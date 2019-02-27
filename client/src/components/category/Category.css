@@ -1,0 +1,31 @@
+.container-category {
+    width: 100%;
+    padding-right: 60px;
+    padding-left: 60px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.button-shop {
+    border-width: 1px;
+    border-color: #53b46e;
+    background-color: Transparent;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.25rem;
+    transition: .25s ease;
+    text-decoration: none;
+}
+.button-shop:active, .button-shop:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.button-shop:active {
+    border-style: solid;
+}
+
+.button-shop:hover{
+    background: #53b46e;
+    color: white;
+}

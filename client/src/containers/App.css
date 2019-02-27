@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  font-family: 'Nunito';
+}
+
+.container .navbar {
+  padding: 0.25rem 1rem;
+}
+
+.navbar-custom {
+  /* background-color: #d0f0be; */
+}
+
+.navbar-header {
+  padding: 0.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.nav-item .nav-link {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color: black;
+  transition: .25s ease;
+}
+
+.nav-item .nav-link:hover { 
+  color: #53b46e;
+  text-decoration: none;
+}
+
+.wrapper {
+  min-height: 100vw;
+  margin-bottom: -48px; 
+}
+
+.wrapper:after {
+  content: "";
+  display: block;
+}
+
+.footer-copyright, .wrapper:after {
+  height: 48px;
+}
