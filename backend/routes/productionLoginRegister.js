@@ -13,6 +13,8 @@ var crypto =  require('crypto');
 var key = require('../key/key')
 var rand,mailOptions,host,link;
 
+
+
 var transport = nodemailer.createTransport({
     service: "Gmail",
     auth: {

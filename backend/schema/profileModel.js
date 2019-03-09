@@ -10,7 +10,6 @@ const ProfileSchema = new Schema({
     Address: String,
     Phone_Number: String,
     Email: String,
-    Eden_Id: String,
     Profile_Picture_Path: String
 })
 
