@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
        cb(null, './images/')
     },
     filename: function(req, file, cd) {
-        file.originalname = req.body.Email + '.jpg'
+        file.originalname = req.body.email + '.jpg'
         cd(null, file.originalname)
     }
 })
@@ -115,6 +115,16 @@ app.post('/profileUpload', imageUpload.single('filename'), function(req, res) {
 
 	})
     
+})
+
+app.get('/profile/:email', function(req, res) {
+    Profile.find({Email: req.params.email}, function(err, docs) {
+		if (docs) {
+			res.send(docs)
+		} else {
+			res.send({"error": err})
+		}
+	})
 })
 
 
