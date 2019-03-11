@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './Register.css';
-import RegularBanner from '../banner/RegularBanner'
+import AuthBanner from '../banner/AuthBanner'
 import { registerUser } from '../../redux/actions/AuthenticationActions'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import '../../containers/App.css'
 
 class Register extends Component {
   constructor() {
@@ -47,7 +48,7 @@ onSubmit = (e) => {
       const { errors } = this.state;
       return (
         <div>
-        <RegularBanner />
+        <AuthBanner />
         <div className = "registerContainer">
         
           <form className="ui form" onSubmit = {this.onSubmit}>

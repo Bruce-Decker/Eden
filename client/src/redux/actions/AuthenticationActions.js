@@ -37,6 +37,7 @@ export const registerUser = (userData, history) => dispatch => {
         // Decode token to get user data
         const decoded = jwt_decode(token);
         // Set current user
+        console.log("dsdfsd " + JSON.stringify(decoded))
         dispatch(setCurrentUser(decoded));
       })
       .catch(err =>

@@ -44,3 +44,7 @@ body {
 .footer-copyright, .wrapper:after {
   height: 48px;
 }
+
+.inputError {
+  color: red;
+}
