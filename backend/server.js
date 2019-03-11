@@ -9,6 +9,8 @@ var passport = require('passport')
 const morgan = require('morgan')
 var multer = require('multer')
 const Profile= require('./schema/profileModel')
+const cors = require('cors')
+
 
 
 const productionLoginRegister = require('./routes/productionLoginRegister');
@@ -41,7 +43,7 @@ const imageUpload = multer({
 
 
 
-
+app.use(cors())
 
 app.use(morgan('dev'))
 
@@ -65,6 +67,10 @@ app.use(passport.initialize());
 
 app.use('/productionLoginRegister', productionLoginRegister);
 app.use('/userAuthentication', userAuthentication);
+
+app.post('/test', function(req, res) {
+    res.send("test")
+})
 
 
 app.post('/profileUpload', imageUpload.single('filename'), function(req, res) {

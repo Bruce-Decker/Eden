@@ -12,9 +12,19 @@ import Property from '../property/Property'
 import Food from '../food/Food'
 import Cart from '../cart/Cart'
 import Login from '../login/Login'
+import { connect } from 'react-redux';
+import { logout  } from '../../redux/actions/AuthenticationActions'
+
+
 
 
 class RegularBanner extends Component {
+
+LogoutButton = (e) => {
+   
+
+  this.props.logout();
+}
     render() {
       
       return (
@@ -61,6 +71,10 @@ class RegularBanner extends Component {
                       </li>
                       <li class="nav-item">
                         <Link class="nav-link" to="/">Home</Link>
+                       
+                      </li>
+                      <li class="nav-item">
+                      <Link class="nav-link" to="/" onClick = {this.LogoutButton}>Logout</Link>
                       </li>
                   </ul>
               </div>
@@ -73,4 +87,11 @@ class RegularBanner extends Component {
 
 }
 
-export default RegularBanner;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
+ 
+
+
+export default connect(mapStateToProps, { logout })(RegularBanner);
