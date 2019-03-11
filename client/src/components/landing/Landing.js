@@ -15,11 +15,12 @@ import Login from '../login/Login'
 
 
 
+
 class Landing extends Component {
   render() {
     return (
       <div className="App">
-        <Router onUpdate={() => window.scrollTo(0, 0)}>
+        <Router>
           <div>
             <div class="navbar-custom">
               <div class="container">
@@ -69,16 +70,7 @@ class Landing extends Component {
                 </nav>
               </div>
             </div>
-            <div class="wrapper">
-              <Route exact path="/" component={Home}/>
-              <Route exact path="/product" component={Product}/>
-              <Route exact path="/service" component={Service}/>
-              <Route exact path="/property" component={Property}/>
-              <Route exact path="/food" component={Food}/>
-              <Route exact path="/cart" component={Cart}/>
-              <Route exact path="/login" component={Login}/>
-              
-            </div>
+           
             <footer>
               <div class="footer-copyright text-center">
                   © 2019 Eden

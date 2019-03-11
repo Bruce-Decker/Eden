@@ -6,12 +6,15 @@ import product from '../../images/product.png'
 import service from '../../images/service.png'
 import property from '../../images/property.png'
 import food from '../../images/food.png'
+import Footer from '../footer/Footer'
+import Banner from '../banner/LandingBanner'
 
 class Home extends Component {
     render() {
       
       return (
         <div>
+          <Banner />
           <Category default={true}
                     category="Product" 
                     description="Capicola pancetta hamburger salami biltong chuck. Pastrami flank tail landjaeger ball tip biltong andouille. Tail cow rump salami prosciutto capicola."
@@ -28,6 +31,7 @@ class Home extends Component {
           <Category category="Food"
                     description="Meatloaf sirloin ham tenderloin chuck shoulder ball tip ribeye ham hock leberkas. Tail cow rump salami prosciutto capicola."
                     image={food}></Category>
+          <Footer />
         </div>
       );
     }
