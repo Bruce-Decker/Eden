@@ -13,6 +13,9 @@ import store from '../redux/store'
 
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 
+// for testing
+import Item from '../components/item/index'
+// for testing
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -33,7 +36,6 @@ if (localStorage.jwtToken) {
     // window.location.href = '/login';
   }
 }
-
 class App extends Component {
   render() {
     return (
@@ -45,6 +47,12 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/product" component={Product} />
+
+          {/* for testing */}
+          <Route exact path="/item" component={Item} />
+          {/* for testing */}
+
+
         </div>
         </BrowserRouter>
       </Provider>
