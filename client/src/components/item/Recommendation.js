@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Item';
+import './Item.css';
 
 import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
@@ -51,11 +51,11 @@ class Recommendation extends Component {
           <ul class="item-recommendation-list">
             {items.map(item => {
               return (
-                <li class="item-recommendation-item" style={{float: "left"}}>
+                <li key={item.id} class="item-recommendation-item" style={{float: "left"}}>
                   <img class="item-recommendation-img" src={item.img} alt="Item"></img>
                   <div class="align-items-center item-recommendation-rating">
                     {item.rating.map(i => {
-                      return <img class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
+                      return <img key={i} class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
                     })}
                   </div>
                   <div class="item-recommendation-title">{item.title}</div>

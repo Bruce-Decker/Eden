@@ -6,7 +6,7 @@ import RegularBanner from '../banner/RegularBanner'
 import Recommendation from './Recommendation';
 import Review from './Review';
 import Footer from '../footer/Footer';
-import Detail from './Item';
+import Detail from './Detail';
 
 class Item extends Component {
 

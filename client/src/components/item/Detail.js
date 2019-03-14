@@ -30,7 +30,7 @@ class Detail extends Component {
           <div class="item-desc">{item.desc}</div>
           <div>
             {item.rating.map(i => {
-              return <img class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
+              return <img key={i} class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
             })}
           </div>
           <div class="item-price">{item.price}</div>

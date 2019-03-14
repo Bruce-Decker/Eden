@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Item';
+import './Item.css';
 
 import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
@@ -35,7 +35,7 @@ class Review extends Component {
             <ul class="item-review-list">
               {reviews.map(review => {
                 return (
-                  <li class="item-review-item row">
+                  <li key={review.user} class="item-review-item row">
                     <div class="col-3">
                       <img class="item-recommendation-img" style={{width: "100%"}} src={review.img} alt="Item"></img>
                       <div class="item-recommendation-title">{review.user}</div>
@@ -44,7 +44,7 @@ class Review extends Component {
                       <div>{review.review}</div>
                       <div>
                         {review.rating.map(i => {
-                          return <img class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
+                          return <img key={i} class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
                         })}
                       </div>
                       <div style={{marginTop: "1rem", color: "#888888"}}>{review.date}</div>
