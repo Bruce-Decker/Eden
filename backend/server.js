@@ -74,31 +74,39 @@ app.post('/test', function(req, res) {
 
 
 app.post('/profileUpload', imageUpload.single('filename'), function(req, res) {
-    var Profile_Picture_Path = req.file.path
-    var First_Name = req.body.first_name
-    var Last_Name = req.body.last_name
+    var email = req.body.email
+    var first_name = req.body.first_name
+    var last_name = req.body.last_name
     var DOB = req.body.DOB;
-    var Age = req.body.age;
-    var Sex = req.body.sex;
-    var Address = req.body.address;
-    var Phone_Number = req.body.phone_number;
-    var Email = req.body.email;
+    var gender = req.body.gender;
+    var profile_picture_path = req.file.path
+   
+    var phone_number = req.body.phone_number
+    var address = req.body.address
+    var city = req.body.city 
+    var country = req.body.country 
+    var company = req.body.company 
+    var about_me = req.body.about_me
+    
 
     var data = {
-        First_Name,
-        Last_Name,
+        first_name,
+        last_name,
         DOB,
-        Age,
-        Sex,
-        Address,
-        Phone_Number, 
-        Email,
-        Profile_Picture_Path
+        gender,
+        profile_picture_path,
+        email,
+        phone_number,
+        address,
+        city,
+        country,
+        company,
+        about_me
     }
    
-    Profile.findOne({Email: Email}, function(err, docs) {
+    Profile.findOne({email: email}, function(err, docs) {
 		if (docs) {
-			Profile.findOneAndUpdate({Email: Email}, data, function(err, result) {
+			Profile.findOneAndUpdate({email: email}, data, function(err, result) {
 				 if (err) {
 				 	res.send("Fail")
 				 } else {
