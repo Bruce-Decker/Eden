@@ -15,6 +15,7 @@ import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 
 // for testing
 import Item from '../components/item/index'
+import Cart from '../components/cart/Cart'
 // for testing
 
 if (localStorage.jwtToken) {
@@ -50,6 +51,7 @@ class App extends Component {
 
           {/* for testing */}
           <Route exact path="/item" component={Item} />
+          <Route exact path="/cart" component={Cart} />
           {/* for testing */}
 
 
