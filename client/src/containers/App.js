@@ -5,6 +5,7 @@ import Home from '../components/home/Home';
 import Login from '../components/login/Login';
 import Product from '../components/product/Product'
 import ChangeProfile from '../components/profile/ChangeProfile'
+import ShowProfile from '../components/profile/ShowProfile'
 import Register from '../components/register/Register'
 import { Provider } from 'react-redux';
 import { setCurrentUser } from '../redux/actions/AuthenticationActions'
@@ -50,6 +51,7 @@ class App extends Component {
           <Route exact path="/register" component={Register} />
           <Route exact path="/product" component={Product} />
           <Route exact path = "/changeProfile" component = {ChangeProfile} />
+          <Route exact path = "/showProfile" component = {ShowProfile} />
 
           {/* for testing */}
           <Route exact path="/item" component={Item} />

@@ -18,7 +18,7 @@ const userAuthentication = require('./routes/userAuthentication');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-       cb(null, './images/')
+       cb(null, '../client/public/images/')
     },
     filename: function(req, file, cd) {
         file.originalname = req.body.email + '.jpg'
@@ -79,7 +79,7 @@ app.post('/profileUpload', imageUpload.single('filename'), function(req, res) {
     var last_name = req.body.last_name
     var DOB = req.body.DOB;
     var gender = req.body.gender;
-    var profile_picture_path = req.file.path
+    var profile_picture_path = "images/" + req.body.email + '.jpg'
    
     var phone_number = req.body.phone_number
     var address = req.body.address
@@ -132,7 +132,7 @@ app.post('/profileUpload', imageUpload.single('filename'), function(req, res) {
 })
 
 app.get('/profile/:email', function(req, res) {
-    Profile.find({Email: req.params.email}, function(err, docs) {
+    Profile.find({email: req.params.email}, function(err, docs) {
 		if (docs) {
 			res.send(docs)
 		} else {
