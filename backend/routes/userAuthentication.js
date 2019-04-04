@@ -11,6 +11,57 @@ var validateRegisterInput = require('../validation/validateRegisterInput')
 var validateLoginInput = require('../validation/validateLoginInput')
 const keys = require('../key/keys')
 
+var redis = require("redis"),
+    client = redis.createClient();
+
+
+function cache(req, res, next) {
+    const { errors, isValid } = validateLoginInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+       
+        client.get(req.body.email, function (err, user) {
+            if (err) throw err;
+           
+           
+            if (user != null) {
+                //res.send(respond(org, data));
+                var data = JSON.parse(user)
+                console.log(data.password)
+                console.log(req.body.password)
+                bcrypt.compare(req.body.password, data.password)
+                .then(isMatch => {
+                        if (isMatch) {
+                            console.log("redis retrieve")
+                            const payload = { id: user.id, email: user.email, name: user.name} 
+                            jwt.sign(
+                                payload, 
+                                'secret', 
+                                { expiresIn: 3600 }, 
+                                (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: 'Bearer ' + token
+                                })
+                            });
+                        } else {
+                            console.log("Wrong password from cache function")
+                            errors.password = 'Password incorrect'
+                            return res.status(400).json(errors)
+                        }
+
+                    
+
+                })
+                  
+            } else {
+                next();
+            }
+        });
+    }
+
 router.post('/register', (req, res) => {
     console.log(req.body)
     const{errors, isValid } = validateRegisterInput(req.body);
@@ -46,7 +97,9 @@ router.post('/register', (req, res) => {
     })
 })
 
-router.post('/login', (req, res) => {
+
+
+router.post('/login', cache, (req, res) => {
     const { errors, isValid } = validateLoginInput(req.body);
 
     if (!isValid) {
@@ -71,9 +124,11 @@ router.post('/login', (req, res) => {
           console.log(password)
           console.log(isMatch)
           if(isMatch) {
+            console.log("MongoDB retrieve")
               //res.json({msg: 'Sucess'})
               //User matched
-              const payload = { id: user.id, email: user.email, name: user.name} //Create JWT payload
+              const payload = { id: user.id, email: user.email, name: user.name, password: user.password} //Create JWT payload
+              client.setex(email, 3600, JSON.stringify(payload));
               console.log(payload)
               jwt.sign(
                   payload, 
