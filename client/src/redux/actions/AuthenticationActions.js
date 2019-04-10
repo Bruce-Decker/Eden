@@ -49,7 +49,7 @@ export const registerUser = (userData, history) => dispatch => {
   };
 
 export const logout = () => dispatch => {
-    localStorage.removeItem('token')
+    localStorage.removeItem('jwtToken')
    
     setTokenHeader(false)
    
