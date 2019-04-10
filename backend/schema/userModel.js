@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs')
 
-const userSchema = new Schema({
+const AuthSchema = new Schema({
     email: {
         type: String, 
         unique: true,
@@ -38,4 +38,4 @@ const userSchema = new Schema({
 
 // }
 
-module.exports = user = mongoose.model('user', userSchema)
+module.exports = user = mongoose.model('user', AuthSchema)
