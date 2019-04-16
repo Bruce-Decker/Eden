@@ -11,10 +11,12 @@ var multer = require('multer')
 const Profile= require('./schema/profileModel')
 const cors = require('cors')
 
-
+// development configuration
+const configDev = require('./config/configDev.js')
 
 const productionLoginRegister = require('./routes/productionLoginRegister');
 const userAuthentication = require('./routes/userAuthentication');
+const cart = require('./routes/cart');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -67,6 +69,7 @@ app.use(passport.initialize());
 
 app.use('/productionLoginRegister', productionLoginRegister);
 app.use('/userAuthentication', userAuthentication);
+app.use('/cart', cart);
 
 app.post('/test', function(req, res) {
     res.send("test")
