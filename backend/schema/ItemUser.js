@@ -36,4 +36,4 @@ const ItemUserSchema = new Schema({
     }
 })
 
-module.exports = Cart = mongoose.model('cart', ItemUserSchema);
+module.exports = ItemUser = mongoose.model('itemUser', ItemUserSchema);
