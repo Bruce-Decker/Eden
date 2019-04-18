@@ -3,12 +3,12 @@ const app = express()
 const bodyParser = require('body-parser')
 const User = require('./schema/userModel')
 const mongoose = require('mongoose')
-const url = process.env.MONGODB_URI || "mongodb://localhost:27017/Login_test_app"
+const url = process.env.MONGODB_URI || "mongodb://localhost:27017/eden";//"mongodb://localhost:27017/Login_test_app"
 var passport = require('passport')
 
 const morgan = require('morgan')
 var multer = require('multer')
-const Profile= require('./schema/profileModel')
+const Profile = require('./schema/profileModel')
 const cors = require('cors')
 
 // development configuration

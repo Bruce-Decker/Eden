@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserRecSchema = new Schema({
   user_id: String,
-  recs: [String], /* ordered list of item ids */
+  recs: [String], /* ordered list of user ids */
   timestamp: Date
 });
 

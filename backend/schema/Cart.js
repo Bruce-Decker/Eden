@@ -18,7 +18,10 @@ const CartSchema = new Schema({
         type: String,
         required: true
     },
-    quantity: Number,
+    quantity: {
+        type: Number,
+        required: true
+    },
     bid_price: Number
 })
 

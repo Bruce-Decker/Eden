@@ -10,7 +10,7 @@ const ItemSchema = new Schema({
         type: String,
         required: true
     },
-    by_user: {
+    category: {
         type: String,
         required: true
     },

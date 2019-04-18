@@ -18,10 +18,6 @@ const ItemUserSchema = new Schema({
         type: String,
         required: true
     },
-    quantity: {
-        type: Number,
-        required: true
-    },
     comment: {
         type: String,
         required: true
@@ -33,6 +29,10 @@ const ItemUserSchema = new Schema({
     purchased_count: {
         type: Number,
         required: true
+    },
+    rating: {
+        type: Number,
+        required: false
     }
 })
 
