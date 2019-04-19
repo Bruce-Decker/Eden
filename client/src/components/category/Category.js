@@ -20,7 +20,7 @@ class Category extends Component {
                             <h6 class="text-center">
                                 <small>{this.props.description}</small>
                             </h6>
-                            <Link to={this.props.category.toLowerCase()}>
+                            <Link style={{textDecoration: 'none'}} to={this.props.category.toLowerCase()}>
                                 <button onClick={() => window.scrollTo(0, 0)} class="button-shop">Shop</button>
                             </Link>
                         </div>

@@ -7,6 +7,7 @@ import Product from '../components/product/Product'
 import ChangeProfile from '../components/profile/ChangeProfile'
 import ShowProfile from '../components/profile/ShowProfile'
 import Register from '../components/register/Register'
+import Items from '../components/items/index'
 import { Provider } from 'react-redux';
 import { setCurrentUser } from '../redux/actions/AuthenticationActions'
 import  setTokenHeader  from '../utils/setTokenHeader'
@@ -50,11 +51,12 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/product" component={Product} />
+          <Route exact path="/product/:category" component={Items} />
           <Route exact path = "/changeProfile" component = {ChangeProfile} />
           <Route exact path = "/showProfile" component = {ShowProfile} />
 
           {/* for testing */}
-          <Route exact path="/item" component={Item} />
+          <Route exact path="/item/:id" component={Item} />
           <Route exact path="/cart" component={Cart} />
           {/* for testing */}
 

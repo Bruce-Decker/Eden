@@ -46,16 +46,16 @@ LogoutButton = (e) => {
               <div class="navbar-collapse collapse" id="navbar">
                   <ul class="navbar-nav mr-auto">
                       <li class="nav-item">
-                        <Link class="nav-link" to="product">Product</Link>
+                        <Link class="nav-link" to="/product">Product</Link>
                       </li>
                       <li class="nav-item">
-                        <Link class="nav-link" to="service">Service</Link>
+                        <Link class="nav-link" to="/service">Service</Link>
                       </li>
                       <li class="nav-item">
-                        <Link class="nav-link" to="property">Property</Link>
+                        <Link class="nav-link" to="/property">Property</Link>
                       </li>
                       <li class="nav-item">
-                        <Link class="nav-link" to="food">Food</Link>
+                        <Link class="nav-link" to="/food">Food</Link>
                       </li>
                   </ul>
                   <ul class="navbar-nav ml-auto">

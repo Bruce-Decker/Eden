@@ -65,6 +65,7 @@ def cart(db):
 def item(db):
   db.items.drop()
 
+  categories = ['appliances', 'arts', 'books', 'clothing', 'computers', 'electronics', 'games', 'home']
   adjectives = ['cool','new','stylish','fun','hip','amazing','awesome','trendy','designer','faux']
   colors = ['red','orange','yellow','green','blue','purple','pink','white','black','gray']
   items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
@@ -77,7 +78,7 @@ def item(db):
         item = {
           'item_id': str(itemId),
           'item_name': '{0} {1} {2}'.format(a,c,i),
-          'category': 'apparel',
+          'category': categories[int(randrange(0,len(categories)))],
           'description': '{0} {1} {2}'.format(a,c,i),
           'price': float(randrange(500,10000))/100,
           'average_rating': randint(1,5)
