@@ -6,6 +6,54 @@ const Cart = require('../schema/Cart');
 const Item = require('../schema/Item');
 var localStorage = require('localStorage');
 
+
+router.get('/getCartByID', function(req,res) {
+  var cart_id = req.query.cart_id
+  Cart.find({cart_id, cart_id}, function(err, docs) {
+     if (err) {
+       res.send(err)
+     } else {
+       res.send(docs)
+     }
+  })
+});
+
+router.post('/createCart', function(req, res) {
+  const cart_id = req.body.cart_id
+  const items = req.body.items
+  const email = req.body.email
+ 
+
+  const data = {
+    cart_id,
+    items,
+    email
+  }
+
+  Cart.findOne({cart_id: cart_id}, function(err, docs) {
+    if (docs) {
+      Cart.findOneAndUpdate({cart_id: cart_id}, data, function(err, result) {
+         if (err) {
+               res.send("Fail")
+                    
+         } else {
+               console.log(result)
+               res.send({msg: "Update successfully", data: data})
+          }
+      })
+    } else {    
+      Cart.create(data, function(err, newlyCreated) {
+          if (err) {
+                res.send({msg: "False"});
+                        
+          } else {
+                res.send({msg: "True", data: data});
+          }
+        })
+    }
+  })   
+})
+
 router.get('/getCartItems', function(req,res) {
   // placeholder: need to get actual logged-in user ID
   uid = 0

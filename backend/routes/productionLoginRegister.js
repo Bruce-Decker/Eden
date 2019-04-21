@@ -18,7 +18,7 @@ var rand,mailOptions,host,link;
 var transport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-        user: "bruced8210@gmail.com",
+        user: "",
         pass: key.pass
     }
 });

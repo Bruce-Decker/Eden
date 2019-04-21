@@ -10,6 +10,10 @@ const ItemSchema = new Schema({
         type: String,
         required: true
     },
+    item_image: {
+        type: String,
+        required: true
+    },
     category: {
         type: String,
         required: true
@@ -19,10 +23,6 @@ const ItemSchema = new Schema({
         required: true
     },
     price: {
-        type: Number,
-        required: true
-    },
-    average_rating: {
         type: Number,
         required: true
     },
