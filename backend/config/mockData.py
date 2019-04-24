@@ -17,7 +17,7 @@ def itemUser(db):
   adjectives = ['cool','new','stylish','fun','hip','amazing','awesome','trendy','designer','faux']
   colors = ['red','orange','yellow','green','blue','purple','pink','white','black','gray']
   items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
-  users = [(0,'adam'),(1,'bob'),(2,'cindy'),(3,'david'),(4,'eric'),(5,'florence'),(6,'gary'),(7,'heather'),(8,'irene'),(9,'joe')]
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
   comment = 'I liked it'
   itemId = 0
 
@@ -46,15 +46,16 @@ def cart(db):
   db.carts.drop()
 
   items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
-  users = [(0,'adam'),(1,'bob'),(2,'cindy'),(3,'david'),(4,'eric'),(5,'florence'),(6,'gary'),(7,'heather'),(8,'irene'),(9,'joe')]
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
 
   for u in users:
     cart = {
-      'item_id': str(u[0]+1),
-      'item_name': 'cool red {0}'.format(items[u[0]]),
-      'user_id': str(u[0]),
-      'user_name': u[1],
-      'quantity': randint(1,5)
+      'cart_id': str(u[0]),
+      'items': [{
+        'item_id': str(u[0]+1),
+        'quantity': randint(1,5)
+      }],
+      'email': u[1]
     }
 
     result = db.carts.insert_one(cart)
@@ -69,6 +70,7 @@ def item(db):
   adjectives = ['cool','new','stylish','fun','hip','amazing','awesome','trendy','designer','faux']
   colors = ['red','orange','yellow','green','blue','purple','pink','white','black','gray']
   items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
+  imgPath = 'clothing.jpg'
 
   itemId = 0
   for a in adjectives:
@@ -78,6 +80,7 @@ def item(db):
         item = {
           'item_id': str(itemId),
           'item_name': '{0} {1} {2}'.format(a,c,i),
+          'item_image': imgPath,
           'category': categories[int(randrange(0,len(categories)))],
           'description': '{0} {1} {2}'.format(a,c,i),
           'price': float(randrange(500,10000))/100,
@@ -86,7 +89,7 @@ def item(db):
 
         result = db.items.insert_one(item)
 
-  print('Finished inserting {0} carts into Carts collection.'.format(itemId))
+  print('Finished inserting {0} items into Items collection.'.format(itemId))
 
 if __name__ == "__main__":
   main()
