@@ -56,7 +56,6 @@ router.get('/getCartItems', function(req,res) {
   const cart_id = req.query.cart_id;
 
   Cart.findOne({cart_id: cart_id},{ _id: 0 }).then(async (cart) => {
-    //console.log(cart)
     let items = cart._doc.items;
     let ret = []
 
@@ -90,7 +89,6 @@ router.get('/getCartItems', function(req,res) {
 
     // return the list of items in the cart to the front-end
     res.json(ret);
-    //res.json(cart);
   }).catch(err => {
     console.log(err);
     res.json({ msg: 'ERROR: no cart found for user' });
