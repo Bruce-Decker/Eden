@@ -18,6 +18,7 @@ const productionLoginRegister = require('./routes/productionLoginRegister');
 const userAuthentication = require('./routes/userAuthentication');
 const cart = require('./routes/cart');
 const item = require('./routes/item');
+const search = require('./routes/search');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -72,6 +73,7 @@ app.use('/productionLoginRegister', productionLoginRegister);
 app.use('/userAuthentication', userAuthentication);
 app.use('/cart', cart);
 app.use('/items', item);
+app.use('/search', search);
 
 app.post('/test', function(req, res) {
     res.send("test")
