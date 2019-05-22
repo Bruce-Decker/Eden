@@ -22,8 +22,7 @@ router.post('/createCart', function(req, res) {
   const cart_id = req.body.cart_id
   const items = req.body.items
   const email = req.body.email
- 
-
+  
   const data = {
     cart_id,
     items,
