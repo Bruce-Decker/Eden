@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
     first_name: String,
     last_name: String,
+    username: String,
     DOB: String,
     address: String,
     city: String,
