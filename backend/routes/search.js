@@ -26,7 +26,7 @@ router.get('/getSearchResults', function(req,res) {
     }).catch(err => {
 
       console.log(err);
-      res.json({ msg: 'ERROR: no cart found for user' });
+      res.json({ msg: 'ERROR: search failed' });
 
     });
 

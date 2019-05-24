@@ -6,14 +6,12 @@ import star from '../../images/rating.png';
 class CartItems extends Component {
   constructor(props) {
     super(props);
-
-    this.cartItems = this.props.cartItems;
   }
 
   render() {
     return (
       <ul class="cart-item-list">
-        {this.cartItems.map(cartItem => {
+        {this.props.cartItems.map(cartItem => {
           return (
             <li key={cartItem.id} class="cart-item row">
               <div class="col-2">

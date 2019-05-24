@@ -1,0 +1,14 @@
+.search-item-list {
+  margin-left: 5rem;
+  list-style-type: none;
+}
+
+.search-item {
+  margin-bottom: 1rem;
+  border: 1px solid darkgray;
+}
+
+.search-item-img {
+  width: 150px;
+  height: 150px;
+}
