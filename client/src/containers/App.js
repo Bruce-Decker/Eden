@@ -10,6 +10,7 @@ import ShowProfile from '../components/profile/ShowProfile';
 import Register from '../components/register/Register';
 import Items from '../components/items/index';
 import SearchResults from '../components/search/SearchResults';
+import Ar from '../components/ar/index'
 
 import { Provider } from 'react-redux';
 import { setCurrentUser } from '../redux/actions/AuthenticationActions'
@@ -59,9 +60,10 @@ class App extends Component {
           <Route exact path="/showProfile" component = {ShowProfile} />
 
           {/* for testing */}
-          <Route exact path="/item/:id" component={Item} />
+          <Route exact path="/items/:id" component={Item} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
+          <Route exact path="/ar/" component={Ar} />
           {/* for testing */}
 
 

@@ -12,12 +12,12 @@ class Item extends Component {
         <div class="items-row">
           <div class="row">
               <div class="col-4" style={{backgroundColor: "#f2ffea", textAlign: "center", lineHeight: "275px"}}>
-                <Link to={"/item/" + this.props.id}>
+                <Link to={"/items/" + this.props.id}>
                   <div onClick={() => window.scrollTo(0, 0)}>*img</div>
                 </Link>
               </div>
             <div class="col-8">
-              <Link to={"/item/" + this.props.id} style={{textDecoration: "none"}}>
+              <Link to={"/items/" + this.props.id} style={{textDecoration: "none"}}>
                 <div class="items-name" onClick={() => window.scrollTo(0, 0)}>{this.props.name}</div>
               </Link>
               <div>

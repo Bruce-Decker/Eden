@@ -1,0 +1,25 @@
+.ar-move-button {
+  border-width: 1px;
+  border-color: #53b46e;
+  background-color: Transparent;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  transition: .25s ease;
+  text-decoration: none;
+  color: #53b46e
+}
+
+.ar-move-button:active, .ar-move-button:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.ar-move-button:active {
+  border-style: solid;
+}
+
+.ar-move-button:hover{
+  background: #53b46e;
+  color: white;
+}
