@@ -6,26 +6,31 @@ import { AFrameRenderer, Marker } from 'react-web-ar'
 
 
 class AFrame extends Component {
-  z = 25
+  z = 0
   x = 0
+  scale = 5
   render() {
     return (
       <div>
-        <div style={{position: "fixed", right: "9rem", bottom: "5px", zIndex: "10"}}>
-          <button class="ar-move-button" onClick={() => {this.move('up')}}>U</button>
-          <button class="ar-move-button" onClick={() => {this.move('down')}}>D</button>
-          <button class="ar-move-button" onClick={() => {this.move('left')}}>L</button>
-          <button class="ar-move-button" onClick={() => {this.move('right')}}>R</button>
+        <div style={{position: "fixed", right: "20rem", bottom: "5px", zIndex: "10"}}>
+          <button class="ar-move-button" onClick={() => {this.adjust('up')}}>U</button>
+          <button class="ar-move-button" onClick={() => {this.adjust('down')}}>D</button>
+          <button class="ar-move-button" onClick={() => {this.adjust('left')}}>L</button>
+          <button class="ar-move-button" onClick={() => {this.adjust('right')}}>R</button>
+        </div>
+        <div style={{position: "fixed", right: "15rem", bottom: "5px", zIndex: "10"}}>
+          <button class="ar-move-button" onClick={() => {this.adjust('upScale')}}>+</button>
+          <button class="ar-move-button" onClick={() => {this.adjust('downScale')}}>-</button>
         </div>
        <AFrameRenderer inherent={true}>
           <Marker parameters={{ preset: "hiro" }}>
             <a-entity
               id="entity"
-              gltf-model="./images/ar/t-shirt/scene.gltf"
               rotation="270 0 0"
               position={this.x + " 0 " + this.z}
-              scale="7 7 7"
-              >
+              scale={this.scale + " " + this.scale + " " + this.scale}
+              geometry={"primitive: plane;"}
+              material="shader: flat; src: ./images/undefined.jpg">
             </a-entity>
           </Marker>
         </AFrameRenderer>
@@ -33,8 +38,8 @@ class AFrame extends Component {
     );
   }
 
-  move(dir) {
-    const val = 0.25;
+  adjust(dir) {
+    const val = 0.2;
     switch (dir){
       case 'up':
         this.z -= val;
@@ -48,10 +53,17 @@ class AFrame extends Component {
       case 'right':
         this.x += val;
         break;
+      case 'upScale':
+        this.scale += val;
+        break;
+      case 'downScale':
+        this.scale -= val;
+        break;
       default:
     }
     var entity = document.querySelector('#entity');
     entity.object3D.position.set(this.x, 0, this.z);
+    entity.object3D.scale.set(this.scale, this.scale, this.scale);
   }
 }
 
