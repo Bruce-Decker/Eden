@@ -26,6 +26,7 @@ const ItemSchema = new Schema({
         type: Number,
         required: true
     },
+    ar: String,
     bid_price: Number // not required
 })
 

@@ -10,17 +10,18 @@ class AFrame extends Component {
   x = 0
   scale = 5
   render() {
+    const ar = this.props.ar
     return (
       <div>
         <div style={{position: "fixed", right: "20rem", bottom: "5px", zIndex: "10"}}>
-          <button class="ar-move-button" onClick={() => {this.adjust('up')}}>U</button>
-          <button class="ar-move-button" onClick={() => {this.adjust('down')}}>D</button>
-          <button class="ar-move-button" onClick={() => {this.adjust('left')}}>L</button>
-          <button class="ar-move-button" onClick={() => {this.adjust('right')}}>R</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('up')}}>U</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('down')}}>D</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('left')}}>L</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('right')}}>R</button>
         </div>
         <div style={{position: "fixed", right: "15rem", bottom: "5px", zIndex: "10"}}>
-          <button class="ar-move-button" onClick={() => {this.adjust('upScale')}}>+</button>
-          <button class="ar-move-button" onClick={() => {this.adjust('downScale')}}>-</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('upScale')}}>+</button>
+          <button className="ar-move-button" onClick={() => {this.adjust('downScale')}}>-</button>
         </div>
        <AFrameRenderer inherent={true}>
           <Marker parameters={{ preset: "hiro" }}>
@@ -30,7 +31,7 @@ class AFrame extends Component {
               position={this.x + " 0 " + this.z}
               scale={this.scale + " " + this.scale + " " + this.scale}
               geometry={"primitive: plane;"}
-              material="shader: flat; src: ./images/undefined.jpg">
+              material={"shader: flat; src: /uploads/" + ar}>
             </a-entity>
           </Marker>
         </AFrameRenderer>

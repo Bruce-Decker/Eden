@@ -9,5 +9,6 @@ export default combineReducers({
     auth: AuthenticationReducers,
     errors: errorReducer,
     cart: CartReducers,
-    items: ItemReducers
+    items: ItemReducers,
+    item: ItemReducers
 })

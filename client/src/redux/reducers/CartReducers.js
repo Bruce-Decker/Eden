@@ -6,7 +6,6 @@ const initialState = {
 }
 
 const cart = (state = initialState, action) => {
-  console.log(state)
   switch (action.type) {
     case ADD_TO_CART:
       if (state.ids.indexOf(action.id) !== -1) {

@@ -28,7 +28,7 @@
   font-size: 1.5rem;
 }
 
-.item-add-button {
+.item-button {
   border-width: 1px;
   border-color: #53b46e;
   background-color: Transparent;
@@ -38,16 +38,16 @@
   transition: .25s ease;
   text-decoration: none;
 }
-.item-add-button:active, .item-add-button:focus {
+.item-button:active, .item-button:focus {
   outline: none !important;
   box-shadow: none;
 }
 
-.item-add-button:active {
+.item-button:active {
   border-style: solid;
 }
 
-.item-add-button:hover{
+.item-button:hover{
   background: #53b46e;
   color: white;
 }

@@ -1,8 +1,17 @@
 import axios from 'axios'
-import { GET_ITEMS } from './types';
+import { GET_ITEM, GET_ITEMS } from './types';
 
 const url = '/items/'
 
+export const getItem = (id) => dispatch => {
+  return axios.get(url + id)
+      .then(response => {
+        dispatch(getItemSuccess(response.data))
+      })
+      .catch(error => {
+        throw(error);
+      });
+};
 
 export const getItems = () => dispatch => {
   return axios.get(url)
@@ -23,6 +32,11 @@ export const getItemsByCategory = (category) => dispatch => {
         throw(error);
       });
 };
+
+export const getItemSuccess = (item) => ({
+  type: GET_ITEM,
+  item
+})
 
 export const getItemsSuccess = (items) => ({
   type: GET_ITEMS,

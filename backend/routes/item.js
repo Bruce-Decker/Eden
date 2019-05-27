@@ -50,7 +50,7 @@ router.post('/createItem', function(req, res) {
     })   
 })
 
-router.get('/getCategory', function(req,res) {
+router.get('/', function(req,res) {
   if(req.query.category == null) {
     Item.find(function(err, doc) {
       if (err) {
@@ -72,9 +72,9 @@ router.get('/getCategory', function(req,res) {
   }
 });
 
-router.get('/getID', function(req,res) {
-  var item_id = req.query.item_id
-  Item.find({item_id, item_id}, function(err, docs) {
+router.get('/:id', function(req,res) {
+  var item_id = req.params.id
+  Item.find({item_id: item_id}, function(err, docs) {
      if (err) {
        res.send(err)
      } else {
