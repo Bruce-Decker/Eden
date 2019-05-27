@@ -11,10 +11,11 @@ import Detail from './Detail';
 class Item extends Component {
 
   render() {
+    const id = this.props.match.params.id
     return (
       <div>
         <RegularBanner/>
-        <Detail/>
+        <Detail id={id}/>
         <Review/>
         <Recommendation/>
         <Footer/>
