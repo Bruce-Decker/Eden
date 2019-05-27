@@ -2,7 +2,7 @@
 import {Entity, Scene} from 'aframe-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import  image  from  '../../uploads/1.jpg'
+import  background_image  from  '../../images/VR_background_1.jpg'
 
  
 class VRScene extends React.Component {
@@ -21,7 +21,7 @@ class VRScene extends React.Component {
     scale="0.1 0.1 0.1"
   
   />
-       <Entity primitive='a-sky' src={image}/>
+       <Entity primitive='a-sky' src={background_image}/>
       </Scene>
     );
   }
