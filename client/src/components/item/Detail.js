@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { getItem } from '../../redux/actions/ItemActions'
 
 import Add from './Add'
+import Try from './Try'
 import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
 
@@ -29,7 +30,11 @@ class Detail extends Component {
           <img src={apple} alt="Item" style={{height: "100%"}}></img>
         </div>
         <div class="col-3" >
-          <div class="item-title">{item.item_name}</div>
+          <div class="item-title">
+            {item.item_name}
+            <span style={{marginLeft: "1rem"}}></span>
+            <Try id={item.item_id} ar={item.ar}></Try>
+          </div>
           <div class="item-by">unknown</div>
           <div class="item-desc">{item.description}</div>
           <div>
@@ -38,7 +43,7 @@ class Detail extends Component {
             })}
           </div>
           <div class="item-price">${item.price}</div>
-          <div ><Add id={item.id}/><span style={{marginLeft: "1rem"}}></span></div>
+          <div ><Add id={item.item_id}/><span style={{marginLeft: "1rem"}}></span></div>
         </div>
         </div>
         <div class="col-1"/>
@@ -50,7 +55,7 @@ class Detail extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return({
     getItem: (id) => {
       dispatch(getItem(id))

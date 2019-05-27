@@ -8,9 +8,10 @@ import AFrame from './AFrame'
 class Ar extends Component {
 
   render() {
+    const {ar} = this.props.location.state
     return (
       <div>
-        <AFrame/>
+        <AFrame ar={ar}/>
       </div>
     );
   }  

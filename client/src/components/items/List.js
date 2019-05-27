@@ -8,7 +8,6 @@ import { getItems, getItemsByCategory } from '../../redux/actions/ItemActions'
 class List extends Component {
 
   render() {
-    console.log(this.props.items)
     const items = this.props.items.data.map((item) =>
       <Item key={item.item_id}
             id={item.item_id}

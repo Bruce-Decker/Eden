@@ -63,7 +63,7 @@ class App extends Component {
           <Route exact path="/items/:id" component={Item} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
-          <Route exact path="/ar/" component={Ar} />
+          <Route exact path="/items/:id/ar" component={Ar} />
           {/* for testing */}
 
 

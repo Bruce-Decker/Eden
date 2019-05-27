@@ -28,48 +28,48 @@ LogoutButton = (e) => {
       
       return (
       
-        <div class="navbar-custom">
-          <div class="container">
-            <nav class="navbar navbar-expand-md">
-              <div class="navbar-header">
+        <div className="navbar-custom">
+          <div className="container">
+            <nav className="navbar navbar-expand-md">
+              <div className="navbar-header">
                 <Link to="/">
                   <img src={apple} height="32" width="32" alt="Home"></img>
                 </Link>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="sr-only">Toggle navigation</span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
                 </button>
               </div>
-              <div class="navbar-collapse collapse" id="navbar">
-                  <ul class="navbar-nav mr-auto">
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/product">Product</Link>
+              <div className="navbar-collapse collapse" id="navbar">
+                  <ul className="navbar-nav mr-auto">
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/product">Product</Link>
                       </li>
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/service">Service</Link>
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/service">Service</Link>
                       </li>
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/property">Property</Link>
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/property">Property</Link>
                       </li>
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/food">Food</Link>
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/food">Food</Link>
                       </li>
                   </ul>
                   <SearchBar/>
-                  <ul class="navbar-nav ml-auto">
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/cart">
+                  <ul className="navbar-nav ml-auto">
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/cart">
                           <img src={cart} height="28" width="28" alt="Cart"></img>
                         </Link>
                       </li>
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/">Home</Link>
+                      <li className="nav-item">
+                        <Link className="nav-link" to="/">Home</Link>
                        
                       </li>
-                      <li class="nav-item">
-                      <Link class="nav-link" to="/" onClick = {this.LogoutButton}>Logout</Link>
+                      <li className="nav-item">
+                      <Link className="nav-link" to="/" onClick = {this.LogoutButton}>Logout</Link>
                       </li>
                   </ul>
               </div>

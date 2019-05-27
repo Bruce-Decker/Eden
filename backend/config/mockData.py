@@ -84,7 +84,8 @@ def item(db):
           'category': categories[int(randrange(0,len(categories)))],
           'description': '{0} {1} {2}'.format(a,c,i),
           'price': float(randrange(500,10000))/100,
-          'average_rating': randint(1,5)
+          'average_rating': randint(1,5),
+          'ar': 'ar_default.png' if randint(0,1) > 0.5 else None
         }
 
         result = db.items.insert_one(item)
