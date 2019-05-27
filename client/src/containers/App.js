@@ -11,6 +11,7 @@ import Register from '../components/register/Register';
 import Items from '../components/items/index';
 import SearchResults from '../components/search/SearchResults';
 import Ar from '../components/ar/index'
+import VR from '../components/vr/VR'
 
 import { Provider } from 'react-redux';
 import { setCurrentUser } from '../redux/actions/AuthenticationActions'
@@ -64,6 +65,7 @@ class App extends Component {
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
           <Route exact path="/ar/" component={Ar} />
+          <Route exact path="/vr" component={VR} />
           {/* for testing */}
 
 
