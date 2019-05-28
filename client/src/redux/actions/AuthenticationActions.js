@@ -1,12 +1,32 @@
-import axios from 'axios'
-import setTokenHeader from '../../utils/setTokenHeader'
-import jwt_decode from 'jwt-decode'
+import axios from 'axios';
+import setTokenHeader from '../../utils/setTokenHeader';
+import getRandomInt from '../../utils/utils';
+import jwt_decode from 'jwt-decode';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 
 export const registerUser = (userData, history) => dispatch => {
     axios
       .post('/userAuthentication/register', userData)
-      .then(res => history.push('/login'))
+      .then(res => {
+        // create the cart for the user
+        let cartData = {
+          cart_id: getRandomInt(100000,999999).toString(),
+          items: [],
+          email: userData.email
+        };
+
+        axios
+          .post('/cart/createCart', cartData)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+
+        history.push('/login');
+      })
       .catch(err =>
        
       
@@ -30,8 +50,9 @@ export const registerUser = (userData, history) => dispatch => {
       .then(res => {
         // Save to localStorage
         const { token } = res.data;
-        // Set token to ls
         localStorage.setItem('jwtToken', token);
+        localStorage.setItem('currentUser', userData.email);
+
         // Set token to Auth header
         setTokenHeader(token);
         // Decode token to get user data
@@ -49,11 +70,12 @@ export const registerUser = (userData, history) => dispatch => {
   };
 
 export const logout = () => dispatch => {
-    localStorage.removeItem('jwtToken')
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('currentUser');
    
-    setTokenHeader(false)
+    setTokenHeader(false);
    
-    dispatch(activeUser({}))
+    dispatch(activeUser({}));
 }
 
 export const activeUser = (decrypt_data) => {

@@ -53,9 +53,9 @@ router.post('/createCart', function(req, res) {
 });
 
 router.get('/getCartItems', function(req,res) {
-  const cart_id = req.query.cart_id;
+  const email = req.query.email;
 
-  Cart.findOne({cart_id: cart_id},{ _id: 0 }).then(async (cart) => {
+  Cart.findOne({email: email},{ _id: 0 }).then(async (cart) => {
     let items = cart._doc.items;
     let ret = []
 

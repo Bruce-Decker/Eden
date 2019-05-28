@@ -5,6 +5,7 @@ import axios from 'axios';
 import Category from '../../components/category/Category';
 import Footer from '../footer/Footer';
 import LandingBanner from '../banner/LandingBanner';
+import RegularBanner from '../banner/RegularBanner';
 import SearchResultItems from './SearchResultItems';
 
 class SearchResults extends Component {
@@ -46,10 +47,19 @@ class SearchResults extends Component {
     }
   }
 
+  showBanner() {
+    // show the appropriate banner if user is logged in
+    if(window.localStorage.getItem('jwtToken')) {
+      return (<RegularBanner/>);
+    } else {
+      return (<LandingBanner/>);
+    }
+  }
+
   render() {
     return (
       <div>
-        <LandingBanner/>
+        {this.showBanner()}
         <SearchResultItems items={this.state.results}/>
         <Footer/>
       </div>

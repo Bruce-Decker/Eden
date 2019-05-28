@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './Cart.css';
+import axios from 'axios';
+
 import CartItems from './CartItems';
 import CartSummary from './CartSummary';
 import OtherBoughtItems from './OtherBoughtItems';
@@ -43,6 +45,31 @@ const cartItems = [
 class Cart extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      cartItems: []
+    };
+
+    this.getCart();
+  }
+
+  async getCart() {
+    // get the email of the current logged-in user
+    let params = {
+      email: window.localStorage.getItem('currentUser')
+    };
+
+    try {
+      console.log(params);
+      const res = await axios.get('/cart/getCartItems', {params:params});
+      let ci = res.data;
+      this.setState({
+        cartItems: ci
+      });
+
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -55,14 +82,14 @@ class Cart extends Component {
         <div class="cart-container row">
           <div class="col-8 divider">
             <div class="left-col">
-              <CartItems cartItems={cartItems}/>
+              <CartItems cartItems={this.state.cartItems}/>
             </div>
             <hr/>
             <Recommendation/>
           </div>
           <div class="col-3">
             <div class="right-col">
-              <CartSummary cartItems={cartItems}/>
+              <CartSummary cartItems={this.state.cartItems}/>
               <hr/>
               <OtherBoughtItems/>
             </div>

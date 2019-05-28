@@ -1,20 +1,38 @@
 import React, { Component } from 'react';
 import './Cart.css';
+import store from '../../redux/store.js';
 
 class CartSummary extends Component {
   constructor(props) {
     super(props);
 
-    this.cartItems = this.props.cartItems;
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.toCheckout = this.toCheckout.bind(this);
+  }
+
+  componentDidMount() {
+    console.log(this.props);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    var url = '/checkout';
+    this.props.history.push(url);
   }
 
   sumPrices() {
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    return this.cartItems.map(cartItem => parseFloat(cartItem.price.substr(1))).reduce(reducer);
+    if(this.props.cartItems.length == 0) {
+      return 0.00;
+    } else {
+      const reducer = (accumulator, currentValue) => accumulator + currentValue;
+      return this.props.cartItems.map(cartItem => cartItem.price).reduce(reducer).toFixed(2);
+    }
   }
 
   toCheckout() {
     console.log("going to checkout page");
+    let s = store.getState();
+    console.log(s);
   }
 
   render() {
@@ -31,6 +49,10 @@ class CartSummary extends Component {
 }
 
 export default CartSummary;
+
+
+
+
 
 
 
