@@ -10,10 +10,6 @@ class CartSummary extends Component {
     this.toCheckout = this.toCheckout.bind(this);
   }
 
-  componentDidMount() {
-    console.log(this.props);
-  }
-
   handleSubmit(event) {
     event.preventDefault();
     var url = '/checkout';

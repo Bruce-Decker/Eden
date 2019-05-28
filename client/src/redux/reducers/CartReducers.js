@@ -1,12 +1,21 @@
-import { ADD_TO_CART } from '../actions/types';
+import { GET_CART_ITEMS } from '../actions/types';
 
-const initialState = {
+/*const initialState = {
   ids: [],
   quantities: {}
+}*/
+
+const initialState = {
+  items: []
 }
 
 const cart = (state = initialState, action) => {
   switch (action.type) {
+    case GET_CART_ITEMS:
+      return {
+        items: action.items
+      }
+    /*
     case ADD_TO_CART:
       if (state.ids.indexOf(action.id) !== -1) {
         let quantities = {...state.quantities}
@@ -20,7 +29,7 @@ const cart = (state = initialState, action) => {
         ...state,
         ids: [...state.ids, action.id],
         quantities: {...state.quantities, [action.id]: 1}
-      }
+      }*/
     default:
       return state
   }

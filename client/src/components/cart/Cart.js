@@ -11,6 +11,9 @@ import Footer from '../footer/Footer';
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
+import { connect } from 'react-redux'
+import { getCartItems, addToCart, removeFromCart, changeQuantity } from '../../redux/actions/CartActions';
+
 // for testing
 const cartItems = [
   {
@@ -18,7 +21,7 @@ const cartItems = [
     title: 'Orange',
     img: apple,
     rating: [1],
-    price: '$0.99',
+    price: 0.99,
     description: 'High in vitamin C, oranges are a delicious part of any diet.',
     quantity: 1
   },
@@ -27,7 +30,7 @@ const cartItems = [
     title: 'Apple',
     img: apple,
     rating: [1, 2, 3],
-    price: '$2.99',
+    price: 2.99,
     description: 'High in antioxidants, apples are a wholesome part of any diet.',
     quantity: 2
   },
@@ -36,7 +39,7 @@ const cartItems = [
     title: 'Melon',
     img: apple,
     rating: [1, 2, 3, 4, 5],
-    price: '$4.99',
+    price: 4.99,
     description: 'High in potassium, melons are an enjoyable part of any diet.',
     quantity: 3
   }
@@ -45,31 +48,11 @@ const cartItems = [
 class Cart extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      cartItems: []
-    };
-
-    this.getCart();
   }
 
-  async getCart() {
-    // get the email of the current logged-in user
-    let params = {
-      email: window.localStorage.getItem('currentUser')
-    };
-
-    try {
-      console.log(params);
-      const res = await axios.get('/cart/getCartItems', {params:params});
-      let ci = res.data;
-      this.setState({
-        cartItems: ci
-      });
-
-    } catch (err) {
-      console.log(err);
-    }
+  componentWillMount() {
+    let currentUser = window.localStorage.getItem('currentUser');
+    this.props.getCartItems(currentUser);
   }
 
   render() {
@@ -82,14 +65,14 @@ class Cart extends Component {
         <div class="cart-container row">
           <div class="col-8 divider">
             <div class="left-col">
-              <CartItems cartItems={this.state.cartItems}/>
+              <CartItems cartItems={this.props.cart.items}/>
             </div>
             <hr/>
             <Recommendation/>
           </div>
           <div class="col-3">
             <div class="right-col">
-              <CartSummary cartItems={this.state.cartItems}/>
+              <CartSummary cartItems={this.props.cart.items}/>
               <hr/>
               <OtherBoughtItems/>
             </div>
@@ -101,7 +84,39 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+const mapDispatchToProps = dispatch => {
+  return({
+    getCartItems: email => {
+      dispatch(getCartItems(email));
+    },
+    addToCart: iid => {
+      dispatch(addToCart(iid));
+    },
+    removeFromCart: iid => {
+      dispatch(removeFromCart(iid));
+    },
+    changeQuantity: (iid, newQuantity) => {
+      dispatch(changeQuantity(iid, newQuantity));
+    }
+  });
+};
+
+const mapStateToProps = state => {
+  return {
+    cart: state.cart
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);
+
+
+
+
+
+
 
 
 

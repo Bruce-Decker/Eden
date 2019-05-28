@@ -9,9 +9,7 @@ export const GET_ITEM = 'GET_ITEM'
 export const GET_ITEMS = 'GET_ITEMS'
 
 /* Cart Types */
-export const ADD_TO_CART = 'ADD_TO_CART'
-export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
-export const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
+export const GET_CART_ITEMS = 'GET_CART_ITEMS'
 
 /* Other Types */
 export const ACTIVE_FACULTY = 'ACTIVE_FACULTY'
