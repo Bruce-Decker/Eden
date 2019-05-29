@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Cart.css';
-import axios from 'axios';
 
 import CartItems from './CartItems';
 import CartSummary from './CartSummary';
@@ -59,19 +58,19 @@ class Cart extends Component {
     return (
       <div>
         <RegularBanner/>
-        <div class="cart-header">
+        <div className="cart-header">
           <h1>Shopping Cart</h1>
         </div>
-        <div class="cart-container row">
-          <div class="col-8 divider">
-            <div class="left-col">
+        <div className="cart-container row">
+          <div className="col-8 divider">
+            <div className="left-col">
               <CartItems cartItems={this.props.cart.items}/>
             </div>
             <hr/>
             <Recommendation/>
           </div>
-          <div class="col-3">
-            <div class="right-col">
+          <div className="col-3">
+            <div className="right-col">
               <CartSummary cartItems={this.props.cart.items}/>
               <hr/>
               <OtherBoughtItems/>

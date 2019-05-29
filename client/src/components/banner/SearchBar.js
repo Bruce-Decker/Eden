@@ -27,16 +27,16 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <form class="form-search" onSubmit={this.handleSubmit}>
+      <form className="form-search" onSubmit={this.handleSubmit}>
         <input
           type="text"
-          class="input-search"
+          className="input-search"
           placeholder="Search..."
           value={this.state.value}
           onChange={this.handleChange}
         />
 
-        <button type="submit" class="button-search">
+        <button type="submit" className="button-search">
           <img src={search} height="24" width="24" alt="Search"></img>
         </button>
       </form>

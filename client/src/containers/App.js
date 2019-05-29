@@ -10,21 +10,19 @@ import ShowProfile from '../components/profile/ShowProfile';
 import Register from '../components/register/Register';
 import Items from '../components/items/index';
 import SearchResults from '../components/search/SearchResults';
-import Ar from '../components/ar/index'
-import VR from '../components/vr/VR'
+import Ar from '../components/ar/index';
+import VR from '../components/vr/VR';
+import Item from '../components/item/index';
+import Cart from '../components/cart/Cart';
+import Checkout from '../components/checkout/Checkout';
 
 import { Provider } from 'react-redux';
-import { setCurrentUser } from '../redux/actions/AuthenticationActions'
-import  setTokenHeader  from '../utils/setTokenHeader'
+import { setCurrentUser } from '../redux/actions/AuthenticationActions';
+import  setTokenHeader  from '../utils/setTokenHeader';
 import jwt_decode from 'jwt-decode';
-import store from '../redux/store'
+import store from '../redux/store';
 
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
-
-// for testing
-import Item from '../components/item/index'
-import Cart from '../components/cart/Cart'
-// for testing
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -59,16 +57,12 @@ class App extends Component {
           <Route exact path="/product/:category" component={Items} />
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile" component = {ShowProfile} />
-
-          {/* for testing */}
           <Route exact path="/items/:id" component={Item} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
-         
+          <Route exact path="/checkout" component={Checkout} />
           <Route exact path="/vr" component={VR} />
           <Route exact path="/items/:id/ar" component={Ar} />
-          {/* for testing */}
-
 
         </div>
         </BrowserRouter>

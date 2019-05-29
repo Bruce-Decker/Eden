@@ -19,7 +19,7 @@ class Footer extends Component {
     render() {
         return (
             <footer>
-            <div class="footer-copyright text-center">
+            <div className="footer-copyright text-center">
                 © 2019 Eden
             </div>    
           </footer>

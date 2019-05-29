@@ -1,0 +1,86 @@
+#checkout-header {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+#shipping {
+  float: right;
+  margin-right: 50px;
+  width: 500px;
+}
+
+#billing {
+  float: left;
+  margin-left: 50px;
+  width: 500px;
+}
+
+form {
+  margin-top: 1rem;
+}
+
+.divider {
+  border-right: 1px solid lightgrey;
+}
+
+.ck-row {
+  display: flex;
+}
+
+.ck-col {
+  flex: 50%;
+}
+
+.three-col-row {
+  display: flex;
+}
+
+.three-col-col {
+  flex: 30%;
+}
+
+.center-col {
+  flex: 30%;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.req {
+  color: red;
+  font-weight: bold;
+}
+
+#checkout-submit {
+  display: flex;
+  justify-content: center;
+}
+
+.checkout-button {
+  color: white;
+  border-width: 1px;
+  border-color: #53b46e;
+  border-radius: 5px;
+  background-color: #53b46e;
+  font-size: 1.5rem;
+  transition: .25s ease;
+  text-decoration: none;
+  width: 175px;
+  height: 60px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.checkout-button:active, .checkout-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.checkout-button:active {
+  border-style: solid;
+}
+
+.checkout-button:hover{
+  background: transparent;
+  color: black;
+  font-size: 1.6rem;
+}
