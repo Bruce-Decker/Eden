@@ -3,6 +3,8 @@ import './SearchResults.css';
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
+import { BrowserRouter as Route, Link } from 'react-router-dom';
+
 class SearchResultItems extends Component {
   constructor(props) {
     super(props);
@@ -23,10 +25,15 @@ class SearchResultItems extends Component {
           return (
             <li key={item.item_id} class="search-item row">
               <div class="col-2">
-                <img class="search-item-img" style={{width: "100%"}} src={item.item_image} alt="Item"></img>
+                <Link to={"/items/" + item.item_id}>
+                  <img onClick={() => window.scrollTo(0, 0)} 
+                       class="search-item-img" style={{width: "100%"}} src={item.item_image} alt="Item"></img>
+                </Link>
               </div>
               <div class="col-6">
-                <div>{item.item_name}</div>
+                <Link to={"/items/" + item.item_id}>
+                  <div onClick={() => window.scrollTo(0, 0)}>{item.item_name}</div>
+                </Link>
                 <div>{item.description}</div>
                 <div>{this.renderRating(item.average_rating)}</div>
               </div>

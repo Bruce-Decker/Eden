@@ -7,7 +7,7 @@ import { addToCart } from '../../redux/actions/CartActions'
 
 const Add = ({ dispatch }) => {
   return (
-    <button class="item-button" 
+    <button class="item-button" style={{marginTop: "2rem", marginBottom: "2rem"}}
             onClick={e => {
               e.preventDefault()
               dispatch(addToCart(parseInt(Math.random() * 10))) // test several ids
