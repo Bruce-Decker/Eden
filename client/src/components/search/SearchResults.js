@@ -8,7 +8,8 @@ import LandingBanner from '../banner/LandingBanner';
 import RegularBanner from '../banner/RegularBanner';
 import SearchResultItems from './SearchResultItems';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { getSearchResults, getSearchPage } from '../../redux/actions/SearchActions';
 
 class SearchResults extends Component {
@@ -25,6 +26,15 @@ class SearchResults extends Component {
 
   componentDidMount() {
     console.log(this.props);
+
+    // handle search queries from this page
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.props.getSearchResults();
+    });
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   handlePageChange(pageNumber) {
@@ -88,10 +98,10 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(SearchResults);
+)(SearchResults));
 
 
 
