@@ -11,6 +11,10 @@ export const GET_ITEMS = 'GET_ITEMS'
 /* Cart Types */
 export const GET_CART_ITEMS = 'GET_CART_ITEMS'
 
+/* Search Types */
+export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS'
+export const GET_SEARCH_PAGE = 'GET_SEARCH_PAGE'
+
 /* Other Types */
 export const ACTIVE_FACULTY = 'ACTIVE_FACULTY'
 export const RETRIEVE_PROFILE = 'RETRIEVE_PROFILE'

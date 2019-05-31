@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './SearchResults.css';
-import axios from 'axios';
+import Pagination from 'react-js-pagination';
 
 import Category from '../../components/category/Category';
 import Footer from '../footer/Footer';
@@ -8,43 +8,27 @@ import LandingBanner from '../banner/LandingBanner';
 import RegularBanner from '../banner/RegularBanner';
 import SearchResultItems from './SearchResultItems';
 
+import { connect } from 'react-redux'
+import { getSearchResults, getSearchPage } from '../../redux/actions/SearchActions';
+
 class SearchResults extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      results: []
-    };
-
-    this.getSearchResults();
+    this.handlePageChange = this.handlePageChange.bind(this)
   }
 
-  async getSearchResults() {
-    // obtain url, containing search query
-    let uri = window.location.href;
+  componentWillMount() {
+    // on load, show first page (pages are one-indexed)
+    this.props.getSearchResults();
+  }
 
-    // isolate search query
-    let cmp = uri.substring(uri.lastIndexOf('/') + 1);
+  componentDidMount() {
+    console.log(this.props);
+  }
 
-    // remove any extra query parameters
-    if(cmp.indexOf('?') > -1) {
-      cmp = cmp.substring(0, cmp.indexOf('?'));
-    }
-
-    let uri_dec = decodeURIComponent(cmp);
-    let params = {
-      simple: 'true',
-      keyword: uri_dec
-    };
-
-    try {
-      const res = await axios.get('/search/getSearchResults', {params:params});
-      this.setState({
-        results: res.data
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  handlePageChange(pageNumber) {
+    this.props.getSearchPage(pageNumber);
   }
 
   showBanner() {
@@ -60,11 +44,77 @@ class SearchResults extends Component {
     return (
       <div>
         {this.showBanner()}
-        <SearchResultItems items={this.state.results}/>
+        <SearchResultItems items={this.props.search.items}/>
+        <div id='pagination'>
+          <Pagination
+            prevPageText='prev'
+            nextPageText='next'
+            firstPageText='first'
+            lastPageText='last'
+            activePage={this.props.search.activePage}
+            itemsCountPerPage={this.props.search.itemsPerPage}
+            totalItemsCount={this.props.search.numItems}
+            onChange={this.handlePageChange}
+            activeClass='pn-active'
+            activeLinkClass='pn-active-link'
+            itemClass='pn-item'
+            itemClassFirst='pn-item-first'
+            itemClassPrev='pn-item-prev'
+            itemClassNext='pn-item-next'
+            itemClassLast='pn-item-last'
+            disabledClass='pn-disabled'
+          />
+        </div>
         <Footer/>
       </div>
     );
   }
 }
 
-export default SearchResults;
+const mapDispatchToProps = dispatch => {
+  return({
+    getSearchResults: () => {
+      dispatch(getSearchResults());
+    },
+    getSearchPage: pageNumber => {
+      dispatch(getSearchPage(pageNumber));
+    }
+  });
+};
+
+const mapStateToProps = state => {
+  return {
+    search: state.search
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchResults);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

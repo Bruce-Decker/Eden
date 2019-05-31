@@ -1,10 +1,5 @@
 import { GET_CART_ITEMS } from '../actions/types';
 
-/*const initialState = {
-  ids: [],
-  quantities: {}
-}*/
-
 const initialState = {
   items: []
 }

@@ -38,5 +38,5 @@ export const changeQuantity = (iid, newQuantity) => dispatch => {
 
 export const cartSuccess = items => ({
   type: GET_CART_ITEMS,
-  items
+  items: items
 })
