@@ -23,6 +23,7 @@ import jwt_decode from 'jwt-decode';
 import store from '../redux/store';
 
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
+import Property from '../components/property/Property';
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -54,6 +55,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/product" component={Product} />
+          <Route exact path="/property" component={Property} />
           <Route exact path="/product/:category" component={Items} />
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile" component = {ShowProfile} />
