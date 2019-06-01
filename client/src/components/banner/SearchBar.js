@@ -4,6 +4,7 @@ import './SearchBar.css';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import isEmpty from '../../validation/isEmpty.js';
 import search from '../../images/search.png';
 
 class SearchBar extends Component {
@@ -21,8 +22,12 @@ class SearchBar extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    var url = '/search/' + this.state.value;
-    this.props.history.push(url);
+    let val = this.state.value;
+
+    if(!isEmpty(val)) {
+      var url = '/search/' + val;
+      this.props.history.push(url);
+    }
   }
 
   render() {
