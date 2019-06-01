@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_ITEM, GET_ITEMS } from './types';
+import { GET_ITEM, GET_ITEMS, GET_ITEMS_PAGE } from './types';
 
 const url = '/items/'
 
@@ -26,7 +26,17 @@ export const getItems = () => dispatch => {
 export const getItemsByCategory = (category) => dispatch => {
   return axios.get(url + '?category=' + category)
       .then(response => {
-        dispatch(getItemsSuccess(response.data))
+        dispatch(getItemsSuccess(1, response.data))
+      })
+      .catch(error => {
+        throw(error);
+      });
+};
+
+export const getItemsByPageNumber = (category, pageNumber) => dispatch => {
+  return axios.get(url + '?category=' + category + '&page=' + pageNumber)
+      .then(response => {
+        dispatch(getPageSuccess(pageNumber, response.data))
       })
       .catch(error => {
         throw(error);
@@ -38,7 +48,16 @@ export const getItemSuccess = (item) => ({
   item
 })
 
-export const getItemsSuccess = (items) => ({
+export const getItemsSuccess = (activePage, data) => ({
   type: GET_ITEMS,
-  items
+  activePage: activePage,
+  numItems: data.numItems,
+  itemsPerPage: data.itemsPerPage,
+  items: data.items
+})
+
+export const getPageSuccess = (activePage, data) => ({
+  type: GET_ITEMS_PAGE,
+  activePage: activePage,
+  items: data.items
 })

@@ -1,8 +1,11 @@
-import { GET_ITEM, GET_ITEMS } from '../actions/types';
+import { GET_ITEM, GET_ITEMS, GET_ITEMS_PAGE } from '../actions/types';
 
 const initialState = {
   object: Object,
-  data: []
+  data: [],
+  numItems: 0,
+  activePage: 0,
+  itemsPerPage: 0
 }
 
 const items = (state = initialState, action) => {
@@ -15,6 +18,15 @@ const items = (state = initialState, action) => {
     case GET_ITEMS:
       return {
         ...state,
+        numItems: action.numItems,
+        activePage: action.activePage,
+        itemsPerPage: action.itemsPerPage,
+        data: action.items
+      }
+    case GET_ITEMS_PAGE:
+      return {
+        ...state,
+        activePage: action.activePage,
         data: action.items
       }
     default:

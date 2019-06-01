@@ -3,7 +3,7 @@ const router = express.Router();
 const Item = require('../schema/Item');
 const uuidv4 = require('uuid/v4');
 
-
+const itemsPerPage = 20;
 
 
 router.post('/createItem', function(req, res) {
@@ -61,10 +61,19 @@ router.get('/', function(req,res) {
       }
     })
   } else {
+    const pageNumber = req.query.page || 1
     Item.find({
       category: req.query.category
-    }).then(async (items) => {
-      res.json(items);
+    }).skip((pageNumber - 1) * itemsPerPage).then(async (items) => {
+      let results = items.map(i => i._doc);
+
+      let ret = {
+        numItems: results.length,
+        itemsPerPage: itemsPerPage,
+        items: results.slice(0, itemsPerPage)
+      };
+
+      res.json(ret);
     }).catch(err => {
       console.log(err);
       res.json({ msg: 'category not found' });
