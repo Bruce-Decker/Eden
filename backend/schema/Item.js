@@ -26,6 +26,58 @@ const ItemSchema = new Schema({
         type: Number,
         required: true
     },
+    comments: [
+       {
+           comment_id: {
+             type: String,
+             required: true,
+             default: rand
+           },
+           email: {
+               type: String,
+               required: true
+           },
+           name: {
+               type: String,
+               required: true
+           },
+           comment: {
+               type: String,
+               required: true
+           },
+           time: {
+               type: Date,
+               required: true
+           },
+           upvote: [
+               {
+                 type: String
+               }
+           ],
+           downvote: [
+               {
+                   type: String
+               }
+           ],
+           replies: [
+               {
+                   email: {
+                       type: String
+                   },
+                   name: {
+                       type: String
+                   },
+                   comment: {
+                       type: String
+                   },
+                   time: {
+                       type: Date
+                   }
+               }
+           ]
+
+       }
+    ],
     ar: String,
     bid_price: Number // not required
 })

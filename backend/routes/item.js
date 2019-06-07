@@ -6,6 +6,43 @@ const uuidv4 = require('uuid/v4');
 const itemsPerPage = 20;
 
 
+router.post('/postCommentForItem/:item_id', function(req, res) {
+    const comment = req.body.comment
+    const time = Date.now()
+    const email = req.body.email
+    const name = req.body.name
+    const item_id = req.params.item_id
+    const data = {
+       email,
+       name,
+       comment,
+       time
+    }
+    if (comment) {
+      Item.findOneAndUpdate(
+          {
+            item_id: item_id
+          },
+         {
+            $push: {
+               comments: data
+            }
+          }, function(err, docs) {
+            if (err) {
+              res.send({Error: err})
+            } else {
+              res.send(docs)
+            }
+          }
+        )
+
+    }
+
+
+
+})
+
+
 router.post('/createItem', function(req, res) {
     const item_id = uuidv4()
     const item_name = req.body.item_name
