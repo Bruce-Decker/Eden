@@ -63,7 +63,7 @@ class App extends Component {
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
           <Route exact path="/checkout" component={Checkout} />
-          <Route exact path="/vr" component={VR} />
+          <Route exact path="/vr/:item_id" component={VR} />
           <Route exact path="/items/:id/ar" component={Ar} />
 
         </div>
