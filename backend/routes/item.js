@@ -44,6 +44,31 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
 
 })
 
+// router.post('/upvote', function(req, res) {
+//    var comment_id = req.body.comment_id
+//    var email = req.body.email
+//    var name = req.body.name
+//    var data = {
+//       email,
+//       name
+//    }
+//    if (email && name) {
+//       Item.findOneAndUpdate(
+//          {
+//              comment_id: comment_id
+//          },
+//          {
+             
+//          },
+//          {   
+//            "Item.$[comments].upvote": data
+//          }
+
+//       )
+//    }
+
+// })
+
 
 router.post('/createItem', function(req, res) {
     const item_id = uuidv4()
