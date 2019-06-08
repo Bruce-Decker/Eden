@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './Cart.css';
+
+import { BrowserRouter as Route, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
@@ -8,17 +12,23 @@ class CartItems extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    console.log(this.props);
+  }
+
   render() {
     return (
       <ul class="cart-item-list">
-        {this.props.cartItems.map(cartItem => {
+        {this.props.cart.items.map(cartItem => {
           return (
             <li key={cartItem.id} class="cart-item row">
               <div class="col-2">
-                <img class="cart-item-img" style={{width: "100%"}} src={cartItem.img} alt="Item"></img>
+                <img class="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
               </div>
               <div class="col-6">
-                <div>{cartItem.title}</div>
+                <Link to={"/items/" + cartItem.id}>
+                  <div onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</div>
+                </Link>
                 <div>{cartItem.description}</div>
                 {/*
                 <div>
@@ -41,7 +51,15 @@ class CartItems extends Component {
   }
 }
 
-export default CartItems;
+const mapStateToProps = state => {
+  return {
+    cart: state.cart
+  }
+};
+
+export default connect(
+  mapStateToProps
+)(CartItems);
 
 
 

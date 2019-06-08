@@ -78,8 +78,9 @@ router.get('/getCartItems', function(req,res) {
       let cur_item = items[i];
       let dbItem = await itemPromise(cur_item.item_id);
 
-      obj['item_name'] = dbItem._doc.item_name;
-      obj['item_image'] = dbItem._doc.item_image;
+      obj['id'] = dbItem._doc.item_id;
+      obj['name'] = dbItem._doc.item_name;
+      obj['image'] = dbItem._doc.item_image;
       obj['description'] = dbItem._doc.description;
       obj['category'] = dbItem._doc.category;
       obj['price'] = dbItem._doc.price;
