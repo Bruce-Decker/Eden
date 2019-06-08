@@ -51,7 +51,6 @@ export const registerUser = (userData, history) => dispatch => {
         // Save to localStorage
         const { token } = res.data;
         localStorage.setItem('jwtToken', token);
-        localStorage.setItem('currentUser', userData.email);
 
         // Set token to Auth header
         setTokenHeader(token);
@@ -71,7 +70,6 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const logout = () => dispatch => {
     localStorage.removeItem('jwtToken');
-    localStorage.removeItem('currentUser');
    
     setTokenHeader(false);
    

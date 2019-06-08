@@ -50,8 +50,11 @@ class Cart extends Component {
   }
 
   componentWillMount() {
-    let currentUser = window.localStorage.getItem('currentUser');
-    this.props.getCartItems(currentUser);
+    this.props.getCartItems(this.props.auth.user.email);
+  }
+
+  componentDidMount() {
+    console.log(this.props);
   }
 
   render() {
@@ -102,6 +105,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
+    auth: state.auth,
     cart: state.cart
   }
 };
