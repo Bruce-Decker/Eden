@@ -10,7 +10,7 @@ import Footer from '../footer/Footer';
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { getCartItems, addToCart, removeFromCart, changeQuantity } from '../../redux/actions/CartActions';
 
 // for testing
@@ -50,7 +50,8 @@ class Cart extends Component {
   }
 
   componentWillMount() {
-    this.props.getCartItems(this.props.auth.user.email);
+    let email = this.props.auth.user.email;
+    this.props.getCartItems(email);
   }
 
   componentDidMount() {
@@ -67,14 +68,14 @@ class Cart extends Component {
         <div className="cart-container row">
           <div className="col-8 divider">
             <div className="left-col">
-              <CartItems cartItems={this.props.cart.items}/>
+              <CartItems/>
             </div>
             <hr/>
             <Recommendation/>
           </div>
           <div className="col-3">
             <div className="right-col">
-              <CartSummary cartItems={this.props.cart.items}/>
+              <CartSummary/>
               <hr/>
               <OtherBoughtItems/>
             </div>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Cart.css';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class CartSummary extends Component {
   constructor(props) {
@@ -10,11 +11,11 @@ class CartSummary extends Component {
   }
 
   prices() {
-    if(this.props.cartItems.length == 0) {
+    if(this.props.cart.items.length == 0) {
       return 0.00;
     } else {
       const reducer = (accumulator, currentValue) => accumulator + currentValue;
-      let subtotal = this.props.cartItems.map(cartItem => cartItem.price).reduce(reducer).toFixed(2);
+      let subtotal = this.props.cart.items.map(cartItem => cartItem.price).reduce(reducer).toFixed(2);
       let tax = (subtotal * 0.15).toFixed(2);
       let total = (parseFloat(subtotal) + parseFloat(tax)).toString();
       return {
@@ -49,7 +50,15 @@ class CartSummary extends Component {
 
 }
 
-export default withRouter(CartSummary);
+const mapStateToProps = state => {
+  return {
+    cart: state.cart
+  }
+};
+
+export default withRouter(connect(
+  mapStateToProps
+)(CartSummary));
 
 
 
