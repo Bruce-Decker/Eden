@@ -3,7 +3,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const User = require('./schema/userModel')
 const mongoose = require('mongoose')
-const url = process.env.MONGODB_URI || "mongodb://localhost:27017/eden";//"mongodb://localhost:27017/Login_test_app"
+//const url = process.env.MONGODB_URI || "mongodb://localhost:27017/eden";//"mongodb://localhost:27017/Login_test_app"
+const url = process.env.MONGODB_URI || "mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority";
 var passport = require('passport')
 
 const morgan = require('morgan')
@@ -59,7 +60,7 @@ require('./config/passport')(passport);
 
 
 
-mongoose.connect(url, { useNewUrlParser: true })
+mongoose.connect(url, { useNewUrlParser: true })//
     .then(() => console.log("MongoDB is connected"))
     .catch(err => console.log(err))
 const port = process.env.PORT || 5000;
