@@ -53,12 +53,27 @@ const ItemSchema = new Schema({
            },
            upvote: [
                {
-                 type: String
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    email: {
+                        type: String,
+                        required: true
+                    }
+
                }
            ],
            downvote: [
                {
-                   type: String
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    email: {
+                        type: String,
+                        required: true
+                    }
                }
            ],
            replies: [
