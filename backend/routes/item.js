@@ -7,12 +7,14 @@ const itemsPerPage = 20;
 
 
 router.post('/postCommentForItem/:item_id', function(req, res) {
+    const comment_id = uuidv4()
     const comment = req.body.comment
     const time = Date.now()
     const email = req.body.email
     const name = req.body.name
     const item_id = req.params.item_id
     const data = {
+       comment_id,
        email,
        name,
        comment,
@@ -46,7 +48,7 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
 router.post('/createItem', function(req, res) {
     const item_id = uuidv4()
     const item_name = req.body.item_name
-    const item_image = req.body.image
+    const item_image = req.body.item_image
     const category = req.body.category
     const description = req.body.description
     const price = req.body.price
@@ -77,6 +79,7 @@ router.post('/createItem', function(req, res) {
       } else {    
           Item.create(data, function(err, newlyCreated) {
             if (err) {
+                  console.log(err)
                   res.send({msg: "False"});
                           
             } else {

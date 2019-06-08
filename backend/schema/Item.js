@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+const uniqueRandom = require("unique-random");
+const rand = uniqueRandom(1, 1000000);
 
 const ItemSchema = new Schema({
     item_id: {
