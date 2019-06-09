@@ -39,35 +39,73 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
         )
 
     }
-
-
-
 })
 
-// router.post('/upvote', function(req, res) {
-//    var comment_id = req.body.comment_id
-//    var email = req.body.email
-//    var name = req.body.name
-//    var data = {
-//       email,
-//       name
-//    }
-//    if (email && name) {
-//       Item.findOneAndUpdate(
-//          {
-//              comment_id: comment_id
-//          },
-//          {
-             
-//          },
-//          {   
-//            "Item.$[comments].upvote": data
-//          }
+router.post('/upvote/:comment_id', function(req, res) {
+   var comment_id = req.params.comment_id
+   console.log(comment_id)
+   var email = req.body.email
+   var name = req.body.name
+   const item_id = req.body.item_id
+   var data = {
+      name,
+      email
+   }
+   console.log(data)
+   if (email && name) {
+     console.log("test")
 
-//       )
-//    }
+      Item.findOneAndUpdate(
+         {
+          "comments.comment_id": comment_id
+         }, {
+            $push: {
+              "comments.$.upvote": data
+           }
+         },
+         function(err, docs) {
+          if (err) {
+            res.send({Error: err})
+          } else {
+            console.log("docs")
+            console.log(docs)
+            res.send(data)
+          }
+        }
+      )
+   }
+})
 
-// })
+
+router.post('/downvote/:comment_id', function(req, res) {
+  var comment_id = req.params.comment_id
+  console.log(comment_id)
+  var email = req.body.email
+  
+  if (email) {
+   
+
+    Item.findOneAndUpdate(
+      {
+       "comments.comment_id": comment_id
+      }, {
+         $pull: {
+           "comments.$.upvote": { email: email}
+        }
+      },
+      function(err, docs) {
+       if (err) {
+         res.send({Error: err})
+       } else {
+         console.log("docs")
+         console.log(docs)
+        res.send(docs)
+       }
+     }
+   )
+
+  }
+})
 
 
 router.post('/createItem', function(req, res) {
