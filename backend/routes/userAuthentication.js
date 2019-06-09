@@ -17,7 +17,6 @@ var redis = require("redis"),
 
 function cache(req, res, next) {
     const { errors, isValid } = validateLoginInput(req.body);
-
     if (!isValid) {
       return res.status(400).json(errors);
     }
@@ -108,7 +107,6 @@ router.post('/login', cache, (req, res) => {
   
     const email = req.body.email;
     const password = req.body.password;
-
     User.findOne({ email }).then(user => {
 
       if (!user) {
