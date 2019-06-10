@@ -26,10 +26,6 @@ class Filter extends Component {
     } 
   }
 
-  search = () => {
-    console.log(this.map.current.getBounds())
-  }
-
   handleSelect = (evt) => {
     const { selected } = this.state;
     selected[evt[0]] = evt[2]
@@ -51,7 +47,7 @@ class Filter extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
         })}
-        <button className="property-search-button" onClick={this.search}>Search this area</button>
+        <button className="property-search-button" onClick={this.props.search}>Search this area</button>
       </div>
     )
   }

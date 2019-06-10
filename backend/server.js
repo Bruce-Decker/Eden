@@ -3,7 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const User = require('./schema/userModel')
 const mongoose = require('mongoose')
-//const url = process.env.MONGODB_URI || "mongodb://localhost:27017/eden";//"mongodb://localhost:27017/Login_test_app"
+// const url = process.env.MONGODB_URI || "mongodb://localhost:27017/eden";//"mongodb://localhost:27017/Login_test_app"
 const url = process.env.MONGODB_URI || "mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority";
 var passport = require('passport')
 
@@ -22,6 +22,7 @@ const item = require('./routes/item');
 const search = require('./routes/search');
 const upload = require('./routes/upload')
 const message = require('./routes/message')
+const property = require('./routes/property');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -79,6 +80,7 @@ app.use('/items', item);
 app.use('/search', search);
 app.use('/upload', upload)
 app.use('/message', message)
+app.use('/properties', property)
 
 app.post('/test', function(req, res) {
     res.send("test")

@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const PropertySchema = new Schema({
+    id: {
+      type: Number,
+      required: true
+    },
     address: {
       type: String,
       required: true
@@ -23,15 +27,14 @@ const PropertySchema = new Schema({
       required: true
     },
     phone: {
-      type: String,
-      required: true
+      type: String
     },
     lat: {
-      type: String,
+      type: Number,
       required: true
     },
     lng: {
-      type: String,
+      type: Number,
       required: true
     },
     home_type: {
@@ -65,6 +68,9 @@ const PropertySchema = new Schema({
     price: {
         type: Number,
         required: true
+    },
+    images: {
+      type: [String]
     }
 })
 

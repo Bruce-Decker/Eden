@@ -83,6 +83,10 @@ class Property extends Component {
     console.log(evt)
   }
 
+  search = () => {
+    console.log(this.map.current.getBounds())
+  }
+
   setMap = () => {
     Map = compose(
       withProps(mapAttributes),
@@ -120,7 +124,9 @@ class Property extends Component {
     return (
       <div>
         <RegularBanner />
-        <Filter />
+        <Filter 
+          search={this.search}
+        />
         <Detail 
           show={this.state.show}
           handleClose={this.handleClose}

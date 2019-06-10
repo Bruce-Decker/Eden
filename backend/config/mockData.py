@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from random import randint
 from random import randrange
+import random
 
 def main():
   client = MongoClient("mongodb://localhost:27017")
@@ -9,6 +10,7 @@ def main():
   itemUser(db)
   cart(db)
   item(db)
+  properties(db)
 
 # ItemUser
 def itemUser(db):
@@ -91,6 +93,77 @@ def item(db):
         result = db.items.insert_one(item)
 
   print('Finished inserting {0} items into Items collection.'.format(itemId))
+
+
+  db.itemUsers.drop()
+
+  adjectives = ['cool','new','stylish','fun','hip','amazing','awesome','trendy','designer','faux']
+  colors = ['red','orange','yellow','green','blue','purple','pink','white','black','gray']
+  items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
+  comment = 'I liked it'
+  itemId = 0
+
+  for a in adjectives:
+    for c in colors:
+      for i in items:
+        itemId += 1
+        user = users[randint(0,9)]
+        itemUser = {
+          'item_id': str(itemId),
+          'item_name': '{0} {1} {2}'.format(a,c,i),
+          'user_id': str(user[0]),
+          'user_name': user[1],
+          'comment': comment,
+          'visited_count': randint(1,10),
+          'purchased_count': randint(1,3),
+          'rating': randint(1,5),
+        }
+
+        result = db.itemUsers.insert_one(itemUser)
+
+  print('Finished inserting {0} items into ItemUsers collection.'.format(itemId))
+
+# Properties
+def properties(db):
+  db.properties.drop()
+
+  addresses = ['Apartment 9, 201 Cuesta Dr','Apartment 7, 521 E Taylor Ave','717 Ellsworth Pl','550 E Weddell Dr','580 Arastradero Rd','555 E El Camino Real,','Donohoe St','1363 Kingfisher Way','Apartment 105, 500 Fulton St','20875 Valley Green Dr']
+  cities = ['Sunnyvale','San Jose','Mountain View','Palo Alto','Los Altos']
+  zip_ = ['94022', '95112', '94312', '94821', '91242', '95213', '95563', '91823', '98721', '99874']
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
+  home_types = ['homes', 'apartments', 'townhomes']
+  listing_types = ['sale', 'rent']
+  propId = 0
+
+  for i in range(100):
+    propId += 1
+    user = users[randint(0,9)]
+    property_data = {
+      'id': propId,
+      'address': addresses[int(randrange(0,len(addresses)))],
+      'state': 'CA',
+      'user_id': str(user[0]),
+      'user_name': user[1],
+      'city': cities[int(randrange(0,len(cities)))],
+      'zip': zip_[int(randrange(0,len(zip_)))],
+      'email': user[1],
+      'phone': 6699990000,
+      'lat': random.uniform(37.32661463408306,37.340622024210774),
+      'lng': random.uniform(-121.89412876426604,-121.87084719001678),
+      'home_type': home_types[randint(0,2)],
+      'listing_type': listing_types[randint(0,1)],
+      'num_bath': randint(1,10),
+      'num_bed': randint(1,10),
+      'space': randint(500,5000),
+      'price': randint(500,1000000),
+      'images': ['home1.jpg', 'home2.jpg', 'home3.jpg']
+    }
+    result = db.properties.insert_one(property_data)
+
+  print('Finished inserting {0} items into Property collection.'.format(propId))
+
+
 
 if __name__ == "__main__":
   main()
