@@ -136,9 +136,11 @@ def properties(db):
   listing_types = ['sale', 'rent']
   propId = 0
 
-  for i in range(100):
+  for i in range(10000):
     propId += 1
     user = users[randint(0,9)]
+    ltype = randint(0,1)
+    price = randint(500,5000) if ltype == 1 else randint(50000,1000000) 
     property_data = {
       'id': propId,
       'address': addresses[int(randrange(0,len(addresses)))],
@@ -150,14 +152,14 @@ def properties(db):
       'desc': 'You will love living in this modern and spacious 1 bedroom apartment located in Sunnyvale with easy freeway access! Inside you will find, ample white kitchen cabinetry, black granite countertops, updated fixtures, plush carpeting and hard surface flooring! Wood beam ceilings add lots of architectural appeal! This downstairs unit also features an enclosed patio area.',
       'email': user[1],
       'phone': 6699990000,
-      'lat': random.uniform(37.32661463408306,37.340622024210774),
-      'lng': random.uniform(-121.89412876426604,-121.87084719001678),
+      'lat': random.uniform(37.20838626323297,37.43254343446974),
+      'lng': random.uniform(-122.15024233370286,-121.77773714571458),
       'home_type': home_types[randint(0,2)],
-      'listing_type': listing_types[randint(0,1)],
+      'listing_type': listing_types[ltype],
       'num_bath': randint(1,10),
       'num_bed': randint(1,10),
       'space': randint(500,5000),
-      'price': randint(500,1000000),
+      'price': price,
       'images': ['home1.jpg', 'home2.jpg', 'home3.jpg']
     }
     result = db.properties.insert_one(property_data)

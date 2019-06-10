@@ -8,12 +8,14 @@ import { connect } from 'react-redux'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
+import icon from '../../images/msg.png'
+
 import { getProperties } from '../../redux/actions/PropertyActions'
 
 /* eslint-disable no-undef */
 
 var Map;
-const icon = 'http://maps.google.com/mapfiles/ms/icons/green.png'
+// const icon = 'http://maps.google.com/mapfiles/ms/icons/green.png'
 const default_lat = 37.3351874
 const default_lng = -121.8810715
 const mapAttributes = {
@@ -61,8 +63,9 @@ class Property extends Component {
           return <Marker key={i} icon={icon} label={{
                     text: price,
                     fontFamily: "Nunito",
-                    fontSize: "16px",
-                    color: "ิblack"
+                    fontSize: "14px",
+                    color: "white",
+                    fontWeight: "bold"
                   }}
                   position={{ lat: lat, lng: lng }} onClick={props.handleMarkerClick} />
         })}
