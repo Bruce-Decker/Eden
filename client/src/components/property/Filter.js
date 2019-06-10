@@ -30,6 +30,7 @@ class Filter extends Component {
         response => {
           const { lat, lng } = response.results[0].geometry.location;
           this.props.setCenter(lat, lng)
+          this.search()
         },
         error => {
           console.error(error);

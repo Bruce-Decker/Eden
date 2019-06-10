@@ -88,6 +88,9 @@ class Property extends Component {
     lng = position.coords.longitude
     this.setState({ lat: lat, lng: lng })
     this.setCenter(lat, lng)
+    setTimeout(() => {
+      this.search(0, 0, 'houses', 'sale')
+    }, 1000)
   }
 
   setCenter = (lat, lng) => {
@@ -96,9 +99,6 @@ class Property extends Component {
     center[1] = lng
     loading = false;
     this.setState({ center, loading })
-    setTimeout(() => {
-      this.search(0, 0, 'houses', 'sale')
-    }, 1000)
   }
 
   handleCenterChanged = () => {
