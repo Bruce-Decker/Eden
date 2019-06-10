@@ -1,7 +1,7 @@
 import { GET_ERRORS, GET_SEARCH_RESULTS, GET_SEARCH_PAGE } from './types';
 import axios from 'axios';
 
-export const getSearchResults = () => dispatch => {
+export const getSearchResults = (pageNumber) => dispatch => {
   // obtain url, containing search query
   let uri = window.location.href;
 
@@ -17,36 +17,17 @@ export const getSearchResults = () => dispatch => {
   let params = {
     simple: 'true',
     keyword: uri_dec,
+    pageNumber: pageNumber
   };
 
   axios
     .get('/search/getSearchResults', {params:params})
     .then(res => {
       let numItems = res.data.numItems;
-      let activePage = 1;
+      let activePage = pageNumber;
       let itemsPerPage = res.data.itemsPerPage;
       let items = res.data.items;
       dispatch(searchResultsSuccess(numItems, activePage, itemsPerPage, items));
-    })
-    .catch(err =>
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
-}
-
-export const getSearchPage = (pageNumber) => dispatch => {
-  let params = {
-    pageNumber: pageNumber
-  }
-
-  axios
-    .get('/search/getSearchPage', {params:params})
-    .then(res => {
-      let activePage = pageNumber;
-      let items = res.data;
-      dispatch(searchPageSuccess(activePage, items));
     })
     .catch(err =>
       dispatch({
@@ -61,11 +42,5 @@ export const searchResultsSuccess = (numItems, activePage, itemsPerPage, items) 
   numItems: numItems,
   activePage: activePage,
   itemsPerPage: itemsPerPage,
-  items: items
-})
-
-export const searchPageSuccess = (activePage, items) => ({
-  type: GET_SEARCH_PAGE,
-  activePage: activePage,
   items: items
 })

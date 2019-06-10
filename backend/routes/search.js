@@ -3,13 +3,12 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Item = require('../schema/Item');
 var localStorage = require('localStorage');
-const itemsPerPage = 10;
-
-var searchResults = [];
 
 router.get('/getSearchResults', function(req,res) {
   const is_simple_search = req.query.simple;
   const keyword = req.query.keyword;
+  const pageNumber = req.query.pageNumber || 1;
+  const itemsPerPage = req.query.itemsPerPage || 10;
 
   if(is_simple_search == 'true') {
 
@@ -20,9 +19,8 @@ router.get('/getSearchResults', function(req,res) {
         {'category': {'$regex': re}},
         {'description': {'$regex': re}}
       ]
-    },{ _id: 0 }).then((itms) => {
+    },{ _id: 0 }).skip((pageNumber - 1) * itemsPerPage).then((itms) => {
       let results = itms.map(i => i._doc);
-      searchResults = Object.assign([], results);
 
       let ret = {
         numItems: results.length,
@@ -44,13 +42,13 @@ router.get('/getSearchResults', function(req,res) {
     res.json({ msg: 'success' });
   }
 });
-
+/*
 router.get('/getSearchPage', function(req,res) {
   const pageNumber = parseInt(req.query.pageNumber);
   let low = (pageNumber-1) * itemsPerPage;
   let high = pageNumber * itemsPerPage;
-  let items = searchResults.slice(low, high);
+  let items = [];//searchResults.slice(low, high);
   res.json(items);
-});
+});*/
 
 module.exports = router;

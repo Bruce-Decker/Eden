@@ -1,4 +1,4 @@
-import { GET_SEARCH_RESULTS, GET_SEARCH_PAGE } from '../actions/types';
+import { GET_SEARCH_RESULTS } from '../actions/types';
 
 const initialState = {
   numItems: 0,
@@ -14,12 +14,6 @@ const search = (state = initialState, action) => {
         numItems: action.numItems,
         activePage: action.activePage,
         itemsPerPage: action.itemsPerPage,
-        items: action.items
-      }
-    case GET_SEARCH_PAGE:
-      return {
-        ...state,
-        activePage: action.activePage,
         items: action.items
       }
     default:

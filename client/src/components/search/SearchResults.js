@@ -21,7 +21,7 @@ class SearchResults extends Component {
 
   componentWillMount() {
     // on load, show first page (pages are one-indexed)
-    this.props.getSearchResults();
+    this.props.getSearchResults(1);
   }
 
   componentDidMount() {
@@ -29,7 +29,7 @@ class SearchResults extends Component {
 
     // handle search queries from this page
     this.unlisten = this.props.history.listen((location, action) => {
-      this.props.getSearchResults();
+      this.props.getSearchResults(1);
     });
   }
 
@@ -38,7 +38,7 @@ class SearchResults extends Component {
   }
 
   handlePageChange(pageNumber) {
-    this.props.getSearchPage(pageNumber);
+    this.props.getSearchResults(pageNumber);
   }
 
   showBanner() {
@@ -83,11 +83,8 @@ class SearchResults extends Component {
 
 const mapDispatchToProps = dispatch => {
   return({
-    getSearchResults: () => {
-      dispatch(getSearchResults());
-    },
-    getSearchPage: pageNumber => {
-      dispatch(getSearchPage(pageNumber));
+    getSearchResults: pageNumber => {
+      dispatch(getSearchResults(pageNumber));
     }
   });
 };
