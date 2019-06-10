@@ -132,7 +132,7 @@ def properties(db):
   cities = ['Sunnyvale','San Jose','Mountain View','Palo Alto','Los Altos']
   zip_ = ['94022', '95112', '94312', '94821', '91242', '95213', '95563', '91823', '98721', '99874']
   users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
-  home_types = ['homes', 'apartments', 'townhomes']
+  home_types = ['houses', 'apartments', 'townhomes']
   listing_types = ['sale', 'rent']
   propId = 0
 

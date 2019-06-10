@@ -4,6 +4,7 @@ import errorReducer from './errorReducer';
 import CartReducers from './CartReducers';
 import ItemReducers from './ItemReducers';
 import SearchReducers from './SearchReducers';
+import PropertyReducers from './PropertyReducers';
 
 export default combineReducers({
     auth: AuthenticationReducers,
@@ -11,5 +12,6 @@ export default combineReducers({
     cart: CartReducers,
     items: ItemReducers,
     item: ItemReducers,
-    search: SearchReducers
+    search: SearchReducers,
+    property: PropertyReducers
 })

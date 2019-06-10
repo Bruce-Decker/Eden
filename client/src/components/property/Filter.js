@@ -7,7 +7,8 @@ import Geocode from "react-geocode";
 
 const options = [
   ['For Sale', 'For Rent'],
-  ['Any Price', '$1,000+', '$2,000+', '$3,000+', '$4,000+', '$5,000+'],
+  ['Any Price', '$500+', '$750+', '$1,000+', '$1,250+', '$1,500+', '$1,750+', '$2,000+', '$2,250+', '$2,500+', '$2,750+', '$3,000+'
+  ,'Any Price', '$50,000+', '$75,000+', '$100,000+', '$125,000+', '$150,000+', '$175,000+', '$200,000+', '$250,000+', '$300,000+', '$400,000+', '$500,000+'],
   ['0+ Beds', '1+ Beds', '2+ Beds', '3+ Beds', '4+ Beds', '5+ Beds', '6+ Beds'],
   ['Houses', 'Apartments', 'Townhomes']
 ]
@@ -38,9 +39,22 @@ class Filter extends Component {
   }
 
   handleSelect = (evt) => {
+    evt = JSON.parse("[" + evt + "]");
     const { selected } = this.state;
-    selected[evt[0]] = evt[2]
+    if (evt[0] === 0 && parseInt(evt[1]) !== selected[evt[0]]) {
+      selected[1] = 0
+    }
+    selected[evt[0]] = parseInt(evt[1])
     this.setState({ selected });
+    this.search()
+  }
+
+  search = () => {
+    const listing = options[0][this.state.selected[0]].split(' ')[1].toLowerCase()
+    const type = options[3][this.state.selected[3]].toLowerCase()
+    const bed = this.state.selected[2]
+    const price = this.state.selected[1] === 0 || this.state.selected[1] === 12 ? 0:options[1][this.state.selected[1]].replace(/[|&;$%@"<>()+,]/g, "")
+    this.props.search(price, bed, type, listing)
   }
   
   render() {
@@ -52,13 +66,15 @@ class Filter extends Component {
                   <Dropdown.Toggle id="property-button-style">{options[i][this.state.selected[i]]}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {Array.from(options[i], (e, j) => {
+                      if (i === 1 && j >= options[i].length / 2) return null
+                      if (i === 1 && this.state.selected[0] === 0) j += options[i].length / 2
                       const map = [i, j]
                       return <Dropdown.Item key={j} eventKey={map}>{options[i][j]}</Dropdown.Item>
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
         })}
-        <button className="property-search-button" onClick={this.props.search}>Search this area</button>
+        <button className="property-search-button" onClick={this.search}>Search this area</button>
       </div>
     )
   }

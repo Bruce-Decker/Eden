@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
+import { getProperties } from '../../redux/actions/PropertyActions'
+
 /* eslint-disable no-undef */
 
 var Map;
@@ -39,17 +41,17 @@ class Property extends Component {
     lat = position.coords.latitude
     lng = position.coords.longitude
     this.setCenter(lat, lng)
-    this.setMap()
-    this.setState({ update: true })
   }
 
   setCenter = (lat, lng) => {
     const { center } = this.state;
     center[0] = lat
     center[1] = lng
-    this.setState({ center });
     this.setMap()
-    this.setState({ update: true })
+    this.setState({ update: true, center })
+    setTimeout(() => {
+      this.search(0, 0, 'houses', 'sale')
+    }, 1000)
   }
 
   handleError = (error) => {
@@ -86,12 +88,17 @@ class Property extends Component {
     }, 2500)
   }
 
-  handleMarkerClick = () => {
+  handleMarkerClick = (key) => {
     this.handleShow();
   }
 
-  search = () => {
-    console.log(this.map.current.getBounds())
+  search = (price, bed, type, listing) => {
+    const bounds = this.map.current.getBounds()
+    const nelat = bounds.na.l
+    const nelng = bounds.ga.l
+    const swlat = bounds.na.j
+    const swlng = bounds.ga.j
+    this.props.getProperties(nelat, swlat, nelng, swlng, price, bed, type, listing)
   }
 
   setMap = () => {
@@ -110,17 +117,28 @@ class Property extends Component {
         }}
       >
         <Marker position={{ lat: lat, lng: lng }} />
-        <Marker icon={icon} label={{
+        {Array.from(this.props.properties, (e, i) => {
+          const price = '$' + this.props.properties[i].price
+          const lat = this.props.properties[i].lat
+          const lng = this.props.properties[i].lng
+          return <Marker key={i} icon={icon} label={{
+            text: price,
+            fontFamily: "Nunito",
+            fontSize: "16px",
+            color: "ิblack"
+          }} position={{ lat: lat, lng: lng }} onClick={this.handleMarkerClick} />
+        })}
+        {/* <Marker icon={icon} label={{
           text: "$1k",
           fontFamily: "Nunito",
           fontSize: "16px",
           color: "ิblack",
           fontWeight: "bold"
-        }} position={{ lat: 37.3399406, lng: -121.89599780000001 }} onClick={props.onMarkerClick} />
-        <Marker icon={icon} position={{ lat: 37.3409406, lng: -121.89399780000001 }} onClick={props.onMarkerClick} />
-        <Marker icon={icon} position={{ lat: 37.3349406, lng: -121.89199780000001 }} onClick={props.onMarkerClick} />
-        <Marker icon={icon} position={{ lat: 37.3359406, lng: -121.87999780000001 }} onClick={props.onMarkerClick} />
-        <Marker icon={icon} position={{ lat: 37.3389406, lng: -121.87799780000001 }} onClick={props.onMarkerClick} />
+        }} position={{ lat: 37.3399406, lng: -121.89599780000001 }} onClick={this.handleMarkerClick} />
+        <Marker icon={icon} key={1} position={{ lat: 37.3409406, lng: -121.89399780000001 }} onClick={this.handleMarkerClick} />
+        <Marker icon={icon} key={2} position={{ lat: 37.3349406, lng: -121.89199780000001 }} onClick={this.handleMarkerClick} />
+        <Marker icon={icon} key={3} position={{ lat: 37.3359406, lng: -121.87999780000001 }} onClick={this.handleMarkerClick} />
+        <Marker icon={icon} key={4} position={{ lat: 37.3389406, lng: -121.87799780000001 }} onClick={this.handleMarkerClick} /> */}
       </GoogleMap>
     )
   }
@@ -137,10 +155,7 @@ class Property extends Component {
           show={this.state.show}
           handleClose={this.handleClose}
         />
-        <Map
-          isMarkerShown={this.state.isMarkerShown}
-          onMarkerClick={this.handleMarkerClick}
-        />
+        <Map />
       </div>
     )
   }
@@ -148,13 +163,15 @@ class Property extends Component {
 
 const mapDispatchToProps = dispatch => {
   return({
-    
+    getProperties: (nelat, swlat, nelng, swlng, price, bed, type, listing) => {
+      dispatch(getProperties(nelat, swlat, nelng, swlng, price, bed, type, listing))
+    }
   })
 };
 
 function mapStateToProps(state) {
   return {
-    
+    properties: state.property.data
   }
 }
 

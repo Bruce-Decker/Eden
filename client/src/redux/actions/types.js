@@ -9,6 +9,9 @@ export const GET_ITEM = 'GET_ITEM'
 export const GET_ITEMS = 'GET_ITEMS'
 export const GET_ITEMS_PAGE = 'GET_ITEMS_PAGE'
 
+/* Property Types */
+export const GET_PROPERTIES = 'GET_PROPERTIES'
+
 /* Cart Types */
 export const GET_CART_ITEMS = 'GET_CART_ITEMS'
 
