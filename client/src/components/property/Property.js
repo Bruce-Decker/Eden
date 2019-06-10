@@ -3,10 +3,13 @@ import './Property.css';
 import RegularBanner from '../banner/RegularBanner';
 import Filter from './Filter'
 import Detail from './Detail'
+import Control from './Control'
 
 import { connect } from 'react-redux'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+
+import { Spinner } from 'react-bootstrap';
 
 import icon from '../../images/msg.png'
 
@@ -30,6 +33,7 @@ class Property extends Component {
     this.map = React.createRef()
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleError = this.handleError.bind(this);
 
     this.state = {
       show: false,
@@ -37,7 +41,9 @@ class Property extends Component {
       update: true,
       lat: default_lat, 
       lng: default_lng,
-      center: [default_lat, default_lng]
+      center: [default_lat, default_lng],
+      property: null,
+      loading: true
     };
 
     Map = compose(
@@ -55,6 +61,9 @@ class Property extends Component {
         }}
         onCenterChanged={props.handleCenterChanged}
       >
+        <Control position={google.maps.ControlPosition.CENTER}>
+          {this.state.loading ? (<Spinner style={{width: "50px", height: "50px"}} animation="border" variant="success" />):(null)}
+        </Control>
         <Marker position={{ lat: props.poslat, lng: props.poslng }} />
         {Array.from(props.properties, (e, i) => {
           const price = formatPrice(props.properties[i].price)
@@ -67,7 +76,7 @@ class Property extends Component {
                     color: "white",
                     fontWeight: "bold"
                   }}
-                  position={{ lat: lat, lng: lng }} onClick={props.handleMarkerClick} />
+                  position={{ lat: lat, lng: lng }} onClick={() => props.handleMarkerClick(i)} />
         })}
       </GoogleMap>
     )
@@ -82,10 +91,11 @@ class Property extends Component {
   }
 
   setCenter = (lat, lng) => {
-    const { center } = this.state;
+    var { center, loading } = this.state;
     center[0] = lat
     center[1] = lng
-    this.setState({ center })
+    loading = false;
+    this.setState({ center, loading })
     setTimeout(() => {
       this.search(0, 0, 'houses', 'sale')
     }, 1000)
@@ -106,8 +116,19 @@ class Property extends Component {
     this.setState({ show: true });
   }
 
+  handleError = (error) => {
+    if (error.code === error.PERMISSION_DENIED) {
+      var { loading } = this.state;
+      loading = false;
+      this.setState({ loading })
+      setTimeout(() => {
+        this.search(0, 0, 'houses', 'sale')
+      }, 1000)
+    }
+  }
+
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition(this.setCurrentPosition);
+    navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError);
   }
 
   componentDidMount() {
@@ -119,6 +140,9 @@ class Property extends Component {
   }
 
   handleMarkerClick = (key) => {
+    var { property } = this.state;
+    property = this.props.properties[key]
+    this.setState({ property });
     this.handleShow();
   }
 
@@ -142,6 +166,7 @@ class Property extends Component {
         <Detail 
           show={this.state.show}
           handleClose={this.handleClose}
+          property={this.state.property}
         />
         <Map 
           map={this.map}
@@ -161,7 +186,8 @@ class Property extends Component {
 const formatPrice = (price) => {
   var priceStr = price.toString()
   const length = priceStr.length
-  if (length > 4) return '$' + priceStr.slice(0, 3) +'k'
+  if (length > 5) return '$' + priceStr.slice(0, 3) +'k'
+  else if (length === 5) return '$' + priceStr.slice(0, 2) + '.' + priceStr[2] + 'k'
   else if (length === 4) return '$' + priceStr[0] + '.' + priceStr[1] + 'k'
   return '$' + priceStr
 }
