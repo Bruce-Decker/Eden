@@ -14,7 +14,7 @@ var Map;
 var lat = 37.3351874, lng = -121.8810715;
 const icon = 'http://maps.google.com/mapfiles/ms/icons/green.png'
 const mapAttributes = {
-  googleMapURL: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places",
+  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUocP7N8Bfa2KLWKYEfA-E7dIHfDkLwkM&v=3.exp&libraries=geometry,drawing,places",
   loadingElement: <div style={{ height: '100%' }} />,
   containerElement: <div style={{ height: '100vh' }} />,
   mapElement: <div style={{ height: '100%' }} />,
@@ -29,20 +29,32 @@ class Property extends Component {
 
     this.state = {
       show: false,
-      isMarkerShown: false,
+      isMarkerShown: true,
+      center: [lat, lng],
+      update: true
     };
   }
 
   setCurrentPosition = (position) => {
     lat = position.coords.latitude
     lng = position.coords.longitude
+    this.setCenter(lat, lng)
     this.setMap()
-    this.setState({ isMarkerShown: true })
+    this.setState({ update: true })
+  }
+
+  setCenter = (lat, lng) => {
+    const { center } = this.state;
+    center[0] = lat
+    center[1] = lng
+    this.setState({ center });
+    this.setMap()
+    this.setState({ update: true })
   }
 
   handleError = (error) => {
     if (error.code === error.PERMISSION_DENIED) {
-      this.setState({ isMarkerShown: true })
+      this.setState({ update: true })
     }
   }
 
@@ -78,11 +90,6 @@ class Property extends Component {
     this.handleShow();
   }
 
-  
-  handleSelect(event) {
-    console.log(evt)
-  }
-
   search = () => {
     console.log(this.map.current.getBounds())
   }
@@ -96,21 +103,19 @@ class Property extends Component {
       <GoogleMap
         ref={this.map}
         defaultZoom={16}
-        defaultCenter={{ lat: lat, lng: lng }}
+        center={{ lat: this.state.center[0], lng: this.state.center[1]}}
         options={{
-          // scrollwheel: false
           gestureHandling: 'greedy',
           disableDefaultUI: true
         }}
       >
-        {props.isMarkerShown && 
-        <Marker position={{ lat: lat, lng: lng }} />}
+        <Marker position={{ lat: lat, lng: lng }} />
         <Marker icon={icon} label={{
           text: "$1k",
           fontFamily: "Nunito",
-          fontSize: "14px",
-          color: "white",
-          backgroundColor: "black"
+          fontSize: "16px",
+          color: "ิblack",
+          fontWeight: "bold"
         }} position={{ lat: 37.3399406, lng: -121.89599780000001 }} onClick={props.onMarkerClick} />
         <Marker icon={icon} position={{ lat: 37.3409406, lng: -121.89399780000001 }} onClick={props.onMarkerClick} />
         <Marker icon={icon} position={{ lat: 37.3349406, lng: -121.89199780000001 }} onClick={props.onMarkerClick} />
@@ -126,6 +131,7 @@ class Property extends Component {
         <RegularBanner />
         <Filter 
           search={this.search}
+          setCenter={this.setCenter}
         />
         <Detail 
           show={this.state.show}

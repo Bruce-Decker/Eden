@@ -147,6 +147,7 @@ def properties(db):
       'user_name': user[1],
       'city': cities[int(randrange(0,len(cities)))],
       'zip': zip_[int(randrange(0,len(zip_)))],
+      'desc': 'You will love living in this modern and spacious 1 bedroom apartment located in Sunnyvale with easy freeway access! Inside you will find, ample white kitchen cabinetry, black granite countertops, updated fixtures, plush carpeting and hard surface flooring! Wood beam ceilings add lots of architectural appeal! This downstairs unit also features an enclosed patio area.',
       'email': user[1],
       'phone': 6699990000,
       'lat': random.uniform(37.32661463408306,37.340622024210774),

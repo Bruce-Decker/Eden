@@ -22,6 +22,10 @@ const PropertySchema = new Schema({
       type: String,
       required: true
     },
+    desc: {
+      type: String,
+      required: true
+    },
     email: {
       type: String,
       required: true

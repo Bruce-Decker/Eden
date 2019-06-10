@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Property.css';
 import { Dropdown, Form } from 'react-bootstrap';
 
-import { BrowserRouter as Route, Link } from 'react-router-dom';
+import Geocode from "react-geocode";
 
 
 const options = [
@@ -12,6 +12,8 @@ const options = [
   ['Houses', 'Apartments', 'Townhomes']
 ]
 
+Geocode.setApiKey("AIzaSyCUocP7N8Bfa2KLWKYEfA-E7dIHfDkLwkM");
+
 class Filter extends Component {
   constructor(props) {
     super(props)
@@ -19,10 +21,19 @@ class Filter extends Component {
       selected: Array.from(options, (e, i) => {return 0}),
      };
   }
-
-  handleKeyPress(target) {
-    if(target.charCode == 13){
-      alert('Enter clicked!!!');    
+  
+  handleKeyPress = (target) => {
+    const input = document.getElementById("property-input").value
+    if(target.charCode === 13 && input !== ''){
+      Geocode.fromAddress(input).then(
+        response => {
+          const { lat, lng } = response.results[0].geometry.location;
+          this.props.setCenter(lat, lng)
+        },
+        error => {
+          console.error(error);
+        }
+      );   
     } 
   }
 
@@ -35,14 +46,14 @@ class Filter extends Component {
   render() {
     return (
       <div className="property-filter">
-        <Form.Control id="property-input" onKeyPress={this.handleKeyPress} placeholder="Address or ZIP" />
+        <Form.Control id="property-input" onKeyPress={this.handleKeyPress} type="text" placeholder="Address or ZIP" />
         {Array.from(options, (e, i) => {
-          return <Dropdown className="property-button" onSelect={this.handleSelect}>
+          return <Dropdown key={i} className="property-button" onSelect={this.handleSelect}>
                   <Dropdown.Toggle id="property-button-style">{options[i][this.state.selected[i]]}</Dropdown.Toggle>
                   <Dropdown.Menu>
                     {Array.from(options[i], (e, j) => {
                       const map = [i, j]
-                      return <Dropdown.Item eventKey={map}>{options[i][j]}</Dropdown.Item>
+                      return <Dropdown.Item key={j} eventKey={map}>{options[i][j]}</Dropdown.Item>
                     })}
                   </Dropdown.Menu>
                 </Dropdown>
