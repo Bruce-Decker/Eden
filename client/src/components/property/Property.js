@@ -13,10 +13,11 @@ import { getProperties } from '../../redux/actions/PropertyActions'
 /* eslint-disable no-undef */
 
 var Map;
-var lat = 37.3351874, lng = -121.8810715;
 const icon = 'http://maps.google.com/mapfiles/ms/icons/green.png'
+const default_lat = 37.3351874
+const default_lng = -121.8810715
 const mapAttributes = {
-  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUocP7N8Bfa2KLWKYEfA-E7dIHfDkLwkM&v=3.exp&libraries=geometry,drawing,places",
+  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUocP7N8Bfa2KLWKYEfA-E7dIHfDkLwkM&v=3.31&libraries=geometry,drawing,places",
   loadingElement: <div style={{ height: '100%' }} />,
   containerElement: <div style={{ height: '100vh' }} />,
   mapElement: <div style={{ height: '100%' }} />,
@@ -25,21 +26,55 @@ class Property extends Component {
   constructor(props){
     super(props)
     this.map = React.createRef()
-    this.handleError = this.handleError.bind(this)
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
     this.state = {
       show: false,
       isMarkerShown: true,
-      center: [lat, lng],
-      update: true
+      update: true,
+      lat: default_lat, 
+      lng: default_lng,
+      center: [default_lat, default_lng]
     };
+
+    Map = compose(
+      withProps(mapAttributes),
+      withScriptjs,
+      withGoogleMap
+    )((props) =>
+      <GoogleMap
+        ref={props.map}
+        defaultZoom={16}
+        center={{ lat: props.centerlat, lng: props.centerlng}}
+        options={{
+          gestureHandling: 'greedy',
+          disableDefaultUI: true
+        }}
+        onCenterChanged={props.handleCenterChanged}
+      >
+        <Marker position={{ lat: props.poslat, lng: props.poslng }} />
+        {Array.from(props.properties, (e, i) => {
+          const price = formatPrice(props.properties[i].price)
+          const lat = props.properties[i].lat
+          const lng = props.properties[i].lng
+          return <Marker key={i} icon={icon} label={{
+                    text: price,
+                    fontFamily: "Nunito",
+                    fontSize: "16px",
+                    color: "ิblack"
+                  }}
+                  position={{ lat: lat, lng: lng }} onClick={props.handleMarkerClick} />
+        })}
+      </GoogleMap>
+    )
   }
 
   setCurrentPosition = (position) => {
+    var { lat, lng } = this.state;
     lat = position.coords.latitude
     lng = position.coords.longitude
+    this.setState({ lat: lat, lng: lng })
     this.setCenter(lat, lng)
   }
 
@@ -47,17 +82,17 @@ class Property extends Component {
     const { center } = this.state;
     center[0] = lat
     center[1] = lng
-    this.setMap()
-    this.setState({ update: true, center })
+    this.setState({ center })
     setTimeout(() => {
       this.search(0, 0, 'houses', 'sale')
     }, 1000)
   }
 
-  handleError = (error) => {
-    if (error.code === error.PERMISSION_DENIED) {
-      this.setState({ update: true })
-    }
+  handleCenterChanged = () => {
+    const { center } = this.state;
+    center[0] = this.map.current.getCenter().lat()
+    center[1] = this.map.current.getCenter().lng()
+    this.setState({ center })
   }
 
   handleClose() {
@@ -69,23 +104,15 @@ class Property extends Component {
   }
 
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError);
-    this.setMap()
+    navigator.geolocation.getCurrentPosition(this.setCurrentPosition);
   }
 
   componentDidMount() {
-    // this.delayedShowMarker()
     document.body.style.overflow = 'hidden';
   }
 
   componentWillUnmount() {
     document.body.style.overflow = 'unset';
-  }
-
-  delayedShowMarker = () => {
-    setTimeout(() => {
-      this.setState({ isMarkerShown: true })
-    }, 2500)
   }
 
   handleMarkerClick = (key) => {
@@ -101,48 +128,6 @@ class Property extends Component {
     this.props.getProperties(nelat, swlat, nelng, swlng, price, bed, type, listing)
   }
 
-  setMap = () => {
-    Map = compose(
-      withProps(mapAttributes),
-      withScriptjs,
-      withGoogleMap
-    )((props) =>
-      <GoogleMap
-        ref={this.map}
-        defaultZoom={16}
-        center={{ lat: this.state.center[0], lng: this.state.center[1]}}
-        options={{
-          gestureHandling: 'greedy',
-          disableDefaultUI: true
-        }}
-      >
-        <Marker position={{ lat: lat, lng: lng }} />
-        {Array.from(this.props.properties, (e, i) => {
-          const price = '$' + this.props.properties[i].price
-          const lat = this.props.properties[i].lat
-          const lng = this.props.properties[i].lng
-          return <Marker key={i} icon={icon} label={{
-            text: price,
-            fontFamily: "Nunito",
-            fontSize: "16px",
-            color: "ิblack"
-          }} position={{ lat: lat, lng: lng }} onClick={this.handleMarkerClick} />
-        })}
-        {/* <Marker icon={icon} label={{
-          text: "$1k",
-          fontFamily: "Nunito",
-          fontSize: "16px",
-          color: "ิblack",
-          fontWeight: "bold"
-        }} position={{ lat: 37.3399406, lng: -121.89599780000001 }} onClick={this.handleMarkerClick} />
-        <Marker icon={icon} key={1} position={{ lat: 37.3409406, lng: -121.89399780000001 }} onClick={this.handleMarkerClick} />
-        <Marker icon={icon} key={2} position={{ lat: 37.3349406, lng: -121.89199780000001 }} onClick={this.handleMarkerClick} />
-        <Marker icon={icon} key={3} position={{ lat: 37.3359406, lng: -121.87999780000001 }} onClick={this.handleMarkerClick} />
-        <Marker icon={icon} key={4} position={{ lat: 37.3389406, lng: -121.87799780000001 }} onClick={this.handleMarkerClick} /> */}
-      </GoogleMap>
-    )
-  }
-
   render() {
     return (
       <div>
@@ -155,10 +140,27 @@ class Property extends Component {
           show={this.state.show}
           handleClose={this.handleClose}
         />
-        <Map />
+        <Map 
+          map={this.map}
+          centerlat={this.state.center[0]}
+          centerlng={this.state.center[1]}
+          poslat={this.state.lat}
+          poslng={this.state.lng}
+          properties={this.props.properties}
+          handleMarkerClick={this.handleMarkerClick}
+          handleCenterChanged={this.handleCenterChanged}
+        />
       </div>
     )
   }
+}
+
+const formatPrice = (price) => {
+  var priceStr = price.toString()
+  const length = priceStr.length
+  if (length > 4) return '$' + priceStr.slice(0, 3) +'k'
+  else if (length === 4) return '$' + priceStr[0] + '.' + priceStr[1] + 'k'
+  return '$' + priceStr
 }
 
 const mapDispatchToProps = dispatch => {
