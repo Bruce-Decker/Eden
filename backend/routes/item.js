@@ -41,6 +41,33 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
     }
 })
 
+router.post('/deleteComment/:item_id', function(req, res) {
+    const item_id = req.params.item_id
+    const comment_id = req.body.comment_id
+    const email = req.body.email
+    Item.findOneAndUpdate(
+      {
+        "comments.comment_id": comment_id,
+        "comments.email": email
+      },
+     
+       {
+       $pull: {
+         comments: { comment_id: comment_id}
+      }
+      },
+      function(err, docs) {
+       if (err) {
+         res.send({Error: err})
+       } else {
+         console.log("docs")
+         console.log(docs)
+         res.send(docs)
+       }
+     }
+   )
+})
+
 router.post('/upvote/:comment_id', function(req, res) {
    var comment_id = req.params.comment_id
    console.log(comment_id)
@@ -59,6 +86,9 @@ router.post('/upvote/:comment_id', function(req, res) {
          {
           "comments.comment_id": comment_id
          }, {
+          $pull: {
+            "comments.$.downvote": { email: email}
+         },
             $push: {
               "comments.$.upvote": data
            }
@@ -81,18 +111,25 @@ router.post('/downvote/:comment_id', function(req, res) {
   var comment_id = req.params.comment_id
   console.log(comment_id)
   var email = req.body.email
-  
-  if (email) {
-   
+  var name = req.body.name
+  var data = {
+    name,
+    email
+ }
 
+  if (email) {
     Item.findOneAndUpdate(
       {
        "comments.comment_id": comment_id
       }, {
          $pull: {
            "comments.$.upvote": { email: email}
-        }
-      },
+        },
+        $push: {
+          "comments.$.downvote": data
+       }
+      }, 
+      
       function(err, docs) {
        if (err) {
          res.send({Error: err})
@@ -105,6 +142,60 @@ router.post('/downvote/:comment_id', function(req, res) {
    )
 
   }
+})
+
+router.post('/reply/:comment_id', function(req, res) {
+    var comment_id = req.params.comment_id
+    var email = req.body.email
+    var name = req.body.name
+    var reply_id =  uuidv4()
+    var reply = req.body.reply
+    var time = Date.now()
+    var data = {
+      reply_id,
+      email,
+      name,
+      reply,
+      time
+    }
+    Item.findOneAndUpdate(
+      {
+        "comments.comment_id": comment_id
+       }, {
+        $push: {
+           "comments.$.replies": data
+        }
+    }, function(err, docs) {
+       if (err) {
+         res.send({Error: err})
+       } else {
+         res.send(docs)
+       }
+    })
+})
+
+router.post('/deleteReply/:comment_id', function(req, res) {
+    var comment_id = req.params.comment_id
+    var reply_id = req.body.reply_id
+    Item.findOneAndUpdate(
+      {
+       "comments.comment_id": comment_id
+      }, {
+       $pull: {
+         "comments.$.replies": { reply_id: reply_id}
+      }
+      },
+      function(err, docs) {
+       if (err) {
+         res.send({Error: err})
+       } else {
+     
+         console.log(docs)
+         res.send(docs)
+       }
+     }
+   )
+
 })
 
 

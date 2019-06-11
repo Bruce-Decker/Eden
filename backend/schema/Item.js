@@ -78,13 +78,16 @@ const ItemSchema = new Schema({
            ],
            replies: [
                {
+                   reply_id: {
+                       type: String 
+                   },
                    email: {
                        type: String
                    },
                    name: {
                        type: String
                    },
-                   comment: {
+                   reply: {
                        type: String
                    },
                    time: {
