@@ -1,4 +1,4 @@
-import { GET_CART_ITEMS } from '../actions/types';
+import { GET_CART_ITEMS, CHANGE_QUANTITY } from '../actions/types';
 
 const initialState = {
   items: []
@@ -25,6 +25,19 @@ const cart = (state = initialState, action) => {
         ids: [...state.ids, action.id],
         quantities: {...state.quantities, [action.id]: 1}
       }*/
+    case CHANGE_QUANTITY:
+      return {
+        items: state.items.map(item => {
+          if (item.id == action.iid) {
+            return {
+              ...item,
+              quantity: action.newQuantity
+            }
+          } else {
+            return item;
+          }
+        })
+      }
     default:
       return state
   }

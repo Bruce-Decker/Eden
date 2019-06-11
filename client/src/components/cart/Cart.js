@@ -11,7 +11,7 @@ import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
 import { connect } from 'react-redux';
-import { getCartItems, addToCart, removeFromCart, changeQuantity } from '../../redux/actions/CartActions';
+import { getCartItems, addToCart } from '../../redux/actions/CartActions';
 
 // for testing
 const cartItems = [
@@ -94,12 +94,6 @@ const mapDispatchToProps = dispatch => {
     },
     addToCart: iid => {
       dispatch(addToCart(iid));
-    },
-    removeFromCart: iid => {
-      dispatch(removeFromCart(iid));
-    },
-    changeQuantity: (iid, newQuantity) => {
-      dispatch(changeQuantity(iid, newQuantity));
     }
   });
 };

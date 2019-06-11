@@ -14,6 +14,9 @@ export const GET_PROPERTIES = 'GET_PROPERTIES'
 
 /* Cart Types */
 export const GET_CART_ITEMS = 'GET_CART_ITEMS'
+export const ADD_TO_CART = 'ADD_TO_CART'
+export const CHANGE_QUANTITY = 'CHANGE_QUANTITY'
+export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 
 /* Search Types */
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS'
