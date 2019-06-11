@@ -4,8 +4,8 @@ from random import randrange
 import random
 
 def main():
-  client = MongoClient("mongodb://localhost:27017")
-  db = client.eden
+  client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
+  db = client.test
 
   itemUser(db)
   cart(db)
@@ -136,7 +136,7 @@ def properties(db):
   listing_types = ['sale', 'rent']
   propId = 0
 
-  for i in range(10000):
+  for i in range(5000):
     propId += 1
     user = users[randint(0,9)]
     ltype = randint(0,1)
