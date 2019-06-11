@@ -52,6 +52,22 @@ router.post('/createCart', function(req, res) {
   });
 });
 
+router.post('/changeQuantity', function(req, res) {
+  const email = req.body.email;
+  const iid = req.body.iid;
+  const newQuantity = parseInt(req.body.newQuantity);
+
+  Cart.update( {'email': email, 'items.item_id': iid},
+    { $set: {'items.$.quantity': newQuantity} }, function(err, result) {
+    if (err) {
+      res.send("Failed to change quantity for item");
+    } else {
+      console.log(result);
+      res.send("Changed item quantity successfully");
+    }
+  });
+});
+
 router.get('/getCartItems', function(req,res) {
   const email = req.query.email;
 
@@ -84,6 +100,7 @@ router.get('/getCartItems', function(req,res) {
       obj['description'] = dbItem._doc.description;
       obj['category'] = dbItem._doc.category;
       obj['price'] = dbItem._doc.price;
+      obj['quantity'] = cur_item.quantity;
 
       ret.push(obj);
     }

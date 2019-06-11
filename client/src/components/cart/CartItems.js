@@ -3,6 +3,7 @@ import './Cart.css';
 
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { removeFromCart, changeQuantity } from '../../redux/actions/CartActions';
 
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
@@ -10,10 +11,20 @@ import star from '../../images/rating.png';
 class CartItems extends Component {
   constructor(props) {
     super(props);
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     console.log(this.props);
+  }
+
+  handleChange(e) {
+    let arr = e.target.value.split('_');
+    let email = this.props.auth.user.email;
+    let iid = arr[0];
+    let newQuantity = parseInt(arr[1]);
+    this.props.changeQuantity(email, iid, newQuantity);
   }
 
   render() {
@@ -40,7 +51,21 @@ class CartItems extends Component {
               </div>
               <div class="col-3">
                 <div>{cartItem.price}</div>
-                <div>Change Quantity</div>
+                <div>
+                  <span>Change Quantity </span>
+                  <select id="quantity" name="quantity" onChange={this.handleChange}>
+                    <option value={cartItem.id+"_1"}>1</option>
+                    <option value={cartItem.id+"_2"}>2</option>
+                    <option value={cartItem.id+"_3"}>3</option>
+                    <option value={cartItem.id+"_4"}>4</option>
+                    <option value={cartItem.id+"_5"}>5</option>
+                    <option value={cartItem.id+"_6"}>6</option>
+                    <option value={cartItem.id+"_7"}>7</option>
+                    <option value={cartItem.id+"_8"}>8</option>
+                    <option value={cartItem.id+"_9"}>9</option>
+                    <option value={cartItem.id+"_10"}>10</option>
+                  </select>
+                </div>
                 <div>Remove From Cart</div>
               </div>
             </li>
@@ -51,6 +76,17 @@ class CartItems extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return({
+    removeFromCart: iid => {
+      dispatch(removeFromCart(iid));
+    },
+    changeQuantity: (email, iid, newQuantity) => {
+      dispatch(changeQuantity(email, iid, newQuantity));
+    }
+  });
+};
+
 const mapStateToProps = state => {
   return {
     cart: state.cart
@@ -58,7 +94,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(CartItems);
 
 

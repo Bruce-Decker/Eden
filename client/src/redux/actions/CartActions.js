@@ -1,4 +1,4 @@
-import { GET_ERRORS, GET_CART_ITEMS } from './types';
+import { GET_ERRORS, GET_CART_ITEMS, CHANGE_QUANTITY } from './types';
 import axios from 'axios';
 
 export const getCartItems = email => dispatch => {
@@ -31,12 +31,33 @@ export const removeFromCart = iid => dispatch => {
   dispatch(cartSuccess(items));
 }
 
-export const changeQuantity = (iid, newQuantity) => dispatch => {
-  let items = [];
-  dispatch(cartSuccess(items));
+export const changeQuantity = (email, iid, newQuantity) => dispatch => {
+  let params = {
+    email: email,
+    iid: iid,
+    newQuantity: newQuantity
+  }
+
+  axios
+    .post('/cart/changeQuantity', params)
+    .then(res => {
+      dispatch(changeQuantitySuccess(iid, newQuantity));
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 }
 
 export const cartSuccess = items => ({
   type: GET_CART_ITEMS,
   items: items
+})
+
+export const changeQuantitySuccess = (iid, newQuantity) => ({
+  type: CHANGE_QUANTITY,
+  iid: iid,
+  newQuantity: newQuantity
 })
