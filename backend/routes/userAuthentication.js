@@ -19,12 +19,9 @@ function cache(req, res, next) {
     const { errors, isValid } = validateLoginInput(req.body);
     if (!isValid) {
       return res.status(400).json(errors);
-    }
-       
+    }    
         client.get(req.body.email, function (err, user) {
             if (err) throw err;
-           
-           
             if (user != null) {
                 //res.send(respond(org, data));
                 var data = JSON.parse(user)
@@ -34,7 +31,9 @@ function cache(req, res, next) {
                 .then(isMatch => {
                         if (isMatch) {
                             console.log("redis retrieve")
-                            const payload = { id: user.id, email: user.email, name: user.name} 
+                          
+                            const payload = { id: data.id, email: data.email, name: data.name, password: data.password}
+                            console.log(payload) 
                             jwt.sign(
                                 payload, 
                                 'secret', 
@@ -50,11 +49,7 @@ function cache(req, res, next) {
                             errors.password = 'Password incorrect'
                             return res.status(400).json(errors)
                         }
-
-                    
-
                 })
-                  
             } else {
                 next();
             }
