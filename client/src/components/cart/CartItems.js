@@ -13,6 +13,7 @@ class CartItems extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,13 @@ class CartItems extends Component {
     let iid = arr[0];
     let newQuantity = parseInt(arr[1]);
     this.props.changeQuantity(email, iid, newQuantity);
+  }
+
+  handleRemove(e) {
+    console.log(e.target.name);
+    let email = this.props.auth.user.email;
+    let iid = e.target.name;
+    this.props.removeFromCart(email, iid);
   }
 
   render() {
@@ -66,7 +74,9 @@ class CartItems extends Component {
                     <option value={cartItem.id+"_10"}>10</option>
                   </select>
                 </div>
-                <div>Remove From Cart</div>
+                <div>
+                  <button id="remove" name={cartItem.id} onClick={this.handleRemove}>Delete</button>
+                </div>
               </div>
             </li>
           )
@@ -78,8 +88,8 @@ class CartItems extends Component {
 
 const mapDispatchToProps = dispatch => {
   return({
-    removeFromCart: iid => {
-      dispatch(removeFromCart(iid));
+    removeFromCart: (email, iid) => {
+      dispatch(removeFromCart(email, iid));
     },
     changeQuantity: (email, iid, newQuantity) => {
       dispatch(changeQuantity(email, iid, newQuantity));
@@ -89,6 +99,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
+    auth: state.auth,
     cart: state.cart
   }
 };

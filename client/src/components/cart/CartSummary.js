@@ -17,7 +17,7 @@ class CartSummary extends Component {
       const reducer = (accumulator, currentValue) => accumulator + currentValue;
       let subtotal = this.props.cart.items.map(cartItem => cartItem.price*cartItem.quantity).reduce(reducer).toFixed(2);
       let tax = (subtotal * 0.15).toFixed(2);
-      let total = (parseFloat(subtotal) + parseFloat(tax)).toString();
+      let total = (parseFloat(subtotal) + parseFloat(tax)).toFixed(2);
       return {
         subtotal: subtotal,
         tax: tax,

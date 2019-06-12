@@ -68,6 +68,21 @@ router.post('/changeQuantity', function(req, res) {
   });
 });
 
+router.post('/removeFromCart', function(req, res) {
+  const email = req.body.email;
+  const iid = req.body.iid;
+
+  Cart.update( {'email': email, 'items.item_id': iid},
+    { $pull: {'items': { 'item_id': iid } } }, function(err, result) {
+    if (err) {
+      res.send("Failed to remove item from cart");
+    } else {
+      console.log(result);
+      res.send("Removed item from cart successfully");
+    }
+  });
+});
+
 router.get('/getCartItems', function(req,res) {
   const email = req.query.email;
 

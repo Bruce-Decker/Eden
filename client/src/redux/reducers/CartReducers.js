@@ -1,4 +1,4 @@
-import { GET_CART_ITEMS, CHANGE_QUANTITY } from '../actions/types';
+import { GET_CART_ITEMS, CHANGE_QUANTITY, REMOVE_FROM_CART } from '../actions/types';
 
 const initialState = {
   items: []
@@ -37,6 +37,10 @@ const cart = (state = initialState, action) => {
             return item;
           }
         })
+      }
+    case REMOVE_FROM_CART:
+      return {
+        items: state.items.filter(item => item.id != action.iid)
       }
     default:
       return state
