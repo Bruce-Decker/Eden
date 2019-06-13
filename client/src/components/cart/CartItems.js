@@ -61,7 +61,7 @@ class CartItems extends Component {
                 <div>{cartItem.price}</div>
                 <div>
                   <span>Change Quantity </span>
-                  <select id="quantity" name="quantity" onChange={this.handleChange}>
+                  <select id="quantity" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
                     <option value={cartItem.id+"_1"}>1</option>
                     <option value={cartItem.id+"_2"}>2</option>
                     <option value={cartItem.id+"_3"}>3</option>
