@@ -13,6 +13,7 @@ import SearchResults from '../components/search/SearchResults';
 import Ar from '../components/ar/index';
 import VR from '../components/vr/VR';
 import Item from '../components/item/index';
+import CreateItem from '../components/item/CreatItem'
 import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 
@@ -60,6 +61,7 @@ class App extends Component {
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile" component = {ShowProfile} />
           <Route exact path="/items/:id" component={Item} />
+          <Route exact path="/createItem" component={CreateItem} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
           <Route exact path="/checkout" component={Checkout} />

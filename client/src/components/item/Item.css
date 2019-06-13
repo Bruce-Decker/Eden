@@ -104,3 +104,10 @@
 .item-review-item {
   margin-bottom: 2.5rem;
 }
+
+.createItem {
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-right: 500px;
+    width: 600px;
+}
