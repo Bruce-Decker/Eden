@@ -2,8 +2,39 @@ const express = require('express');
 const router = express.Router();
 const Item = require('../schema/Item');
 const uuidv4 = require('uuid/v4');
-
+var multer = require('multer')
 const itemsPerPage = 20;
+
+var item_id
+
+const itemImageStorage = multer.diskStorage({
+  
+  destination: function(req, file, cb) {
+     item_id = uuidv4()
+     cb(null, '../client/public/item_images/')
+  },
+  filename: function(req, file, cd) {
+      
+      file.originalname = item_id + '.jpg'
+      cd(null, file.originalname)
+  }
+})
+
+
+const itemImageFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+      cb(null, true);
+  } else {
+      cb(null, false);
+  }
+
+}
+
+
+const itemImageUpload = multer({
+  storage: itemImageStorage,
+  fileFilter: itemImageFilter
+})
 
 
 router.post('/postCommentForItem/:item_id', function(req, res) {
@@ -199,14 +230,14 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 })
 
 
-router.post('/createItem', function(req, res) {
-    const item_id = uuidv4()
+router.post('/createItem', itemImageUpload.single('filename'), function(req, res) {
     const item_name = req.body.item_name
-    const item_image = req.body.item_image
+    const item_image = "item_images/" + item_id + '.jpg'
     const category = req.body.category
     const description = req.body.description
     const price = req.body.price
     const bid_price = req.body.bid_price
+    console.log(req.body.price)
 
     const data = {
        item_id,
@@ -218,6 +249,8 @@ router.post('/createItem', function(req, res) {
        bid_price
     }
 
+    console.log(data)
+
     Item.findOne({item_id: item_id}, function(err, docs) {
       if (docs) {
          Item.findOneAndUpdate({item_id: item_id}, data, function(err, result) {
@@ -225,8 +258,8 @@ router.post('/createItem', function(req, res) {
                        res.send("Fail")
                       
            } else {
-             console.log(result)
-                       res.send({msg: "Update successfully", data: data})
+                  console.log(result)
+                  res.send({msg: "Update successfully", data: data})
                       
             }
         })

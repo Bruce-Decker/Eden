@@ -5,6 +5,12 @@ import { BrowserRouter as Route, Link } from 'react-router-dom';
 
 
 class Item extends Component {
+  
+  constructor() {
+     super()
+  }
+
+  
 
   render() {
     return (
