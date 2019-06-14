@@ -9,6 +9,7 @@ class CreateItem extends Component {
         this.state = {
             item_name: '',
             item_image: null,
+            vr_file: null,
             category: '',
             description: '',
             price: '',
@@ -23,6 +24,13 @@ class CreateItem extends Component {
         this.setState({item_image: item_image})
     }
 
+    handleVRFile = event => {
+        console.log('uploaded')
+        let vr_file = event.target.files[0]
+        this.setState({vr_file: vr_file})
+       
+    }
+
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     } 
@@ -30,16 +38,23 @@ class CreateItem extends Component {
     onSubmit = (e) => {
         e.preventDefault()
         let item_image = this.state.item_image
+        let vr_file = this.state.vr_file
         let formdata = new FormData()
         formdata.append('item_name', this.state.item_name)
         formdata.append('filename', item_image)
+        formdata.append('filename', vr_file)
         formdata.append('category', this.state.category)
         formdata.append('description', this.state.description)
         formdata.append('price', this.state.price)
         formdata.append('bid_price', this.state.bid_price)
       
         axios.post('/items/createItem', formdata)
-            .then(res => window.location.reload())
+            .then(res => 
+                {
+                    console.log(res)
+                    window.location.reload()
+                    
+                })
             .catch(err => console.log(err))
 
        
@@ -67,6 +82,10 @@ class CreateItem extends Component {
                          <div className="field">
                                 <label> Upload an image </label>
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleImage}/>
+                        </div>
+                        <div className="field">
+                                <label> Upload a VR file </label>
+                                <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleVRFile}/>
                         </div>
 
                         <div className="field">

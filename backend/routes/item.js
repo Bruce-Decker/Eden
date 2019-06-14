@@ -7,9 +7,10 @@ const itemsPerPage = 20;
 var Unzipper = require("decompress-zip");
 var path = require("path");
 var del = require('delete');
-
+var fs = require('fs');
 
 var item_id
+var file_old_name
 //application/zip
 const itemImageStorage = multer.diskStorage({
   
@@ -25,6 +26,7 @@ const itemImageStorage = multer.diskStorage({
     
   },
   filename: function(req, file, cd) {
+     
       if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
        
          file.originalname = item_id + '.jpg'
@@ -32,6 +34,8 @@ const itemImageStorage = multer.diskStorage({
        } 
 
        if (file.mimetype === 'application/zip') {
+        file_old_name = file.originalname.slice(0, -4)
+          file.originalname = item_id + '.zip'
           cd(null, file.originalname)
        }
 
@@ -255,7 +259,7 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
     const description = req.body.description
     const price = req.body.price
     const bid_price = req.body.bid_price
-    var vr_file_name
+    var vr_file_name = req.body.vr_file_name
     var vr_upload_time 
     var vr_file_path
     
@@ -265,9 +269,11 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
     console.log(req.files[0].filename)
 
     if (req.files[1]) {
-        vr_file_name = req.files[1].originalname
-        vr_file_name = vr_file_name.slice(0, -4)
-        vr_file_path = "/uploads/" + vr_file_name
+      console.log(req.files[1])
+      vr_file_path = req.files[1].originalname
+      vr_file_path =vr_file_path.slice(0, -4)
+        
+        vr_file_path = "/uploads/" + vr_file_path
         var filepath = path.join(req.files[1].destination, req.files[1].filename);
         var unzipper = new Unzipper(filepath);
 
@@ -321,6 +327,10 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
                       console.log("delete")
                     
                     });
+
+                      fs.rename('../client/public/uploads/' + file_old_name, '../client/public/uploads/' + item_id, function(err) {
+                        if ( err ) console.log('ERROR: ' + err);
+                      });
                   }
 
                       
@@ -348,6 +358,10 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
                       // deleted files
                       console.log("delete")
                     
+                    });
+
+                    fs.rename('../client/public/uploads/' + file_old_name, '../client/public/uploads/' + item_id, function(err) {
+                      if ( err ) console.log('ERROR: ' + err);
                     });
                   }
             }
@@ -398,5 +412,19 @@ router.get('/:id', function(req,res) {
   })
 
 });
+
+
+
+router.get('/retrieveFile/:item_id', function(req, res) {
+  var item_id = req.params.item_id
+  Item.findOne({item_id: item_id}, function(err, docs) {
+       if (err) {
+         console.log("Error Data");
+         res.send({msg: "False"});
+       } else {
+           res.send(docs)
+       }
+  })
+})
 
 module.exports = router;

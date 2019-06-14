@@ -19,10 +19,10 @@ class VR extends React.Component {
     }
 
     async componentDidMount() {
-         response = await axios.get('/upload/retrieveFile/' + this.props.match.params.item_id)
+         response = await axios.get('/items/retrieveFile/' + this.props.match.params.item_id)
          console.log(response)
          this.setState({
-            file_path: response.data.file_path,
+            vr_file_path: response.data.vr_file_path,
             showFile: true
          })
     }
@@ -36,7 +36,7 @@ class VR extends React.Component {
         <Entity light={{type: 'point'}}/>
         {this.state.showFile ?
             <a-assets>        
-              <a-asset-item id="model2" src= {response.data.file_path + '/scene.gltf'}></a-asset-item>
+              <a-asset-item id="model2" src= {response.data.vr_file_path + '/scene.gltf'}></a-asset-item>
             </a-assets>
             : null }
         <Entity
