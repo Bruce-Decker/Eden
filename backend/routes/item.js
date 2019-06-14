@@ -271,6 +271,7 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
         var filepath = path.join(req.files[1].destination, req.files[1].filename);
         var unzipper = new Unzipper(filepath);
 
+
             unzipper.on("extract", function () {
                 console.log("Finished extracting");
             });
@@ -278,6 +279,7 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
             unzipper.extract({ path: "../client/public/uploads/"})
             vr_upload_time = Date.now()
             //unzip(unzipper, req.file.filename, deleteFile)
+            //comments
     }
   
 
