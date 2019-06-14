@@ -98,6 +98,31 @@ const ItemSchema = new Schema({
 
        }
     ],
+    vr_file_name: {
+        type: String
+    },
+    vr_file_path: {
+        type: String
+    },
+    vr_upload_time: {
+        type: String
+    },
+    viewers: [{
+        username: {
+            type: String,
+            required: true
+        },
+        view_time: {
+            type: String,
+            required: true
+        }
+    }],
+    longitude: {
+        type: Number
+    },
+    latitude: {
+        type: Number
+    },
     ar: String,
     bid_price: Number // not required
 })

@@ -4,25 +4,43 @@ const Item = require('../schema/Item');
 const uuidv4 = require('uuid/v4');
 var multer = require('multer')
 const itemsPerPage = 20;
+var Unzipper = require("decompress-zip");
+var path = require("path");
+var del = require('delete');
+
 
 var item_id
-
+//application/zip
 const itemImageStorage = multer.diskStorage({
   
   destination: function(req, file, cb) {
      item_id = uuidv4()
-     cb(null, '../client/public/item_images/')
+      console.log(file.mimetype)
+      if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+          cb(null, '../client/public/item_images/')
+      } 
+      if (file.mimetype === 'application/zip') {
+          cb(null, '../client/public/uploads/')
+      }
+    
   },
   filename: function(req, file, cd) {
-      
-      file.originalname = item_id + '.jpg'
-      cd(null, file.originalname)
+      if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+       
+         file.originalname = item_id + '.jpg'
+         cd(null, file.originalname)
+       } 
+
+       if (file.mimetype === 'application/zip') {
+          cd(null, file.originalname)
+       }
+
   }
 })
 
 
 const itemImageFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'application/zip') {
       cb(null, true);
   } else {
       cb(null, false);
@@ -230,14 +248,38 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 })
 
 
-router.post('/createItem', itemImageUpload.single('filename'), function(req, res) {
+router.post('/createItem', itemImageUpload.array('filename', 2), function(req, res) {
     const item_name = req.body.item_name
     const item_image = "item_images/" + item_id + '.jpg'
     const category = req.body.category
     const description = req.body.description
     const price = req.body.price
     const bid_price = req.body.bid_price
-    console.log(req.body.price)
+    var vr_file_name
+    var vr_upload_time 
+    var vr_file_path
+    
+   
+
+    console.log("file0 ")
+    console.log(req.files[0].filename)
+
+    if (req.files[1]) {
+        vr_file_name = req.files[1].originalname
+        vr_file_name = vr_file_name.slice(0, -4)
+        vr_file_path = "/uploads/" + vr_file_name
+        var filepath = path.join(req.files[1].destination, req.files[1].filename);
+        var unzipper = new Unzipper(filepath);
+
+            unzipper.on("extract", function () {
+                console.log("Finished extracting");
+            });
+
+            unzipper.extract({ path: "../client/public/uploads/"})
+            vr_upload_time = Date.now()
+            //unzip(unzipper, req.file.filename, deleteFile)
+    }
+  
 
     const data = {
        item_id,
@@ -246,7 +288,10 @@ router.post('/createItem', itemImageUpload.single('filename'), function(req, res
        category,
        description,
        price,
-       bid_price
+       bid_price,
+       vr_file_name,
+       vr_upload_time,
+       vr_file_path
     }
 
     console.log(data)
@@ -260,6 +305,22 @@ router.post('/createItem', itemImageUpload.single('filename'), function(req, res
            } else {
                   console.log(result)
                   res.send({msg: "Update successfully", data: data})
+                  if (req.files[1]) {
+                    del(['../client/public/uploads/' + req.files[1].filename], {force: true}, function(err, deleted) {
+                      if (err) throw err;
+                      // deleted files
+                      console.log("delete")
+                    
+                    });
+
+                    del(['../client/public/uploads/__MACOSX'], {force: true}, function(err, deleted) {
+                      if (err) throw err;
+                      // deleted files
+                      console.log("delete")
+                    
+                    });
+                  }
+
                       
             }
         })
@@ -271,6 +332,22 @@ router.post('/createItem', itemImageUpload.single('filename'), function(req, res
                           
             } else {
                   res.send({msg: "True", data: data});
+
+                  if (req.files[1]) {
+                    del(['../client/public/uploads/' + req.files[1].filename], {force: true}, function(err, deleted) {
+                      if (err) throw err;
+                      // deleted files
+                      console.log("delete")
+                    
+                    });
+
+                    del(['../client/public/uploads/__MACOSX'], {force: true}, function(err, deleted) {
+                      if (err) throw err;
+                      // deleted files
+                      console.log("delete")
+                    
+                    });
+                  }
             }
           })
       }

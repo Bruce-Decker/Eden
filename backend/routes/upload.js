@@ -44,6 +44,7 @@ router.post("/fileUploadZip", function(req, res){
     var upload_time = Date.now()
     var file_path = "/uploads/" + file_name
 
+
     if (req.file){
 
         FileUpload.findOne({item_id, item_id}, function(err, docs) {
