@@ -52,6 +52,35 @@ router.post('/createCart', function(req, res) {
   });
 });
 
+router.post('/addToCart', function(req, res) {
+  const email = req.body.email;
+  const iid = req.body.iid;
+
+  Cart.findOne( {'email': email, 'items.item_id': iid}, function(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (result == null) {
+        Cart.update( {'email': email },
+          { $push: {'items': { 'item_id': iid,
+                               'quantity': 1 } } }, function(err, result) {
+          if (err) {
+            console.log("Failed to add item " + iid + " to cart");
+            res.send("Failed to add item to cart");
+          } else {
+            console.log("Added item " + iid + " to cart successfully");
+            res.send("Added item to cart successfully");
+          }
+        });
+      } else {
+        // the item is already in the cart!
+        console.log("Failed to add item to cart: item already in cart!");
+        res.send("Failed to add item to cart: item already in cart!");
+      }
+    }
+  });
+});
+
 router.post('/changeQuantity', function(req, res) {
   const email = req.body.email;
   const iid = req.body.iid;
@@ -60,9 +89,10 @@ router.post('/changeQuantity', function(req, res) {
   Cart.update( {'email': email, 'items.item_id': iid},
     { $set: {'items.$.quantity': newQuantity} }, function(err, result) {
     if (err) {
+      console.log("Failed to change quantity for item " + iid);
       res.send("Failed to change quantity for item");
     } else {
-      console.log(result);
+      console.log("Changed item " + iid + " quantity successfully");
       res.send("Changed item quantity successfully");
     }
   });
@@ -75,9 +105,10 @@ router.post('/removeFromCart', function(req, res) {
   Cart.update( {'email': email, 'items.item_id': iid},
     { $pull: {'items': { 'item_id': iid } } }, function(err, result) {
     if (err) {
+      console.log("Failed to remove item " + iid + " from cart");
       res.send("Failed to remove item from cart");
     } else {
-      console.log(result);
+      console.log("Removed item " + iid + " from cart successfully");
       res.send("Removed item from cart successfully");
     }
   });
