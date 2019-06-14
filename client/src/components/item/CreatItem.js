@@ -10,6 +10,7 @@ class CreateItem extends Component {
             item_name: '',
             item_image: null,
             vr_file: null,
+            vr_file_name: '',
             category: '',
             description: '',
             price: '',
@@ -43,6 +44,7 @@ class CreateItem extends Component {
         formdata.append('item_name', this.state.item_name)
         formdata.append('filename', item_image)
         formdata.append('filename', vr_file)
+        formdata.append('vr_file_name', this.state.vr_file_name)
         formdata.append('category', this.state.category)
         formdata.append('description', this.state.description)
         formdata.append('price', this.state.price)
@@ -87,6 +89,15 @@ class CreateItem extends Component {
                                 <label> Upload a VR file </label>
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleVRFile}/>
                         </div>
+
+                        <div className="field">
+                            <label> VR File Name</label>
+                            <input type="text" name="vr_file_name" placeholder="VR File Name"  onChange = {this.onChange}/>
+                            </div>
+
+                                   <div className = "inputError">
+                                            {errors.vr_file_name }
+                                    </div>  
 
                         <div className="field">
                             <label> Category </label>
