@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './SearchResults.css';
+import CartAddButton from '../cart/CartAddButton';
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
@@ -37,8 +38,11 @@ class SearchResultItems extends Component {
                 <div>{item.description}</div>
                 <div>{this.renderRating(item.average_rating)}</div>
               </div>
-              <div class="col-3">
-                <div>{item.price}</div>
+              <div class="col-1">
+                <div>{"$" + item.price}</div>
+              </div>
+              <div class="col-2">
+                <CartAddButton item={item}/>
               </div>
             </li>
           )

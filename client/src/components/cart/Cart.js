@@ -8,10 +8,9 @@ import RegularBanner from '../banner/RegularBanner';
 import Recommendation from '../item/Recommendation';
 import Footer from '../footer/Footer';
 import apple from '../../images/apple.png';
-import star from '../../images/rating.png';
 
 import { connect } from 'react-redux';
-import { getCartItems, addToCart } from '../../redux/actions/CartActions';
+import { getCartItems } from '../../redux/actions/CartActions';
 
 // for testing
 const cartItems = [
@@ -88,12 +87,9 @@ class Cart extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-  return({
+  return ({
     getCartItems: email => {
       dispatch(getCartItems(email));
-    },
-    addToCart: iid => {
-      dispatch(addToCart(iid));
     }
   });
 };

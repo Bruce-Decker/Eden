@@ -55,11 +55,18 @@ router.post('/createCart', function(req, res) {
 router.post('/addToCart', function(req, res) {
   const email = req.body.email;
   const iid = req.body.iid;
+  console.log(req.body);
 
-  Cart.findOne( {'email': email, 'items.item_id': iid}, function(err, result) {
+  Cart.findOne( { 'email': email, 'items.item_id': iid }, function(err, result) {
     if (err) {
       console.log(err);
     } else {
+      ret = {
+        msg: '',
+        newItem: true,
+        iid: iid
+      }
+
       if (result == null) {
         Cart.update( {'email': email },
           { $push: {'items': { 'item_id': iid,
@@ -69,13 +76,26 @@ router.post('/addToCart', function(req, res) {
             res.send("Failed to add item to cart");
           } else {
             console.log("Added item " + iid + " to cart successfully");
-            res.send("Added item to cart successfully");
+
+            ret.msg = "Added item to cart successfully";
+            res.json(ret);
           }
         });
       } else {
-        // the item is already in the cart!
-        console.log("Failed to add item to cart: item already in cart!");
-        res.send("Failed to add item to cart: item already in cart!");
+        // the item is already in the cart, so increase its quantity by one
+        Cart.update( {'email': email, 'items.item_id': iid},
+          { $inc: {'items.$.quantity': 1 } }, function(err, result) {
+          if (err) {
+            console.log("Failed to change quantity for item " + iid);
+            res.send("Failed to change quantity for item");
+          } else {
+            console.log("Changed item " + iid + " quantity successfully");
+
+            ret.msg = "Changed item quantity successfully";
+            ret.newItem = false;
+            res.json(ret);
+          }
+        });
       }
     }
   });

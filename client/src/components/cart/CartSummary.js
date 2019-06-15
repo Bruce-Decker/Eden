@@ -11,7 +11,7 @@ class CartSummary extends Component {
   }
 
   prices() {
-    if(this.props.cart.items.length == 0) {
+    if(this.props.cart.items.length === 0) {
       return 0.00;
     } else {
       const reducer = (accumulator, currentValue) => accumulator + currentValue;

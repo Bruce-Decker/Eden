@@ -1,4 +1,4 @@
-import { GET_ERRORS, GET_SEARCH_RESULTS, GET_SEARCH_PAGE } from './types';
+import { GET_ERRORS, GET_SEARCH_RESULTS } from './types';
 import axios from 'axios';
 
 export const getSearchResults = (pageNumber) => dispatch => {

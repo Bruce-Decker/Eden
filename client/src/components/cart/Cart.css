@@ -29,3 +29,32 @@
   margin: 3rem;
   text-align: center;
 }
+
+.addtocart-button {
+  color: white;
+  border-width: 1px;
+  border-color: #53b46e;
+  border-radius: 5px;
+  background-color: #53b46e;
+  font-size: 1.5rem;
+  transition: .25s ease;
+  text-decoration: none;
+  width: 175px;
+  height: 60px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.addtocart-button:active, .addtocart-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.addtocart-button:active {
+  border-style: solid;
+}
+
+.addtocart-button:hover{
+  background: transparent;
+  color: black;
+  font-size: 1.6rem;
+}

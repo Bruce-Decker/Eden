@@ -42,13 +42,5 @@ router.get('/getSearchResults', function(req,res) {
     res.json({ msg: 'success' });
   }
 });
-/*
-router.get('/getSearchPage', function(req,res) {
-  const pageNumber = parseInt(req.query.pageNumber);
-  let low = (pageNumber-1) * itemsPerPage;
-  let high = pageNumber * itemsPerPage;
-  let items = [];//searchResults.slice(low, high);
-  res.json(items);
-});*/
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { GET_CART_ITEMS, CHANGE_QUANTITY, REMOVE_FROM_CART } from '../actions/types';
+import { GET_CART_ITEMS, ADD_TO_CART, CHANGE_QUANTITY, REMOVE_FROM_CART } from '../actions/types';
 
 const initialState = {
   items: []
@@ -10,25 +10,34 @@ const cart = (state = initialState, action) => {
       return {
         items: action.items
       }
-    /*
     case ADD_TO_CART:
-      if (state.ids.indexOf(action.id) !== -1) {
-        let quantities = {...state.quantities}
-        quantities[action.id] += 1
+      if (action.isNewItem) {
+        // if it's a new item, add it to the cart's list of items
+        let newItem = Object.assign({}, action.item);
+        newItem.quantity = 1;
+
         return {
-          ...state,
-          quantities: {...quantities}
+          items: [...state.items, newItem]
+        }
+      } else {
+        // if it's not a new item, increase its quantity by 1
+        return {
+          items: state.items.map(item => {
+            if (item.id === action.item.item_id) {
+              return {
+                ...item,
+                quantity: item.quantity + 1
+              }
+            } else {
+              return item;
+            }
+          })
         }
       }
-      return {
-        ...state,
-        ids: [...state.ids, action.id],
-        quantities: {...state.quantities, [action.id]: 1}
-      }*/
     case CHANGE_QUANTITY:
       return {
         items: state.items.map(item => {
-          if (item.id == action.iid) {
+          if (item.id === action.iid) {
             return {
               ...item,
               quantity: action.newQuantity
@@ -40,7 +49,7 @@ const cart = (state = initialState, action) => {
       }
     case REMOVE_FROM_CART:
       return {
-        items: state.items.filter(item => item.id != action.iid)
+        items: state.items.filter(item => item.id !== action.iid)
       }
     default:
       return state
