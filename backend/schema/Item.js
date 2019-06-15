@@ -4,6 +4,10 @@ const uniqueRandom = require("unique-random");
 const rand = uniqueRandom(1, 1000000);
 
 const ItemSchema = new Schema({
+    email: {
+        type: String,
+        required: true
+    },
     item_id: {
         type: String,
         required: true

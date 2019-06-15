@@ -253,6 +253,7 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 
 
 router.post('/createItem', itemImageUpload.array('filename', 2), function(req, res) {
+    const email = req.body.email
     const item_name = req.body.item_name
     const item_image = "item_images/" + item_id + '.jpg'
     const category = req.body.category
@@ -293,6 +294,7 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
   
 
     const data = {
+       email,
        item_id,
        item_name,
        item_image,
@@ -418,6 +420,20 @@ router.get('/:id', function(req,res) {
   })
 
 });
+
+
+router.get('/getAllItemsForUser/:email', function(req, res) {
+      var email = req.params.email
+      Item.find({email: email}, function(err, docs) {
+         if (err) {
+           console.log("Error Data")
+           res.send({msg: "False"})
+         } else {
+           res.send(docs)
+         }
+      })
+
+})
 
 
 

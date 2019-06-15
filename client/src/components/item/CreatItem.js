@@ -77,6 +77,7 @@ class CreateItem extends Component {
         let item_image = this.state.item_image
         let vr_file = this.state.vr_file
         let formdata = new FormData()
+        formdata.append('email', this.props.auth.user.email)
         formdata.append('item_name', this.state.item_name)
         formdata.append('filename', item_image)
         formdata.append('filename', vr_file)
