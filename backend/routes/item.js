@@ -259,6 +259,9 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
     const description = req.body.description
     const price = req.body.price
     const bid_price = req.body.bid_price
+    const address = req.body.address
+    const longitude = Number(req.body.longitude)
+    const latitude = Number(req.body.latitude)
     var vr_file_name = req.body.vr_file_name
     var vr_upload_time 
     var vr_file_path
@@ -299,7 +302,10 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
        bid_price,
        vr_file_name,
        vr_upload_time,
-       vr_file_path
+       vr_file_path,
+       address,
+       longitude,
+       latitude
     }
 
     console.log(data)

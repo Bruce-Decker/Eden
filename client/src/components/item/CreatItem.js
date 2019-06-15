@@ -2,8 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import RegularBanner from '../banner/RegularBanner'
 import axios from 'axios'
+import LocationPicker from 'react-location-picker';
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng,
+  } from 'react-places-autocomplete';
+
+
 
 class CreateItem extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -15,9 +23,37 @@ class CreateItem extends Component {
             description: '',
             price: '',
             bid_price: '',
+            address: "",
+            position: {
+               lat: 37.7749,
+               lng: -122.4194
+            },
             errors: {}
         }
     }
+
+    handleChange = address => {
+        this.setState({ address });
+      };
+
+      handleSelect = address => {
+        geocodeByAddress(address)
+          .then(results => getLatLng(results[0]))
+          .then(latLng => {
+             
+              this.setState({
+                 position: latLng
+              })
+              console.log('Success', this.state.position)
+          })
+          .catch(error => console.error('Error', error));
+      };
+
+    handleLocationChange = ({ position, address }) => {
+ 
+        // Set new location
+        this.setState({ position, address });
+      }
 
     handleImage = event => {
         console.log('uploaded')
@@ -49,10 +85,15 @@ class CreateItem extends Component {
         formdata.append('description', this.state.description)
         formdata.append('price', this.state.price)
         formdata.append('bid_price', this.state.bid_price)
+        formdata.append('address', this.state.address)
+        formdata.append('longitude', this.state.position.lat)
+        formdata.append('latitude', this.state.position.lng)
       
+        console.log("address is " + this.state.address)
         axios.post('/items/createItem', formdata)
             .then(res => 
                 {
+                    console.log("item 3423")
                     console.log(res)
                     window.location.reload()
                     
@@ -66,6 +107,10 @@ class CreateItem extends Component {
     }
 
     render() {
+        const defaultPosition = {
+            lat: this.state.position.lat,
+            lng: this.state.position.lng
+        };
         const { errors } = this.state
          return (
              <div>
@@ -86,7 +131,7 @@ class CreateItem extends Component {
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleImage}/>
                         </div>
                         <div className="field">
-                                <label> Upload a VR file </label>
+                                <label> Upload a VR file (zip format) </label>
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleVRFile}/>
                         </div>
 
@@ -143,8 +188,68 @@ class CreateItem extends Component {
 
                     
                    <div className="field">
-                
+                   <label>Input Location </label>
                    </div>
+                   <PlacesAutocomplete
+                                value={this.state.address}
+                                onChange={this.handleChange}
+                                onSelect={this.handleSelect}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <input
+                                    type="text" 
+                                    name="address"
+                                    {...getInputProps({
+                                        placeholder: 'Search Places ...',
+                                        className: 'location-search-input',
+                                    })}
+                                  
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                    {loading && <div>Loading...</div>}
+                                    {suggestions.map(suggestion => {
+                                        const className = suggestion.active
+                                        ? 'suggestion-item--active'
+                                        : 'suggestion-item';
+                                        // inline style for demonstration purpose
+                                        const style = suggestion.active
+                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                        return (
+                                        <div
+                                            {...getSuggestionItemProps(suggestion, {
+                                            className,
+                                            style,
+                                            })}
+                                        >
+                                            <span>{suggestion.description}</span>
+                                        </div>
+                                        );
+                                    })}
+                                    </div>
+                                </div>
+                                )}
+      </PlacesAutocomplete>
+      <div className="field">
+                
+                </div>
+
+                   <div>
+                            <h1>{this.state.address}</h1>
+                            <div>
+                            <LocationPicker
+                                containerElement={ <div style={ {height: '100%'} } /> }
+                                mapElement={ <div style={ {height: '400px'} } /> }
+                                defaultPosition={defaultPosition}
+                                onChange={this.handleLocationChange}
+                                zoom = {14}
+                            />
+                            </div>
+                  </div>
+                  <div className="space">
+                
+                </div>
                    
                     <button className="ui button" type="submit">Submit</button>
                 

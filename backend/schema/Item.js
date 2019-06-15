@@ -123,6 +123,9 @@ const ItemSchema = new Schema({
     latitude: {
         type: Number
     },
+    address : {
+        type: String,
+    },
     ar: String,
     bid_price: Number // not required
 })
