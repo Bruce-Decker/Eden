@@ -4,7 +4,6 @@ import './Ar.css';
 import { AFrameRenderer, Marker } from 'react-web-ar'
 
 
-
 class AFrame extends Component {
   z = 0
   x = 0
@@ -23,7 +22,7 @@ class AFrame extends Component {
           <button className="ar-move-button" onClick={() => {this.adjust('upScale')}}>+</button>
           <button className="ar-move-button" onClick={() => {this.adjust('downScale')}}>-</button>
         </div>
-       <AFrameRenderer inherent={true}>
+        <AFrameRenderer inherent={true}>
           <Marker parameters={{ preset: "hiro" }}>
             <a-entity
               id="entity"

@@ -8,6 +8,7 @@
     "aframe-react": "^4.4.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
+    "jest-cli": "^24.8.0",
     "jwt-decode": "^2.2.0",
     "markerwithlabel": "^2.0.2",
     "path": "^0.12.7",
