@@ -21,27 +21,31 @@ class ShowProfile extends Component {
                 city: '',
                 country: '',
                 company: '',
-                about_me: ''
+                about_me: '',
+                showProfile: false
         }
     }
 
     async componentDidMount() {
-        const response = await axios.get('/profile/' + this.props.auth.user.email)
+        const response = await axios.get('/profile/' + this.props.match.params.email)
         console.log(response.data[0])
-        this.setState({
-            image_path: response.data[0].profile_picture_path,
-            first_name: response.data[0].first_name,
-            last_name: response.data[0].last_name,
-            DOB: response.data[0].DOB,
-            gender: response.data[0].gender,
-            email: response.data[0].email,
-            phone_number: response.data[0].phone_number,
-            address: response.data[0].address,
-            city: response.data[0].city,
-            country: response.data[0].country,
-            company: response.data[0].company,
-            about_me: response.data[0].about_me
-        })
+        if (response.data[0]) {
+                this.setState({
+                    image_path: response.data[0].profile_picture_path,
+                    first_name: response.data[0].first_name,
+                    last_name: response.data[0].last_name,
+                    DOB: response.data[0].DOB,
+                    gender: response.data[0].gender,
+                    email: response.data[0].email,
+                    phone_number: response.data[0].phone_number,
+                    address: response.data[0].address,
+                    city: response.data[0].city,
+                    country: response.data[0].country,
+                    company: response.data[0].company,
+                    about_me: response.data[0].about_me,
+                    showProfile: true
+                })
+       }
 
     }
 
@@ -51,18 +55,25 @@ class ShowProfile extends Component {
             <div>
                <RegularBanner />
                <div className = "ShowProfileContainer">
-               <img src = { this.state.image_path} height = "190" width = "220" />
-               <h3>First Name: {this.state.first_name}</h3>
-               <h3>Last Name: {this.state.last_name}</h3>
-               <h3>Date of Birth: {this.state.DOB}</h3>
-               <h3>Gender: {this.state.gender}</h3>
-               <h3>Email: {this.state.email}</h3>
-               <h3>Phone Number: {this.state.phone_number}</h3>
-               <h3>Address: {this.state.address}</h3>
-               <h3>City: {this.state.city}</h3>
-               <h3>Country: {this.state.country}</h3>
-               <h3>Company: {this.state.company}</h3>
-               <h3>About Me: {this.state.about_me}</h3>
+              {this.state.showProfile ? 
+             <div>
+                          
+                              <img src = { this.state.image_path} height = "190" width = "220" />
+                          
+                           
+                            <h5>First Name: {this.state.first_name}</h5>
+                            <h5>Last Name: {this.state.last_name}</h5>
+                            <h5>Date of Birth: {this.state.DOB}</h5>
+                            <h5>Gender: {this.state.gender}</h5>
+                            <h5>Email: {this.state.email}</h5>
+                            <h5>Phone Number: {this.state.phone_number}</h5>
+                            <h5>Address: {this.state.address}</h5>
+                            <h5>City: {this.state.city}</h5>
+                            <h5>Country: {this.state.country}</h5>
+                            <h5>Company: {this.state.company}</h5>
+                            <h5>About Me: {this.state.about_me}</h5>
+               </div>
+                    : null }
                 
                </div>
 

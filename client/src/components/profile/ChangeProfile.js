@@ -36,7 +36,7 @@ class ChangeProfile extends Component {
         let formdata = new FormData()
         formdata.append('first_name', this.state.first_name)
         formdata.append('last_name', this.state.last_name)
-        formdata.append('email', this.state.email)
+        formdata.append('email', this.props.auth.user.email)
         formdata.append('filename', file)
         formdata.append('DOB', this.state.DOB)
         formdata.append('gender', this.state.gender)
@@ -52,7 +52,7 @@ class ChangeProfile extends Component {
         // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
         // this.props.createProfile(formdata)
         console.log(formdata)
-         axios.post('/profileUpload', formdata)
+         axios.post('/profile/profileUpload', formdata)
            .then(res => window.location.reload())
            .catch(err => console.log(err))
        
@@ -113,14 +113,14 @@ class ChangeProfile extends Component {
                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleFile}/>
                 </div>
 
-                <div className="field">
+                {/* <div className="field">
                 <label> Email </label>
                 <input type="text" name="email" placeholder="Email"  onChange = {this.onChange}/>
                 </div>
 
                                      <div className = "inputError">
                                             {errors.email }
-                                    </div> 
+                                    </div>  */}
                 
 
                 <div className="field">

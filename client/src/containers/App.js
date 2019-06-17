@@ -60,7 +60,7 @@ class App extends Component {
           <Route exact path="/property" component={Property} />
           <Route exact path="/product/:category" component={Items} />
           <Route exact path="/changeProfile" component = {ChangeProfile} />
-          <Route exact path="/showProfile" component = {ShowProfile} />
+          <Route exact path="/showProfile/:email" component = {ShowProfile} />
           <Route exact path="/items/:id" component={Item} />
           <Route exact path="/createItem" component={CreateItem} />
           <Route exact path="/showShowAllUserItems/:email" component={ShowAllUserItems} />
