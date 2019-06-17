@@ -14,7 +14,7 @@ const ProfileSchema = new Schema({
     phone_number: String,
     email: String,
     profile_picture_path: String,
-    about_me: String
+    about_me: String,
 })
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

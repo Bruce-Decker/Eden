@@ -37,7 +37,6 @@ router.post('/profileUpload', imageUpload.single('filename'), function(req, res)
     var profile_picture_path = "/images/" + req.body.email + '.jpg'
    
     var phone_number = req.body.phone_number
-    var address = req.body.address
     var city = req.body.city 
     var country = req.body.country 
     var company = req.body.company 
@@ -52,7 +51,6 @@ router.post('/profileUpload', imageUpload.single('filename'), function(req, res)
         profile_picture_path,
         email,
         phone_number,
-        address,
         city,
         country,
         company,

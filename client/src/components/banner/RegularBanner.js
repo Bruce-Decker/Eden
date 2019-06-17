@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../containers/App.css';
-
+import { Dropdown } from 'react-bootstrap'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import search from '../../images/search.png';
 import cart from '../../images/cart.png';
@@ -44,19 +44,25 @@ LogoutButton = (e) => {
               </div>
               <div className="navbar-collapse collapse" id="navbar">
                   <ul className="navbar-nav mr-auto">
+                  <Dropdown>
+  <Dropdown.Toggle variant="success" id="dropdown-basic">
+    Items
+  </Dropdown.Toggle>
+
+  <Dropdown.Menu>
+    <Dropdown.Item href="/product">Product</Dropdown.Item>
+    <Dropdown.Item href="/service">Service</Dropdown.Item>
+    <Dropdown.Item href="/property">Property</Dropdown.Item>
+    <Dropdown.Item href="/food">Food</Dropdown.Item>
+  </Dropdown.Menu>
+</Dropdown>
+                    
                       <li className="nav-item">
-                        <Link className="nav-link" to="/product">Product</Link>
+                        <Link className="nav-link" to={`/showProfile/${this.props.auth.user.email}`} >My Profile</Link>
                       </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/service">Service</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/property">Property</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/food">Food</Link>
-                      </li>
+                     
                   </ul>
+                  
                   <SearchBar/>
                   <ul className="navbar-nav ml-auto">
                       <li className="nav-item">
