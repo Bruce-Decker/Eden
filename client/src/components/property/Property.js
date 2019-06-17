@@ -5,7 +5,7 @@ import Filter from './Filter'
 import Detail from './Detail'
 import Control from './Control'
 
-import { connect } from 'react-redux'
+import axios from 'axios'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 
@@ -13,7 +13,6 @@ import { Spinner } from 'react-bootstrap';
 
 import icon from '../../images/msg.png'
 
-import { getProperties } from '../../redux/actions/PropertyActions'
 
 /* eslint-disable no-undef */
 
@@ -34,6 +33,7 @@ class Property extends Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleError = this.handleError.bind(this);
+    this.search = this.search.bind(this);
 
     this.state = {
       show: false,
@@ -43,7 +43,8 @@ class Property extends Component {
       lng: default_lng,
       center: [default_lat, default_lng],
       property: null,
-      loading: true
+      loading: true,
+      properties: []
     };
 
     Map = compose(
@@ -141,18 +142,29 @@ class Property extends Component {
 
   handleMarkerClick = (key) => {
     var { property } = this.state;
-    property = this.props.properties[key]
+    property = this.state.properties[key]
     this.setState({ property });
     this.handleShow();
   }
 
-  search = (price, bed, type, listing) => {
+  async search (price, bed, type, listing) {
     const bounds = this.map.current.getBounds()
     const nelat = bounds.na.l
     const nelng = bounds.ga.l
     const swlat = bounds.na.j
     const swlng = bounds.ga.j
-    this.props.getProperties(nelat, swlat, nelng, swlng, price, bed, type, listing)
+    const params =  'nelat=' + nelat +
+                    '&swlat=' + swlat +
+                    '&nelng=' + nelng +
+                    '&swlng=' + swlng +
+                    '&price=' + price +
+                    '&bed=' + bed +
+                    '&type=' + type +
+                    '&listing=' + listing
+    const response = await axios.get('/properties?' + params)
+    var { properties } = this.state;
+    properties = response.data
+    this.setState({ properties })
   }
 
   render() {
@@ -174,7 +186,7 @@ class Property extends Component {
           centerlng={this.state.center[1]}
           poslat={this.state.lat}
           poslng={this.state.lng}
-          properties={this.props.properties}
+          properties={this.state.properties}
           handleMarkerClick={this.handleMarkerClick}
           handleCenterChanged={this.handleCenterChanged}
         />
@@ -192,21 +204,5 @@ const formatPrice = (price) => {
   return '$' + priceStr
 }
 
-const mapDispatchToProps = dispatch => {
-  return({
-    getProperties: (nelat, swlat, nelng, swlng, price, bed, type, listing) => {
-      dispatch(getProperties(nelat, swlat, nelng, swlng, price, bed, type, listing))
-    }
-  })
-};
+export default Property
 
-function mapStateToProps(state) {
-  return {
-    properties: state.property.data
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Property);
