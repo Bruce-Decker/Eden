@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import RegularBanner from '../banner/RegularBanner'
 import axios from 'axios'
 import LocationPicker from 'react-location-picker';
+import uuidv4 from 'uuid/v4';
 import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
@@ -74,9 +75,11 @@ class CreateItem extends Component {
 
     onSubmit = (e) => {
         e.preventDefault()
+        var item_id = uuidv4();
         let item_image = this.state.item_image
         let vr_file = this.state.vr_file
         let formdata = new FormData()
+        formdata.append('item_id', item_id)
         formdata.append('email', this.props.auth.user.email)
         formdata.append('item_name', this.state.item_name)
         formdata.append('filename', item_image)

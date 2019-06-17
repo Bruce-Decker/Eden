@@ -9,13 +9,13 @@ var path = require("path");
 var del = require('delete');
 var fs = require('fs');
 
-var item_id
+
 var file_old_name
 //application/zip
 const itemImageStorage = multer.diskStorage({
   
   destination: function(req, file, cb) {
-     item_id = uuidv4()
+    
       console.log(file.mimetype)
       if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
           cb(null, '../client/public/item_images/')
@@ -29,13 +29,13 @@ const itemImageStorage = multer.diskStorage({
      
       if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
        
-         file.originalname = item_id + '.jpg'
+         file.originalname = req.body.item_id + '.jpg'
          cd(null, file.originalname)
        } 
 
        if (file.mimetype === 'application/zip') {
         file_old_name = file.originalname.slice(0, -4)
-          file.originalname = item_id + '.zip'
+          file.originalname = req.body.item_id + '.zip'
           cd(null, file.originalname)
        }
 
@@ -253,9 +253,10 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 
 
 router.post('/createItem', itemImageUpload.array('filename', 2), function(req, res) {
+    const item_id = req.body.item_id
     const email = req.body.email
     const item_name = req.body.item_name
-    const item_image = "item_images/" + item_id + '.jpg'
+    const item_image = "/item_images/" + item_id + '.jpg'
     const category = req.body.category
     const description = req.body.description
     const price = req.body.price
@@ -420,6 +421,21 @@ router.get('/:id', function(req,res) {
   })
 
 });
+
+
+router.post('/deleteItemForUser/:item_id', function(req, res) {
+  var item_id = req.params.item_id
+  Item.findOneAndDelete({item_id: item_id}, function(err, docs) {
+     if (err) {
+       console.log("Error Data")
+       res.send({msg: "False"})
+     } else {
+       res.send(docs)
+     }
+  })
+
+})
+
 
 
 router.get('/getAllItemsForUser/:email', function(req, res) {
