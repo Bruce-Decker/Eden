@@ -16,7 +16,6 @@ class ChangeProfile extends Component {
             gender: '',
             email: '',
             phone_number: '',
-            address: '',
             city: '',
             country: '',
             company: '',
@@ -135,14 +134,7 @@ class ChangeProfile extends Component {
                 
 
                
-                <div className="field">
-                  <label> Address </label>
-                  <input type="text" name="address" placeholder="Address"  onChange = {this.onChange}/>
-                </div>
-
-                                    <div className = "inputError">
-                                            {errors.Address }
-                                    </div> 
+              
 
                 <div className="field">
                   <label> City </label>
