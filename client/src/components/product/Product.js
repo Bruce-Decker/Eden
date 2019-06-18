@@ -20,15 +20,14 @@ class Product extends Component {
               <div class="product-container">
                 <div class="product-header">Categories</div>
                 <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
-                  {Array.from(Array(6), (e, i) => {
+                  {/* {Array.from(Array(6), (e, i) => {
                     return  <Category key={i} name={categories[i]}/>
-                  })}
+                  })} */}
+                   {categories.map(category => {
+                      return  <Category name={category}/>
+                   })}
                 </div>
-                <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
-                  {Array.from(Array(2), (e, i) => {
-                    return  <Category key={6 + i} name={categories[6 + i]}/>
-                  })}
-                </div>
+               
               </div>
             </div>
         </div>

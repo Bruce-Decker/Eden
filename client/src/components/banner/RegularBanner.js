@@ -64,6 +64,7 @@ LogoutButton = (e) => {
                       </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item href={`/showShowAllUserItems/:${this.props.auth.user.email}`}>My listed items</Dropdown.Item>
+                      <Dropdown.Item href={`/createItem`}>Create items</Dropdown.Item>
                      
                     </Dropdown.Menu>
                 </Dropdown>

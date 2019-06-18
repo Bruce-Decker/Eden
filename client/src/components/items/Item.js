@@ -18,9 +18,11 @@ class Item extends Component {
         <div className="items-row">
           <div className="row">
               <div className="col-4" style={{backgroundColor: "#f2ffea", textAlign: "center", lineHeight: "275px"}}>
-                <Link to={"/items/" + this.props.id}>
-                  <div onClick={() => window.scrollTo(0, 0)}>*img</div>
-                </Link>
+                          <Link to={"/items/" + this.props.item_id}>
+                                            {/* <div onClick={() => window.scrollTo(0, 0)}>*img</div> */}
+                                            <img key={this.props.item_id} src= {this.props.item_image} alt="Rating" style={{width: "250px", height: "250px"}}/>
+                                        
+                                            </Link>
               </div>
             <div className="col-8">
               <Link to={"/items/" + this.props.id} style={{textDecoration: "none"}}>

@@ -32,7 +32,10 @@ class List extends Component {
             name={item.item_name}
             description={item.description}
             rating={item.average_rating}
-            price={item.price}/>
+            price={item.price}
+            item_image = {item.item_image}
+            />
+          
       );
       return (
         <div className="container list-container">
