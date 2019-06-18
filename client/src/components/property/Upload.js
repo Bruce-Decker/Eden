@@ -7,6 +7,7 @@ import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import ImageUploader from 'react-images-upload';
 import Geocode from "react-geocode";
+import uuidv4 from 'uuid/v4';
 
 var Map;
 const default_lat = 37.3351874
@@ -101,7 +102,7 @@ class Upload extends Component {
 
   async handleSubmit() {
     if (this.isValid()) {
-      const body = this.toJSON()
+      const body = this.getData()
       await axios.post('/properties', body)
       window.location.reload();
     }
@@ -149,32 +150,37 @@ class Upload extends Component {
     }
   }
 
-  toJSON = () => {
-    return {
-      listing_type: this.listing.current.value,
-      home_type: this.type.current.value,
-      address: this.address.current.value,
-      city: this.city.current.value,
-      state: this.usstate.current.value,
-      zip: this.zip.current.value,
-      desc: this.desc.current.value,
-      num_bed: this.bed.current.value,
-      num_bath: this.bath.current.value,
-      space: this.space.current.value,
-      price: this.price.current.value,
-      email: this.email.current.value,
-      phone: this.phone.current.value,
-      lat: this.lat,
-      lng: this.lng,
-      user_id: this.props.auth.user.id,
-      user_name: this.props.auth.user.name
+  getData = () => {
+    var data = new FormData()
+    data.append('id', uuidv4())
+    data.append('listing_type', this.listing.current.value)
+    data.append('home_type', this.type.current.value)
+    data.append('address', this.address.current.value)
+    data.append('city', this.city.current.value)
+    data.append('state', this.usstate.current.value)
+    data.append('zip', this.zip.current.value)
+    data.append('desc', this.desc.current.value)
+    data.append('num_bed', this.bed.current.value)
+    data.append('num_bath', this.bath.current.value)
+    data.append('space', this.space.current.value)
+    data.append('price', this.price.current.value)
+    data.append('email', this.email.current.value)
+    data.append('phone', this.phone.current.value)
+    data.append('lat', this.lat)
+    data.append('lng', this.lng)
+    data.append('user_id', this.props.auth.user.id)
+    data.append('user_name', this.props.auth.user.name)
+    for(var i = 0; i < this.state.pictures.length; i++) {
+      data.append('files', this.state.pictures[i])
+      data.append('images', this.state.pictures[i].name) 
     }
+    return data
   }
 
   render() {
     return (
     <div>
-      <Modal show={this.props.show} onExited={() => window.scrollTo(0, 0)}>
+      <Modal show={this.props.show} onExited={() => window.scrollTo(0, 0)} scrollable>
         <div style={{backgroundColor: "#53b46e", color: "white"}}>
           <Modal.Header>
             <Modal.Title style={{fontSize: "1.25rem", lineHeight: "1.8"}}>
@@ -323,8 +329,9 @@ class Upload extends Component {
               withLabel={false}
               buttonText='Choose images'
               onChange={this.onDrop}
-              imgExtension={['.jpg', '.png']}
+              imgExtension={['.jpg', '.png', '.jpeg']}
               maxFileSize={5242880}
+              name="files"
             >
             </ImageUploader>
 

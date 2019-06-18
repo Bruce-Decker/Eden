@@ -31,7 +31,7 @@ class Detail extends Component {
       const space = format(this.props.property.space)
       return (
         <div ref={node => this.node = node}>
-          <Modal show={this.props.show} onExited={() => window.scrollTo(0, 0)}>
+          <Modal show={this.props.show} onExited={() => window.scrollTo(0, 0)} scrollable>
             <div style={{backgroundColor: "#53b46e", color: "white"}}>
               <Modal.Header style={{borderBottom: "0", paddingBottom: "0.25rem"}}>
                 <Modal.Title>${price}</Modal.Title>
@@ -51,7 +51,7 @@ class Detail extends Component {
                       return <Carousel.Item key={i}>
                               <img
                                 className="d-block w-100 property-image"
-                                src={'/images/property/' + this.props.property.images[i]}
+                                src={'/images/property/' + this.props.property.id + '/' + this.props.property.images[i]}
                                 alt={i}
                               />
                             </Carousel.Item>

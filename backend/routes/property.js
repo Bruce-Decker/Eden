@@ -1,7 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const Property = require('../schema/Property');
-const uuidv4 = require('uuid/v4');
+var multer = require('multer');
+var fs = require('fs');
+
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    var dir = '../client/public/images/property/' + req.body.id
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+    cb(null, dir)
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+var upload = multer({ storage: storage })
 
 
 router.get('/', function(req, res) {
@@ -20,6 +36,8 @@ router.get('/', function(req, res) {
     num_bed: { $gte: bed },
     home_type: type,
     listing_type: listing
+  }, {
+    user_id: 0
   }).then(async (properties) => {
     console.log(properties)
     res.json(properties);
@@ -29,8 +47,8 @@ router.get('/', function(req, res) {
   });
 });
 
-router.post('/', function(req, res) {
-  const data = extractRequestData(req, uuidv4())
+router.post('/', upload.array('files', 24), function(req, res) {
+  const data = extractRequestData(req)
   Property.create(data, function(err, _) {
     if (err) {
       console.log(err)
@@ -44,7 +62,7 @@ router.post('/', function(req, res) {
 
 router.put('/:id', function(req, res) {
   const id = req.params.id
-  const data = extractRequestData(req, id)
+  const data = extractRequestData(req)
   Property.findOneAndUpdate()(
     { id: id }, 
     data,
@@ -75,7 +93,8 @@ router.delete('/:id', function(req, res) {
   })
 })
 
-function extractRequestData(req, id) {
+function extractRequestData(req) {
+  const id = req.body.id
   const address = req.body.address
   const state = req.body.state
   const city = req.body.city
@@ -93,6 +112,7 @@ function extractRequestData(req, id) {
   const price = req.body.price
   const user_id = req.body.user_id
   const user_name = req.body.user_name
+  const images = req.body.images
   const data = {
     id,
     address,
@@ -111,10 +131,12 @@ function extractRequestData(req, id) {
     space,
     price,
     user_id,
-    user_name
+    user_name,
+    images
   }
   return data
 }
+
 
 
 module.exports = router;
