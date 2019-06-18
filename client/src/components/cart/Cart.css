@@ -6,11 +6,25 @@
 .cart-item {
   margin-bottom: 1rem;
   border: 1px solid darkgray;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .cart-item-img {
   width: 150px;
   height: 150px;
+}
+
+.cart-item-title {
+  font-size: 16pt;
+}
+
+.cart-item-price {
+  font-size: 16pt;
+}
+
+.quantity-spn {
+  font-size: 11pt;
 }
 
 .divider {
@@ -38,12 +52,30 @@
   font-size: 16pt;
 }
 
+.cart-price-title {
+  font-size: 18pt;
+}
+
+.cart-price-amt {
+  font-size: 18pt;
+}
+
+#cart-total-amt {
+  font-weight: bold;
+  font-size: 24pt;
+}
+
+#cart-total-title {
+  font-weight: bold;
+  font-size: 24pt;
+}
+
 .addtocart-button {
   font-size: 1.5rem;
   width: 175px;
   height: 60px;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .shop-button {
@@ -54,7 +86,15 @@
   margin-bottom: 2rem;
 }
 
-.addtocart-button, .shop-button {
+.cart-checkout-button {
+  font-size: 1.5rem;
+  width: 200px;
+  height: 80px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.addtocart-button, .shop-button, .cart-checkout-button {
   color: white;
   border-width: 1px;
   border-color: #53b46e;
@@ -64,17 +104,63 @@
   text-decoration: none;
 }
 
-.addtocart-button:active, .addtocart-button:focus, .shop-button:active, .shop-button:focus {
+.delete-button {
+  font-size: 1.2rem;
+  width: 100px;
+  height: 40px;
+  color: white;
+  border-width: 1px;
+  border-color: #ef2828;
+  border-radius: 5px;
+  background-color: #ef2828;
+  transition: .25s ease;
+  text-decoration: none;
+}
+
+.addtocart-button:active, .addtocart-button:focus,
+.shop-button:active, .shop-button:focus,
+.delete-button:active, .delete-button:focus,
+.cart-checkout-button:active, .cart-checkout-button:focus {
   outline: none;
   box-shadow: none;
 }
 
-.addtocart-button:active, .shop-button:active {
+.addtocart-button:active, .shop-button:active,
+.delete-button:active, .cart-checkout-button:active {
   border-style: solid;
 }
 
-.addtocart-button:hover, .shop-button:hover {
+.addtocart-button:hover, .shop-button:hover, .cart-checkout-button:hover {
   background: transparent;
   color: black;
   font-size: 1.6rem;
 }
+
+.delete-button:hover {
+  background: transparent;
+  color: black;
+  font-size: 1.4rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
