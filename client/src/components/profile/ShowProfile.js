@@ -58,9 +58,9 @@ class ShowProfile extends Component {
               {this.state.showProfile ? 
              <div>
                           
-                              <img src = { this.state.image_path} height = "190" width = "220" />
-                          
                            
+                            <img src = { this.state.image_path} height = "190" width = "220" />
+                            <Link to = "/changeProfile"> <h4> Edit Profile </h4>  </Link>
                             <h5>First Name: {this.state.first_name}</h5>
                             <h5>Last Name: {this.state.last_name}</h5>
                             <h5>Date of Birth: {this.state.DOB}</h5>

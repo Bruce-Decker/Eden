@@ -45,21 +45,35 @@ LogoutButton = (e) => {
               <div className="navbar-collapse collapse" id="navbar">
                   <ul className="navbar-nav mr-auto">
                   <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic">
-    Items
-  </Dropdown.Toggle>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Market Items
+                      </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="/product">Product</Dropdown.Item>
+                      <Dropdown.Item href="/service">Service</Dropdown.Item>
+                      <Dropdown.Item href="/property">Property</Dropdown.Item>
+                      <Dropdown.Item href="/food">Food</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <li className="nav-item">
+                        <Link className="nav-link" to={`/showProfile/${this.props.auth.user.email}`} ></Link>
+                </li>
+                <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        My Items
+                      </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href={`/showShowAllUserItems/:${this.props.auth.user.email}`}>My listed items</Dropdown.Item>
+                     
+                    </Dropdown.Menu>
+                </Dropdown>
 
-  <Dropdown.Menu>
-    <Dropdown.Item href="/product">Product</Dropdown.Item>
-    <Dropdown.Item href="/service">Service</Dropdown.Item>
-    <Dropdown.Item href="/property">Property</Dropdown.Item>
-    <Dropdown.Item href="/food">Food</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>
+
                     
                       <li className="nav-item">
                         <Link className="nav-link" to={`/showProfile/${this.props.auth.user.email}`} >My Profile</Link>
                       </li>
+                      
                      
                   </ul>
                   
