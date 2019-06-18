@@ -1,4 +1,4 @@
-.property-search-button {
+.property-filter-button {
   border-width: 1px;
   border-color: #53b46e;
   background-color: #53b46e;
@@ -13,16 +13,16 @@
   color: white
 }
 
-.property-search-button:active, .property-search-button:focus {
+.property-filter-button:active, .property-filter-button:focus {
   outline: none !important;
   box-shadow: none;
 }
 
-.property-search-button:active {
+.property-filter-button:active {
   border-style: solid;
 }
 
-.property-search-button:hover{
+.property-filter-button:hover{
   background: transparent;
   color: black;
   border-width: 1px;

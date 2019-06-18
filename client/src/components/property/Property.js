@@ -4,10 +4,12 @@ import RegularBanner from '../banner/RegularBanner';
 import Filter from './Filter'
 import Detail from './Detail'
 import Control from './Control'
+import Upload from './Upload'
 
 import axios from 'axios'
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { connect } from 'react-redux'
 
 import { Spinner } from 'react-bootstrap';
 
@@ -30,13 +32,16 @@ class Property extends Component {
   constructor(props){
     super(props)
     this.map = React.createRef()
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.showDetail = this.showDetail.bind(this);
+    this.hideDetail = this.hideDetail.bind(this);
+    this.showUploadForm = this.showUploadForm.bind(this);
+    this.hideUploadForm = this.hideUploadForm.bind(this);
     this.handleError = this.handleError.bind(this);
     this.search = this.search.bind(this);
 
     this.state = {
-      show: false,
+      detail: false,
+      upload: false,
       isMarkerShown: true,
       update: true,
       lat: default_lat, 
@@ -109,12 +114,20 @@ class Property extends Component {
     this.setState({ center })
   }
 
-  handleClose() {
-    this.setState({ show: false });
+  hideDetail() {
+    this.setState({ detail: false });
   }
 
-  handleShow() {
-    this.setState({ show: true });
+  showDetail() {
+    this.setState({ detail: true });
+  }
+
+  hideUploadForm() {
+    this.setState({ upload: false });
+  }
+
+  showUploadForm() {
+    this.setState({ upload: true });
   }
 
   handleError = (error) => {
@@ -144,7 +157,7 @@ class Property extends Component {
     var { property } = this.state;
     property = this.state.properties[key]
     this.setState({ property });
-    this.handleShow();
+    this.showDetail();
   }
 
   async search (price, bed, type, listing) {
@@ -174,11 +187,17 @@ class Property extends Component {
         <Filter 
           search={this.search}
           setCenter={this.setCenter}
+          auth={this.props.auth}
+          handleShow={this.showUploadForm}
         />
         <Detail 
-          show={this.state.show}
-          handleClose={this.handleClose}
+          show={this.state.detail}
+          handleClose={this.hideDetail}
           property={this.state.property}
+        />
+        <Upload
+          show={this.state.upload}
+          handleClose={this.hideUploadForm}
         />
         <Map 
           map={this.map}
@@ -204,5 +223,9 @@ const formatPrice = (price) => {
   return '$' + priceStr
 }
 
-export default Property
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Property);
 

@@ -25,7 +25,7 @@ class Filter extends Component {
   
   handleKeyPress = (target) => {
     const input = document.getElementById("property-input").value
-    if(target.charCode === 13 && input !== ''){
+    if (target.charCode === 13 && input !== ''){
       Geocode.fromAddress(input).then(
         response => {
           const { lat, lng } = response.results[0].geometry.location;
@@ -75,7 +75,10 @@ class Filter extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
         })}
-        <button className="property-search-button" onClick={this.search}>Search this area</button>
+        <button className="property-filter-button" onClick={this.search}>Search this area</button>
+        {this.props.auth.isAuthenticated === true &&
+          <button className="property-filter-button" onClick={this.props.handleShow}>List your property</button>
+        }
       </div>
     )
   }
