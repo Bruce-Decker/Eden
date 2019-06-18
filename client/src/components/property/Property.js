@@ -131,18 +131,16 @@ class Property extends Component {
   }
 
   handleError = (error) => {
-    if (error.code === error.PERMISSION_DENIED) {
-      var { loading } = this.state;
-      loading = false;
-      this.setState({ loading })
-      setTimeout(() => {
-        this.search(0, 0, 'houses', 'sale')
-      }, 1000)
-    }
+    var { loading } = this.state;
+    loading = false;
+    this.setState({ loading })
+    setTimeout(() => {
+      this.search(0, 0, 'houses', 'sale')
+    }, 1000)
   }
 
   componentWillMount() {
-    navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError);
+    navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError, { timeout:10000 });
   }
 
   componentDidMount() {
@@ -198,6 +196,7 @@ class Property extends Component {
         <Upload
           show={this.state.upload}
           handleClose={this.hideUploadForm}
+          auth={this.props.auth}
         />
         <Map 
           map={this.map}

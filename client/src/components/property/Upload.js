@@ -42,7 +42,8 @@ class Upload extends Component {
       pictures: [],
       center: [default_lat, default_lng],
     };
-    this.onDrop = this.onDrop.bind(this);
+    this.onDrop = this.onDrop.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
 
     Map = compose(
       withProps(mapAttributes),
@@ -98,9 +99,11 @@ class Upload extends Component {
     this.lng = lng
   }
 
-  handleSubmit = () => {
+  async handleSubmit() {
     if (this.isValid()) {
-      alert('Valid!')
+      const body = this.toJSON()
+      await axios.post('/properties', body)
+      window.location.reload();
     }
   }
 
@@ -132,11 +135,39 @@ class Upload extends Component {
           !isNumeric(this.price.current.value)) {
         alert('Please enter numeric values for all of the following fields: \n# Bedrooms, # Bathrooms, Space (sqft), and Price($)')
         return false
-      } 
+      } else if (!isEmailValid(this.email.current.value)) {
+        alert('Please enter a valid email address.')
+        return false
+      } else if (!isPhoneNumberValid(this.phone.current.value)) {
+        alert('Please enter a valid phone number.')
+        return false
+      }
       return true
     } else {
       alert('Please enter details for all fields.')
       return false
+    }
+  }
+
+  toJSON = () => {
+    return {
+      listing_type: this.listing.current.value,
+      home_type: this.type.current.value,
+      address: this.address.current.value,
+      city: this.city.current.value,
+      state: this.usstate.current.value,
+      zip: this.zip.current.value,
+      desc: this.desc.current.value,
+      num_bed: this.bed.current.value,
+      num_bath: this.bath.current.value,
+      space: this.space.current.value,
+      price: this.price.current.value,
+      email: this.email.current.value,
+      phone: this.phone.current.value,
+      lat: this.lat,
+      lng: this.lng,
+      user_id: this.props.auth.user.id,
+      user_name: this.props.auth.user.name
     }
   }
 
@@ -334,6 +365,15 @@ class Upload extends Component {
 
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function isEmailValid(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function isPhoneNumberValid(number) {
+  return number.match(/\d/g).length===10;
 }
 
 export default Upload

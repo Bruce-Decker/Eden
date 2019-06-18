@@ -76,7 +76,6 @@ router.delete('/:id', function(req, res) {
 })
 
 function extractRequestData(req, id) {
-  const id = id
   const address = req.body.address
   const state = req.body.state
   const city = req.body.city

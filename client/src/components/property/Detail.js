@@ -43,22 +43,29 @@ class Detail extends Component {
                 <h6>{this.props.property.address}, {this.props.property.city}, {this.props.property.state} {this.props.property.zip}</h6>
               </Modal.Header>
             </div>
-            <Modal.Body>
-              <Carousel>
-                {Array.from(this.props.property.images, (e, i) => {
-                  return <Carousel.Item key={i}>
-                          <img
-                            className="d-block w-100 property-image"
-                            src={'/images/property/' + this.props.property.images[i]}
-                            alt={i}
-                          />
-                        </Carousel.Item>
-                })}
-              </Carousel>
-            </Modal.Body>
-            <Modal.Body style={{paddingTop: "0"}}>
-              {this.props.property.desc}
-            </Modal.Body>
+            {this.props.property.images.length > 0 ?
+              (<div>
+                <Modal.Body>
+                  <Carousel>
+                    {Array.from(this.props.property.images, (e, i) => {
+                      return <Carousel.Item key={i}>
+                              <img
+                                className="d-block w-100 property-image"
+                                src={'/images/property/' + this.props.property.images[i]}
+                                alt={i}
+                              />
+                            </Carousel.Item>
+                    })}
+                  </Carousel>
+                </Modal.Body>
+                <Modal.Body style={{paddingTop: "0"}}>
+                  {this.props.property.desc}
+                </Modal.Body>
+              </div>) :
+              (<Modal.Body>
+                {this.props.property.desc}
+              </Modal.Body>)
+            }
             <Modal.Footer style={{display: "inline"}}>
               <Row>
                 <Col style={{height: "40px"}}>
