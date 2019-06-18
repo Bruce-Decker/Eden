@@ -52,27 +52,22 @@ class CartItems extends Component {
           {this.props.cart.items.map(cartItem => {
             return (
               <li key={cartItem.id} class="cart-item row">
-                <div class="col-2">
+                <div class="col-3">
                   <img class="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
                 </div>
-                <div class="col-6">
+                <div class="col-7">
                   <Link to={"/items/" + cartItem.id}>
-                    <div onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</div>
+                    <span class="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
                   </Link>
+                  <hr/>
                   <div>{cartItem.description}</div>
-                  {/*
-                  <div>
-                    {cartItem.rating.map(i => {
-                      return <img key={i} class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
-                    })}
-                  </div>
-                  */}
                 </div>
-                <div class="col-3">
-                  <div>{cartItem.price}</div>
+                <div class="col-2">
+                  <span class="cart-item-price">{"$" + cartItem.price}</span>
+                  <hr/>
                   <div>
-                    <span>Change Quantity </span>
-                    <select id="quantity" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
+                    <span class="quantity-spn">Quantity </span>
+                    <select class="quantity-sel" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
                       <option value={cartItem.id+"_1"}>1</option>
                       <option value={cartItem.id+"_2"}>2</option>
                       <option value={cartItem.id+"_3"}>3</option>
@@ -85,8 +80,9 @@ class CartItems extends Component {
                       <option value={cartItem.id+"_10"}>10</option>
                     </select>
                   </div>
+                  <hr/>
                   <div>
-                    <button id="remove-button" name={cartItem.id} onClick={this.handleRemove}>Delete</button>
+                    <button class="delete-button" name={cartItem.id} onClick={this.handleRemove}>Delete</button>
                   </div>
                 </div>
               </li>

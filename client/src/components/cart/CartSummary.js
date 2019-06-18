@@ -39,11 +39,11 @@ class CartSummary extends Component {
   render() {
     let prices = this.prices();
     return (
-      <div>
-        Subtotal: ${prices.subtotal}<br/>
-        Tax: ${prices.tax}<br/>
-        Total: ${prices.total}<br/>
-        <button id="checkout-button" onClick={this.toCheckout}>Proceed to Checkout</button>
+      <div id="cart-summary">
+        <span class="cart-price-title">Subtotal:</span> <span class="cart-price-amt">${prices.subtotal}</span><br/>
+        <span class="cart-price-title">Tax:</span> <span class="cart-price-amt">${prices.tax}</span><br/>
+        <span id="cart-total-title">Total:</span> <span id="cart-total-amt">${prices.total}</span><br/>
+        <button class="cart-checkout-button" onClick={this.toCheckout}>Proceed to Checkout</button>
       </div>
     );
   }
