@@ -3,6 +3,7 @@ import './Property.css';
 import { Dropdown, Form } from 'react-bootstrap';
 
 import Geocode from "react-geocode";
+import search from '../../images/search.png'
 
 
 const options = [
@@ -75,9 +76,11 @@ class Filter extends Component {
                   </Dropdown.Menu>
                 </Dropdown>
         })}
-        <button className="property-filter-button" onClick={this.search}>Search this area</button>
-        {this.props.auth.isAuthenticated === true &&
-          <button className="property-filter-button" onClick={this.props.handleShow}>List your property</button>
+        {this.props.auth.isAuthenticated && 
+          <span>
+            <button className="property-filter-button" onClick={this.props.handleShowPropertyList}>Your properties</button>
+            <button className="property-filter-button" onClick={this.props.handleShowUploadForm}>List your property</button>
+          </span>
         }
       </div>
     )

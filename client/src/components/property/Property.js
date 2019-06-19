@@ -5,6 +5,7 @@ import Filter from './Filter'
 import Detail from './Detail'
 import Control from './Control'
 import Upload from './Upload'
+import List from './List'
 
 import axios from 'axios'
 import { compose, withProps } from "recompose"
@@ -37,13 +38,19 @@ class Property extends Component {
     this.hideDetail = this.hideDetail.bind(this);
     this.showUploadForm = this.showUploadForm.bind(this);
     this.hideUploadForm = this.hideUploadForm.bind(this);
+    this.showPropertyList = this.showPropertyList.bind(this);
+    this.hidePropertyList = this.hidePropertyList.bind(this);
     this.handleError = this.handleError.bind(this);
     this.search = this.search.bind(this);
+    this.getUserProperties = this.getUserProperties.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.go = this.go.bind(this);
 
     this.state = {
       detail: false,
       upload: false,
+      list: false,
       isMarkerShown: true,
       update: true,
       lat: default_lat, 
@@ -51,7 +58,12 @@ class Property extends Component {
       center: [default_lat, default_lng],
       property: null,
       loading: true,
-      properties: []
+      properties: [],
+      userProperties: [],
+      listing: 'sale',
+      type: 'houses',
+      price: 0,
+      bed: 0
     };
 
     Map = compose(
@@ -68,24 +80,40 @@ class Property extends Component {
           disableDefaultUI: true
         }}
         onCenterChanged={props.handleCenterChanged}
+        onDragEnd={props.onChange}
+        onZoomChanged={props.onChange}
       >
         <Control position={google.maps.ControlPosition.CENTER}>
           {this.state.loading ? (<Spinner style={{width: "50px", height: "50px"}} animation="border" variant="success" />):(null)}
         </Control>
         <Marker position={{ lat: props.poslat, lng: props.poslng }} />
-        {Array.from(props.properties, (e, i) => {
-          const price = formatPrice(props.properties[i].price)
-          const lat = props.properties[i].lat
-          const lng = props.properties[i].lng
-          const icon = this.props.auth.user.name === props.properties[i].user_name ? icon_2 : icon_1
-          return <Marker key={i} icon={icon} label={{
+        {Array.from(props.userProperties, (e, i) => {
+          const price = formatPrice(props.userProperties[i].price)
+          const lat = props.userProperties[i].lat
+          const lng = props.userProperties[i].lng
+          return <Marker key={i} icon={icon_2} label={{
                     text: price,
                     fontFamily: "Nunito",
                     fontSize: "14px",
                     color: "white",
                     fontWeight: "bold"
                   }}
-                  position={{ lat: lat, lng: lng }} onClick={() => props.handleMarkerClick(i)} />
+                  position={{ lat: lat, lng: lng }} onClick={() => props.handleUserMarkerClick(i)} />
+        })}
+        {Array.from(props.properties, (e, i) => {
+          if (this.props.auth.user.name !== props.properties[i].user_name) {
+            const price = formatPrice(props.properties[i].price)
+            const lat = props.properties[i].lat
+            const lng = props.properties[i].lng
+            return <Marker key={i} icon={icon_1} label={{
+                      text: price,
+                      fontFamily: "Nunito",
+                      fontSize: "14px",
+                      color: "white",
+                      fontWeight: "bold"
+                    }}
+                    position={{ lat: lat, lng: lng }} onClick={() => props.handleMarkerClick(i)} />
+          }
         })}
       </GoogleMap>
     )
@@ -98,7 +126,8 @@ class Property extends Component {
     this.setState({ lat: lat, lng: lng })
     this.setCenter(lat, lng)
     setTimeout(() => {
-      this.search(0, 0, 'houses', 'sale')
+      this.search(this.state.price, this.state.bed, this.state.type, this.state.listing)
+      this.getUserProperties()
     }, 1000)
   }
 
@@ -108,6 +137,13 @@ class Property extends Component {
     center[1] = lng
     loading = false;
     this.setState({ center, loading })
+  }
+
+  async getUserProperties() {
+    const response = await axios.get('/properties?user_name=' + this.props.auth.user.name)
+    var { userProperties } = this.state;
+    userProperties = response.data
+    this.setState({ userProperties })
   }
 
   handleCenterChanged = () => {
@@ -133,12 +169,21 @@ class Property extends Component {
     this.setState({ upload: true });
   }
 
+  hidePropertyList() {
+    this.setState({ list: false });
+  }
+
+  showPropertyList() {
+    this.setState({ list: true });
+  }
+
   handleError = (error) => {
     var { loading } = this.state;
     loading = false;
     this.setState({ loading })
     setTimeout(() => {
-      this.search(0, 0, 'houses', 'sale')
+      this.search(this.state.price, this.state.bed, this.state.type, this.state.listing)
+      this.getUserProperties()
     }, 1000)
   }
 
@@ -152,7 +197,7 @@ class Property extends Component {
     }
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError, { timeout:10000 });
   }
 
@@ -171,6 +216,27 @@ class Property extends Component {
     this.showDetail();
   }
 
+  handleUserMarkerClick = (key) => {
+    var { property } = this.state;
+    property = this.state.userProperties[key]
+    this.setState({ property });
+    this.showDetail();
+  }
+
+  onChange = () => {
+    this.search(this.state.price, this.state.bed, this.state.type, this.state.listing)
+  }
+
+  go = (i) => {
+    const lat = this.state.userProperties[i].lat
+    const lng = this.state.userProperties[i].lng
+    this.hidePropertyList();
+    this.setCenter(lat, lng)
+    setTimeout(() => {
+      this.search(this.state.price, this.state.bed, this.state.type, this.state.listing)
+    }, 100)
+  }
+
   async search (price, bed, type, listing) {
     const bounds = this.map.current.getBounds()
     const nelat = bounds.na.l
@@ -185,6 +251,12 @@ class Property extends Component {
                     '&bed=' + bed +
                     '&type=' + type +
                     '&listing=' + listing
+    this.setState({ 
+      price: price,
+      bed: bed,
+      type: type,
+      listing: listing
+    })
     const response = await axios.get('/properties?' + params)
     var { properties } = this.state;
     properties = response.data
@@ -199,7 +271,8 @@ class Property extends Component {
           search={this.search}
           setCenter={this.setCenter}
           auth={this.props.auth}
-          handleShow={this.showUploadForm}
+          handleShowUploadForm={this.showUploadForm}
+          handleShowPropertyList={this.showPropertyList}
         />
         <Detail 
           show={this.state.detail}
@@ -213,6 +286,12 @@ class Property extends Component {
           handleClose={this.hideUploadForm}
           auth={this.props.auth}
         />
+        <List
+          show={this.state.list}
+          handleClose={this.hidePropertyList}
+          properties={this.state.userProperties}
+          go={this.go}
+        />
         <Map 
           map={this.map}
           centerlat={this.state.center[0]}
@@ -220,8 +299,11 @@ class Property extends Component {
           poslat={this.state.lat}
           poslng={this.state.lng}
           properties={this.state.properties}
+          userProperties={this.state.userProperties}
           handleMarkerClick={this.handleMarkerClick}
+          handleUserMarkerClick={this.handleUserMarkerClick}
           handleCenterChanged={this.handleCenterChanged}
+          onChange={this.onChange}
         />
       </div>
     )

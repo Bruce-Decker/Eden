@@ -10,7 +10,8 @@
   font-size: 1rem;
   transition: .25s ease;
   text-decoration: none;
-  color: white
+  color: white;
+  width: 140px
 }
 
 .property-filter-button:active, .property-filter-button:focus {
@@ -119,6 +120,34 @@
   color: black;
   border-width: 1px;
   border-color: #e65757;
+}
+
+.property-go-button {
+  border-width: 1px;
+  border-color: #53b46e;
+  background-color: white;
+  transition: .25s ease;
+  text-decoration: none;
+  color: black;
+  margin: auto;
+  height: 35px;
+  width: 100%;
+}
+
+.property-go-button:active, .property-go-button:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.property-go-button:active {
+  border-style: solid;
+}
+
+.property-go-button:hover{
+  background: #53b46e;
+  color: white;
+  border-width: 1px;
+  border-color: #53b46e;
 }
 
 .property-contact-icon {
