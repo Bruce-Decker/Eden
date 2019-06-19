@@ -28,12 +28,14 @@ class List extends Component {
     if (this.state.items != null) {
       const items = this.state.items.map((item) =>
       <Item key={item.item_id}
-            id={item.item_id}
+            item_id={item.item_id}
             name={item.item_name}
             description={item.description}
             rating={item.average_rating}
             price={item.price}
+            bid_price = {item.bid_price}
             item_image = {item.item_image}
+           
             />
           
       );
