@@ -13,7 +13,8 @@ import { connect } from 'react-redux'
 
 import { Spinner } from 'react-bootstrap';
 
-import icon from '../../images/msg.png'
+import icon_1 from '../../images/property_icon_1.png'
+import icon_2 from '../../images/property_icon_2.png'
 
 
 /* eslint-disable no-undef */
@@ -76,6 +77,7 @@ class Property extends Component {
           const price = formatPrice(props.properties[i].price)
           const lat = props.properties[i].lat
           const lng = props.properties[i].lng
+          const icon = this.props.auth.user.name === props.properties[i].user_name ? icon_2 : icon_1
           return <Marker key={i} icon={icon} label={{
                     text: price,
                     fontFamily: "Nunito",
