@@ -27,18 +27,9 @@ class List extends Component {
   render() {
     if (this.state.items != null) {
       const items = this.state.items.map((item) =>
-      <Item key={item.item_id}
-            item_id={item.item_id}
-            name={item.item_name}
-            description={item.description}
-            rating={item.average_rating}
-            price={item.price}
-            bid_price = {item.bid_price}
-            item_image = {item.item_image}
-           
-            />
-          
+        <Item key={item.item_id} item={item}/>
       );
+      
       return (
         <div className="container list-container">
           <div className="list-header">{this.props.category.toUpperCase()}</div>

@@ -8,11 +8,16 @@ class CartSummary extends Component {
     super(props);
 
     this.toCheckout = this.toCheckout.bind(this);
+    this.checkoutButtonClass = this.checkoutButtonClass.bind(this);
   }
 
   prices() {
     if(this.props.cart.items.length === 0) {
-      return 0.00;
+      return {
+        subtotal: 0.00,
+        tax: 0.00,
+        total: 0.00
+      }
     } else {
       const reducer = (accumulator, currentValue) => accumulator + currentValue;
       let subtotal = this.props.cart.items.map(cartItem => cartItem.price*cartItem.quantity).reduce(reducer).toFixed(2);
@@ -27,23 +32,42 @@ class CartSummary extends Component {
   }
 
   toCheckout() {
-    let url = '/checkout';
-    let prices = this.prices();
+    if(this.props.cart.items.length === 0) {
+      console.log("Cannot checkout with an empty cart...");
+    } else {
+      let url = '/checkout';
+      let prices = this.prices();
 
-    this.props.history.push({
-      pathname: url,
-      state: prices
-    });
+      this.props.history.push({
+        pathname: url,
+        state: prices
+      });
+    }
+  }
+
+  checkoutButtonClass() {
+    if(this.props.cart.items.length === 0) {
+      return "no-checkout-button";
+    } else {
+      return "cart-checkout-button";
+    }
   }
 
   render() {
     let prices = this.prices();
     return (
       <div id="cart-summary">
-        <span class="cart-price-title">Subtotal:</span> <span class="cart-price-amt">${prices.subtotal}</span><br/>
-        <span class="cart-price-title">Tax:</span> <span class="cart-price-amt">${prices.tax}</span><br/>
-        <span id="cart-total-title">Total:</span> <span id="cart-total-amt">${prices.total}</span><br/>
-        <button class="cart-checkout-button" onClick={this.toCheckout}>Proceed to Checkout</button>
+        <span class="cart-price-title">Subtotal:</span> 
+        <span class="cart-price-amt">${prices.subtotal}</span><br/>
+        <span class="cart-price-title">Tax:</span> 
+        <span class="cart-price-amt">${prices.tax}</span><br/>
+        <span id="cart-total-title">Total:</span> 
+        <span id="cart-total-amt">${prices.total}</span><br/>
+        <button 
+          class={this.props.cart.items.length === 0
+          ? "no-checkout-button"
+          : "cart-checkout-button"}
+          onClick={this.toCheckout}>Proceed to Checkout</button>
       </div>
     );
   }

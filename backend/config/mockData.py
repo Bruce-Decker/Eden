@@ -5,12 +5,14 @@ import random
 
 def main():
   client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
+  #client = MongoClient("mongodb://localhost:27017/eden")
   db = client.test
 
   itemUser(db)
   cart(db)
   item(db)
   properties(db)
+  itemRatings(db)
 
 # ItemUser
 def itemUser(db):
@@ -166,7 +168,41 @@ def properties(db):
 
   print('Finished inserting {0} items into Property collection.'.format(propId))
 
+# ItemRating
+def itemRatings(db):
+  db.itemRatings.drop()
+  users = [
+    (0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),
+    (3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),
+    (6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),
+    (9,'joe@gmail.com'),(10,'hoxodo@atech5.com'),(11,'kuracichub@memeil.top'),
+    (12,'rexuxus@atnextmail.com'),(13,'x13@x.com'),(14,'x14@x.com'),
+    (15,'x15@x.com'),(16,'x16@x.com'),(17,'x17@x.com'),(18,'x18@x.com'),
+    (19,'x19@x.com'),(20,'x20@x.com'),(21,'x21@x.com'),(22,'x22@x.com'),
+    (23,'x23@x.com'),(24,'x24@x.com'),(25,'x25@x.com'),(26,'x26@x.com'),
+    (27,'x27@x.com'),(28,'x28@x.com'),(29,'x29@x.com'),(30,'x30@x.com'),
+    (31,'x31@x.com'),(32,'x32@x.com'),(33,'x33@x.com'),(34,'x34@x.com'),
+    (35,'x35@x.com'),(36,'x36@x.com'),(37,'x37@x.com'),(38,'x38@x.com'),
+    (39,'x39@x.com'),(40,'x40@x.com'),(41,'x41@x.com'),(42,'x42@x.com'),
+    (43,'x43@x.com'),(44,'x44@x.com'),(45,'x45@x.com'),(46,'x46@x.com'),
+    (47,'x47@x.com'),(48,'x48@x.com'),(49,'x49@x.com'),(50,'x50@x.com')
+  ]
 
+  c = 0
+  for u in users:
+    for i in range(1,1001):
+      # skip with 30% probability for some sparsity
+      p = randint(1,10)
+      if p > 3:
+        c += 1
+        r = {
+          'email': u[1],
+          'item_id': str(i),
+          'item_rating': randint(1,5)
+        }
+        result = db.itemRatings.insert_one(r)
+  
+  print('Finished inserting {0} items into ItemRatings collection.'.format(c))
 
 if __name__ == "__main__":
   main()

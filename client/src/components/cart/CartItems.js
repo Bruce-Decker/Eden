@@ -63,7 +63,7 @@ class CartItems extends Component {
                   <div>{cartItem.description}</div>
                 </div>
                 <div class="col-2">
-                  <span class="cart-item-price">{"$" + cartItem.price}</span>
+                  <span class="cart-item-price">{"$" + cartItem.price.toFixed(2)}</span>
                   <hr/>
                   <div>
                     <span class="quantity-spn">Quantity </span>

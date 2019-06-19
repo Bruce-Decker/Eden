@@ -142,6 +142,32 @@
   font-size: 1.4rem;
 }
 
+.no-checkout-button {
+  font-size: 1.5rem;
+  width: 200px;
+  height: 80px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  color: white;
+  border-width: 1px;
+  border-color: #a6dbb5;
+  border-radius: 5px;
+  background-color: #a6dbb5;
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+.no-checkout-button:active {
+  border: 1px solid #a6dbb5;
+}
+
+.no-checkout-button:focus {
+  border: 1px solid #a6dbb5;
+}
+
+.no-checkout-button:hover {
+  cursor: not-allowed;
+}
 
 
 

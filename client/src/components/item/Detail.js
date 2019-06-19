@@ -3,6 +3,7 @@ import './Item.css';
 
 import axios from 'axios'
 
+import CartAddButton from '../cart/CartAddButton'
 import Add from './Add'
 import Try from './Try'
 import apple from '../../images/apple.png'
@@ -53,7 +54,7 @@ class Detail extends Component {
               })}
             </div>
             <div class="item-price">${item.price}</div>
-            <div ><Add id={item.item_id}/><span style={{marginLeft: "1rem"}}></span></div>
+            <div ><CartAddButton item={this.state.item}/><span style={{marginLeft: "1rem"}}></span></div>
           </div>
           </div>
           <div class="col-1"/>
