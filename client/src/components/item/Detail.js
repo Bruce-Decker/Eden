@@ -17,6 +17,17 @@ class Detail extends Component {
     };
   }
 
+  async componentWillMount() {
+    const response = await axios.get('/items/' + this.props.id)
+    console.log(response)
+    if (response.data[0]) {
+        this.setState({
+          item: response.data[0]
+        })
+    }
+   
+  }
+
   render() {
     if (this.state.item != null) {
       const item = this.state.item
@@ -25,7 +36,8 @@ class Detail extends Component {
           <div class="row">
           <div class="col-1"/>
           <div class="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw"}}>
-            <img src={apple} alt="Item" style={{height: "100%"}}></img>
+           
+            <img key={item.item_id} src= {item.item_image} alt="Rating" style={{width: "300px", height: "250px"}}/>    
           </div>
           <div class="col-3" >
             <div class="item-title">
@@ -33,7 +45,7 @@ class Detail extends Component {
               <span style={{marginLeft: "1rem"}}></span>
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
-            <div class="item-by">unknown</div>
+            <div class="item-by">{item.category}</div>
             <div class="item-desc">{item.description}</div>
             <div>
               {Array.from(Array(item.average_rating), (e, i) => {
@@ -50,12 +62,7 @@ class Detail extends Component {
     } 
     return null
   }  
-  async componentWillMount() {
-    const response = await axios.get('/items/' + this.props.id)
-    this.setState({
-        item: response.data[0]
-    })
-  }
+ 
 }
 
 export default Detail

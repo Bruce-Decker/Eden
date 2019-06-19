@@ -16,8 +16,8 @@ class Item extends Component {
       <div>
         <RegularBanner/>
         <Detail id={id}/>
-        <Review/>
-        <Recommendation/>
+        <Review item_id = {id}/>
+        <Recommendation />
         <Footer/>
       </div>
     );

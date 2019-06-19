@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import './Item.css';
-
+import LocationPicker from 'react-location-picker';
 import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
 import map from '../../images/map.jpg'
+import axios from 'axios'
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
+
 
 const reviews = [
   {
@@ -23,13 +29,47 @@ const reviews = [
 ]
 
 class Review extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+   
+      position: {
+         lat: 37.7749,
+         lng: -122.4194
+      }
+  }
+  }
+
+  async componentWillMount() {
+    const response = await axios.get('/items/' + this.props.item_id)
+   if (response.data[0]) {
+        this.setState({
+          item: response.data[0]
+      })
+   }
+   
+  }
+
   render() {
+    const defaultPosition = {
+      lat: this.state.position.lat,
+      lng: this.state.position.lng
+  };
     return (
       <div class="container-review">
-        <div class="item-header">Reviews</div>
+        <div class="item-header">Reviews </div>
+      
         <div class="row" style={{marginTop: "1rem"}}>
           <div class="col-5">
-            <img src={map} alt="Map" style={{maxWidth: "100%"}}></img>
+          <LocationPicker
+                                containerElement={ <div style={ {height: '100%'} } /> }
+                                mapElement={ <div style={ {height: '400px'} } /> }
+                                defaultPosition={defaultPosition}
+                                onChange={this.handleLocationChange}
+                                zoom = {14}
+                            />
+         
           </div>
           <div class="col-7">
             <ul class="item-review-list">
