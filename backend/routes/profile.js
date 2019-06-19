@@ -41,7 +41,9 @@ router.post('/profileUpload', imageUpload.single('filename'), function(req, res)
     var country = req.body.country 
     var company = req.body.company 
     var about_me = req.body.about_me
-    
+    const address = req.body.address
+    const longitude = Number(req.body.longitude)
+    const latitude = Number(req.body.latitude)
 
     var data = {
         first_name,
@@ -54,7 +56,10 @@ router.post('/profileUpload', imageUpload.single('filename'), function(req, res)
         city,
         country,
         company,
-        about_me
+        about_me,
+        address,
+        longitude,
+        latitude
     }
    
     Profile.findOne({email: email}, function(err, docs) {

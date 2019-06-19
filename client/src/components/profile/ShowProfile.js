@@ -67,7 +67,6 @@ class ShowProfile extends Component {
                             <h5>Gender: {this.state.gender}</h5>
                             <h5>Email: {this.state.email}</h5>
                             <h5>Phone Number: {this.state.phone_number}</h5>
-                            <h5>Address: {this.state.address}</h5>
                             <h5>City: {this.state.city}</h5>
                             <h5>Country: {this.state.country}</h5>
                             <h5>Company: {this.state.company}</h5>

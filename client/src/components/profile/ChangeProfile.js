@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom'
 import RegularBanner from '../banner/RegularBanner'
 import { connect } from 'react-redux'
 import './ChangeProfile.css'
+import LocationPicker from 'react-location-picker';
+
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng,
+  } from 'react-places-autocomplete';
 
 class ChangeProfile extends Component {
     constructor() {
@@ -20,9 +26,37 @@ class ChangeProfile extends Component {
             country: '',
             company: '',
             about_me: '',
+            address: "",
+            position: {
+               lat: 37.7749,
+               lng: -122.4194
+            },
             errors: {}
         }
     }
+
+    handleChange = address => {
+        this.setState({ address });
+      };
+
+      handleSelect = address => {
+        geocodeByAddress(address)
+          .then(results => getLatLng(results[0]))
+          .then(latLng => {
+             
+              this.setState({
+                 position: latLng
+              })
+              console.log('Success', this.state.position)
+          })
+          .catch(error => console.error('Error', error));
+      };
+
+    handleLocationChange = ({ position, address }) => {
+ 
+        // Set new location
+        this.setState({ position, address });
+      }
 
     onChange = (e) => {
       
@@ -46,7 +80,9 @@ class ChangeProfile extends Component {
         formdata.append('country', this.state.country)
         formdata.append('company', this.state.company)
         formdata.append('about_me', this.state.about_me)
-        
+        formdata.append('address', this.state.address)
+        formdata.append('longitude', this.state.position.lat)
+        formdata.append('latitude', this.state.position.lng)
 
         // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
         // this.props.createProfile(formdata)
@@ -64,6 +100,10 @@ class ChangeProfile extends Component {
     }
 
     render() {
+        const defaultPosition = {
+            lat: this.state.position.lat,
+            lng: this.state.position.lng
+        };
         const { errors } = this.state
         return (
             <div>
@@ -162,6 +202,67 @@ class ChangeProfile extends Component {
                                     <div className = "inputError">
                                             {errors.company }
                                     </div>
+
+
+                <div className="field">
+                     <label>Input Location </label>
+                </div>
+                
+                 <PlacesAutocomplete
+                                value={this.state.address}
+                                onChange={this.handleChange}
+                                onSelect={this.handleSelect}
+                            >
+                                {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                                <div>
+                                    <input
+                                    type="text" 
+                                    name="address"
+                                    {...getInputProps({
+                                        placeholder: 'Search Places ...',
+                                        className: 'location-search-input',
+                                    })}
+                                  
+                                    />
+                                    <div className="autocomplete-dropdown-container">
+                                    {loading && <div>Loading...</div>}
+                                    {suggestions.map(suggestion => {
+                                        const className = suggestion.active
+                                        ? 'suggestion-item--active'
+                                        : 'suggestion-item';
+                                        // inline style for demonstration purpose
+                                        const style = suggestion.active
+                                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                                        return (
+                                        <div
+                                            {...getSuggestionItemProps(suggestion, {
+                                            className,
+                                            style,
+                                            })}
+                                        >
+                                            <span>{suggestion.description}</span>
+                                        </div>
+                                        );
+                                    })}
+                                    </div>
+                                </div>
+                                )}
+         </PlacesAutocomplete>
+
+
+         <div>
+                            <h1>{this.state.address}</h1>
+                            <div>
+                            <LocationPicker
+                                containerElement={ <div style={ {height: '100%'} } /> }
+                                mapElement={ <div style={ {height: '400px'} } /> }
+                                defaultPosition={defaultPosition}
+                                onChange={this.handleLocationChange}
+                                zoom = {14}
+                            />
+                            </div>
+                  </div>
 
               
 

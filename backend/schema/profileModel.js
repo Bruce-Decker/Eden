@@ -15,6 +15,15 @@ const ProfileSchema = new Schema({
     email: String,
     profile_picture_path: String,
     about_me: String,
+    longitude: {
+        type: Number
+    },
+    latitude: {
+        type: Number
+    },
+    address : {
+        type: String,
+    }
 })
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);
