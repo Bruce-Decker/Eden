@@ -103,8 +103,11 @@ class Upload extends Component {
   async handleSubmit() {
     if (this.isValid()) {
       const body = this.getData()
-      await axios.post('/properties', body)
-      window.location.reload();
+      await axios.post('/properties', body).then(function (response) {
+        window.location.reload();
+      }).catch(function (error) {
+        alert(error);
+      });
     }
   }
 
@@ -211,7 +214,7 @@ class Upload extends Component {
 
             <Form.Group>
               <Form.Label>Address</Form.Label>
-              <Form.Control id="property-address" ref={this.address} onChange={this.handleAddressChanged}/>
+              <Form.Control ref={this.address}/>
             </Form.Group>
 
             <Form.Row>
@@ -283,9 +286,7 @@ class Upload extends Component {
               </Form.Group>
             </Form.Row>
 
-            <Form.Text className="text-muted">
-              Drag the map below to pinpoint the exact location.
-            </Form.Text>
+            <input type="text" id="property-address"  placeholder="Search Google Maps" onChange={this.handleAddressChanged}></input>
             <div style={{marginTop: "0.5rem", marginBottom: "1rem"}}>
               <Map
                 map={this.map}
@@ -294,6 +295,9 @@ class Upload extends Component {
                 handleCenterChanged={this.handleCenterChanged}
               >
               </Map>
+              <Form.Text className="text-muted">
+              Drag the map to pinpoint the exact location.
+            </Form.Text>
             </div>
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -352,7 +356,7 @@ class Upload extends Component {
         <Modal.Footer style={{display: "inline"}}>
           <Row style={{height: "40px"}}>
             <Col style={{display: "grid"}}>
-              <button className="property-close-button" onClick={this.handleSubmit}>
+              <button className="property-upload-button" onClick={this.handleSubmit}>
                 Post
               </button>
             </Col>

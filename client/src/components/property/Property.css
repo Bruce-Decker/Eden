@@ -69,6 +69,58 @@
   border-color: #53b46e;
 }
 
+.property-upload-button {
+  border-width: 1px;
+  border-color: #53b46e;
+  background-color: #53b46e;
+  float: right;
+  transition: .25s ease;
+  text-decoration: none;
+  color: white
+}
+
+.property-upload-button:active, .property-upload-button:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.property-upload-button:active {
+  border-style: solid;
+}
+
+.property-upload-button:hover{
+  background: transparent;
+  color: black;
+  border-width: 1px;
+  border-color: #53b46e;
+}
+
+.property-delete-button {
+  border-width: 1px;
+  border-color: #e65757;
+  background-color: #e65757;
+  float: right;
+  transition: .25s ease;
+  text-decoration: none;
+  color: white
+}
+
+.property-delete-button:active, .property-delete-button:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.property-delete-button:active {
+  border-style: solid;
+}
+
+.property-delete-button:hover{
+  background: transparent;
+  color: black;
+  border-width: 1px;
+  border-color: #e65757;
+}
+
 .property-contact-icon {
   max-width: 20px;
   max-height: 20px;
@@ -109,4 +161,13 @@
   border-color: #53b46e;
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+#property-address {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #b6bbc0;
+  color: #6c757d;
+  font-size: 95%;
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Property = require('../schema/Property');
 var multer = require('multer');
-var fs = require('fs');
+var fs = require('fs-extra');
 
 
 var storage = multer.diskStorage({
@@ -62,9 +62,12 @@ router.post('/', upload.array('files', 24), function(req, res) {
 
 router.put('/:id', function(req, res) {
   const id = req.params.id
+  const user_id = req.body.user_id
   const data = extractRequestData(req)
-  Property.findOneAndUpdate()(
-    { id: id }, 
+  Property.findOneAndUpdate({
+      id: id,
+      user_id: user_id
+    }, 
     data,
     _,
     function(err, data) {
@@ -80,14 +83,18 @@ router.put('/:id', function(req, res) {
 
 router.delete('/:id', function(req, res) {
   const id = req.params.id
-  Property.findOneAndRemove()(
-    { id: id },
+  const user_id = req.body.user_id
+  Property.findOneAndDelete({ 
+      id: id,
+      user_id: user_id
+    },
     function(err) {
       if (err) {
         console.log(err)
         res.json({ msg: 'An error occurred, please try again later.' });        
       } else {
         console.log('property deleted')
+        fs.removeSync('../client/public/images/property/' + id); 
         res.json({ msg: 'property deleted' });
       }
   })

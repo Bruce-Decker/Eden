@@ -68,7 +68,7 @@ class Detail extends Component {
             }
             <Modal.Footer style={{display: "inline"}}>
               <Row>
-                <Col style={{height: "40px"}}>
+                <Col xs={6} style={{height: "40px"}}>
                   <h6>
                     <img alt="email" className="property-contact-icon" src={email}/>
                     {this.props.property.email}
@@ -78,6 +78,13 @@ class Detail extends Component {
                     {this.props.property.phone}
                   </h6>
                 </Col>
+                {this.props.auth.user.name === this.props.property.user_name &&
+                  <Col style={{display: "grid"}}>
+                    <button className="property-delete-button" onClick={() => this.props.handleDelete(this.props.auth.user.id, this.props.property.id)}>
+                      Delete
+                    </button>
+                  </Col>
+                }
                 <Col style={{display: "grid"}}>
                   <button className="property-close-button" onClick={this.props.handleClose}>
                     Close

@@ -38,6 +38,7 @@ class Property extends Component {
     this.hideUploadForm = this.hideUploadForm.bind(this);
     this.handleError = this.handleError.bind(this);
     this.search = this.search.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
 
     this.state = {
       detail: false,
@@ -139,6 +140,16 @@ class Property extends Component {
     }, 1000)
   }
 
+  async handleDelete(user_id, id) {
+    if (window.confirm('Are you sure you want to delete this property?')) {
+      await axios.delete('/properties/' + id, { data:{ user_id: user_id } }).then(function (response) {
+        window.location.reload();
+      }).catch(function (error) {
+        alert(error);
+      });
+    }
+  }
+
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError, { timeout:10000 });
   }
@@ -192,6 +203,8 @@ class Property extends Component {
           show={this.state.detail}
           handleClose={this.hideDetail}
           property={this.state.property}
+          auth={this.props.auth}
+          handleDelete={this.handleDelete}
         />
         <Upload
           show={this.state.upload}
