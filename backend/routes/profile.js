@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const uuidv4 = require('uuid/v4');
 const Profile = require('../schema/profileModel')
 var multer = require('multer')
 
@@ -97,6 +97,108 @@ router.get('/:email', function(req, res) {
 			res.send({"error": err})
 		}
 	})
+})
+
+
+router.post('/sharePost', function(req, res) {
+     var post_id = uuidv4()
+     var email = req.body.email
+     var profile_owner_email = req.body.profile_owner_email
+     var name = req.body.name
+     var post = req.body.post
+     var time = Date.now()
+     var data = {
+         name,
+         post_id,
+         email,
+         post,
+         time
+     }
+     if (post) {
+        Profile.findOneAndUpdate(
+            {
+              email: profile_owner_email
+            },
+           {
+              $push: {
+                 posts: data
+              }
+            }, function(err, docs) {
+              if (err) {
+                res.send({Error: err})
+              } else {
+                res.send(docs)
+              }
+            }
+          )
+     }
+})
+
+
+router.post('/deletePost', function(req, res) {
+  
+    var profile_owner_email = req.body.profile_owner_email
+    const post_id = req.body.post_id
+    Profile.findOneAndUpdate(
+      {
+        email: profile_owner_email,
+        "posts.post_id": post_id
+      },
+     
+       {
+       $pull: {
+         posts: { post_id: post_id}
+      }
+      },
+      function(err, docs) {
+       if (err) {
+         res.send({Error: err})
+       } else {
+         console.log("docs")
+         console.log(docs)
+         res.send(docs)
+       }
+     }
+   )
+})
+
+
+router.post('/commentPost', function(req, res) {
+    var comment_id = uuidv4()
+    var comment = req.body.comment
+    var email = req.body.email
+    var profile_owner_email = req.body.profile_owner_email
+    var name = req.body.name
+    var post_id = req.body.post_id
+    var time = Date.now()
+    var data = {
+       comment_id,
+       email,
+       name,
+       comment,
+       time
+    }
+    console.log(data)
+    if (comment) {
+       Profile.findOneAndUpdate(
+           {
+             email: profile_owner_email,
+             "posts.post_id": post_id
+           },
+          {
+             $push: {
+                "posts.$.comments": data
+             }
+           }, function(err, docs) {
+             if (err) {
+                 console.log(err)
+               res.send({Error: err})
+             } else {
+               res.send(docs)
+             }
+           }
+         )
+    }
 })
 
 

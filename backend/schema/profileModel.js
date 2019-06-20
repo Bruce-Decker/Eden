@@ -23,7 +23,92 @@ const ProfileSchema = new Schema({
     },
     address : {
         type: String,
-    }
+    },
+    followers: [
+        {
+          email: {
+            type: String
+          },
+          time: {
+            type: Date
+          }
+        }
+      ],
+    posts: [
+        {
+            post_id: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true 
+            },
+            post: {
+                type: String,
+                required: true
+            },
+            time: {
+                type: Date,
+                required: true
+            },
+            like: [
+                {
+                     name: {
+                         type: String,
+                         required: true
+                     },
+                     email: {
+                         type: String,
+                         required: true
+                     }
+ 
+                }
+            ],
+            comments: [
+                {
+                    comment_id: {
+                      type: String,
+                      required: true,
+                    },
+                    email: {
+                        type: String,
+                        required: true
+                    },
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    comment: {
+                        type: String,
+                        required: true
+                    },
+                    time: {
+                        type: Date,
+                        required: true
+                    },
+                    like: [
+                        {
+                             name: {
+                                 type: String,
+                                 required: true
+                             },
+                             email: {
+                                 type: String,
+                                 required: true
+                             }
+         
+                        }
+                    ]
+                   
+                }
+           ]
+        }
+    ]
 })
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

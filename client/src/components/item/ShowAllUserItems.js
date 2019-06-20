@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import RegularBanner from '../banner/RegularBanner'
 import axios from 'axios'
 import star from '../../images/rating.png'
+import { Card } from 'react-bootstrap'
 
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 
@@ -36,6 +37,7 @@ class ShowAllUserItems extends Component {
                     {this.state.show ? 
                     <div>
                             { this.state.items.map(item =>
+                              <Card>
                                     <div className="row">
                                         <div >
                                             <Link to={"/items/" + item.item_id}>
@@ -58,11 +60,14 @@ class ShowAllUserItems extends Component {
                                         <div>{this.props.description}</div>
                                         </div>
                                     </div>
+                                    </Card>
                                 )}
                                 </div>
                                 : null }
         </div>
                 </div>
+
+              
             </div>
         )
 

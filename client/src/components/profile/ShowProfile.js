@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import RegularBanner from '../banner/RegularBanner'
 import { connect } from 'react-redux'
 import './ShowProfile.css'
-
+import { Card } from 'react-bootstrap'
 
 class ShowProfile extends Component {
     constructor() {
@@ -56,25 +56,32 @@ class ShowProfile extends Component {
                <RegularBanner />
                <div className = "ShowProfileContainer">
               {this.state.showProfile ? 
-             <div>
-                          
-                           
-                            <img src = { this.state.image_path} height = "190" width = "220" />
-                            <Link to = "/changeProfile"> <h4> Edit Profile </h4>  </Link>
-                            <h5>First Name: {this.state.first_name}</h5>
-                            <h5>Last Name: {this.state.last_name}</h5>
-                            <h5>Date of Birth: {this.state.DOB}</h5>
-                            <h5>Gender: {this.state.gender}</h5>
-                            <h5>Email: {this.state.email}</h5>
-                            <h5>Phone Number: {this.state.phone_number}</h5>
-                            <h5>City: {this.state.city}</h5>
-                            <h5>Country: {this.state.country}</h5>
-                            <h5>Company: {this.state.company}</h5>
-                            <h5>About Me: {this.state.about_me}</h5>
-               </div>
+                       <Card>
+                            <img src = { this.state.image_path} height = "250" width = "300" />
+                            <Link to = "/changeProfile"> <h4> <i class="fas fa-user"></i> Edit Profile </h4>  </Link>
+                            <div className = "sorts_mill_goudy_font">
+                                <h5>First Name: {this.state.first_name}</h5>
+                                <h5>Last Name: {this.state.last_name}</h5>
+                                <h5>Date of Birth: {this.state.DOB}</h5>
+                                <h5>Gender: {this.state.gender}</h5>
+                                <h5>Email: {this.state.email}</h5>
+                                <h5>Phone Number: {this.state.phone_number}</h5>
+                                <h5>City: {this.state.city}</h5>
+                                <h5>Country: {this.state.country}</h5>
+                                <h5>Company: {this.state.company}</h5>
+                                <h5>About Me: {this.state.about_me}</h5>
+                            </div>
+                      </Card> 
                     : null }
                 
                </div>
+               <div className = "ShowProfileWallContainer">
+              
+                       <Card>
+                             <h1>Test </h1>
+                      </Card> 
+               </div>
+
 
             </div>
         )
