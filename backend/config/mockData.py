@@ -4,9 +4,9 @@ from random import randrange
 import random
 
 def main():
-  #client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
-  client = MongoClient("mongodb://localhost:27017/eden")
-  db = client.eden
+  client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
+  #client = MongoClient("mongodb://localhost:27017/eden")
+  db = client.test
 
   #itemUser(db)
   #cart(db)
