@@ -6,6 +6,7 @@ from surprise.model_selection import GridSearchCV
 from surprise.model_selection.split import train_test_split
 from surprise.prediction_algorithms.knns import KNNWithMeans
 from collections import defaultdict
+from datetime import datetime
 import pandas as pd
 
 def main():
@@ -22,10 +23,11 @@ def main():
   data = Dataset.load_from_df(df[['email', 'item_id', 'item_rating']], reader)
 
   user_based(data, db)
-  item_based(data, db)
+  #item_based(data, db)
 
 def user_based(data, db):
-  # user-based collaborative filtering
+  # user-based collaborative filtering: recommend the
+  # top n items based on similar users
   param_grid = {'k': [20,25,30,35,40],
                 'min_k': [1],
                 'sim_options': {'name': ['msd'],
@@ -51,13 +53,26 @@ def user_based(data, db):
   algo.fit(trainset)
   testset = trainset.build_anti_testset()
   predictions = algo.test(testset)
+
+  # get top n predictions, in order
   top_n = get_top_n(predictions, n=10)
 
+  # insert into database
+  db.userRecs.drop()
   for uid, user_ratings in top_n.items():
-    print(uid, [iid for (iid, _) in user_ratings])
+    recs = [iid for (iid, _) in user_ratings]
+    rec = {
+      'user_id': uid,
+      'recs': recs,
+      'timestamp': datetime.utcnow()
+    }
+    result = db.userRecs.insert_one(rec)
+
+  print('done')
 
 def item_based(data, db):
-  # item-based collaborative filtering
+  # content-based recommendations: recommend the
+  # top n items similar to the current item
   param_grid = {'k': [20,30,40,50],
                 'min_k': [1,5,10],
                 'sim_options': {'name': ['msd'],
@@ -83,8 +98,11 @@ def item_based(data, db):
   algo.fit(trainset)
   testset = trainset.build_anti_testset()
   predictions = algo.test(testset)
+
+  # get top n predictions, in order
   top_n = get_top_n(predictions, n=10)
 
+  # insert into database
   for uid, user_ratings in top_n.items():
     print(uid, [iid for (iid, _) in user_ratings])
 
