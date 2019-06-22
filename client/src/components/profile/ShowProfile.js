@@ -5,7 +5,7 @@ import RegularBanner from '../banner/RegularBanner'
 import { connect } from 'react-redux'
 import './ShowProfile.css'
 import { Card } from 'react-bootstrap'
-import { FacebookProvider, Share, Comments  } from 'react-facebook';
+
 
 class ShowProfile extends Component {
     constructor() {
@@ -23,12 +23,34 @@ class ShowProfile extends Component {
                 country: '',
                 company: '',
                 about_me: '',
-                showProfile: false
+                showProfile: false,
+                post: ''
         }
     }
 
+    onChange = e => {
+        this.setState({ [e.target.name]: e.target.value });
+      };
+
     handleClick = () => {
-         alert("clicked")
+         
+         var post = this.state.post
+         var name = this.props.auth.user.name
+         var email = this.props.auth.user.email
+         var profile_owner_email = this.props.match.params.email
+         var data = {
+             post,
+             name,
+             email,
+             profile_owner_email
+         }
+
+         axios.post('/profile/sharePost', data)
+              .then(res => {
+                  console.log(res)
+                  window.location.reload()
+              })
+              .catch(err => console.log(err))
     }
 
     async componentDidMount() {
@@ -96,14 +118,20 @@ class ShowProfile extends Component {
                              <div class="ui form">
                                     <div class="field">
                                       
-                                        <textarea></textarea>
+                                        <textarea  name = "post" onChange = {this.onChange}></textarea>
                                     </div>
                             </div>
                            
-                                    <button type="button" onClick={this.handleClick}>Share</button>
+                                    <button type="button" id="share_button_tree" onClick={this.handleClick}>Share</button>
                                
                              
                       </Card> 
+
+                      <div className = "showPosts">
+                        <Card >
+                            <h1>Test</h1>
+                        </Card>
+                      </div>
                </div>
 
 

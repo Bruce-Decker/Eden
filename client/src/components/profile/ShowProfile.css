@@ -86,6 +86,20 @@
     background-color: #7FFFD4
    }
 
+
+   #share_button_tree {
+    height: 40px;
+    background-image: url('share_button_tree.jpg');
+    background-position: 280px 100px; 
+    font-family: 'Pacifico', cursive;
+    
+   }
+
+
+.showPosts {
+    padding-top: 50px;
+}
+
 /* #9ACD32 */
 /* #ADFF2F
 #00FF00 */
