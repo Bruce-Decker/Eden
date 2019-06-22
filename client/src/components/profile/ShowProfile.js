@@ -5,6 +5,7 @@ import RegularBanner from '../banner/RegularBanner'
 import { connect } from 'react-redux'
 import './ShowProfile.css'
 import { Card } from 'react-bootstrap'
+import { FacebookProvider, Share, Comments  } from 'react-facebook';
 
 class ShowProfile extends Component {
     constructor() {
@@ -24,6 +25,10 @@ class ShowProfile extends Component {
                 about_me: '',
                 showProfile: false
         }
+    }
+
+    handleClick = () => {
+         alert("clicked")
     }
 
     async componentDidMount() {
@@ -78,7 +83,26 @@ class ShowProfile extends Component {
                <div className = "ShowProfileWallContainer">
               
                        <Card>
-                             <h1>Test </h1>
+                       <div class="non-semantic-protector"> 
+                            <h1 class="ribbon">
+                              <strong className="ribbon-content ribbon_font">Share something today!</strong>
+                            </h1>
+                        </div>
+                        <div class="profile_space1">
+                        </div> 
+                        <div class="profile_space2">
+                        </div> 
+                        
+                             <div class="ui form">
+                                    <div class="field">
+                                      
+                                        <textarea></textarea>
+                                    </div>
+                            </div>
+                           
+                                    <button type="button" onClick={this.handleClick}>Share</button>
+                               
+                             
                       </Card> 
                </div>
 
