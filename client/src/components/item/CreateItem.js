@@ -18,6 +18,7 @@ class CreateItem extends Component {
         this.state = {
             item_name: '',
             item_image: null,
+            ar_file: null,
             vr_file: null,
             vr_file_name: '',
             category: '',
@@ -69,6 +70,13 @@ class CreateItem extends Component {
        
     }
 
+    handleARFile = event => {
+        console.log('uploaded')
+        let ar_file = event.target.files[0]
+        this.setState({ar_file: ar_file})
+       
+    }
+
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
     } 
@@ -78,11 +86,13 @@ class CreateItem extends Component {
         var item_id = uuidv4();
         let item_image = this.state.item_image
         let vr_file = this.state.vr_file
+        let ar_file = this.state.ar_file
         let formdata = new FormData()
         formdata.append('item_id', item_id)
         formdata.append('email', this.props.auth.user.email)
         formdata.append('item_name', this.state.item_name)
         formdata.append('filename', item_image)
+        formdata.append('ar_file', ar_file)
         formdata.append('filename', vr_file)
         formdata.append('vr_file_name', this.state.vr_file_name)
         formdata.append('category', this.state.category)
@@ -92,6 +102,9 @@ class CreateItem extends Component {
         formdata.append('address', this.state.address)
         formdata.append('longitude', this.state.position.lat)
         formdata.append('latitude', this.state.position.lng)
+        if (ar_file) {
+            formdata.append('ar', ar_file.name)
+        }
       
         console.log("address is " + this.state.address)
         axios.post('/items/createItem', formdata)
@@ -135,6 +148,10 @@ class CreateItem extends Component {
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleImage}/>
                         </div>
                         <div className="field">
+                                <label> Upload an AR file </label>
+                                <input type="file" name="ar_file" id="fileToUpload"  onChange = {this.handleARFile}/>
+                        </div>
+                        <div className="field">
                                 <label> Upload a VR file (zip format) </label>
                                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleVRFile}/>
                         </div>
@@ -147,7 +164,7 @@ class CreateItem extends Component {
                                    <div className = "inputError">
                                             {errors.vr_file_name }
                                     </div>  
-
+                        
                         <div className="field">
                             <label> Category </label>
                             <input type="text" name="category" placeholder="Category"  onChange = {this.onChange}/>
