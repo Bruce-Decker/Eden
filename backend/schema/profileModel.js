@@ -65,6 +65,10 @@ const ProfileSchema = new Schema({
                      email: {
                          type: String,
                          required: true
+                     },
+                     time: {
+                         type: Date,
+                         required: true
                      }
  
                 }
@@ -100,6 +104,10 @@ const ProfileSchema = new Schema({
                              email: {
                                  type: String,
                                  required: true
+                             },
+                             time: {
+                                type: Date,
+                                required: true
                              }
          
                         }

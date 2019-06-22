@@ -163,6 +163,37 @@ router.post('/deletePost', function(req, res) {
 })
 
 
+router.post('/deleteCommentPost', function(req, res) {
+    var comment_id = req.body.comment_id
+    var email = req.body.email
+    var profile_owner_email = req.body.profile_owner_email
+    var post_id = req.body.post_id
+    if (email && profile_owner_email) {
+       Profile.findOneAndUpdate(
+           {
+             email: profile_owner_email,
+             "posts.post_id": post_id,
+           
+           },
+          {
+             $pull: {
+                "posts.$.comments": { comment_id: comment_id}
+             }
+           }, function(err, docs) {
+             if (err) {
+                 console.log(err)
+                 res.send({Error: err})
+             } else {
+                console.log("Sdfsdf")
+              
+               res.send(docs)
+             }
+           }
+         )
+    }
+})
+
+
 router.post('/commentPost', function(req, res) {
     var comment_id = uuidv4()
     var comment = req.body.comment
@@ -201,5 +232,147 @@ router.post('/commentPost', function(req, res) {
     }
 })
 
+
+
+router.post('/likePost', function(req, res) {
+     var post_id = req.body.post_id
+     var name = req.body.name
+     var email = req.body.email
+     var profile_owner_email = req.body.profile_owner_email
+     var time = Date.now()
+     var data = {
+         name,
+         email,
+         time
+     }
+     if (email && name) {
+        Profile.findOneAndUpdate(
+            {
+              email: profile_owner_email,
+              "posts.post_id": post_id
+            },
+            {
+                $push: {
+                    "posts.$.like": data
+                 }
+            }, function(err, docs) {
+                if (err) {
+                    console.log(err)
+                  res.send({Error: err})
+                } else {
+                  res.send(docs)
+                }
+
+            })
+
+
+     }
+})
+
+router.post('/unlikePost', function(req, res) {
+    var post_id = req.body.post_id
+    var email = req.body.email
+    var profile_owner_email = req.body.profile_owner_email
+    
+    
+    if (email && profile_owner_email) {
+       Profile.findOneAndUpdate(
+           {
+             email: profile_owner_email,
+             "posts.post_id": post_id
+           },
+           {
+               $pull: {
+                   "posts.$.like": {email: email}
+                }
+           }, function(err, docs) {
+               if (err) {
+                   console.log(err)
+                 res.send({Error: err})
+               } else {
+                 res.send(docs)
+               }
+
+           })
+
+
+    }
+})
+
+
+router.post('/likeComment', function(req, res) {
+    var post_id = req.body.post_id
+    var comment_id = req.body.comment_id
+    var name = req.body.name
+    var email = req.body.email
+    var profile_owner_email = req.body.profile_owner_email
+    var time = Date.now()
+    var data = {
+        name,
+        email,
+        time
+    }
+    if (email && name) {
+       Profile.findOneAndUpdate(
+           {
+             "posts.0.comments.comment_id": comment_id,
+            
+           },
+           {
+           
+               $addToSet: {
+                "posts.0.comments.$.like": data
+                }
+           }, function(err, docs) {
+               if (err) {
+                   console.log(err)
+                 res.send({Error: err})
+               } else {
+                 console.log(docs)
+                 res.send(docs)
+               }
+
+           })
+
+
+    }
+})
+
+
+router.post('/unlikeComment', function(req, res) {
+    var post_id = req.body.post_id
+    var comment_id = req.body.comment_id
+    var name = req.body.name
+    var email = req.body.email
+    var profile_owner_email = req.body.profile_owner_email
+    var time = Date.now()
+    var data = {
+        name,
+        email,
+        time
+    }
+    if (email && name) {
+       Profile.findOneAndUpdate(
+           {
+             "posts.0.comments.comment_id": comment_id,
+           },
+           {
+            $pull: {
+                "posts.0.comments.$.like": {email: email}
+                }
+           }, function(err, docs) {
+               if (err) {
+                   console.log(err)
+                 res.send({Error: err})
+               } else {
+                 console.log(docs)
+                 res.send(docs)
+               }
+
+           })
+
+
+    }
+})
 
 module.exports = router;
