@@ -7,4 +7,4 @@ const UserRecSchema = new Schema({
   timestamp: Date
 });
 
-module.exports = UserRec = mongoose.model('userRec', UserRecSchema);
+module.exports = UserRec = mongoose.model('userRec', UserRecSchema, 'userRecs');
