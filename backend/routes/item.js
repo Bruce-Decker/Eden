@@ -26,11 +26,13 @@ const itemImageStorage = multer.diskStorage({
     
   },
   filename: function(req, file, cd) {
-     
       if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/jpg') {
-       
-         file.originalname = req.body.item_id + '.jpg'
-         cd(null, file.originalname)
+          if (file.fieldname === 'ar_file') {
+            file.originalname = req.body.item_id + '_' + file.originalname
+          } else {
+            file.originalname = req.body.item_id + '.jpg'
+          }
+          cd(null, file.originalname)
        } 
 
        if (file.mimetype === 'application/zip') {
@@ -252,7 +254,7 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 })
 
 
-router.post('/createItem', itemImageUpload.array('filename', 2), function(req, res) {
+router.post('/createItem', itemImageUpload.fields([{name: 'filename', maxCount: 2}, {name: 'ar_file', maxCount: 1}]), function(req, res) {
     const item_id = req.body.item_id
     const email = req.body.email
     const item_name = req.body.item_name
@@ -264,22 +266,20 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
     const address = req.body.address
     const longitude = Number(req.body.longitude)
     const latitude = Number(req.body.latitude)
+    var ar = req.body.ar
     var vr_file_name = req.body.vr_file_name
     var vr_upload_time 
     var vr_file_path
     
    
-
-    console.log("file0 ")
-    console.log(req.files[0].filename)
-
-    if (req.files[1]) {
-      console.log(req.files[1])
-      vr_file_path = req.files[1].originalname
+    const files = req.files.filename
+    if (files && files[1]) {
+      console.log(files[1])
+      vr_file_path = files[1].originalname
       vr_file_path =vr_file_path.slice(0, -4)
         
         vr_file_path = "/uploads/" + vr_file_path
-        var filepath = path.join(req.files[1].destination, req.files[1].filename);
+        var filepath = path.join(files[1].destination, files[1].filename);
         var unzipper = new Unzipper(filepath);
 
 
@@ -303,6 +303,7 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
        description,
        price,
        bid_price,
+       ar,
        vr_file_name,
        vr_upload_time,
        vr_file_path,
@@ -322,8 +323,8 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
            } else {
                   console.log(result)
                   res.send({msg: "Update successfully", data: data})
-                  if (req.files[1]) {
-                    del(['../client/public/uploads/' + req.files[1].filename], {force: true}, function(err, deleted) {
+                  if (files && files[1]) {
+                    del(['../client/public/uploads/' + files[1].filename], {force: true}, function(err, deleted) {
                       if (err) throw err;
                       // deleted files
                       console.log("delete")
@@ -354,8 +355,8 @@ router.post('/createItem', itemImageUpload.array('filename', 2), function(req, r
             } else {
                   res.send({msg: "True", data: data});
 
-                  if (req.files[1]) {
-                    del(['../client/public/uploads/' + req.files[1].filename], {force: true}, function(err, deleted) {
+                  if (files && files[1]) {
+                    del(['../client/public/uploads/' + files[1].filename], {force: true}, function(err, deleted) {
                       if (err) throw err;
                       // deleted files
                       console.log("delete")

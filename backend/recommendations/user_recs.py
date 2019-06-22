@@ -10,8 +10,8 @@ from datetime import datetime
 import pandas as pd
 
 def main():
-  client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
-  #client = MongoClient("mongodb://localhost:27017")
+  #client = MongoClient("mongodb+srv://Eden:qwe123456@eden-cluster-nrey3.mongodb.net/test?retryWrites=true&w=majority")
+  client = MongoClient("mongodb://localhost:27017")
   db = client.test
 
   cursor = db.itemRatings.find()

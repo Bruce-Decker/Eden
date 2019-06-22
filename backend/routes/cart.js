@@ -161,6 +161,7 @@ router.get('/getCartItems', function(req,res) {
       let dbItem = await itemPromise(cur_item.item_id);
 
       obj['id'] = dbItem._doc.item_id;
+      obj['seller'] = dbItem._doc.email;
       obj['name'] = dbItem._doc.item_name;
       obj['image'] = dbItem._doc.item_image;
       obj['description'] = dbItem._doc.description;

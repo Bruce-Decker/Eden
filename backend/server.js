@@ -26,6 +26,7 @@ const upload = require('./routes/upload');
 const message = require('./routes/message');
 const property = require('./routes/property');
 const payment = require('./routes/payment');
+const recs = require('./routes/recs');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -87,6 +88,7 @@ app.use('/upload', upload);
 app.use('/message', message);
 app.use('/properties', property);
 app.use('/payment', payment);
+app.use('/recs', recs);
 
 app.post('/test', function(req, res) {
     res.send("test")

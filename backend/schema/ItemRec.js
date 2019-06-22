@@ -7,4 +7,4 @@ const ItemRecSchema = new Schema({
   timestamp: Date
 });
 
-module.exports = ItemRec = mongoose.model('itemRec', ItemRecSchema);
+module.exports = ItemRec = mongoose.model('itemRec', ItemRecSchema, 'itemRecs');
