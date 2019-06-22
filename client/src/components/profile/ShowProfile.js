@@ -24,7 +24,8 @@ class ShowProfile extends Component {
                 company: '',
                 about_me: '',
                 showProfile: false,
-                post: ''
+                share_post: '',
+                posts: []
         }
     }
 
@@ -34,7 +35,7 @@ class ShowProfile extends Component {
 
     handleClick = () => {
          
-         var post = this.state.post
+         var post = this.state.share_post
          var name = this.props.auth.user.name
          var email = this.props.auth.user.email
          var profile_owner_email = this.props.match.params.email
@@ -70,7 +71,8 @@ class ShowProfile extends Component {
                     country: response.data[0].country,
                     company: response.data[0].company,
                     about_me: response.data[0].about_me,
-                    showProfile: true
+                    showProfile: true,
+                    posts: response.data[0].posts
                 })
        }
 
@@ -118,7 +120,7 @@ class ShowProfile extends Component {
                              <div class="ui form">
                                     <div class="field">
                                       
-                                        <textarea  name = "post" onChange = {this.onChange}></textarea>
+                                        <textarea  name = "share_post" onChange = {this.onChange}></textarea>
                                     </div>
                             </div>
                            
@@ -128,8 +130,108 @@ class ShowProfile extends Component {
                       </Card> 
 
                       <div className = "showPosts">
+                          <div className = "space">
+
+                         </div>
                         <Card >
-                            <h1>Test</h1>
+
+                {this.state.showProfile ? 
+                <div>
+
+
+               
+                     {this.state.posts.map(post =>
+                              <div className="container bootstrap snippet">
+                              <div className="col-sm-12">
+                                <div className="panel panel-white post panel-shadow">
+                                  <div className="post-heading">
+                                    <div className="pull-left image">
+                                     
+                                      <img src={`/images/${post.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                    </div>
+                                    <div className="pull-left meta">
+                                      <div className="title h5">
+                                        <a href="#"><b>{post.name} </b></a>
+                                        made a post.
+                                      </div>
+                                      <h6 className="text-muted time">{post.time}</h6>
+                                    </div>
+                                  </div> 
+                                  <div className="post-description"> 
+                                    <p>{post.post}</p>
+                                    <div className="stats">
+                                      <a href="#" className="btn btn-default stat-item">
+                                        <i className="fa fa-thumbs-up icon" />2
+                                      </a>
+                                      <a href="#" className="btn btn-default stat-item">
+                                        <i className="fa fa-share icon" />12
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div className="post-footer">
+                                    <div className="input-group"> 
+                                      <input className="form-control" placeholder="Add a comment" type="text" />
+                                      <span className="input-group-addon">
+                                        <a href="#"><i className="fa fa-edit" /></a>  
+                                      </span>
+                                    </div>
+                                    {post.comments.map(comment => 
+                                    <ul className="comments-list">
+                                      <li className="comment">
+                                        <a className="pull-left" href="#">
+                                          {/* <img className="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar" /> */}
+
+                                          <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                        </a>
+                                       
+                                            <div className="comment-body">
+                                            <div className="comment-heading">
+                                                <h4 className="user">{comment.name}</h4>
+                                                <h5 className="time">{comment.time}</h5>
+                                            </div>
+                                            <p>{comment.comment}</p>
+                                            </div>
+                                      
+                                        {/* <ul className="comments-list">
+                                          <li className="comment">
+                                            <a className="pull-left" href="#">
+                                              <img className="avatar" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar" />
+                                            </a>
+                                            <div className="comment-body">
+                                              <div className="comment-heading">
+                                                <h4 className="user">Ryan Haywood</h4>
+                                                <h5 className="time">3 minutes ago</h5>
+                                              </div>
+                                              <p>Relax my friend</p>
+                                            </div>
+                                          </li> 
+                                          <li className="comment">
+                                            <a className="pull-left" href="#">
+                                              <img className="avatar" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar" />
+                                            </a>
+                                            <div className="comment-body">
+                                              <div className="comment-heading">
+                                                <h4 className="user">Gavino Free</h4>
+                                                <h5 className="time">3 minutes ago</h5>
+                                              </div>
+                                              <p>Ok, cool.</p>
+                                            </div>
+                                          </li> 
+                                        </ul> */}
+                                      </li>
+                                    </ul>
+                                      )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className = "space">
+                                  </div>
+                            </div>
+                                   
+                            )}
+                             </div>
+                            : null }
+
                         </Card>
                       </div>
                </div>
