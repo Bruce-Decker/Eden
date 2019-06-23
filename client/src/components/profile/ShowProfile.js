@@ -25,7 +25,8 @@ class ShowProfile extends Component {
                 about_me: '',
                 showProfile: false,
                 share_post: '',
-                posts: []
+                posts: [],
+                comment: ''
         }
     }
 
@@ -52,6 +53,27 @@ class ShowProfile extends Component {
                   window.location.reload()
               })
               .catch(err => console.log(err))
+    }
+
+    handleComment = (post_id) => {
+        var comment = this.state.comment
+        var email = this.props.auth.user.email
+        var profile_owner_email = this.props.match.params.email
+        var name = this.props.auth.user.name
+        var data = {
+            comment,
+            email,
+            profile_owner_email,
+            name,
+            post_id
+        }
+
+        axios.post('/profile/commentPost', data)
+            .then(res => {
+                console.log(res)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
     }
 
 
@@ -222,10 +244,11 @@ class ShowProfile extends Component {
                                     </div>
                                   </div>
                                   <div className="post-footer">
+                                     
                                     <div className="input-group"> 
-                                      <input className="form-control" placeholder="Add a comment" type="text" />
+                                      <input className="form-control" name = "comment" placeholder="Add a comment" type="text" onChange = {this.onChange}/>
                                       <span className="input-group-addon">
-                                        <a href="#"><i className="fa fa-edit" /></a>  
+                                        <button href="#" onClick = {() => this.handleComment(post.post_id)}><i className="fa fa-edit" /></button>  
                                       </span>
                                     </div>
                                     {post.comments.map(comment => 
