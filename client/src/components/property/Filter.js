@@ -3,7 +3,6 @@ import './Property.css';
 import { Dropdown, Form } from 'react-bootstrap';
 
 import Geocode from "react-geocode";
-import search from '../../images/search.png'
 
 
 const options = [

@@ -10,6 +10,7 @@ class AFrame extends Component {
   scale = 5
   render() {
     const ar = this.props.ar
+    const id = this.props.id
     return (
       <div>
         <div style={{position: "fixed", right: "20rem", bottom: "5px", zIndex: "10"}}>
@@ -30,7 +31,7 @@ class AFrame extends Component {
               position={this.x + " 0 " + this.z}
               scale={this.scale + " " + this.scale + " " + this.scale}
               geometry={"primitive: plane;"}
-              material={"shader: flat; src: /uploads/" + ar}>
+              material={"shader: flat; src: /item_images/" + id + "_" + ar}>
             </a-entity>
           </Marker>
         </AFrameRenderer>
