@@ -54,6 +54,44 @@ class ShowProfile extends Component {
               .catch(err => console.log(err))
     }
 
+
+    likePost = (post_id) => {
+      
+        var name = this.props.auth.user.name
+        var email = this.props.auth.user.email
+        var profile_owner_email = this.props.match.params.email
+        var data = {
+            post_id,
+            name,
+            email,
+            profile_owner_email
+        }
+        axios.post('/profile/likePost', data)
+            .then(res => {
+                console.log(res)
+                window.location.reload()
+            })
+        .catch(err => console.log(err))
+    }
+
+
+    unlikePost = (post_id) => {
+        var email = this.props.auth.user.email
+        var profile_owner_email = this.props.match.params.email
+        var data = {
+            post_id,
+            email,
+            profile_owner_email
+        }
+        axios.post('/profile/unlikePost', data)
+        .then(res => {
+            console.log(res)
+            window.location.reload()
+        })
+        .catch(err => console.log(err))
+    
+    }
+
     async componentDidMount() {
         const response = await axios.get('/profile/' + this.props.match.params.email)
         console.log(response.data[0])
@@ -160,12 +198,27 @@ class ShowProfile extends Component {
                                   <div className="post-description"> 
                                     <p>{post.post}</p>
                                     <div className="stats">
-                                      <a href="#" className="btn btn-default stat-item">
-                                        <i className="fa fa-thumbs-up icon" />2
-                                      </a>
-                                      <a href="#" className="btn btn-default stat-item">
+                                    { post.like.some(element => element['email'] === this.props.auth.user.email) ?
+                                      <div>
+                                        <button href="#" className="btn btn-default stat-item" onClick = {() => this.unlikePost(post.post_id)}>
+                                            <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>{post.like.length}
+                                        </button>
+                                      </div>
+
+                                      : 
+                                      <button href="#" className="btn btn-default stat-item" onClick = {() => this.likePost(post.post_id)}>
+                                        <i className="fa fa-thumbs-up icon"  />{post.like.length}
+                                      </button>
+
+                                      
+
+                                      }
+
+
+
+                                      {/* <a href="#" className="btn btn-default stat-item">
                                         <i className="fa fa-share icon" />12
-                                      </a>
+                                      </a> */}
                                     </div>
                                   </div>
                                   <div className="post-footer">
