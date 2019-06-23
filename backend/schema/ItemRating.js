@@ -5,7 +5,7 @@ const ItemRatingSchema = new Schema({
     email: {
         type: String,
         required: true
-    }
+    },
     item_id: {
         type: String,
         required: true
@@ -16,4 +16,4 @@ const ItemRatingSchema = new Schema({
     }
 })
 
-module.exports = ItemRating = mongoose.model('item_rating', ItemRatingSchema);
+module.exports = ItemRating = mongoose.model('item_rating', ItemRatingSchema, 'itemRatings');

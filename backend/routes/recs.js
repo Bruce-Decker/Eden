@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 var async = require('async');
 const Item = require('../schema/Item');
-const UserRec = require('../schema/UserRec')
-const ItemRec = require('../schema/ItemRec')
+const UserRec = require('../schema/UserRec');
+const ItemRec = require('../schema/ItemRec');
+const ItemRating = require('../schema/ItemRating');
 
 router.post('/getUserRecs', function(req, res) {
   const uid = req.body.email;
@@ -101,6 +102,69 @@ router.post('/getItemRecs', function(req, res) {
     } else {
       console.log(err);
       res.send("No recommendations found for user " + iid);
+    }
+  });
+});
+
+router.get('/getTopRatedItems', function(req, res) {
+  console.log('Fetching top items');
+  
+  ItemRating.aggregate([
+    {
+      '$group': {
+        '_id': '$item_id',
+        'avg_rating': { '$avg': '$item_rating' }
+      }
+    },
+    {
+      '$sort': { 'avg_rating': -1 }
+    },
+    {
+      '$limit': 25
+    }
+  ], async function(err, docs) {
+    if (docs) {
+      console.log(docs);
+
+      let ret = [];
+
+      // use promise to enforce synchronous results
+      let itemPromise = (iiid) => {
+        return new Promise((resolve, reject) => {
+          Item.findOne({
+            item_id: iiid
+          }).then(dbItem => {
+            resolve(dbItem);
+          }).catch(err => {
+            reject(err);
+          });
+        });
+      };
+
+      // obtain item details synchronously
+      for(let i=0; i<docs.length; i++) {
+        let obj = {}
+        let cur_iid = docs[i]['_id'];
+        let dbItem = await itemPromise(cur_iid);
+
+        obj['id'] = dbItem._doc.item_id;
+        obj['seller'] = dbItem._doc.email;
+        obj['name'] = dbItem._doc.item_name;
+        obj['image'] = dbItem._doc.item_image;
+        obj['description'] = dbItem._doc.description;
+        obj['category'] = dbItem._doc.category;
+        obj['price'] = dbItem._doc.price;
+        obj['avg_rating'] = docs[i].avg_rating;
+
+        ret.push(obj);
+      }
+
+      // return the list of items to the front-end page
+      res.json(ret);
+
+    } else {
+      console.log(err);
+      res.send("Could not fetch top rated items");
     }
   });
 });

@@ -5,7 +5,7 @@ import CartItems from './CartItems';
 import CartSummary from './CartSummary';
 import OtherBoughtItems from './OtherBoughtItems';
 import RegularBanner from '../banner/RegularBanner';
-import Recommendation from '../item/Recommendation';
+import TopRatedItems from './TopRatedItems';
 import Footer from '../footer/Footer';
 import apple from '../../images/apple.png';
 
@@ -66,17 +66,19 @@ class Cart extends Component {
         </div>
         <div className="cart-container row">
           <div className="col-8 divider">
-            <div className="left-col">
+            <div className="cart-item-div left-col">
               <CartItems/>
             </div>
             <hr/>
-            <Recommendation/>
+            <TopRatedItems/>
           </div>
           <div className="col-3">
             <div className="right-col">
               <CartSummary/>
               <hr/>
-              <OtherBoughtItems/>
+              <div id="obi-div">
+                <OtherBoughtItems/>
+              </div>
             </div>
           </div>
         </div>

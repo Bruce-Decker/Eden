@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Cart.css';
+import CartEmpty from './CartEmpty';
 
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -38,13 +39,7 @@ class CartItems extends Component {
   render() {
     if (this.props.cart.items.length === 0) {
       return (
-        <div class="outer-div">
-          <span id="cart-empty-message">Your cart is currently empty.</span>
-          <br/>
-          <Link to="/product">
-            <button onClick={() => window.scrollTo(0, 0)} class="shop-button">Start Shopping</button>
-          </Link>
-        </div>
+        <CartEmpty/>
       );
     } else {
       return (

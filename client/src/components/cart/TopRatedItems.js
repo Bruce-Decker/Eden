@@ -4,7 +4,7 @@ import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-class OtherBoughtItems extends Component {
+class SimilarItems extends Component {
   constructor(props) {
     super(props);
 
@@ -14,14 +14,9 @@ class OtherBoughtItems extends Component {
   }
 
   componentWillMount() {
-    // show user-based recommendations
-    let email = this.props.auth.user.email;
-    let params = {
-      email: 'hoxodo@atech5.com'
-    }
-    
+    // show top items
     axios
-      .post('/recs/getUserRecs', params)
+      .get('/recs/getTopRatedItems')
       .then(res => {
         console.log(res);
         this.setState({
@@ -35,18 +30,18 @@ class OtherBoughtItems extends Component {
 
   render() {
     return (
-      <div id="user-recs-1">
-        <h3 id="user-recs-h3">Other Users Bought</h3>
-        <div class="user-recs-2">
-          {this.state.recs.slice(0,10).map(rec => {
+      <div id="top-rated-items-1">
+        <h3 id="top-rated-items-h3">Top Rated Items</h3>
+        <div class="top-rated-items-2">
+          {this.state.recs.slice(0,25).map(rec => {
             return (
-              <div key={rec.id} class="user-recs-3">
+              <div key={rec.id} class="top-rated-items-3">
                 <div>
-                  <img class="user-recs-img" style={{width: "100%"}} src={rec.image} alt="Item"></img>
+                  <img class="top-rated-items-img" style={{width: "100%"}} src={rec.image} alt="Item"></img>
                 </div>
                 <div>
                   <Link to={"/items/" + rec.id}>
-                    <span class="user-recs-title" onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
+                    <span class="top-rated-items-title" onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
                   </Link>
                   <div>{rec.price}</div>
                   <div>{rec.description}</div>
@@ -69,7 +64,7 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps
-)(OtherBoughtItems);
+)(SimilarItems);
 
 
 
