@@ -21,7 +21,7 @@ class Category extends Component {
                                 <small>{this.props.description}</small>
                             </h6>
                             <Link style={{textDecoration: 'none'}} to={this.props.category.toLowerCase()}>
-                                <button onClick={() => window.locations.reload()} class="button-shop">Shop</button>
+                                <button onClick={() => window.scrollTo(0, 0)} class="button-shop">Shop</button>
                             </Link>
                         </div>
                     </div>
@@ -38,8 +38,8 @@ class Category extends Component {
                             <h6 class="text-center">
                                 <small>{this.props.description}</small>
                             </h6>
-                            <Link to={this.props.category.toLowerCase()}>
-                                <button onClick={() => window.locations.reload()} class="button-shop">Shop</button>
+                            <Link style={{textDecoration: 'none'}} to={this.props.category.toLowerCase()}>
+                                <button onClick={() => window.scrollTo(0, 0)} class="button-shop">Shop</button>
                             </Link>
                         </div>
                         <div class="col-8" style={{paddingLeft: "7vw", paddingRight: "7vw"}}>

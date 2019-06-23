@@ -9,6 +9,7 @@ import ChangeProfile from '../components/profile/ChangeProfile';
 import ShowProfile from '../components/profile/ShowProfile';
 import Register from '../components/register/Register';
 import Items from '../components/items/index';
+import List from '../components/service/List';
 import ShowAllUserItems from '../components/item/ShowAllUserItems'
 import SearchResults from '../components/search/SearchResults';
 import Ar from '../components/ar/index';
@@ -26,6 +27,7 @@ import store from '../redux/store';
 
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 import Property from '../components/property/Property';
+import Service from '../components/service/Service';
 
 if (localStorage.jwtToken) {
   // Set auth token header auth
@@ -58,7 +60,9 @@ class App extends Component {
           <Route exact path="/register" component={Register} />
           <Route exact path="/product" component={Product} />
           <Route exact path="/property" component={Property} />
+          <Route exact path="/service" component={Service} />
           <Route exact path="/product/:category" component={Items} />
+          <Route exact path="/service/:category" component={List} />
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile/:email" component = {ShowProfile} />
           <Route exact path="/items/:id" component={Item} />
