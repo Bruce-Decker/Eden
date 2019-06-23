@@ -5,7 +5,7 @@ import RegularBanner from '../banner/RegularBanner'
 import { connect } from 'react-redux'
 import './ShowProfile.css'
 import { Card } from 'react-bootstrap'
-
+import  delete_icon  from './delete_icon.png'
 
 class ShowProfile extends Component {
     constructor() {
@@ -56,6 +56,7 @@ class ShowProfile extends Component {
     }
 
     handleComment = (post_id) => {
+        
         var comment = this.state.comment
         var email = this.props.auth.user.email
         var profile_owner_email = this.props.match.params.email
@@ -71,7 +72,9 @@ class ShowProfile extends Component {
         axios.post('/profile/commentPost', data)
             .then(res => {
                 console.log(res)
+               
                 window.location.reload()
+               
             })
             .catch(err => console.log(err))
     }
@@ -97,6 +100,25 @@ class ShowProfile extends Component {
     }
 
 
+    deleteComment = (comment_id, post_id) => {
+       var email = this.props.auth.user.email
+       var profile_owner_email = this.props.match.params.email
+       var data = {
+           comment_id,
+           email,
+           profile_owner_email,
+           post_id
+       }
+       axios.post('/profile/deleteCommentPost', data)
+            .then(res => {
+                console.log(res)
+                window.location.reload()
+            })
+        .catch(err => console.log(err))
+
+    }
+
+
     unlikePost = (post_id) => {
         var email = this.props.auth.user.email
         var profile_owner_email = this.props.match.params.email
@@ -113,6 +135,12 @@ class ShowProfile extends Component {
         .catch(err => console.log(err))
     
     }
+
+
+   
+
+
+    
 
     async componentDidMount() {
         const response = await axios.get('/profile/' + this.props.match.params.email)
@@ -246,7 +274,7 @@ class ShowProfile extends Component {
                                   <div className="post-footer">
                                      
                                     <div className="input-group"> 
-                                      <input className="form-control" name = "comment" placeholder="Add a comment" type="text" onChange = {this.onChange}/>
+                                      <input className="form-control" name = "comment"  id="comment" ref={(ref) => this.comment= ref} placeholder="Add a comment" type="text" onChange = {this.onChange}/>
                                       <span className="input-group-addon">
                                         <button href="#" onClick = {() => this.handleComment(post.post_id)}><i className="fa fa-edit" /></button>  
                                       </span>
@@ -264,8 +292,14 @@ class ShowProfile extends Component {
                                             <div className="comment-heading">
                                                 <h4 className="user">{comment.name}</h4>
                                                 <h5 className="time">{comment.time}</h5>
+                                                {comment.email === this.props.auth.user.email ?
+                                                   <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id, post.post_id)} height="15" width="15"/>  
+                                                    : null }
                                             </div>
+                                           
                                             <p>{comment.comment}</p>
+                                           
+
                                             </div>
                                       
                                         {/* <ul className="comments-list">
