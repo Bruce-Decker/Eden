@@ -20,6 +20,7 @@ import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 
 import { Provider } from 'react-redux';
+import { toast } from 'react-toastify';
 import { setCurrentUser } from '../redux/actions/AuthenticationActions';
 import  setTokenHeader  from '../utils/setTokenHeader';
 import jwt_decode from 'jwt-decode';
@@ -29,6 +30,8 @@ import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 import Property from '../components/property/Property';
 import Service from '../components/service/Service';
 
+// Setup toastify for notifications
+toast.configure();
 if (localStorage.jwtToken) {
   // Set auth token header auth
   setTokenHeader(localStorage.jwtToken);

@@ -85,6 +85,16 @@
   text-align: center;
 }
 
+/* Style the toast notification. Note that we need
+   to include !important here to override the default
+   classname that the component attaches. */
+.addtocart-toast-toast {
+  color: white !important;
+  padding: 10px 10px 10px 15px !important;
+  border-radius: 5px !important;
+  font-size: 12pt !important;
+}
+
 .addtocart-button {
   font-size: 1.5rem;
   width: 175px;
