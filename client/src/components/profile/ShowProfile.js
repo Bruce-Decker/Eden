@@ -6,6 +6,9 @@ import { connect } from 'react-redux'
 import './ShowProfile.css'
 import { Card } from 'react-bootstrap'
 import  delete_icon  from './delete_icon.png'
+import  isUrl  from 'is-valid-http-url'
+import MicrolinkCard from '@microlink/react';
+
 
 class ShowProfile extends Component {
     constructor() {
@@ -98,7 +101,21 @@ class ShowProfile extends Component {
             })
         .catch(err => console.log(err))
     }
+    
+    deletePost = (post_id) => {
+        var profile_owner_email = this.props.match.params.email
+        var data = {
+            profile_owner_email,
+            post_id
+        }
 
+        axios.post('/profile/deletePost', data)
+            .then(res => {
+                console.log(res)
+                window.location.reload()
+            })
+        .catch(err => console.log(err))
+    }
 
     deleteComment = (comment_id, post_id) => {
        var email = this.props.auth.user.email
@@ -137,6 +154,8 @@ class ShowProfile extends Component {
     }
 
 
+
+
    
 
 
@@ -144,6 +163,10 @@ class ShowProfile extends Component {
 
     async componentDidMount() {
         const response = await axios.get('/profile/' + this.props.match.params.email)
+        
+
+       
+
         console.log(response.data[0])
         if (response.data[0]) {
                 this.setState({
@@ -241,12 +264,22 @@ class ShowProfile extends Component {
                                       <div className="title h5">
                                         <a href="#"><b>{post.name} </b></a>
                                         made a post.
+                                        
                                       </div>
                                       <h6 className="text-muted time">{post.time}</h6>
+                                     
                                     </div>
+                                    {post.email === this.props.auth.user.email ?
+                                                   <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deletePost(post.post_id)} height="15" width="15"/>  
+                                                    : null }
                                   </div> 
                                   <div className="post-description"> 
                                     <p>{post.post}</p>
+                                    {isUrl(post.post) ? 
+                                     <div>
+                                        <MicrolinkCard url={post.post} />
+                                    </div>
+                                    : <h1> NO</h1>}
                                     <div className="stats">
                                     { post.like.some(element => element['email'] === this.props.auth.user.email) ?
                                       <div>
