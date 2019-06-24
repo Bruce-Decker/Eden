@@ -95,6 +95,36 @@
   font-size: 12pt !important;
 }
 
+.modal-header {
+  background-color: #53b46e;
+  color: white;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #a9a9a9;
+  border: 1px solid #a9a9a9;
+  transition: 0.25s ease;
+}
+
+.modal-footer .btn-primary {
+  background-color: red;
+  border: 1px solid red;
+  transition: 0.25s ease;
+}
+
+.modal-footer .btn-primary:hover {
+  background: transparent;
+  background-color: #900000;
+  border-color: #900000;
+}
+
+.modal-footer .btn-primary:active {
+  background-color: #600000;
+  border-color: #600000;
+  outline: none;
+  box-shadow: none;
+}
+
 .addtocart-button {
   font-size: 1.5rem;
   width: 175px;
