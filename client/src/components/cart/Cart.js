@@ -69,13 +69,11 @@ class Cart extends Component {
             <div className="cart-item-div left-col">
               <CartItems/>
             </div>
-            <hr/>
             <TopRatedItems/>
           </div>
           <div className="col-3">
             <div className="right-col">
               <CartSummary/>
-              <hr/>
               <div id="obi-div">
                 <OtherBoughtItems/>
               </div>

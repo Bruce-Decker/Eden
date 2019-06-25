@@ -39,39 +39,39 @@ class CartItems extends Component {
         <ul class="cart-item-list">
           {this.props.cart.items.map(cartItem => {
             return (
-              <li key={cartItem.id} class="cart-item row">
-                <div class="col-3">
-                  <img class="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
-                </div>
-                <div class="col-7">
-                  <Link to={"/items/" + cartItem.id}>
-                    <span class="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
-                  </Link>
-                  <hr/>
-                  <div>{cartItem.description}</div>
-                </div>
-                <div class="col-2">
-                  <span class="cart-item-price">{"$" + cartItem.price.toFixed(2)}</span>
-                  <hr/>
-                  <div>
-                    <span class="quantity-spn">Quantity </span>
-                    <select class="quantity-sel" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
-                      <option value={cartItem.id+"_1"}>1</option>
-                      <option value={cartItem.id+"_2"}>2</option>
-                      <option value={cartItem.id+"_3"}>3</option>
-                      <option value={cartItem.id+"_4"}>4</option>
-                      <option value={cartItem.id+"_5"}>5</option>
-                      <option value={cartItem.id+"_6"}>6</option>
-                      <option value={cartItem.id+"_7"}>7</option>
-                      <option value={cartItem.id+"_8"}>8</option>
-                      <option value={cartItem.id+"_9"}>9</option>
-                      <option value={cartItem.id+"_10"}>10</option>
-                    </select>
+              <div>
+                <li key={cartItem.id} class="cart-item row">
+                  <div class="col-2">
+                    <img class="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
                   </div>
-                  <hr/>
-                  <DeleteModal iid={cartItem.id}/>
-                </div>
-              </li>
+                  <div class="col-8">
+                    <Link to={"/items/" + cartItem.id}>
+                      <span class="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
+                    </Link>
+                    <div>{cartItem.description}</div>
+                  </div>
+                  <div class="col-2 cart-item-controls">
+                    <span class="cart-item-price">{"$" + cartItem.price.toFixed(2)}</span>
+                    <div id="quantity-div">
+                      <span class="quantity-spn">Quantity </span>
+                      <select class="quantity-sel" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
+                        <option value={cartItem.id+"_1"}>1</option>
+                        <option value={cartItem.id+"_2"}>2</option>
+                        <option value={cartItem.id+"_3"}>3</option>
+                        <option value={cartItem.id+"_4"}>4</option>
+                        <option value={cartItem.id+"_5"}>5</option>
+                        <option value={cartItem.id+"_6"}>6</option>
+                        <option value={cartItem.id+"_7"}>7</option>
+                        <option value={cartItem.id+"_8"}>8</option>
+                        <option value={cartItem.id+"_9"}>9</option>
+                        <option value={cartItem.id+"_10"}>10</option>
+                      </select>
+                    </div>
+                    <DeleteModal iid={cartItem.id}/>
+                  </div>
+                </li>
+                <hr/>
+              </div>
             )
           })}
         </ul>

@@ -3,6 +3,7 @@ import './Cart.css';
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import StarRatings from 'react-star-ratings';
 
 class SimilarItems extends Component {
   constructor(props) {
@@ -43,8 +44,15 @@ class SimilarItems extends Component {
                   <Link to={"/items/" + rec.id}>
                     <span class="top-rated-items-title" onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
                   </Link>
-                  <div>{rec.price}</div>
-                  <div>{rec.description}</div>
+                  <div>{'$'+rec.price}</div>
+                  <StarRatings
+                    rating={rec.avg_rating}
+                    starRatedColor='rgb(40,167,69)'
+                    numberOfStars={5}
+                    name='rating'
+                    starDimension='20px'
+                    starSpacing='1px'
+                  />
                 </div>
               </div>
             )

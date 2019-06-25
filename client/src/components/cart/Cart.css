@@ -1,3 +1,7 @@
+/**************
+ * cart items *
+ **************/
+
 .cart-item-list {
   list-style-type: none;
   margin-left: 2rem;
@@ -8,10 +12,6 @@
 }
 
 .cart-item {
-  margin-bottom: 1rem;
-  border: 1px solid darkgray;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 .cart-item-img {
@@ -23,13 +23,26 @@
   font-size: 16pt;
 }
 
+.cart-item-controls {
+  text-align: center;
+}
+
 .cart-item-price {
   font-size: 16pt;
+}
+
+#quantity-div {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .quantity-spn {
   font-size: 11pt;
 }
+
+/************
+ * dividers *
+ ************/
 
 .divider {
   border-right: 1px solid black;
@@ -43,12 +56,12 @@
   margin-left: 3rem;
 }
 
-.cart-header {
-  margin: 3rem;
+.outer-div {
   text-align: center;
 }
 
-.outer-div {
+.cart-header {
+  margin: 3rem;
   text-align: center;
 }
 
@@ -56,10 +69,15 @@
   font-size: 16pt;
 }
 
+/****************
+ * cart summary *
+ ****************/
+
 #cart-summary-div {
   text-align: center;
   background-color: #edf7f0;
   border-radius: 5px;
+  border: 1px solid #53b46e;
   padding: 30px;
 }
 
@@ -81,10 +99,6 @@
   font-size: 24pt;
 }
 
-#obi-div {
-  text-align: center;
-}
-
 /* Style the toast notification. Note that we need
    to include !important here to override the default
    classname that the component attaches. */
@@ -94,6 +108,10 @@
   border-radius: 5px !important;
   font-size: 12pt !important;
 }
+
+/****************
+ * delete modal *
+ ****************/
 
 .modal-header {
   background-color: #53b46e;
@@ -124,6 +142,10 @@
   outline: none;
   box-shadow: none;
 }
+
+/***********
+ * buttons *
+ ***********/
 
 .addtocart-button {
   font-size: 1.5rem;
@@ -222,6 +244,10 @@
   cursor: not-allowed;
 }
 
+/*******************
+ * top rated items *
+ *******************/
+
 #top-rated-items-1 {
   text-align: center;
 }
@@ -237,13 +263,26 @@
 
 .top-rated-items-3 {
   float: left;
-  width: 220px;
-  height: 220px;
+  width: 175px;
+  height: 300px;
   border: 1px solid black;
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 20px;
   text-align: left;
+}
+
+.top-rated-items-img {
+  width: 150px;
+  height: 150px;
+}
+
+/**********************
+ * other bought items *
+ **********************/
+
+#obi-div {
+  text-align: center;
 }
 
 #user-recs-1 {
