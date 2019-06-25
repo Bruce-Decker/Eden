@@ -24,3 +24,78 @@
   margin: auto;
   display: block;
 }
+
+.service-category-title {
+  /* text-align: center; */
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: rgb(165, 165, 165);
+}
+
+.service-category-img {
+  height: 32px;
+  width: 32px;
+  padding-bottom: 6px;
+  padding-right: 6px;
+}
+
+.service-list-img {
+  height: 160px;
+  margin: auto;
+  padding-left: 3rem;
+  display: block;
+}
+
+.service-contact-icon {
+  max-width: 20px;
+  max-height: 20px;
+  margin-right: 0.25rem;
+}
+
+.service-map {
+  float: right;
+  width: 30px;
+  height: 30px;
+}
+
+.service-map:hover {
+  cursor: pointer;
+}
+
+.service-button {
+  border-width: 1px;
+  border-color: #53b46e;
+  background-color: #53b46e;
+  float: right;
+  transition: .25s ease;
+  text-decoration: none;
+  color: white
+}
+
+.service-button:active, .service-button:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.service-button:active {
+  border-style: solid;
+}
+
+.service-button:hover{
+  background: transparent;
+  color: black;
+  border-width: 1px;
+  border-color: #53b46e;
+}
+
+#service-map-address {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #b6bbc0;
+  color: #6c757d;
+  font-size: 95%;
+  width: 100%;
+}

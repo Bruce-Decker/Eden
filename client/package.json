@@ -23,6 +23,7 @@
     "react-google-maps": "^9.4.5",
     "react-images-upload": "^1.2.7",
     "react-js-pagination": "^3.0.2",
+    "react-lines-ellipsis": "^0.14.1",
     "react-location-picker": "^1.3.0",
     "react-places-autocomplete": "^7.2.1",
     "react-redux": "^6.0.1",

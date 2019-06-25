@@ -296,8 +296,8 @@ class Upload extends Component {
               >
               </Map>
               <Form.Text className="text-muted">
-              Drag the map to pinpoint the exact location.
-            </Form.Text>
+                Drag the map to pinpoint the exact location.
+              </Form.Text>
             </div>
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
