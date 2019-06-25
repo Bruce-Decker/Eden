@@ -8,7 +8,8 @@ import { Card } from 'react-bootstrap'
 import  delete_icon  from './delete_icon.png'
 import  isUrl  from 'is-valid-http-url'
 import MicrolinkCard from '@microlink/react';
-
+import request from 'request-promise';
+import isReachable from 'is-reachable';
 
 class ShowProfile extends Component {
     constructor() {
@@ -153,6 +154,35 @@ class ShowProfile extends Component {
     
     }
 
+     handleURL = async(url) => {
+        // var instance = axios.create({
+        //     baseURL: '/profile/' + this.props.match.params.email
+        //   });
+        //   var result = await instance.get('/')
+        //      .then(res => {
+        //         console.log(res)
+        //      })
+        //      .catch(err => {
+        //          console.log(err)
+                
+        //      })
+        //      return result
+       
+      
+            console.log(url)
+            //console.log(await isReachable(url));;
+            var result = await isReachable(url)
+            console.log(result)
+            return result
+            
+            //=> true
+        
+            
+      
+        
+           
+    }
+
 
 
 
@@ -167,7 +197,7 @@ class ShowProfile extends Component {
 
        
 
-        console.log(response.data[0])
+        
         if (response.data[0]) {
                 this.setState({
                     image_path: response.data[0].profile_picture_path,
@@ -277,9 +307,17 @@ class ShowProfile extends Component {
                                     <p>{post.post}</p>
                                     {isUrl(post.post) ? 
                                      <div>
-                                        <MicrolinkCard url={post.post} />
+                                       {isReachable(post.post) ?
+                                          <div>
+                                          <MicrolinkCard url={post.post}  />
+                                         
+                                       </div>
+                                              : null
+                                        }
                                     </div>
-                                    : <h1> NO</h1>}
+
+                                     
+                                    : null }
                                     <div className="stats">
                                     { post.like.some(element => element['email'] === this.props.auth.user.email) ?
                                       <div>
