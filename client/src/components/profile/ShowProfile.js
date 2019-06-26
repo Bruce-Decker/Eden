@@ -10,6 +10,21 @@ import  isUrl  from 'is-valid-http-url'
 import MicrolinkCard from '@microlink/react';
 import request from 'request-promise';
 import isReachable from 'is-reachable';
+import Modal from 'react-modal';
+
+
+const customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)'
+    }
+  };
+
+Modal.setAppElement("#root");
 
 class ShowProfile extends Component {
     constructor() {
@@ -30,7 +45,9 @@ class ShowProfile extends Component {
                 showProfile: false,
                 share_post: '',
                 posts: [],
-                comment: ''
+                comment: '',
+                modalIsOpen: false,
+                post_like: []
         }
     }
 
@@ -184,6 +201,23 @@ class ShowProfile extends Component {
     }
 
 
+    openModal = (post_like) => {
+        this.setState({
+            modalIsOpen: true,
+            post_like: post_like
+        });
+      }
+     
+      afterOpenModal = () => {
+        // references are now sync'd and can be accessed.
+        //this.subtitle.style.color = '#f00';
+      }
+     
+      closeModal = () => {
+        this.setState({modalIsOpen: false});
+      }
+
+
 
 
    
@@ -225,6 +259,31 @@ class ShowProfile extends Component {
             <div>
                <RegularBanner />
                <div className = "ShowProfileContainer">
+               <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+ 
+         
+          <button onClick={this.closeModal}>close</button>
+         
+          {this.state.post_like.map(like => 
+              <div>
+                    {like.name}
+              </div>
+             
+          )}
+          <form>
+            <input />
+            <button>tab navigation</button>
+            <button>stays</button>
+            <button>inside</button>
+            <button>the modal</button>
+          </form>
+        </Modal>
               {this.state.showProfile ? 
                        <Card>
                             <img src = { this.state.image_path} height = "250" width = "300" />
@@ -322,18 +381,29 @@ class ShowProfile extends Component {
                                     { post.like.some(element => element['email'] === this.props.auth.user.email) ?
                                       <div>
                                         <button href="#" className="btn btn-default stat-item" onClick = {() => this.unlikePost(post.post_id)}>
-                                            <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>{post.like.length}
+                                            <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>
+                                        </button>
+                                        <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
+                                           {post.like.length}
                                         </button>
                                       </div>
 
                                       : 
-                                      <button href="#" className="btn btn-default stat-item" onClick = {() => this.likePost(post.post_id)}>
-                                        <i className="fa fa-thumbs-up icon"  />{post.like.length}
-                                      </button>
+                                      <div>
+                                        <button href="#" className="btn btn-default stat-item" onClick = {() => this.likePost(post.post_id)}>
+                                            <i className="fa fa-thumbs-up icon"  />
+                                        </button>
+                                        <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
+                                        {post.like.length}
+                                        </button>
+                                     </div>
+                                      
 
                                       
 
                                       }
+
+
 
 
 

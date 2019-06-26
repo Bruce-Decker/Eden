@@ -158,7 +158,15 @@
 }
 .post .post-description .stats .stat-item {
   display: inline-block;
-  margin-right: 15px;
+  margin-right: 8px;
+  border-radius: 0.1rem;
+}
+
+
+.btn.btn-default.stat-item  {
+     padding-top: 0rem;
+     padding-right: 0rem;
+     padding-left: 0rem;
 }
 .post .post-description .stats .stat-item .icon {
   margin-right: 8px;
