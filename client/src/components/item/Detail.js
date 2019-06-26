@@ -54,7 +54,7 @@ class Detail extends Component {
               })}
             </div>
             <div class="item-price">${item.price}</div>
-            <div ><CartAddButton item={this.state.item}/><span style={{marginLeft: "1rem"}}></span></div>
+            <div ><CartAddButton item={this.state.item} cls={"addtocart-btn-lg"}/><span style={{marginLeft: "1rem"}}></span></div>
           </div>
           </div>
           <div class="col-1"/>

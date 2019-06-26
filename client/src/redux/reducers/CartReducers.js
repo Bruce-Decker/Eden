@@ -17,11 +17,13 @@ const cart = (state = initialState, action) => {
         newItem.quantity = 1;
 
         return {
+          ...state,
           items: [...state.items, newItem]
         }
       } else {
         // if it's not a new item, increase its quantity by 1
         return {
+          ...state,
           items: state.items.map(item => {
             if (item.id === action.item.item_id) {
               return {
@@ -36,6 +38,7 @@ const cart = (state = initialState, action) => {
       }
     case CHANGE_QUANTITY:
       return {
+        ...state,
         items: state.items.map(item => {
           if (item.id === action.iid) {
             return {
@@ -49,6 +52,7 @@ const cart = (state = initialState, action) => {
       }
     case REMOVE_FROM_CART:
       return {
+        ...state,
         items: state.items.filter(item => item.id !== action.iid)
       }
     default:

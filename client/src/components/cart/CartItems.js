@@ -36,25 +36,25 @@ class CartItems extends Component {
       );
     } else {
       return (
-        <ul class="cart-item-list">
+        <ul className="cart-item-list">
           {this.props.cart.items.map(cartItem => {
             return (
-              <div>
-                <li key={cartItem.id} class="cart-item row">
-                  <div class="col-2">
-                    <img class="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
+              <div key={"ci-"+cartItem.id}>
+                <li className="cart-item row">
+                  <div className="col-2">
+                    <img className="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
                   </div>
-                  <div class="col-8">
+                  <div className="col-8">
                     <Link to={"/items/" + cartItem.id}>
-                      <span class="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
+                      <span className="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
                     </Link>
                     <div>{cartItem.description}</div>
                   </div>
-                  <div class="col-2 cart-item-controls">
-                    <span class="cart-item-price">{"$" + cartItem.price.toFixed(2)}</span>
+                  <div className="col-2 cart-item-controls">
+                    <span className="cart-item-price">{"$" + cartItem.price.toFixed(2)}</span>
                     <div id="quantity-div">
-                      <span class="quantity-spn">Quantity </span>
-                      <select class="quantity-sel" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
+                      <span className="quantity-spn">Quantity </span>
+                      <select className="quantity-sel" name="quantity" defaultValue={cartItem.id+"_"+cartItem.quantity} onChange={this.handleChange}>
                         <option value={cartItem.id+"_1"}>1</option>
                         <option value={cartItem.id+"_2"}>2</option>
                         <option value={cartItem.id+"_3"}>3</option>

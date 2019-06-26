@@ -10,11 +10,11 @@ class CartEmpty extends Component {
 
   render() {
     return (
-      <div class="outer-div">
+      <div className="outer-div">
         <span id="cart-empty-message">Your cart is currently empty.</span>
         <br/>
         <Link to="/product">
-          <button onClick={() => window.scrollTo(0, 0)} class="shop-button">Start Shopping</button>
+          <button onClick={() => window.scrollTo(0, 0)} className="shop-button">Start Shopping</button>
         </Link>
       </div>
     );
