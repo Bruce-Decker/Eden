@@ -225,6 +225,15 @@
     
 }
 
+.profile_picutures_like {
+    padding-right: 10px;
+}
+
+.profile_picutures_like_button {
+    position: absolute;
+    bottom: 10px;
+}
+ 
 /* #9ACD32 */
 /* #ADFF2F
 #00FF00 */

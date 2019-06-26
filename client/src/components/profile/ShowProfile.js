@@ -20,7 +20,9 @@ const customStyles = {
       right                 : 'auto',
       bottom                : 'auto',
       marginRight           : '-50%',
-      transform             : 'translate(-50%, -50%)'
+      transform             : 'translate(-50%, -50%)',
+      width: "420px",
+      height: "420px"
     }
   };
 
@@ -260,29 +262,26 @@ class ShowProfile extends Component {
                <RegularBanner />
                <div className = "ShowProfileContainer">
                <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
+                        isOpen={this.state.modalIsOpen}
+                        onAfterOpen={this.afterOpenModal}
+                        onRequestClose={this.closeModal}
+                        style={customStyles}
+                        contentLabel="Example Modal"
+               >
  
-         
-          <button onClick={this.closeModal}>close</button>
+ <div style={{height: '320px', width: '375px', border: '1px solid #ccc', font: '16px/26px Georgia, Garamond, Serif', overflow: 'auto'}}>
          
           {this.state.post_like.map(like => 
-              <div>
-                    {like.name}
+              <div >
+                  <img className = "profile_picutures_like" src = {`/images/${like.email}.jpg`} height = "80" width = "120" />
+                    { }{like.name}
+                    <div className = "space">
+                    </div>
               </div>
              
           )}
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
+          </div>
+          <button className = "profile_picutures_like_button" onClick={this.closeModal}>close</button>
         </Modal>
               {this.state.showProfile ? 
                        <Card>
