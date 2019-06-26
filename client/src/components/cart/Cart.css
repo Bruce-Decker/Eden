@@ -147,12 +147,18 @@
  * buttons *
  ***********/
 
-.addtocart-button {
+.addtocart-btn-sm {
+  font-size: 12pt;
+  width: 115px;
+  height: 30px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.addtocart-btn-lg {
   font-size: 1.5rem;
   width: 175px;
   height: 60px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 .shop-button {
@@ -208,6 +214,13 @@
 .addtocart-button:hover, .shop-button:hover, .cart-checkout-button:hover {
   background: transparent;
   color: black;
+}
+
+.addtocart-btn-sm:hover {
+  font-size: 13pt;
+}
+
+.addtocart-btn-lg:hover {
   font-size: 1.6rem;
 }
 
@@ -269,12 +282,20 @@
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 20px;
-  text-align: left;
 }
 
 .top-rated-items-img {
   width: 150px;
   height: 150px;
+}
+
+.top-rated-items-title {
+  font-size: 11pt;
+}
+
+.top-rated-items-price {
+  font-size: 16pt;
+  font-weight: bold;
 }
 
 /**********************

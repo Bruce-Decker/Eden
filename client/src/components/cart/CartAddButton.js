@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './Cart.css';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { toast } from 'react-toastify';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addToCart } from '../../redux/actions/CartActions';
 
@@ -21,7 +22,7 @@ class CartAddButton extends Component {
     let email = this.props.auth.user.email;
     let item = this.props.item; // get item information from parent
 
-    let name = item.item_name;
+    let name = item.item_name || item.name;
     toast.success(name + " was successfully added to the cart!", {
       autoClose: 3000,
       hideProgressBar: false,
@@ -34,11 +35,16 @@ class CartAddButton extends Component {
     });
 
     this.props.addToCart(email, item);
+
+    // hack to refresh cart page
+    if(window.location.pathname == "/cart") {
+      window.location.reload();
+    }
   }
 
   render() {
     return (
-      <button className="addtocart-button" onClick={this.handleClick}>Add To Cart</button>
+      <button className={"addtocart-button " + this.props.cls} onClick={this.handleClick}>Add To Cart</button>
     );
   }
 }
@@ -58,10 +64,10 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CartAddButton);
+)(CartAddButton));
 
 
 

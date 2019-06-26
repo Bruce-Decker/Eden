@@ -40,7 +40,7 @@ class Item extends Component {
                   : null }
               <div className="items-description">Description: {this.props.item.description}</div>
               <div>
-                <CartAddButton item={this.props.item}/>
+                <CartAddButton item={this.props.item} cls={"addtocart-btn-lg"}/>
               </div>
             </div>
           </div>

@@ -42,7 +42,7 @@ class SearchResultItems extends Component {
                 <div>{"$" + item.price}</div>
               </div>
               <div class="col-2">
-                <CartAddButton item={item}/>
+                <CartAddButton item={item} cls={"addtocart-btn-lg"}/>
               </div>
             </li>
           )

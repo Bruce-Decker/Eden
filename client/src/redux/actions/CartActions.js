@@ -28,7 +28,7 @@ export const getCartItems = email => dispatch => {
 export const addToCart = (email, item) => dispatch => {
   let params = {
     email: email,
-    iid: item.item_id
+    iid: item.item_id || item.id
   };
 
   axios

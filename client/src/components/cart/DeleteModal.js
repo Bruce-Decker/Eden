@@ -36,7 +36,7 @@ class DeleteModal extends React.Component {
   render() {
     return (
       <div>
-        <button class="delete-button" name={this.props.iid} onClick={this.handleShow}>Delete</button>
+        <button className="delete-button" name={this.props.iid} onClick={this.handleShow}>Delete</button>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header>
             <Modal.Title>Confirm Delete</Modal.Title>
