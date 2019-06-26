@@ -26,7 +26,6 @@
 }
 
 .service-category-title {
-  /* text-align: center; */
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: bold;
@@ -88,6 +87,23 @@
   color: black;
   border-width: 1px;
   border-color: #53b46e;
+}
+
+.service-list-category .carousel-indicators li {
+  background-color: grey;
+  opacity: 0.5;
+}
+
+.service-list-category .carousel-indicators .active {
+  background-color: #53b46e;
+  opacity: 1;
+}
+
+.service-image {
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 270px;
+  min-height: 270px;
 }
 
 #service-map-address {

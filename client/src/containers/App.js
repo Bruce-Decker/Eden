@@ -29,6 +29,7 @@ import store from '../redux/store';
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 import Property from '../components/property/Property';
 import Service from '../components/service/Service';
+import Detail from '../components/service/Detail';
 
 // Setup toastify for notifications
 toast.configure();
@@ -69,6 +70,7 @@ class App extends Component {
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile/:email" component = {ShowProfile} />
           <Route exact path="/items/:id" component={Item} />
+          <Route exact path="/services/:id" component={Detail} />
           <Route exact path="/createItem" component={CreateItem} />
           <Route exact path="/showShowAllUserItems/:email" component={ShowAllUserItems} />
           <Route exact path="/cart" component={Cart} />
