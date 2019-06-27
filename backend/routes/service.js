@@ -4,7 +4,7 @@ const Service = require('../schema/Service');
 var multer = require('multer');
 var fs = require('fs-extra');
 
-
+const itemsPerPage = 15
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     var dir = '../client/public/images/service/' + req.body.id
@@ -43,15 +43,24 @@ router.get('/', function(req, res) {
     const nelng = parseFloat(req.query.nelng)
     const swlng = parseFloat(req.query.swlng)
     const swlat = parseFloat(req.query.swlat)
+    const category = req.query.category
+    const pageNumber = parseInt(req.query.page)
     Service.find({
       lat: { $gte: swlat, $lte: nelat },
-      lng: { $gte: swlng, $lte: nelng }
+      lng: { $gte: swlng, $lte: nelng },
+      category: category
     }, {
       user_id: 0,
       "reviews.rating": 0
     }).then(async (services) => {
       console.log(services)
-      res.json(services);
+      const start = (pageNumber - 1) * itemsPerPage
+      const ret = {
+        numItems: services.length,
+        itemsPerPage: itemsPerPage,
+        services: services.slice(start, start + itemsPerPage)
+      };
+      res.json(ret);
     }).catch(err => {
       console.log(err);
       res.json({ msg: 'services not found' });

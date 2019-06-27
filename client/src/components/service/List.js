@@ -6,12 +6,12 @@ import Item from './Item';
 
 import axios from 'axios'
 
-import { Card, Row, Col, Modal, Form } from 'react-bootstrap';
-import { BrowserRouter as Route, Link } from 'react-router-dom';
+import { Row, Col, Modal, Form } from 'react-bootstrap';
 import { compose, withProps } from "recompose"
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps"
 import Geocode from "react-geocode";
 import { Spinner } from 'react-bootstrap';
+import Pagination from 'react-js-pagination';
 
 import hammer from '../../images/hammer.png';
 import shovel from '../../images/shovel.png';
@@ -32,6 +32,8 @@ const mapAttributes = {
   containerElement: <div style={{ height: '400px' }} />,
   mapElement: <div style={{ height: '400px' }} />,
 }
+const latBound = 0.11
+const lngBound = 0.16
 class List extends Component {
   constructor(props) {
     super(props)
@@ -42,8 +44,13 @@ class List extends Component {
       lng: default_lng,
       show: false,
       loading: true,
+      services: [],
+      activePage: 1,
+      itemsPerPage: 0,
+      numItems: 0
     }
     this.search = this.search.bind(this)
+    this.handlePageChange = this.handlePageChange.bind(this)
 
     Map = compose(
       withProps(mapAttributes),
@@ -69,12 +76,18 @@ class List extends Component {
   }
 
   setCurrentPosition = (position) => {
-    var { lat, lng, loading, show } = this.state;
+    var { lat, lng } = this.state;
     lat = position.coords.latitude
     lng = position.coords.longitude
-    loading = false
-    show = true
-    this.setState({ lat: lat, lng: lng, loading, show })
+    this.setState({ lat: lat, lng: lng })
+    this.get(lat + latBound, lng + lngBound, lat - latBound, lng - lngBound)
+  }
+
+  handleCenterChanged = () => {
+    var { lat, lng } = this.state;
+    lat = this.map.current.getCenter().lat()
+    lng = this.map.current.getCenter().lng()
+    this.setState({ lat: lat, lng: lng })
   }
 
   handleError = (error) => {
@@ -84,25 +97,40 @@ class List extends Component {
     this.setState({ show, loading })
   }
 
+  async handlePageChange(pageNumber) {
+    window.scrollTo(0, 0);
+    this.setState({ loading: true })
+    const { lat, lng } = this.state;
+    this.get(lat + latBound, lng + lngBound, lat - latBound, lng - lngBound, pageNumber)
+  }
+
   async search () {
-    this.setState({ loading: true, show: false })
+    this.setState({ show: false })
     const bounds = this.map.current.getBounds()
     const nelat = bounds.na.l
     const nelng = bounds.ga.l
     const swlat = bounds.na.j
     const swlng = bounds.ga.j
+    this.get(nelat, nelng, swlat, swlng)
+  }
+
+  async get(nelat, nelng, swlat, swlng, page=1) {
+    this.setState({ loading: true, services: [] })
     const params =  'nelat=' + nelat +
                     '&swlat=' + swlat +
                     '&nelng=' + nelng +
                     '&swlng=' + swlng +
-                    '&category=' + this.props.match.params.category
-    const response = await axios.get('/properties?' + params)
-    var { services, loading } = this.state;
-    services = response.data
-    loading = false
-    this.setState({ services, loading })
+                    '&category=' + this.props.match.params.category +
+                    '&page=' + page
+    const response = await axios.get('/services?' + params)
+    this.setState({ 
+      services: response.data.services,
+      numItems: response.data.numItems,
+      itemsPerPage: response.data.itemsPerPage,
+      activePage: page,
+      loading: false
+    })
   }
-
 
   handleAddressChanged = (target) => {
     const input = document.getElementById("service-map-address").value
@@ -152,6 +180,7 @@ class List extends Component {
                   map={this.map}
                   lat={this.state.lat}
                   lng={this.state.lng}
+                  handleCenterChanged={this.handleCenterChanged}
                 >
                 </Map>
               </div>
@@ -174,13 +203,51 @@ class List extends Component {
               </Row>
             </Modal.Footer>
           </Modal>
-          {Array.from(Array(5), (_, i) => {
-            return  <div style={{marginBottom: "2.5rem"}}>
-                      <Item />
-                    </div>
-          })}
           {this.state.loading ? (<Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />):(null)}
+          {this.state.services.length !== 0 ? 
+            (Array.from(this.state.services, (e, i) => {
+              return  <div style={{marginBottom: "2.5rem"}}>
+                        <Item 
+                          key={i}
+                          id={e.id}
+                          name={e.name}
+                          desc={e.desc}
+                          rating={e.rating}
+                          phone={e.phone}
+                          email={e.email}
+                          logo={e.logo}
+                        />
+                      </div>
+            })) :
+            this.state.loading ?
+            (
+              <div style={{height: "100vh"}}/>
+            ) :
+            (
+              <div style={{marginTop: "35vh", marginBottom: "50vh", textAlign: "center", color: "rgb(165, 165, 165)", fontSize: "1.25rem"}}>No services found in this area.</div>
+            )
+          }
         </div>
+        {this.state.services.length !== 0 &&
+          <div id='pagination' style={{marginTop: "3rem", marginBottom: "3rem"}}>
+            <Pagination
+              prevPageText='<'
+              nextPageText='>'
+              firstPageText='<<'
+              lastPageText='>>'
+              activePage={this.state.activePage}
+              itemsCountPerPage={this.state.itemsPerPage}
+              totalItemsCount={this.state.numItems}
+              onChange={this.handlePageChange}
+              activeClass='service-pn-active'
+              activeLinkClass='service-pn-active-link'
+              itemClass='service-pn-item'
+              itemClassPrev='service-pn-item-prev'
+              itemClassNext='service-pn-item-next'
+              disabledClass='service-pn-disabled'
+            />
+          </div>
+        }
         <Footer />
       </div>
     )

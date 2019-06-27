@@ -11,7 +11,7 @@ def main():
   # itemUser(db)
   # cart(db)
   # item(db)
-  properties(db)
+  # properties(db)
   # itemRatings(db)
   services(db)
 
@@ -215,6 +215,7 @@ def services(db):
   names = ['CostLess Heating & Cooling Services', 'Hewlett Electric', 'Willow Glen Electric', 'Absolute Power', 'BDS Locksmith', 'Modern Lock & Security', 'San Jose Safe & Lock', 'Sonic Locksmith', 'Trusted Movers', 'Spartan Moving Systems', 'A2B Movers', 'American HVAC', 'Global Heating & Cooling Services', 'Frank’s Yard Clean-Up', 'All Green Scape']
   desc = 'We take pride in our business by providing you 5 star service. What makes us different from other companies is that we make sure we show up on time, provide affordable pricing, and honest work. We are here for you to make sure we take care of your heating and cooling systems.'
   services = ['A/C Installation', 'A/C Repair', 'Air Duct Cleaning', 'Electric Furnace Installation', 'Electric Furnace Repair', 'Emergency Services', 'Flame Sensor Repair', 'Gas Furnace Installation', 'Gas Furnace Repair', 'Heater Installation', 'Heater Repair', 'Thermostat Repair']
+  categories = ['contractors', 'landscaping', 'electricians', 'locksmiths', 'cleaners', 'movers', 'havc', 'plumbers']
   servId = 0
 
   for i in range(1000):
@@ -227,6 +228,7 @@ def services(db):
     }
     rating = round((sum_rating / len(comments)), 1)
     name = names[randint(0, len(names) - 1)]
+    category = categories[randint(0, len(categories) - 1)]
     service_data = {
       'id': servId,
       'address': addresses[int(randrange(0,len(addresses)))],
@@ -235,6 +237,7 @@ def services(db):
       'user_name': user[1],
       'city': cities[int(randrange(0,len(cities)))],
       'zip': zip_[int(randrange(0,len(zip_)))],
+      'category': category,
       'name': name,
       'desc': desc,
       'email': user[1],

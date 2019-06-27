@@ -13,18 +13,18 @@ class Item extends Component {
   render() {
     return (
       <div>
-        <Link to={'/service/'} style={{textDecoration: 'none'}}>
-          <Card className="service-list-category" style={{backgroundColor: "#f7f7ff", borderRadius: "5rem", border: "0"}}>
+        <Link to={'/services/' + this.props.id} style={{textDecoration: 'none'}}>
+          <Card id="service-item" className="service-list-item">
             <Card.Body>
               <Row>
                 <Col md={4}>
-                  <Card.Img className="service-list-img" src={this.props.img}/>
+                  <Card.Img className="service-list-img" src={'/images/property/' + this.props.logo}/>
                 </Col>
                 <Col>
-                  <Card.Title style={{color: "black"}}>Future Vision Remodeling</Card.Title>
+                  <Card.Title style={{color: "black"}}>{this.props.name}</Card.Title>
                   <Card.Text style={{color: "grey"}}>
                     <LinesEllipsis
-                      text="Future Vision Remodeling, Inc. provides quality service for your home. We pride ourselves on reliability, great communication, integrity and quality work."
+                      text={this.props.desc}
                       maxLine='3'
                       ellipsis='...'
                       trimRight
@@ -32,12 +32,12 @@ class Item extends Component {
                     >
                     </LinesEllipsis>
                   </Card.Text>
-                  {Array.from(Array(5), (e, i) => {
+                  {Array.from(Array(parseInt(this.props.rating)), (e, i) => {
                     return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
                   })}
                   <div style={{marginTop: "1rem", color: "black"}}>
-                    <img className="service-contact-icon" alt="phone" src={phone}/> 6697581284
-                    <img className="service-contact-icon" alt="email" src={email} style={{marginLeft: "1.5rem"}}/> futurevision@gmail.com
+                    <img className="service-contact-icon" alt="phone" src={phone}/> {this.props.phone}
+                    <img className="service-contact-icon" alt="email" src={email} style={{marginLeft: "1.5rem"}}/> {this.props.email}
                   </div>
                 </Col>
               </Row>

@@ -8,7 +8,7 @@ class Category extends Component {
   render() {
     return (
       <div>
-        <Link to={'/service/' + this.props.service.toLowerCase()} style={{textDecoration: 'none'}}>
+        <Link to={'/service/' + this.props.service.toLowerCase()} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
           <Card className="service-card-category" style={{backgroundColor: this.props.bg, borderRadius: "25rem", border: "0"}}>
             <Card.Body>
               <Row>
