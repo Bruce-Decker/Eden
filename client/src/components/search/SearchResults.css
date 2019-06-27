@@ -13,6 +13,47 @@
   height: 150px;
 }
 
+.sr-outer-div {
+  text-align: center;
+  padding-top: 5rem;
+}
+
+.sr-no-results {
+  font-size: 16pt;
+}
+
+.sr-shop-button {
+  font-size: 1.5rem;
+  width: 175px;
+  height: 60px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.sr-shop-button {
+  color: white;
+  border-width: 1px;
+  border-color: #53b46e;
+  border-radius: 5px;
+  background-color: #53b46e;
+  transition: .25s ease;
+  text-decoration: none;
+}
+
+.sr-shop-button:active, .sr-shop-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.sr-shop-button:active {
+  border-style: solid;
+}
+
+.sr-shop-button:hover {
+  background: transparent;
+  color: black;
+}
+
 #pagination {
   display: flex;
   justify-content: center;
