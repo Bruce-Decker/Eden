@@ -20,7 +20,7 @@
 }
 
 .non-semantic-protector { 
-    position: relative; z-index: 1; 
+   
     background-color: 	#9ACD32;
 }
 
@@ -232,6 +232,10 @@
 .profile_picutures_like_button {
     position: absolute;
     bottom: 10px;
+}
+
+.edit_profile_h4 {
+  color: blue;
 }
  
 /* #9ACD32 */

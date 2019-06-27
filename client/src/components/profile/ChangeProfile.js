@@ -107,7 +107,7 @@ class ChangeProfile extends Component {
         const { errors } = this.state
         return (
             <div>
-                <RegularBanner />
+             
                 <div className = "ChangeProfileContainer">
                    <h1> User profile </h1>
                    <form onSubmit = {this.onSubmit} className="ui form">

@@ -11,6 +11,7 @@ import MicrolinkCard from '@microlink/react';
 import request from 'request-promise';
 import isReachable from 'is-reachable';
 import Modal from 'react-modal';
+import ChangeProfile from './ChangeProfile'
 
 
 const customStyles = {
@@ -23,6 +24,20 @@ const customStyles = {
       transform             : 'translate(-50%, -50%)',
       width: "420px",
       height: "420px"
+    }
+  };
+
+
+const edit_profile_customStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      width: "700px",
+      height: "500px"
     }
   };
 
@@ -49,6 +64,7 @@ class ShowProfile extends Component {
                 posts: [],
                 comment: '',
                 modalIsOpen: false,
+                profileModalIsOpen: false,
                 post_like: []
         }
     }
@@ -220,6 +236,20 @@ class ShowProfile extends Component {
       }
 
 
+      profileOpenModal = () => {
+        this.setState({profileModalIsOpen: true});
+      }
+    
+      profileAfterOpenModal = () => {
+        // references are now sync'd and can be accessed.
+        //this.subtitle.style.color = '#f00';
+      }
+    
+      profileCloseModal = () => {
+        this.setState({profileModalIsOpen: false});
+      }
+
+
 
 
    
@@ -281,12 +311,26 @@ class ShowProfile extends Component {
              
           )}
           </div>
-          <button className = "profile_picutures_like_button" onClick={this.closeModal}>close</button>
+          <button className = "ui primary button profile_picutures_like_button" onClick={this.closeModal}>close</button>
+        </Modal>
+
+        <Modal
+          isOpen={this.state.profileModalIsOpen}
+          onAfterOpen={this.profileAfterOpenModal}
+          onRequestClose={this.profileCloseModal}
+          style={edit_profile_customStyles}
+          contentLabel="Example Modal"
+        >
+
+        <ChangeProfile />
+       
+        
+          
         </Modal>
               {this.state.showProfile ? 
                        <Card>
                             <img src = { this.state.image_path} height = "250" width = "300" />
-                            <Link to = "/changeProfile"> <h4> <i class="fas fa-user"></i> Edit Profile </h4>  </Link>
+                            <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
                             <div className = "sorts_mill_goudy_font">
                                 <h5>First Name: {this.state.first_name}</h5>
                                 <h5>Last Name: {this.state.last_name}</h5>
