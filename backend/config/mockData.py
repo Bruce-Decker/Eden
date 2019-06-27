@@ -8,11 +8,12 @@ def main():
   #client = MongoClient("mongodb://localhost:27017/eden")
   db = client.test
 
-  #itemUser(db)
-  #cart(db)
-  #item(db)
-  #properties(db)
-  itemRatings(db)
+  # itemUser(db)
+  # cart(db)
+  # item(db)
+  properties(db)
+  # itemRatings(db)
+  services(db)
 
 # ItemUser
 def itemUser(db):
@@ -203,6 +204,72 @@ def itemRatings(db):
         result = db.itemRatings.insert_one(r)
   
   print('Finished inserting {0} items into ItemRatings collection.'.format(c))
+
+def services(db):
+  db.services.drop()
+
+  addresses = ['Apartment 9, 201 Cuesta Dr','Apartment 7, 521 E Taylor Ave','717 Ellsworth Pl','550 E Weddell Dr','580 Arastradero Rd','555 E El Camino Real,','Donohoe St','1363 Kingfisher Way','Apartment 105, 500 Fulton St','20875 Valley Green Dr']
+  cities = ['Sunnyvale','San Jose','Mountain View','Palo Alto','Los Altos']
+  zip_ = ['94022', '95112', '94312', '94821', '91242', '95213', '95563', '91823', '98721', '99874']
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com'),(10,'A')]
+  names = ['CostLess Heating & Cooling Services', 'Hewlett Electric', 'Willow Glen Electric', 'Absolute Power', 'BDS Locksmith', 'Modern Lock & Security', 'San Jose Safe & Lock', 'Sonic Locksmith', 'Trusted Movers', 'Spartan Moving Systems', 'A2B Movers', 'American HVAC', 'Global Heating & Cooling Services', 'Frank’s Yard Clean-Up', 'All Green Scape']
+  desc = 'We take pride in our business by providing you 5 star service. What makes us different from other companies is that we make sure we show up on time, provide affordable pricing, and honest work. We are here for you to make sure we take care of your heating and cooling systems.'
+  services = ['A/C Installation', 'A/C Repair', 'Air Duct Cleaning', 'Electric Furnace Installation', 'Electric Furnace Repair', 'Emergency Services', 'Flame Sensor Repair', 'Gas Furnace Installation', 'Gas Furnace Repair', 'Heater Installation', 'Heater Repair', 'Thermostat Repair']
+  servId = 0
+
+  for i in range(1000):
+    servId += 1
+    user = users[randint(0,10)]
+    comments, sum_rating = generate_comments()
+    reviews = {
+      'rating': sum_rating, 
+      'comments': comments
+    }
+    rating = round((sum_rating / len(comments)), 1)
+    name = names[randint(0, len(names) - 1)]
+    service_data = {
+      'id': servId,
+      'address': addresses[int(randrange(0,len(addresses)))],
+      'state': 'CA',
+      'user_id': str(user[0]),
+      'user_name': user[1],
+      'city': cities[int(randrange(0,len(cities)))],
+      'zip': zip_[int(randrange(0,len(zip_)))],
+      'name': name,
+      'desc': desc,
+      'email': user[1],
+      'phone': 6699990000,
+      'lat': random.uniform(37.20838626323297,37.43254343446974),
+      'lng': random.uniform(-122.15024233370286,-121.77773714571458),
+      'services': services,
+      'rating': rating,
+      'reviews': reviews,
+      'logo': 'home1.jpg',
+      'images': ['home1.jpg', 'home2.jpg', 'home3.jpg']
+    }
+    result = db.services.insert_one(service_data)
+
+  print('Finished inserting {0} items into Service collection.'.format(servId))
+
+def generate_comments():
+  comments = []
+  sum_rating = 0
+  users = ['adam', 'bob', 'cindy', 'david','eric','florence', 'gary','heather','irene','joe', 'A']
+  comment = 'I really appreciate Richard and Nick works for us today. They are very professional and efficiently helped us clean air conditioner tunnel dust accumulated for years. They even helped me clean up my refrigirater top dust that I did not see for years and provided me good opinions on how to maintain the system for future. Their service is far beyond good service and I highly recommended.'
+  for i in range(1, 21):
+    rating = randint(1,5)
+    sum_rating += rating
+    user = users[randint(0,10)]
+    data = {
+      'id': i,
+      'rating': rating,
+      'user_name': user,
+      'comment': comment,
+      'upvote': {'A': True, 'adam': True, 'bob': True},
+      'downvote': {'cindy': True, 'david': True}
+    }
+    comments.append(data)
+  return comments, sum_rating
 
 if __name__ == "__main__":
   main()

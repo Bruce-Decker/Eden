@@ -41,6 +41,48 @@ const ServiceSchema = new Schema({
       type: [String],
       required: true
     },
+    rating: {
+      type: Number,
+      required: true
+    },
+    reviews: {
+      rating: {
+        type: Number,
+        required: true
+      },
+      comments: [
+        {
+          id: {
+            type: String,
+            required: true
+          },
+          user_name: {
+            type: String,
+            required: true
+          },
+          rating: {
+            type: Number,
+            required: true
+          },
+          comment: {
+            type: String,
+            required: true
+          },
+          upvote: {
+            additionalProperties: {
+              type: Boolean,
+              required: true
+            }
+          },
+          downvote: {
+            additionalProperties: {
+              type: Boolean,
+              required: true
+            }
+          }
+        }
+      ]
+    },
     lat: {
       type: Number,
       required: true

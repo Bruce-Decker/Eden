@@ -29,7 +29,8 @@ router.get('/', function(req, res) {
     Service.find({
       user_name: user_name
     }, {
-      user_id: 0
+      user_id: 0,
+      "reviews.rating": 0
     }).then(async (services) => {
       console.log(services)
       res.json(services);
@@ -42,11 +43,12 @@ router.get('/', function(req, res) {
     const nelng = parseFloat(req.query.nelng)
     const swlng = parseFloat(req.query.swlng)
     const swlat = parseFloat(req.query.swlat)
-    Property.find({
+    Service.find({
       lat: { $gte: swlat, $lte: nelat },
       lng: { $gte: swlng, $lte: nelng }
     }, {
-      user_id: 0
+      user_id: 0,
+      "reviews.rating": 0
     }).then(async (services) => {
       console.log(services)
       res.json(services);
