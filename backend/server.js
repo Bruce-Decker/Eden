@@ -25,6 +25,7 @@ const search = require('./routes/search');
 const upload = require('./routes/upload');
 const message = require('./routes/message');
 const property = require('./routes/property');
+const service = require('./routes/service');
 const payment = require('./routes/payment');
 const recs = require('./routes/recs');
 
@@ -87,6 +88,7 @@ app.use('/search', search);
 app.use('/upload', upload);
 app.use('/message', message);
 app.use('/properties', property);
+app.use('/services', service);
 app.use('/payment', payment);
 app.use('/recs', recs);
 
