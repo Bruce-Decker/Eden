@@ -47,7 +47,7 @@ class SimilarItems extends Component {
                   <Link to={"/items/" + rec.id}>
                     <span className="top-rated-items-title" onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
                   </Link>
-                  <div><span class="top-rated-items-price">{'$'+rec.price}</span></div>
+                  <div><span className="top-rated-items-price">{'$'+rec.price}</span></div>
                   <StarRatings
                     rating={rec.avg_rating}
                     starRatedColor='rgb(40,167,69)'
