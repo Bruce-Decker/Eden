@@ -18,7 +18,11 @@ class Product extends Component {
     this.state = {
       rfy: [],
       bsl: [],
-      dls: []
+      dls: [],
+      showUserRecs: false,
+      showTopRatedItems: false,
+      showTodaysDeals: false,
+      
     };
   }
 
@@ -33,7 +37,8 @@ class Product extends Component {
       .then(res => {
         console.log(res);
         this.setState({
-          rfy: res.data
+          rfy: res.data,
+          showUserRecs: true
         })
       })
       .catch(err =>
@@ -45,7 +50,8 @@ class Product extends Component {
       .then(res => {
         console.log(res);
         this.setState({
-          bsl: res.data
+          bsl: res.data,
+          showTopRatedItems: true
         })
       })
       .catch(err =>
@@ -57,7 +63,8 @@ class Product extends Component {
       .then(res => {
         console.log(res);
         this.setState({
-          dls: res.data
+          dls: res.data,
+          showTodaysDeals: true
         })
       })
       .catch(err =>
@@ -70,9 +77,15 @@ class Product extends Component {
       <div>
         <RegularBanner />
         <div>
-          <Scroller header="Recommended for you" data={this.state.rfy} keyPrefix={"rfy"}/>
-          <Scroller header="Bestsellers" data={this.state.bsl} keyPrefix={"bsl"}/>
-          <Scroller header="Today's deals" data={this.state.dls} keyPrefix={"dls"}/>
+          {this.state.showUserRecs ? 
+              <Scroller header="Recommended for you" data={this.state.rfy} keyPrefix={"rfy"}/>
+              : null }
+          {this.state.showTopRatedItems ? 
+             <Scroller header="Bestsellers" data={this.state.bsl} keyPrefix={"bsl"}/>
+             : null }
+          {this.state.showTodaysDeals ? 
+             <Scroller header="Today's deals" data={this.state.dls} keyPrefix={"dls"}/>
+             : null }
           <div class="product-container">
             <div class="product-header">Categories</div>
             <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
