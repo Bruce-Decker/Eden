@@ -19,6 +19,7 @@ import CreateItem from '../components/item/CreateItem'
 import Cart from '../components/cart/Cart';
 import Inbox from '../components/inbox/Inbox'
 import Checkout from '../components/checkout/Checkout';
+import Payment from '../components/payment/Payment';
 
 import { Provider } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -78,6 +79,7 @@ class App extends Component {
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search/:keyword" component={SearchResults} />
           <Route exact path="/checkout" component={Checkout} />
+          <Route exact path="/payment" component={Payment} />
           <Route exact path="/vr/:item_id" component={VR} />
           <Route exact path="/items/:id/ar" component={Ar} />
 
