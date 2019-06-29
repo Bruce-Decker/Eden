@@ -28,6 +28,8 @@ const reviews = [
   },
 ]
 
+var defaultPosition
+
 class Review extends Component {
 
   constructor(props){
@@ -37,17 +39,27 @@ class Review extends Component {
       position: {
          lat: 37.7749,
          lng: -122.4194
-      }
+      },
+      showMap: false
   }
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const response = await axios.get('/items/' + this.props.item_id)
+    console.log(response.data[0].latitude)
+    console.log(typeof(response.data[0].latitude))
    if (response.data[0]) {
         this.setState({
-          item: response.data[0]
+          item: response.data[0],
+          position: {
+             lat: response.data[0].longitude,
+             lng: response.data[0].latitude
+          },
+          showMap: true
       })
+      
    }
+  
    
   }
 
@@ -56,19 +68,22 @@ class Review extends Component {
       lat: this.state.position.lat,
       lng: this.state.position.lng
   };
+  
     return (
       <div class="container-review">
         <div class="item-header">Reviews </div>
       
         <div class="row" style={{marginTop: "1rem"}}>
           <div class="col-5">
-          <LocationPicker
-                                containerElement={ <div style={ {height: '100%'} } /> }
-                                mapElement={ <div style={ {height: '400px'} } /> }
-                                defaultPosition={defaultPosition}
-                                onChange={this.handleLocationChange}
-                                zoom = {14}
-                            />
+           
+              <LocationPicker
+                                    containerElement={ <div style={ {height: '100%'} } /> }
+                                    mapElement={ <div style={ {height: '400px'} } /> }
+                                    defaultPosition={defaultPosition}
+                                    onChange={this.handleLocationChange}
+                                    zoom = {14}
+                                />
+                                
          
           </div>
           <div class="col-7">
