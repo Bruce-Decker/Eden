@@ -87,9 +87,9 @@ class Product extends Component {
              <Scroller header="Today's deals" data={this.state.dls} keyPrefix={"dls"}/>
              : null }
           </div>
-          <div class="product-container">
-            <div class="product-header">Categories</div>
-            <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
+          <div className="product-container">
+            <div className="product-header">Categories</div>
+            <div className="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
               {/* {Array.from(Array(6), (e, i) => {
                 return  <Category key={i} name={categories[i]}/>
               })} */}

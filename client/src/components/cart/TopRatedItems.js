@@ -14,7 +14,8 @@ class TopRatedItems extends Component {
     super(props);
 
     this.state = {
-      recs: []
+      recs: [],
+      showRecs: false
     };
   }
 
@@ -25,7 +26,8 @@ class TopRatedItems extends Component {
       .then(res => {
         console.log(res);
         this.setState({
-          recs: res.data
+          recs: res.data,
+          showRecs: true
         })
       })
       .catch(err =>
@@ -36,7 +38,9 @@ class TopRatedItems extends Component {
   render() {
     return (
       <div id="top-rated-items-1">
-        <Scroller header="Top Rated Items" data={this.state.recs} keyPrefix="tri"/>
+        {this.state.showRecs ?
+          <Scroller header="Top Rated Items" data={this.state.recs} keyPrefix="tri"/>
+          : null}
       </div>
     );
   }

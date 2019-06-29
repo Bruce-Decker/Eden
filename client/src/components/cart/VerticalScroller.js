@@ -9,27 +9,29 @@ import { BrowserRouter as Route, Link } from 'react-router-dom';
 class VerticalScroller extends Component {
   render() {
     return (
-      <div class="row-fluid cart-product-container">
-        <div class="cart-product-header">{this.props.header}</div>
-        <div class="col-md-10">
-          <div class="cart-cover-container">
+      <div className="cart-product-container">
+        <div className="cart-product-header">
+          <div>{this.props.header}</div>
+        </div>
+        <div className="">
+          <div className="cart-cover-container">
             {this.props.data.map(rec => {
               return (
-                <div key={this.props.keyPrefix+"-"+rec.id} className="cart-cover-item">
-                  <div>
+                <div key={this.props.keyPrefix+"-"+rec.id} className="row cart-cover-item">
+                  <div className="col-4">
                     <img className={this.props.keyPrefix+"-img"} style={{width: "100%"}} src={rec.image} alt="Item"></img>
                   </div>
-                  <div>
+                  <div className="col-8">
                     <Link to={"/items/" + rec.id}>
                       <span className={this.props.keyPrefix+"-title"} onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
                     </Link>
-                    <div><span className={this.props.keyPrefix+"-price"}>{'$'+rec.price}</span></div>
+                    <div className={this.props.keyPrefix+"-price"}>{'$'+rec.price}</div>
                     <StarRatings
                       rating={rec.avg_rating ? rec.avg_rating : 4+Math.random()}
                       starRatedColor='rgb(40,167,69)'
                       numberOfStars={5}
                       name='rating'
-                      starDimension='20px'
+                      starDimension='18px'
                       starSpacing='1px'
                     />
                     <br/>

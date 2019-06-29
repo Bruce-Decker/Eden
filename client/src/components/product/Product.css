@@ -29,7 +29,7 @@
 
 .product-header {
   font-weight: bold;
-  font-size: 1.25rem;
+  font-size: 20pt;
   margin-bottom: 2rem;
   margin-left: 1.5rem;
   padding-top: 1rem;
@@ -63,4 +63,19 @@
   background: transparent;
   color: black;
   font-size: 1.5rem;
+}
+
+.rfy-price {
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.bsl-price {
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.dls-price {
+  font-size: 16pt;
+  font-weight: bold;
 }
