@@ -70,9 +70,9 @@ class Product extends Component {
       <div>
         <RegularBanner />
         <div>
-          <Scroller header="Recommended for you" data={this.state.rfy} keyPrefix={"rfy"}/>
+          <Scroller header="Recommended for you" data={this.state.rfy ? this.state.rfy : this.state.bsl} keyPrefix={"rfy"}/>
           <Scroller header="Bestsellers" data={this.state.bsl} keyPrefix={"bsl"}/>
-          <Scroller header="Today's deals" data={this.state.dls} keyPrefix={"dls"}/>
+          <Scroller header="Today's deals" data={this.state.dls ? this.state.dls : this.state.bsl} keyPrefix={"dls"}/>
           <div class="product-container">
             <div class="product-header">Categories</div>
             <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>

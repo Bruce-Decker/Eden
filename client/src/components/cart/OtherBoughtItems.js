@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './Cart.css';
+
+import VerticalScroller from './VerticalScroller';
+
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -9,7 +12,8 @@ class OtherBoughtItems extends Component {
     super(props);
 
     this.state = {
-      recs: []
+      recs: [],
+      tris: []
     };
   }
 
@@ -17,7 +21,7 @@ class OtherBoughtItems extends Component {
     // show user-based recommendations
     let email = this.props.auth.user.email;
     let params = {
-      email: 'hoxodo@atech5.com'
+      email: email
     }
     
     axios
@@ -31,14 +35,33 @@ class OtherBoughtItems extends Component {
       .catch(err =>
         console.log(err)
       );
+
+    axios
+      .get('/recs/getTopRatedItems')
+      .then(res => {
+        console.log(res);
+        this.setState({
+          tris: res.data
+        })
+      })
+      .catch(err =>
+        console.log(err)
+      );
   }
 
   render() {
     return (
+      /*
+      <div id="user-recs-1">
+        <VerticalScroller header="Other Users Bought" data={this.state.recs ? this.state.recs : this.state.tris} keyPrefix="obi"/>
+      </div>
+      */
+
       <div id="user-recs-1">
         <h3 id="user-recs-h3">Other Users Bought</h3>
         <div className="user-recs-2">
-          {this.state.recs.slice(0,10).map(rec => {
+          {
+            this.state.recs.slice(0,10).map(rec => {
             return (
               <div key={"obi-"+rec.id} className="user-recs-3">
                 <div>
