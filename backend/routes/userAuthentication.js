@@ -88,19 +88,33 @@ router.post('/register', (req, res) => {
                 });
             });
 
-            const msg = {
-                to: new_user.email,
-                from: 'support@eden.com',
-                subject: 'Welcome to Eden',
-                text: 'You are now registered to enjoy all our services offered at Eden.',
-                html: '<strong>You are now registered to enjoy all our services offered at Eden.</strong>',
-            };
-            try {
-                sgMail.send(msg);
+            var data = {
+                email: req.body.email
+             
             }
-            catch (e) {
-                console.log(e);
-            }
+
+            Profile.create(data, function(err, newlyCreated) {
+                if (err) {
+                    console.log("Error Data");
+                     res.send({msg: "False"});
+                } else {
+                     res.send({msg: "True"});
+                }
+           })
+
+            // const msg = {
+            //     to: new_user.email,
+            //     from: 'support@eden.com',
+            //     subject: 'Welcome to Eden',
+            //     text: 'You are now registered to enjoy all our services offered at Eden.',
+            //     html: '<strong>You are now registered to enjoy all our services offered at Eden.</strong>',
+            // };
+            // try {
+            //     sgMail.send(msg);
+            // }
+            // catch (e) {
+            //     console.log(e);
+            // }
         }
     })
 });
