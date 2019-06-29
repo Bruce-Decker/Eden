@@ -12,7 +12,7 @@ import request from 'request-promise';
 import isReachable from 'is-reachable';
 import Modal from 'react-modal';
 import ChangeProfile from './ChangeProfile'
-
+import default_profile_image from './default.png'
 
 const customStyles = {
     content : {
@@ -120,7 +120,7 @@ class ShowProfile extends Component {
 
 
     likePost = (post_id) => {
-      
+       
         var name = this.props.auth.user.name
         var email = this.props.auth.user.email
         var profile_owner_email = this.props.match.params.email
@@ -173,6 +173,7 @@ class ShowProfile extends Component {
 
 
     unlikePost = (post_id) => {
+       
         var email = this.props.auth.user.email
         var profile_owner_email = this.props.match.params.email
         var data = {
@@ -264,7 +265,7 @@ class ShowProfile extends Component {
        
 
         
-        if (response.data[0]) {
+        if (response.data[0].profile_picture_path) {
                 this.setState({
                     image_path: response.data[0].profile_picture_path,
                     first_name: response.data[0].first_name,
@@ -281,6 +282,12 @@ class ShowProfile extends Component {
                     showProfile: true,
                     posts: response.data[0].posts
                 })
+       } 
+       if (response.data[0].email) {
+            this.setState({
+                showProfile: false,
+                posts: response.data[0].posts
+            })
        }
 
     }
@@ -344,7 +351,16 @@ class ShowProfile extends Component {
                                 <h5>About Me: {this.state.about_me}</h5>
                             </div>
                       </Card> 
-                    : null }
+                    : 
+                    
+                    <Card>
+                            <img src = {default_profile_image } height = "250" width = "300" />
+                            <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
+                           
+                      </Card> 
+                    
+                    
+                    }
                 
                </div>
                <div className = "ShowProfileWallContainer">
@@ -524,7 +540,126 @@ class ShowProfile extends Component {
                                    
                             )}
                              </div>
-                            : null }
+                            : <div>
+
+
+               
+                            {this.state.posts.map(post =>
+                                     <div className="container bootstrap snippet">
+                                     <div className="col-sm-12">
+                                       <div className="panel panel-white post panel-shadow">
+                                         <div className="post-heading">
+                                           <div className="pull-left image">
+                                            
+                                             <img src={default_profile_image} className="img-circle avatar" alt="user profile image" />
+                                           </div>
+                                           <div className="pull-left meta">
+                                             <div className="title h5">
+                                               <a href="#"><b>{post.name} </b></a>
+                                               made a post.
+                                               
+                                             </div>
+                                             <h6 className="text-muted time">{post.time}</h6>
+                                            
+                                           </div>
+                                           {post.email === this.props.auth.user.email ?
+                                                          <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deletePost(post.post_id)} height="15" width="15"/>  
+                                                           : null }
+                                         </div> 
+                                         <div className="post-description"> 
+                                           <p>{post.post}</p>
+                                           {isUrl(post.post) ? 
+                                            <div>
+                                              {isReachable(post.post) ?
+                                                 <div>
+                                                 <MicrolinkCard url={post.post}  />
+                                                
+                                              </div>
+                                                     : null
+                                               }
+                                           </div>
+       
+                                            
+                                           : null }
+                                           <div className="stats">
+                                           { post.like.some(element => element['email'] === this.props.auth.user.email) ?
+                                             <div>
+                                               <button href="#" className="btn btn-default stat-item" onClick = {() => this.unlikePost(post.post_id)}>
+                                                   <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>
+                                               </button>
+                                               <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
+                                                  {post.like.length}
+                                               </button>
+                                             </div>
+       
+                                             : 
+                                             <div>
+                                               <button href="#" className="btn btn-default stat-item" onClick = {() => this.likePost(post.post_id)}>
+                                                   <i className="fa fa-thumbs-up icon"  />
+                                               </button>
+                                               <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
+                                               {post.like.length}
+                                               </button>
+                                            </div>
+                                             
+       
+                                             
+       
+                                             }
+       
+       
+       
+       
+       
+                                             {/* <a href="#" className="btn btn-default stat-item">
+                                               <i className="fa fa-share icon" />12
+                                             </a> */}
+                                           </div>
+                                         </div>
+                                         <div className="post-footer">
+                                            
+                                           <div className="input-group"> 
+                                             <input className="form-control" name = "comment"  id="comment" ref={(ref) => this.comment= ref} placeholder="Add a comment" type="text" onChange = {this.onChange}/>
+                                             <span className="input-group-addon">
+                                               <button href="#" onClick = {() => this.handleComment(post.post_id)}><i className="fa fa-edit" /></button>  
+                                             </span>
+                                           </div>
+                                           {post.comments.map(comment => 
+                                           <ul className="comments-list">
+                                             <li className="comment">
+                                               <a className="pull-left" href="#">
+                                                 {/* <img className="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar" /> */}
+       
+                                                 <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                               </a>
+                                              
+                                                   <div className="comment-body">
+                                                   <div className="comment-heading">
+                                                       <h4 className="user">{comment.name}</h4>
+                                                       <h5 className="time">{comment.time}</h5>
+                                                       {comment.email === this.props.auth.user.email ?
+                                                          <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id, post.post_id)} height="15" width="15"/>  
+                                                           : null }
+                                                   </div>
+                                                  
+                                                   <p>{comment.comment}</p>
+                                                  
+       
+                                                   </div>
+                                             
+                                              
+                                             </li>
+                                           </ul>
+                                             )}
+                                         </div>
+                                       </div>
+                                     </div>
+                                     <div className = "space">
+                                         </div>
+                                   </div>
+                                          
+                                   )}
+                                    </div> }
 
                         </Card>
                       </div>
