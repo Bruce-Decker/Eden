@@ -265,7 +265,7 @@ class ShowProfile extends Component {
        
 
         
-        if (response.data[0].profile_picture_path) {
+        if (response.data[0].profile_picture_path && response.data[0].email) {
                 this.setState({
                     image_path: response.data[0].profile_picture_path,
                     first_name: response.data[0].first_name,
@@ -283,7 +283,7 @@ class ShowProfile extends Component {
                     posts: response.data[0].posts
                 })
        } 
-       if (response.data[0].email) {
+       if (!response.data[0].profile_picture_path && response.data[0].email) {
             this.setState({
                 showProfile: false,
                 posts: response.data[0].posts
