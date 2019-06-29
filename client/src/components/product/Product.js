@@ -86,6 +86,7 @@ class Product extends Component {
           {this.state.showTodaysDeals ? 
              <Scroller header="Today's deals" data={this.state.dls} keyPrefix={"dls"}/>
              : null }
+          </div>
           <div class="product-container">
             <div class="product-header">Categories</div>
             <div class="row" style={{marginLeft: "0.6rem", marginRight: "0.2rem"}}>
@@ -99,7 +100,7 @@ class Product extends Component {
            
           </div>
         </div>
-      </div>
+     
     );
   }
 }

@@ -8,11 +8,11 @@ def main():
   #client = MongoClient("mongodb://localhost:27017/eden")
   db = client.test
 
-  # itemUser(db)
-  # cart(db)
-  # item(db)
-  # properties(db)
-  # itemRatings(db)
+  itemUser(db)
+  cart(db)
+  item(db)
+  properties(db)
+  itemRatings(db)
   services(db)
 
 # ItemUser
@@ -212,7 +212,7 @@ def services(db):
   cities = ['Sunnyvale','San Jose','Mountain View','Palo Alto','Los Altos']
   zip_ = ['94022', '95112', '94312', '94821', '91242', '95213', '95563', '91823', '98721', '99874']
   users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com'),(10,'A')]
-  names = ['CostLess Heating & Cooling Services', 'Hewlett Electric', 'Willow Glen Electric', 'Absolute Power', 'BDS Locksmith', 'Modern Lock & Security', 'San Jose Safe & Lock', 'Sonic Locksmith', 'Trusted Movers', 'Spartan Moving Systems', 'A2B Movers', 'American HVAC', 'Global Heating & Cooling Services', 'Frank’s Yard Clean-Up', 'All Green Scape']
+  names = ['CostLess Heating & Cooling Services', 'Hewlett Electric', 'Willow Glen Electric', 'Absolute Power', 'BDS Locksmith', 'Modern Lock & Security', 'San Jose Safe & Lock', 'Sonic Locksmith', 'Trusted Movers', 'Spartan Moving Systems', 'A2B Movers', 'American HVAC', 'Global Heating & Cooling Services', 'Frank\'s Yard Clean-Up', 'All Green Scape']
   desc = 'We take pride in our business by providing you 5 star service. What makes us different from other companies is that we make sure we show up on time, provide affordable pricing, and honest work. We are here for you to make sure we take care of your heating and cooling systems.'
   services = ['A/C Installation', 'A/C Repair', 'Air Duct Cleaning', 'Electric Furnace Installation', 'Electric Furnace Repair', 'Emergency Services', 'Flame Sensor Repair', 'Gas Furnace Installation', 'Gas Furnace Repair', 'Heater Installation', 'Heater Repair', 'Thermostat Repair']
   categories = ['contractors', 'landscaping', 'electricians', 'locksmiths', 'cleaners', 'movers', 'havc', 'plumbers']

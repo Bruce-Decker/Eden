@@ -109,6 +109,43 @@
   font-size: 12pt !important;
 }
 
+/*********************
+ * vertical scroller *
+ *********************/
+
+.cart-cover-container {
+  height: 500px;
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.cart-cover-item {
+  position: relative;
+  display: inline-block;
+  box-shadow: 2px 2px 4px #bbb;
+  border-top-right-radius: 4px;
+  width: 100%;
+  height: 120px;
+  margin-right: 1.5rem;
+  vertical-align: bottom;
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.cart-product-container {
+  margin-top: 3rem;
+}
+
+.cart-product-header {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  padding-top: 1rem;
+}
+
 /****************
  * delete modal *
  ****************/
