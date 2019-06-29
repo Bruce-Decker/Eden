@@ -264,8 +264,15 @@ router.post('/createItem', itemImageUpload.fields([{name: 'filename', maxCount: 
     const price = req.body.price
     const bid_price = req.body.bid_price
     const address = req.body.address
-    const longitude = Number(req.body.longitude)
-    const latitude = Number(req.body.latitude)
+    var longitude = 0
+    var latitude = 0
+    if (req.body.longitude) {
+      longitude = Number(req.body.longitude)
+    }
+    if (req.body.latitude) {
+      latitude = Number(req.body.latitude)
+    }
+    
     var ar = req.body.ar
     var vr_file_name = req.body.vr_file_name
     var vr_upload_time 
