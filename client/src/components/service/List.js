@@ -159,7 +159,7 @@ class List extends Component {
         <div style={{width: "700px", marginLeft: "auto", marginRight: "auto"}}>
           <div className="service-category-title">
             <img src={getImage(category)} alt="category" className="service-category-img"></img>
-            {category !== "havc" ? 
+            {category !== "hvac" ? 
               (category.charAt(0).toUpperCase() + category.slice(1)):
               (category.toUpperCase())
             }
@@ -270,7 +270,7 @@ function getImage(category) {
       return broom
     case "movers":
       return mover
-    case "havc":
+    case "hvac":
       return ac
     case "plumbers":
       return tap

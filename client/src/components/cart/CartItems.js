@@ -7,8 +7,15 @@ import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { removeFromCart, changeQuantity } from '../../redux/actions/CartActions';
 
-import apple from '../../images/apple.png';
-import star from '../../images/rating.png';
+import appliances from '../../images/appliances.png';
+import arts from '../../images/arts.png';
+import books from '../../images/books.png';
+import clothing from '../../images/clothing.png';
+import computers from '../../images/computers.png';
+import electronics from '../../images/electronics.png';
+import games from '../../images/games.png';
+import home from '../../images/home.png';
+import clothingJpg from '../../images/clothing.jpg';
 
 class CartItems extends Component {
   constructor(props) {
@@ -42,7 +49,12 @@ class CartItems extends Component {
               <div key={"ci-"+cartItem.id}>
                 <li className="cart-item row">
                   <div className="col-2">
-                    <img className="cart-item-img" style={{width: "100%"}} src={cartItem.image} alt="Item"></img>
+                    <img
+                      className="cart-item-img"
+                      style={{width: "100%"}}
+                      src={cartItem.image ? clothingJpg : getImage(cartItem.category)}
+                      alt="Item">
+                    </img>
                   </div>
                   <div className="col-8">
                     <Link to={"/items/" + cartItem.id}>
@@ -77,6 +89,28 @@ class CartItems extends Component {
         </ul>
       );
     }
+  }
+}
+
+function getImage(category) {
+  switch (category) {
+    case "appliances":
+      return appliances
+    case "arts":
+      return arts
+    case "books":
+      return books
+    case "computers":
+      return computers
+    case "clothing":
+      return clothing
+    case "electronics":
+      return electronics
+    case "games":
+      return games
+    case "home":
+      return home
+    default:
   }
 }
 

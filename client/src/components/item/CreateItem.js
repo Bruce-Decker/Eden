@@ -54,6 +54,7 @@ class CreateItem extends Component {
     handleLocationChange = ({ position, address }) => {
  
         // Set new location
+        alert(position.lat)
         this.setState({ position, address });
       }
 
@@ -79,7 +80,12 @@ class CreateItem extends Component {
 
     onChange = (e) => {
         this.setState({[e.target.name]: e.target.value})
-    } 
+    }
+
+    onChangeSelect = (e) => {
+        console.log(e.target.name);
+        console.log(e.target.value);
+    }
 
     onSubmit = (e) => {
         e.preventDefault()
@@ -167,7 +173,17 @@ class CreateItem extends Component {
                         
                         <div className="field">
                             <label> Category </label>
-                            <input type="text" name="category" placeholder="Category"  onChange = {this.onChange}/>
+                            <select name="category" id="category-select" onChange={this.onChangeSelect}>
+                                <option disabled selected value> -- select an option -- </option>
+                                <option value="appliances">Appliances</option>
+                                <option value="arts">Arts</option>
+                                <option value="books">Books</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="computers">Computers</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="games">Games</option>
+                                <option value="home">Home</option>
+                            </select>
                         </div>
 
                                    <div className = "inputError">

@@ -263,32 +263,34 @@ class ShowProfile extends Component {
         
 
        
-
+         if (response.data[0]) {
         
-        if (response.data[0].profile_picture_path && response.data[0].email) {
-                this.setState({
-                    image_path: response.data[0].profile_picture_path,
-                    first_name: response.data[0].first_name,
-                    last_name: response.data[0].last_name,
-                    DOB: response.data[0].DOB,
-                    gender: response.data[0].gender,
-                    email: response.data[0].email,
-                    phone_number: response.data[0].phone_number,
-                    address: response.data[0].address,
-                    city: response.data[0].city,
-                    country: response.data[0].country,
-                    company: response.data[0].company,
-                    about_me: response.data[0].about_me,
-                    showProfile: true,
-                    posts: response.data[0].posts
-                })
-       } 
-       if (!response.data[0].profile_picture_path && response.data[0].email) {
-            this.setState({
-                showProfile: false,
-                posts: response.data[0].posts
-            })
-       }
+                if (response.data[0].profile_picture_path && response.data[0].email) {
+                        this.setState({
+                            image_path: response.data[0].profile_picture_path,
+                            first_name: response.data[0].first_name,
+                            last_name: response.data[0].last_name,
+                            DOB: response.data[0].DOB,
+                            gender: response.data[0].gender,
+                            email: response.data[0].email,
+                            phone_number: response.data[0].phone_number,
+                            address: response.data[0].address,
+                            city: response.data[0].city,
+                            country: response.data[0].country,
+                            company: response.data[0].company,
+                            about_me: response.data[0].about_me,
+                            showProfile: true,
+                            posts: response.data[0].posts
+                        })
+            } 
+            if (!response.data[0].profile_picture_path && response.data[0].email) {
+                    this.setState({
+                        showProfile: false,
+                        posts: response.data[0].posts
+                    })
+            }
+
+         }
 
     }
 

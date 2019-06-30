@@ -15,8 +15,11 @@
 }
 
 .cart-item-img {
-  width: 150px;
-  height: 150px;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 150px;
+  max-height: 150px;
 }
 
 .cart-item-title {
@@ -345,8 +348,15 @@
 }
 
 .obi-img {
-  width: 90px;
-  height: 90px;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.obi-img-div {
+  padding-right: 0px !important;
 }
 
 .obi-price {

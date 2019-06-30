@@ -23,7 +23,8 @@ const DeliverySchema = new Schema({
         required: true
     },
     destination_address: {
-
+        type: String,
+        required: true
     },
     deliver_status: {
         type: Boolean,

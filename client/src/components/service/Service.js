@@ -16,7 +16,7 @@ import tap from '../../images/tap.png';
 
 const categories = {
     images: [hammer, shovel, plug, key, broom, mover, ac, tap],
-    services: ['Contractors', 'Landscaping', 'Electricians', 'Locksmiths', 'Cleaners', 'Movers', 'HAVC', 'Plumbers'],
+    services: ['Contractors', 'Landscaping', 'Electricians', 'Locksmiths', 'Cleaners', 'Movers', 'HVAC', 'Plumbers'],
     descriptions: ['Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
                    'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
                    'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',

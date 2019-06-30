@@ -25,10 +25,12 @@ class TopRatedItems extends Component {
       .get('/recs/getTopRatedItems')
       .then(res => {
         console.log(res);
-        this.setState({
-          recs: res.data,
-          showRecs: true
-        })
+        if(!res.data.msg) {
+          this.setState({
+            recs: res.data,
+            showRecs: true
+          })
+        }
       })
       .catch(err =>
         console.log(err)

@@ -50,8 +50,8 @@ router.post('/getUserRecs', function(req, res) {
       res.json(ret);
 
     } else {
-      console.log(err);
-      res.send("No recommendations found for user " + uid);
+      console.log("No recommendations found for user " + uid);
+      res.json({ msg: "No recommendations found for user " + uid });
     }
   });
 });
@@ -100,8 +100,8 @@ router.post('/getItemRecs', function(req, res) {
       res.json(ret);
 
     } else {
-      console.log(err);
-      res.send("No recommendations found for user " + iid);
+      console.log("No recommendations found for item " + iid);
+      res.json({ msg: "No recommendations found for user " + iid });
     }
   });
 });
@@ -163,8 +163,8 @@ router.get('/getTopRatedItems', function(req, res) {
       res.json(ret);
 
     } else {
-      console.log(err);
-      res.send("Could not fetch top rated items");
+      console.log("Could not fetch top rated items");
+      res.json({ msg: "Could not fetch top rated items" });
     }
   });
 });
@@ -236,8 +236,8 @@ router.get('/getTodaysDeals', function(req, res) {
       res.json(ret);
 
     } else {
-      console.log(err);
-      res.send("Could not fetch today\'s deals");
+      console.log("Could not fetch today\'s deals");
+      res.json({ msg: "Could not fetch today\'s deals" });
     }
   });
 });
