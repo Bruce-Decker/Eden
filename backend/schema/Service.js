@@ -54,6 +54,10 @@ const ServiceSchema = new Schema({
         type: Number,
         required: true
       },
+      count: {
+        type: Number,
+        required: true
+      },
       comments: [
         {
           id: {
@@ -66,6 +70,11 @@ const ServiceSchema = new Schema({
           },
           rating: {
             type: Number,
+            required: true
+          },
+          date: {
+            type: Date,
+            default: Date.now,
             required: true
           },
           comment: {

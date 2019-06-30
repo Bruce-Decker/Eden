@@ -68,6 +68,19 @@ router.get('/', function(req, res) {
   }
 });
 
+router.get('/:id', function(req, res) {
+  const id = req.params.id
+  Service.find({
+    id: id
+  }).then(async (service) => {
+    console.log(service)
+    res.json(service);
+  }).catch(err => {
+    console.log(err);
+    res.json({ msg: 'service not found' });
+  });
+});
+
 router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'logo', maxCount: 1}]), function(req, res) {
   const data = extractRequestData(req)
   Service.create(data, function(err, _) {

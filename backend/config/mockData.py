@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from random import randint
 from random import randrange
+from datetime import datetime
 import random
 
 def main():
@@ -8,11 +9,11 @@ def main():
   #client = MongoClient("mongodb://localhost:27017/eden")
   db = client.test
 
-  itemUser(db)
-  cart(db)
-  item(db)
-  properties(db)
-  itemRatings(db)
+  # itemUser(db)
+  # cart(db)
+  # item(db)
+  # properties(db)
+  # itemRatings(db)
   services(db)
 
 # ItemUser
@@ -223,14 +224,15 @@ def services(db):
     user = users[randint(0,10)]
     comments, sum_rating = generate_comments()
     reviews = {
-      'rating': sum_rating, 
+      'rating': sum_rating,
+      'count': len(comments),
       'comments': comments
     }
     rating = round((sum_rating / len(comments)), 1)
     name = names[randint(0, len(names) - 1)]
     category = categories[randint(0, len(categories) - 1)]
     service_data = {
-      'id': servId,
+      'id': str(servId),
       'address': addresses[int(randrange(0,len(addresses)))],
       'state': 'CA',
       'user_id': str(user[0]),
@@ -259,13 +261,16 @@ def generate_comments():
   sum_rating = 0
   users = ['adam', 'bob', 'cindy', 'david','eric','florence', 'gary','heather','irene','joe', 'A']
   comment = 'I really appreciate Richard and Nick works for us today. They are very professional and efficiently helped us clean air conditioner tunnel dust accumulated for years. They even helped me clean up my refrigirater top dust that I did not see for years and provided me good opinions on how to maintain the system for future. Their service is far beyond good service and I highly recommended.'
-  for i in range(1, 21):
+  dates = ['06/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '12/12/2019', '01/05/2019']
+  for i in range(1, randint(4,21)):
     rating = randint(1,5)
+    date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')
     sum_rating += rating
     user = users[randint(0,10)]
     data = {
       'id': i,
       'rating': rating,
+      'date': date,
       'user_name': user,
       'comment': comment,
       'upvote': {'A': True, 'adam': True, 'bob': True},

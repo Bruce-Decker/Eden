@@ -133,6 +133,7 @@
 
 .service-pn-item a {
   color: black;
+  transition: .2s ease;
 }
 
 .service-pn-item:hover:not(.service-pn-disabled) {
@@ -161,6 +162,49 @@
   cursor: default;
   text-decoration: none;
   color: rgb(210, 210, 210);
+}
+
+.service-rating-button {
+  width: 48px;
+  height: 48px;
+  border-radius: 3rem;
+  text-decoration: none;
+  border-width: 0;
+  background-color: transparent;
+  text-decoration: none;
+  transition: .25s ease;
+}
+
+.service-rating-button:active, .service-rating-button:focus {
+  outline: none !important;
+  box-shadow: none;
+  transition: .1s ease;
+}
+
+.service-rating-button:hover{
+  -webkit-transform:scale(1.1); 
+  -moz-transform:scale(1.1);
+  -ms-transform:scale(1.1);
+  -o-transform:scale(1.1);
+  transform:scale(1.1);
+}
+
+.service-rating-button:active {
+  -webkit-transform:scale(1); 
+  -moz-transform:scale(1);
+  -ms-transform:scale(1);
+  -o-transform:scale(1);
+  transform:scale(1);
+}
+
+.service-rating-img {
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+}
+
+.service-rating-vote {
+  color: grey;
 }
 
 #service-map-address {

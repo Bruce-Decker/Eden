@@ -206,16 +206,18 @@ class List extends Component {
           {this.state.loading ? (<Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />):(null)}
           {this.state.services.length !== 0 ? 
             (Array.from(this.state.services, (e, i) => {
-              return  <div style={{marginBottom: "2.5rem"}}>
+              return  <div key={i} style={{marginBottom: "2.5rem"}}>
                         <Item 
                           key={i}
                           id={e.id}
                           name={e.name}
                           desc={e.desc}
                           rating={e.rating}
+                          count={e.reviews.count}
                           phone={e.phone}
                           email={e.email}
                           logo={e.logo}
+                          service={e}
                         />
                       </div>
             })) :
