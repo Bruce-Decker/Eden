@@ -53,7 +53,8 @@ class CartItems extends Component {
                       className="cart-item-img"
                       style={{width: "100%"}}
                       src={cartItem.image ? clothingJpg : getImage(cartItem.category)}
-                      alt="Item"></img>
+                      alt="Item">
+                    </img>
                   </div>
                   <div className="col-8">
                     <Link to={"/items/" + cartItem.id}>
