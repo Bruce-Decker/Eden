@@ -87,13 +87,43 @@
    }
 
 
-   #share_button_tree {
-    height: 40px;
-    background-image: url('share_button_tree.jpg');
-    background-position: 280px 100px; 
+   .share_button{
+   
+    transition-duration: 0.4s;
     font-family: 'Pacifico', cursive;
-    
-   }
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    display: inline-block;
+    width: 200px;
+    width: 75%;
+    float: left;
+  }
+
+.share_button:hover {
+    background-color: 	#00FF7F; /* Green */
+    color: white;
+}
+
+.anonymous {
+  background-color: #00CED1;
+  padding-top: 15px;
+  height: 50px;
+  text-align: center;
+  width: 25%;
+  float: left;
+}
+
+.anonymous:hover {
+  background-color: 	#00FF7F; /* Green */
+  color: white;
+}
+
 
 
 .showPosts {
@@ -241,3 +271,5 @@
 /* #9ACD32 */
 /* #ADFF2F
 #00FF00 */
+
+

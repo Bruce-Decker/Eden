@@ -36,7 +36,7 @@ const edit_profile_customStyles = {
       bottom                : 'auto',
       marginRight           : '-50%',
       transform             : 'translate(-50%, -50%)',
-      width: "700px",
+      width: "650px",
       height: "500px"
     }
   };
@@ -65,7 +65,8 @@ class ShowProfile extends Component {
                 comment: '',
                 modalIsOpen: false,
                 profileModalIsOpen: false,
-                post_like: []
+                post_like: [],
+                anonymous: false
         }
     }
 
@@ -75,24 +76,41 @@ class ShowProfile extends Component {
 
     handleClick = () => {
          //this.state.share_post.replace(/(?:\r\n|\r|\n)/g, '<br />')
-         console.log(this.state.share_post)
+       
          var post = this.state.share_post
-         var name = this.props.auth.user.name
-         var email = this.props.auth.user.email
+         var name 
+         var email 
          var profile_owner_email = this.props.match.params.email
-         var data = {
-             post,
-             name,
-             email,
-             profile_owner_email
+         
+
+         if (!this.state.anonymous) {
+           name = this.props.auth.user.name
+           email = this.props.auth.user.email
+         } else {
+          name = "Anonymous"
+          email = "Anonymous"
+              data = {
+                post,
+                name,
+                email,
+                profile_owner_email
+            }
          }
 
+         var data = {
+          post,
+          name,
+          email,
+          profile_owner_email
+      }
+
          axios.post('/profile/sharePost', data)
-              .then(res => {
-                  console.log(res)
-                  window.location.reload()
-              })
-              .catch(err => console.log(err))
+         .then(res => {
+             console.log(res)
+             window.location.reload()
+         })
+         .catch(err => console.log(err))
+        
     }
 
     handleComment = (post_id) => {
@@ -170,6 +188,14 @@ class ShowProfile extends Component {
             })
         .catch(err => console.log(err))
 
+    }
+
+    toggleAnonymous = () => {
+      this.setState({
+        anonymous: !this.state.anonymous,
+      });
+
+     
     }
 
 
@@ -385,8 +411,19 @@ class ShowProfile extends Component {
                                         <textarea  name = "share_post" onChange = {this.onChange}></textarea>
                                     </div>
                             </div>
-                           
-                                    <button type="button" id="share_button_tree" onClick={this.handleClick}>Share</button>
+                            <div>
+                              <div className = "anonymous"> 
+                              <div class="ui checkbox">
+                                  <input type="checkbox" name="example" checked={this.state.anonymous} onChange={this.toggleAnonymous}/>
+                                  <label>Share post anonymously</label>
+                             </div>
+                             
+                              </div>
+                              
+                             
+                                  <button type="button" className = "share_button" onClick={this.handleClick}>Share</button>
+                            
+                           </div>
                                
                              
                       </Card> 
