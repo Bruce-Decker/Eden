@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Payment.css';
+//import './Payment.css';
 //import {Pay} from './pay.js';
 import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
