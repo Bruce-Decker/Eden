@@ -54,6 +54,7 @@ class CreateItem extends Component {
     handleLocationChange = ({ position, address }) => {
  
         // Set new location
+        alert(position.lat)
         this.setState({ position, address });
       }
 

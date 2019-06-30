@@ -26,7 +26,7 @@ class Checkout extends Component {
       bill_state: '',
       bill_zip: '',
       bill_country: ''
-    }
+    };
 
     this.onChange = this.onChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -38,6 +38,13 @@ class Checkout extends Component {
 
   handleClick() {
     // TODO: process payment here, and add payment options to form below
+    let url = '/payment';
+    let charges = this.props.location.state;
+
+      this.props.history.push({
+        pathname: url,
+        state: charges
+      });
 
     console.log(this.props);
     console.log(this.state);

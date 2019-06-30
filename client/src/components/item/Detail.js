@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Item.css';
+import { BrowserRouter as Route, Link } from 'react-router-dom';
 
 import axios from 'axios'
 
@@ -47,6 +48,7 @@ class Detail extends Component {
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
             <div class="item-by">{item.category}</div>
+            <div class="item-desc"><Link to  = {`/vr/${item.item_id}`}>Try VR</Link></div>
             <div class="item-desc">{item.description}</div>
             <div>
               {Array.from(Array(item.average_rating), (e, i) => {

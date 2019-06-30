@@ -23,6 +23,7 @@ class VR extends React.Component {
          console.log(response)
          this.setState({
             vr_file_path: response.data.vr_file_path,
+            item_id: response.data.item_id,
             showFile: true
          })
     }
@@ -36,7 +37,7 @@ class VR extends React.Component {
         <Entity light={{type: 'point'}}/>
         {this.state.showFile ?
             <a-assets>        
-              <a-asset-item id="model2" src= {response.data.vr_file_path + '/scene.gltf'}></a-asset-item>
+              <a-asset-item id="model2" src= {'/uploads/' + this.state.item_id + '/scene.gltf'}></a-asset-item>
             </a-assets>
             : null }
         <Entity
