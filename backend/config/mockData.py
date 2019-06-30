@@ -257,12 +257,17 @@ def services(db):
   print('Finished inserting {0} items into Service collection.'.format(servId))
 
 def generate_comments():
-  comments = []
+  result = []
   sum_rating = 0
   users = ['adam', 'bob', 'cindy', 'david','eric','florence', 'gary','heather','irene','joe', 'A']
-  comment = 'I really appreciate Richard and Nick works for us today. They are very professional and efficiently helped us clean air conditioner tunnel dust accumulated for years. They even helped me clean up my refrigirater top dust that I did not see for years and provided me good opinions on how to maintain the system for future. Their service is far beyond good service and I highly recommended.'
+  comments = ['I really appreciate Richard and Nick works for us today. They are very professional and efficiently helped us clean air conditioner tunnel dust accumulated for years. They even helped me clean up my refrigirater top dust that I did not see for years and provided me good opinions on how to maintain the system for future. Their service is far beyond good service and I highly recommended.',
+             'A real pro, found the problem with my AC within minutes and took 10 min to replace the part. price was very reasonable and all in all experience was very good',
+             'Awesome service!  We called our go-to HVAC company when our AC went out and they told us they wouldn\'t be able to come out for almost a month.',
+             'The best. On time. The technician was great. Repaired our air conditioner in a short amount of time at a reasonable rate. Thanks. Would highly recommend and would call them again',
+             'We got extremely lucky! I called and Henry was literally at our house within 5 minutes. He came in diagnosed the problem, had the part in his van, replaced it and off he went. Great service friendly technician. Made some recommendations for upgrades but didn\'t do a hard sell. Will recommend. 5 stars all the way!',
+            ]
   dates = ['06/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '12/12/2019', '01/05/2019']
-  for i in range(1, randint(4,21)):
+  for i in range(1, randint(4,80)):
     rating = randint(1,5)
     date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')
     sum_rating += rating
@@ -270,14 +275,14 @@ def generate_comments():
     data = {
       'id': i,
       'rating': rating,
-      'date': date,
+      # 'date': date,
       'user_name': user,
-      'comment': comment,
+      'comment': comments[randint(0, len(comments) - 1)],
       'upvote': {'A': True, 'adam': True, 'bob': True},
       'downvote': {'cindy': True, 'david': True}
     }
-    comments.append(data)
-  return comments, sum_rating
+    result.append(data)
+  return result, sum_rating
 
 if __name__ == "__main__":
   main()

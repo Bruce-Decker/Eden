@@ -17,8 +17,8 @@ import dislike_clicked from '../../images/dislike_clicked.png'
 
 class Review extends Component {
   render() {
-    console.log(this.props.comment)
     const date = new Date(this.props.comment.date).toLocaleDateString("en-US")
+    console.log(this.props)
     return (
       <div>
         <Card id="service-item" className="service-list-item" style={{borderRadius: "1rem", backgroundColor: "#f7f7ff"}}>

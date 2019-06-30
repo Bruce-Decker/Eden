@@ -9,6 +9,7 @@ import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import { connect } from 'react-redux'
 import { Spinner } from 'react-bootstrap';
+import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios'
 
 import star from '../../images/rating.png'
@@ -33,7 +34,10 @@ class Detail extends Component {
     this.state = {
       loading: true,
       service: null,
+      hasMore: true,
+      reviews: []
     }
+    this.page = 0
     this.map = React.createRef()
     Map = compose(
       withProps(mapAttributes),
@@ -72,7 +76,6 @@ class Detail extends Component {
                 <div style={{fontWeight: "bold", fontSize: "1.8rem"}}>{this.state.service.name}</div>
                 <div style={{marginBottom: "1.25rem"}}>
                   {Array.from(Array(5), (e, i) => {
-                    console.log(this.state.service.rating - i, this.state.service.rating)
                     return <img key={i} src={this.getRatingImage(this.state.service.rating - i)} alt="Rating" style={{width: "22px", height: "22px", paddingBottom: "0.25rem", paddingRight: "0.25rem"}}></img>
                   })}
                   <span style={{marginLeft: "1rem", color: "#53b46e", fontSize: "1.1rem"}}>{this.state.service.reviews.count} reviews</span>
@@ -157,16 +160,15 @@ class Detail extends Component {
             </Row>
             <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
             <div style={{width: "600px", marginLeft: "auto", marginRight: "auto"}}>
-              {Array.from(this.state.service.reviews.comments.reverse(), (e, i) => {
-                return  <div key={i} style={{marginBottom: "2rem"}}>
-                          <Review 
-                            user_name={this.props.auth.user.name}
-                            comment={e}
-                            handleLike={this.handleLike}
-                            handleDislike={this.handleDislike}
-                          />
-                        </div>
-              })}
+              <InfiniteScroll
+                pageStart={0}
+                loadMore={this.loadReviews}
+                hasMore={this.state.hasMore}
+                threshold={50}
+                loader={<Spinner style={{width: "25px", height: "25px", position: "absolute", left: "50%"}} animation="border" variant="success" />}
+              >
+                {this.state.reviews}
+              </InfiniteScroll>
             </div>
           </div>:
           (<Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />)
@@ -175,13 +177,37 @@ class Detail extends Component {
     )
   }
 
+  loadReviews = () => {
+    const itemsPerPage = 15
+    var reviews = []
+    var i;
+    for (i = 0; i < itemsPerPage; i++) {
+      const index = this.page * itemsPerPage + i
+      const comment = this.state.service.reviews.comments[index]
+      reviews.push(
+        <div key={index} style={{marginBottom: "2rem"}}>
+          <Review 
+            user_name={this.props.auth.user.name}
+            comment={comment}
+            handleLike={this.handleLike}
+            handleDislike={this.handleDislike}
+          />
+        </div>
+      )
+      if (index >= this.state.service.reviews.comments.length - 1) {
+        this.setState({ hasMore: false })
+        break
+      }
+    }
+    this.setState({ reviews: [...this.state.reviews, reviews.reverse()] })
+    this.page += 1
+  }
+
   async componentWillMount() {
     if (this.props.location.state == null) {
       const response = await axios.get('/services/' + this.props.match.params.id)
       this.setState({ service: response.data[0], loading: false })
-      this.state.service.reviews.comments.sort(function(a, b){
-        return new Date(b.date) - new Date(a.date);
-      });
+      
     } else {
       this.setState({ service: this.props.location.state.service, loading: false })
     }
