@@ -74,7 +74,8 @@ class ShowProfile extends Component {
       };
 
     handleClick = () => {
-         
+         //this.state.share_post.replace(/(?:\r\n|\r|\n)/g, '<br />')
+         console.log(this.state.share_post)
          var post = this.state.share_post
          var name = this.props.auth.user.name
          var email = this.props.auth.user.email
@@ -424,7 +425,11 @@ class ShowProfile extends Component {
                                                     : null }
                                   </div> 
                                   <div className="post-description"> 
-                                    <p>{post.post}</p>
+                                    <div>
+                                         {post.post.split("\n").map((i,key) => {
+                                            return <div key={key}>{i}</div>;
+                                         })}
+                                    </div>
                                     {isUrl(post.post) ? 
                                      <div>
                                        {isReachable(post.post) ?
@@ -569,7 +574,11 @@ class ShowProfile extends Component {
                                                            : null }
                                          </div> 
                                          <div className="post-description"> 
-                                           <p>{post.post}</p>
+                                           <div>{post.post}</div>
+                                           
+                                         
+                                          
+
                                            {isUrl(post.post) ? 
                                             <div>
                                               {isReachable(post.post) ?

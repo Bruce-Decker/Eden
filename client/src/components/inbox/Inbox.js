@@ -103,32 +103,8 @@ class Inbox extends Component {
               </li>
             </ul>
            
-            <ul className="nav nav-pills nav-stacked labels-info ">
-              <li> <h4>Buddy online</h4> </li>
-              <li> <a href="#"> <i className=" fa fa-circle text-success" />Alireza Zare <p>I do not think</p></a></li>
-              <li> <a href="#"> <i className=" fa fa-circle text-danger" />Dark Coders<p>Busy with coding</p></a> </li>
-              <li> <a href="#"> <i className=" fa fa-circle text-muted " />Mentaalist <p>I out of control</p></a>
-              </li><li> <a href="#"> <i className=" fa fa-circle text-muted " />H3s4m<p>I am not here</p></a>
-              </li><li> <a href="#"> <i className=" fa fa-circle text-muted " />Dead man<p>I do not think</p></a>
-              </li>
-            </ul>
-            <div className="inbox-body text-center">
-              <div className="btn-group">
-                <a className="btn mini btn-primary" href="javascript:;">
-                  <i className="fa fa-plus" />
-                </a>
-              </div>
-              <div className="btn-group">
-                <a className="btn mini btn-success" href="javascript:;">
-                  <i className="fa fa-phone" />
-                </a>
-              </div>
-              <div className="btn-group">
-                <a className="btn mini btn-info" href="javascript:;">
-                  <i className="fa fa-cog" />
-                </a>
-              </div>
-            </div>
+            
+           
           </aside>
           <aside className="lg-side">
             <div className="inbox-head">
