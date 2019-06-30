@@ -102,15 +102,7 @@ class Inbox extends Component {
                 <a href="#"><i className=" fa fa-trash-o" /> Trash</a>
               </li>
             </ul>
-            <ul className="nav nav-pills nav-stacked labels-info inbox-divider">
-              <li> <h4>Labels</h4> </li>
-              <li> <a href="#"> <i className=" fa fa-sign-blank text-danger" /> Work </a> </li>
-              <li> <a href="#"> <i className=" fa fa-sign-blank text-success" /> Design </a> </li>
-              <li> <a href="#"> <i className=" fa fa-sign-blank text-info " /> Family </a>
-              </li><li> <a href="#"> <i className=" fa fa-sign-blank text-warning " /> Friends </a>
-              </li><li> <a href="#"> <i className=" fa fa-sign-blank text-primary " /> Office </a>
-              </li>
-            </ul>
+           
             <ul className="nav nav-pills nav-stacked labels-info ">
               <li> <h4>Buddy online</h4> </li>
               <li> <a href="#"> <i className=" fa fa-circle text-success" />Alireza Zare <p>I do not think</p></a></li>
