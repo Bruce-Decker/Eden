@@ -94,6 +94,78 @@ router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'logo', ma
   })
 })
 
+router.post('/:sid/comments/:cid/downvote', function(req, res) {
+  const user_name = req.body.user_name
+  Service.findOne({
+    id: req.params.sid,
+  }).then(async (service) => {
+    service = service.toObject()
+    const index = service.reviews.comments.findIndex(obj => obj.id == req.params.cid);
+    let comment = service.reviews.comments[index]
+    if (!(user_name in comment.downvote)) {
+      if (user_name in comment.upvote) {
+        delete comment.upvote[user_name]
+      }
+      comment.downvote[user_name] = true
+    } else {
+      delete comment.downvote[user_name]
+    }
+    service.reviews.comments[index] = comment
+    Service.findOneAndUpdate({
+      id: req.params.sid,
+    },
+    service,
+    function(err, data) {
+      if (err) {
+        console.log(err)
+        res.json({ msg: 'An error occurred, please try again later.' });        
+      } else {
+        console.log('service updated')
+        res.json({ comment });
+      }
+    })
+  }).catch(err => {
+    console.log(err);
+    res.json({ msg: 'An error occurred, please try again later.' });
+  });
+})
+
+router.post('/:sid/comments/:cid/upvote', function(req, res) {
+  const user_name = req.body.user_name
+  Service.findOne({
+    id: req.params.sid,
+  }).then(async (service) => {
+    service = service.toObject()
+    const index = service.reviews.comments.findIndex(obj => obj.id == req.params.cid);
+    let comment = service.reviews.comments[index]
+    if (!(user_name in comment.upvote)) {
+      if (user_name in comment.downvote) {
+        delete comment.downvote[user_name]
+      }
+      comment.upvote[user_name] = true
+    } else {
+      delete comment.upvote[user_name]
+    }
+    service.reviews.comments[index] = comment
+    Service.findOneAndUpdate({
+      id: req.params.sid,
+    },
+    service,
+    function(err, data) {
+      if (err) {
+        console.log(err)
+        res.json({ msg: 'An error occurred, please try again later.' });        
+      } else {
+        console.log('service updated')
+        res.json({ comment });
+      }
+    })
+  }).catch(err => {
+    console.log(err);
+    res.json({ msg: 'An error occurred, please try again later.' });
+  });
+})
+
 router.put('/:id', function(req, res) {
   const id = req.params.id
   const user_id = req.body.user_id

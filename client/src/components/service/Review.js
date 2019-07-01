@@ -18,7 +18,6 @@ import dislike_clicked from '../../images/dislike_clicked.png'
 class Review extends Component {
   render() {
     const date = new Date(this.props.comment.date).toLocaleDateString("en-US")
-    console.log(this.props)
     return (
       <div>
         <Card id="service-item" className="service-list-item" style={{borderRadius: "1rem", backgroundColor: "#f7f7ff"}}>
@@ -35,13 +34,13 @@ class Review extends Component {
                 <Row style={{marginTop: "1rem"}}>
                   <Col style={{textAlign: "center"}}>
                     <div className="service-rating-vote">{Object.keys(this.props.comment.upvote).length}</div>
-                    <button className="service-rating-button" onClick={this.props.handleLike}>
+                    <button className="service-rating-button" onClick={() => this.props.handleLike(this.props.comment.id, this.props.id)}>
                       <img src={this.getVotingImage(1)} alt="Rating" className="service-rating-img"></img>
                     </button>
                   </Col>
                   <Col style={{textAlign: "center"}}>
                   <div className="service-rating-vote">{Object.keys(this.props.comment.downvote).length}</div>
-                    <button className="service-rating-button" onClick={this.props.handleDislike}>
+                    <button className="service-rating-button" onClick={() => this.props.handleDislike(this.props.comment.id, this.props.id)}>
                       <img src={this.getVotingImage(0)} alt="Rating" className="service-rating-img"></img>
                     </button>
                   </Col>

@@ -9,8 +9,8 @@ import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import { connect } from 'react-redux'
 import { Spinner } from 'react-bootstrap';
-import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios'
+import InfiniteScroll from 'react-infinite-scroller';
 
 import star from '../../images/rating.png'
 import star_half from '../../images/rating_half.png'
@@ -160,7 +160,18 @@ class Detail extends Component {
             </Row>
             <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
             <div style={{width: "600px", marginLeft: "auto", marginRight: "auto"}}>
-              <InfiniteScroll
+              {Array.from(this.state.service.reviews.comments.reverse(), (e, i) => {
+                return  <div key={i} style={{marginBottom: "2rem"}}>
+                          <Review 
+                            id={i}
+                            user_name={this.props.auth.user.name}
+                            comment={e}
+                            handleLike={this.handleLike}
+                            handleDislike={this.handleDislike}
+                          />
+                        </div>
+              })}
+              {/* <InfiniteScroll
                 pageStart={0}
                 loadMore={this.loadReviews}
                 hasMore={this.state.hasMore}
@@ -168,7 +179,7 @@ class Detail extends Component {
                 loader={<Spinner style={{width: "25px", height: "25px", position: "absolute", left: "50%"}} animation="border" variant="success" />}
               >
                 {this.state.reviews}
-              </InfiniteScroll>
+              </InfiniteScroll> */}
             </div>
           </div>:
           (<Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />)
@@ -183,12 +194,12 @@ class Detail extends Component {
     var i;
     for (i = 0; i < itemsPerPage; i++) {
       const index = this.page * itemsPerPage + i
-      const comment = this.state.service.reviews.comments[index]
       reviews.push(
         <div key={index} style={{marginBottom: "2rem"}}>
           <Review 
+            id={index}
             user_name={this.props.auth.user.name}
-            comment={comment}
+            comment={this.state.service.reviews.comments[index]}
             handleLike={this.handleLike}
             handleDislike={this.handleDislike}
           />
@@ -199,7 +210,7 @@ class Detail extends Component {
         break
       }
     }
-    this.setState({ reviews: [...this.state.reviews, reviews.reverse()] })
+    this.setState({ reviews: [...this.state.reviews.concat(reviews.reverse())] })
     this.page += 1
   }
 
@@ -213,12 +224,46 @@ class Detail extends Component {
     }
   }
 
-  handleDislike = () => {
-
+  handleDislike = (id, key) => {
+    var { service } = this.state
+    var state = this
+    if (this.props.auth.isAuthenticated) {
+      axios.post('/services/' + this.props.match.params.id + '/comments/' + id + '/downvote', {
+        user_name: this.props.auth.user.name
+      }).then(function (response) {
+        service.reviews.comments[key] = response.data.comment
+        console.log(service.reviews.comments[key])
+        service.reviews.comments = service.reviews.comments.reverse()
+        state.setState({ service: service })
+      })
+      .catch(function (error) {
+        console.log(error);
+        window.alert('An error occurred, please try again later.')
+      });
+    } else {
+      window.alert('Please log in and try again.')
+    }
   }
 
-  handleLike = () => {
-
+  handleLike = (id, key) => {
+    var { service } = this.state
+    var state = this
+    if (this.props.auth.isAuthenticated) {
+      axios.post('/services/' + this.props.match.params.id + '/comments/' + id + '/upvote', {
+        user_name: this.props.auth.user.name
+      }).then(function (response) {
+        service.reviews.comments[key] = response.data.comment
+        console.log(service.reviews.comments[key])
+        service.reviews.comments = service.reviews.comments.reverse()
+        state.setState({ service: service })
+      })
+      .catch(function (error) {
+        console.log(error);
+        window.alert('An error occurred, please try again later.')
+      });
+    } else {
+      window.alert('Please log in and try again.')
+    }
   }
 
   getRatingImage = (rating) => {

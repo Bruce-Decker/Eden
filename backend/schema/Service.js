@@ -82,12 +82,14 @@ const ServiceSchema = new Schema({
             required: true
           },
           upvote: {
+            type: Object,
             additionalProperties: {
               type: Boolean,
               required: true
             }
           },
           downvote: {
+            type: Object,
             additionalProperties: {
               type: Boolean,
               required: true
