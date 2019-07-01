@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import './Service.css';
 import { Card, Row, Col } from 'react-bootstrap';
-import { BrowserRouter as Route, Link } from 'react-router-dom';
 
-import LinesEllipsis from 'react-lines-ellipsis'
 import star from '../../images/rating.png'
-import star_half from '../../images/rating_half.png'
 import star_zero from '../../images/rating_zero.png'
-import email from '../../images/email.png'
-import phone from '../../images/phone.png'
 import smiley from '../../images/smiley.png'
 import dislike from '../../images/dislike.png'
 import smiley_clicked from '../../images/smiley_clicked.png'

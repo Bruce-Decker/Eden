@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Service.css';
 import RegularBanner from '../banner/RegularBanner';
+import Footer from '../footer/Footer';
 import { Card, Row, Col, Carousel } from 'react-bootstrap';
-import { BrowserRouter as Route, Link } from 'react-router-dom';
 import Review from './Review';
 
 import { compose, withProps } from "recompose"
@@ -35,7 +35,7 @@ class Detail extends Component {
       loading: true,
       service: null,
       hasMore: true,
-      reviews: []
+      comments: []
     }
     this.page = 0
     this.map = React.createRef()
@@ -160,81 +160,64 @@ class Detail extends Component {
             </Row>
             <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
             <div style={{width: "600px", marginLeft: "auto", marginRight: "auto"}}>
-              {Array.from(this.state.service.reviews.comments.reverse(), (e, i) => {
-                return  <div key={i} style={{marginBottom: "2rem"}}>
-                          <Review 
-                            id={i}
-                            user_name={this.props.auth.user.name}
-                            comment={e}
-                            handleLike={this.handleLike}
-                            handleDislike={this.handleDislike}
-                          />
-                        </div>
-              })}
-              {/* <InfiniteScroll
+              <InfiniteScroll
                 pageStart={0}
                 loadMore={this.loadReviews}
                 hasMore={this.state.hasMore}
                 threshold={50}
-                loader={<Spinner style={{width: "25px", height: "25px", position: "absolute", left: "50%"}} animation="border" variant="success" />}
+                loader={<Spinner style={{width: "35px", height: "35px", position: "absolute", left: "50%"}} animation="border" variant="success" />}
               >
-                {this.state.reviews}
-              </InfiniteScroll> */}
+                {Array.from(this.state.comments, (e, i) => {
+                  return  <div key={i} style={{marginBottom: "2rem"}}>
+                            <Review 
+                              id={i}
+                              user_name={this.props.auth.user.name}
+                              comment={e}
+                              handleLike={this.handleLike}
+                              handleDislike={this.handleDislike}
+                            />
+                          </div>
+                })}
+              </InfiniteScroll>
             </div>
           </div>:
-          (<Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />)
+          <Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />
         }
+        {!this.state.hasMore && <Footer />}
       </div>
     )
   }
 
   loadReviews = () => {
     const itemsPerPage = 15
-    var reviews = []
+    var comments = []
     var i;
     for (i = 0; i < itemsPerPage; i++) {
       const index = this.page * itemsPerPage + i
-      reviews.push(
-        <div key={index} style={{marginBottom: "2rem"}}>
-          <Review 
-            id={index}
-            user_name={this.props.auth.user.name}
-            comment={this.state.service.reviews.comments[index]}
-            handleLike={this.handleLike}
-            handleDislike={this.handleDislike}
-          />
-        </div>
-      )
+      comments.push(this.state.service.reviews.comments[index])
       if (index >= this.state.service.reviews.comments.length - 1) {
         this.setState({ hasMore: false })
         break
       }
     }
-    this.setState({ reviews: [...this.state.reviews.concat(reviews.reverse())] })
+    this.setState({ comments: [...this.state.comments.concat(comments)] })
     this.page += 1
   }
 
   async componentWillMount() {
-    if (this.props.location.state == null) {
-      const response = await axios.get('/services/' + this.props.match.params.id)
-      this.setState({ service: response.data[0], loading: false })
-      
-    } else {
-      this.setState({ service: this.props.location.state.service, loading: false })
-    }
+    const response = await axios.get('/services/' + this.props.match.params.id)
+    response.data[0].reviews.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    this.setState({ service: response.data[0], loading: false })
   }
 
   handleDislike = (id, key) => {
-    var { service } = this.state
+    var { service, comments } = this.state
     var state = this
     if (this.props.auth.isAuthenticated) {
       axios.post('/services/' + this.props.match.params.id + '/comments/' + id + '/downvote', {
         user_name: this.props.auth.user.name
       }).then(function (response) {
-        service.reviews.comments[key] = response.data.comment
-        console.log(service.reviews.comments[key])
-        service.reviews.comments = service.reviews.comments.reverse()
-        state.setState({ service: service })
+        state.handleResponse(response, service, comments, state, key)
       })
       .catch(function (error) {
         console.log(error);
@@ -246,16 +229,13 @@ class Detail extends Component {
   }
 
   handleLike = (id, key) => {
-    var { service } = this.state
+    var { service, comments } = this.state
     var state = this
     if (this.props.auth.isAuthenticated) {
       axios.post('/services/' + this.props.match.params.id + '/comments/' + id + '/upvote', {
         user_name: this.props.auth.user.name
       }).then(function (response) {
-        service.reviews.comments[key] = response.data.comment
-        console.log(service.reviews.comments[key])
-        service.reviews.comments = service.reviews.comments.reverse()
-        state.setState({ service: service })
+        state.handleResponse(response, service, comments, state, key)
       })
       .catch(function (error) {
         console.log(error);
@@ -264,6 +244,12 @@ class Detail extends Component {
     } else {
       window.alert('Please log in and try again.')
     }
+  }
+
+  handleResponse = (response, service, comments, state, key) => {
+    service.reviews.comments[key] = response.data.comment
+    comments[key] = response.data.comment
+    state.setState({ service: service, comments: comments })
   }
 
   getRatingImage = (rating) => {

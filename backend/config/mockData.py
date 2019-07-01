@@ -265,6 +265,9 @@ def generate_comments():
              'Awesome service!  We called our go-to HVAC company when our AC went out and they told us they wouldn\'t be able to come out for almost a month.',
              'The best. On time. The technician was great. Repaired our air conditioner in a short amount of time at a reasonable rate. Thanks. Would highly recommend and would call them again',
              'We got extremely lucky! I called and Henry was literally at our house within 5 minutes. He came in diagnosed the problem, had the part in his van, replaced it and off he went. Great service friendly technician. Made some recommendations for upgrades but didn\'t do a hard sell. Will recommend. 5 stars all the way!',
+             'Awesome!',
+             'Bad service ever!',
+             'Do not use their service!'
             ]
   dates = ['06/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '12/12/2019', '01/05/2019']
   for i in range(1, randint(4,80)):
@@ -275,7 +278,7 @@ def generate_comments():
     data = {
       'id': i,
       'rating': rating,
-      # 'date': date,
+      'date': date,
       'user_name': user,
       'comment': comments[randint(0, len(comments) - 1)],
       'upvote': {'A': True, 'adam': True, 'bob': True},

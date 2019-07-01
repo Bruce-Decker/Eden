@@ -15,7 +15,7 @@ class Item extends Component {
   render() {
     return (
       <div>
-        <Link to={{pathname: '/services/' + this.props.id, state: {service: this.props.service}}} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
+        <Link to={'/services/' + this.props.id} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
           <Card id="service-item" className="service-list-item">
             <Card.Body>
               <Row>
