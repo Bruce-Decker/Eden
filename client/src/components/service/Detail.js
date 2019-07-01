@@ -4,6 +4,7 @@ import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
 import { Card, Row, Col, Carousel } from 'react-bootstrap';
 import Review from './Review';
+import Write from './Write';
 
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
@@ -17,7 +18,8 @@ import star_half from '../../images/rating_half.png'
 import star_zero from '../../images/rating_zero.png'
 import email from '../../images/email.png'
 import phone from '../../images/phone.png'
-import map from '../../images/map.png';
+import map from '../../images/map.png'
+import write from '../../images/write.png'
 
 var Map
 const mapAttributes = {
@@ -35,7 +37,8 @@ class Detail extends Component {
       loading: true,
       service: null,
       hasMore: true,
-      comments: []
+      comments: [],
+      write: false,
     }
     this.page = 0
     this.map = React.createRef()
@@ -158,7 +161,14 @@ class Detail extends Component {
                 </div>
               </Col>
             </Row>
-            <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
+            <Row>
+              <Col>
+                <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
+              </Col>
+              <Col>
+                <img src={write} alt="write" className="service-write-button" onClick={() => this.setState({ write: true })}/>
+              </Col>
+            </Row>
             <div style={{width: "600px", marginLeft: "auto", marginRight: "auto"}}>
               <InfiniteScroll
                 pageStart={0}
@@ -179,6 +189,13 @@ class Detail extends Component {
                           </div>
                 })}
               </InfiniteScroll>
+              <Write 
+                id={this.state.service.id}
+                auth={this.props.auth}
+                show={this.state.write}
+                name={this.state.service.name}
+                handleClose={this.handleClose}
+              />
             </div>
           </div>:
           <Spinner style={{width: "50px", height: "50px", position: "absolute", top: "50%", left: "50%"}} animation="border" variant="success" />
@@ -250,6 +267,10 @@ class Detail extends Component {
     service.reviews.comments[key] = response.data.comment
     comments[key] = response.data.comment
     state.setState({ service: service, comments: comments })
+  }
+
+  handleClose = () => {
+    this.setState({ write: false })
   }
 
   getRatingImage = (rating) => {

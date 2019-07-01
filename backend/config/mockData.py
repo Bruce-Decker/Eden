@@ -266,10 +266,12 @@ def generate_comments():
              'The best. On time. The technician was great. Repaired our air conditioner in a short amount of time at a reasonable rate. Thanks. Would highly recommend and would call them again',
              'We got extremely lucky! I called and Henry was literally at our house within 5 minutes. He came in diagnosed the problem, had the part in his van, replaced it and off he went. Great service friendly technician. Made some recommendations for upgrades but didn\'t do a hard sell. Will recommend. 5 stars all the way!',
              'Awesome!',
-             'Bad service ever!',
-             'Do not use their service!'
+             'Do not use this service!',
+             'I cannot say enough about Henry and the ThermaTech team and will certainly use them for any future HVAC needs! Honest and fast help.',
+             'Phenomenal customer service!! We will be working with Therma Tech when we need to get a new AC unit.',
+             'There were too many problems to write about in detail, so I\'ll just list some of them. The workmen were nice but changed form day to day. After explaining what was to be done on one day, another plumber, installer, etc, would come in the following day and we\'d have to try to explain what was to be done all over again. Job took 4 times as along as expected. Several times parts of the job was done and then undone and then redone, due to a variety of issues.'
             ]
-  dates = ['06/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '12/12/2019', '01/05/2019']
+  dates = ['04/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '02/12/2019', '01/05/2019']
   for i in range(1, randint(4,80)):
     rating = randint(1,5)
     date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')

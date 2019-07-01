@@ -64,6 +64,10 @@ const ServiceSchema = new Schema({
             type: String,
             required: true
           },
+          user_id: {
+            type: String,
+            required: true
+          },
           user_name: {
             type: String,
             required: true
@@ -83,6 +87,7 @@ const ServiceSchema = new Schema({
           },
           upvote: {
             type: Object,
+            default: {},
             additionalProperties: {
               type: Boolean,
               required: true
@@ -90,6 +95,7 @@ const ServiceSchema = new Schema({
           },
           downvote: {
             type: Object,
+            default: {},
             additionalProperties: {
               type: Boolean,
               required: true
@@ -121,6 +127,6 @@ const ServiceSchema = new Schema({
     images: {
       type: [String]
     }
-})
+}, { minimize: false })
 
 module.exports = Service = mongoose.model('service', ServiceSchema);

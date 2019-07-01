@@ -3,6 +3,7 @@ const router = express.Router();
 const Service = require('../schema/Service');
 var multer = require('multer');
 var fs = require('fs-extra');
+const uuidv4 = require('uuid/v4');
 
 const itemsPerPage = 15
 var storage = multer.diskStorage({
@@ -158,6 +159,45 @@ router.post('/:sid/comments/:cid/upvote', function(req, res) {
       } else {
         console.log('service updated')
         res.json({ comment });
+      }
+    })
+  }).catch(err => {
+    console.log(err);
+    res.json({ msg: 'An error occurred, please try again later.' });
+  });
+})
+
+router.post('/:id/review', function(req, res) {
+  const user_id = req.body.user_id
+  const user_name = req.body.user_name
+  const rating = req.body.rating
+  const review = req.body.review
+  Service.findOne({
+    id: req.params.id,
+  }).then(async (service) => {
+    service = service.toObject()
+    service.reviews.count += 1
+    service.reviews.rating += rating
+    service.rating = service.reviews.rating / service.reviews.count
+    data = {
+      'id': uuidv4(),
+      'rating': rating,
+      'user_name': user_name,
+      'user_id': user_id,
+      'comment': review
+    }
+    service.reviews.comments.push(data)
+    Service.findOneAndUpdate({
+      id: req.params.id,
+    },
+    service,
+    function(err, data) {
+      if (err) {
+        console.log(err)
+        res.json({ msg: 'An error occurred, please try again later.' });        
+      } else {
+        console.log('service updated')
+        res.json({ service });
       }
     })
   }).catch(err => {

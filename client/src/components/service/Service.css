@@ -207,6 +207,28 @@
   color: grey;
 }
 
+.service-write-button {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  float: right;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+.service-write-textarea:active, .service-write-textarea:focus {
+  outline: none !important;
+  box-shadow: none;
+  border-color: #ced4da !important;
+}
+
+.service-star {
+  width: 28px;
+  height: 28px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
 #service-map-address {
   border: 0;
   outline: 0;
