@@ -3,12 +3,38 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import './Inbox.css'
 import RegularBanner from '../banner/RegularBanner'
-
+import queryString from "query-string";
 
 class Inbox extends Component {
 
     constructor() {
         super()
+    }
+
+
+    async componentWillReceiveProps(nextProps) {
+      if (nextProps.location.search !== this.props.location.search) {    
+           window.location.reload();
+      }
+
+    }
+
+
+    async componentDidMount() {
+         var values = queryString.parse(this.props.location.search);
+         var email_selection
+         for (var key in values) {
+            email_selection = values[key]
+         }
+
+         if (email_selection == "inbox") {
+             alert("inbox")
+         } else if (email_selection == "sent") {
+             alert("sent")
+         } else {
+             alert("else")
+         }
+   
     }
 
     render() {
@@ -87,10 +113,22 @@ class Inbox extends Component {
             </div>
             <ul className="inbox-nav inbox-divider">
               <li className="active">
-                <a href="#"><i className="fa fa-inbox" /> Inbox <span className="label label-danger pull-right">2</span></a>
+                <Link to= {{
+                      pathname: "/inbox/" + this.props.auth.user.email,
+                      search: "?emailType=inbox"
+                 }}>
+                    <i className="fa fa-inbox" /> Inbox <span className="label label-danger pull-right">2</span>
+                </Link>
               </li>
               <li>
-                <a href="#"><i className="fa fa-envelope-o" /> Sent Mail</a>
+
+                <Link to = {{
+                   pathname: "/inbox/" + this.props.auth.user.email,
+                   search: "?emailType=sent"
+                }}>
+                     <i className="fa fa-envelope-o" /> Sent Mail
+                </Link>
+
               </li>
               <li>
                 <a href="#"><i className="fa fa-bookmark-o" /> Important</a>
