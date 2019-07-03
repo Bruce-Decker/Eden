@@ -28,6 +28,12 @@
   font-size: 1.5rem;
 }
 
+.required-asterisk {
+  color: red;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
 .item-button {
   border-width: 1px;
   border-color: #53b46e;
@@ -36,6 +42,7 @@
   transition: .25s ease;
   text-decoration: none;
 }
+
 .item-button:active, .item-button:focus {
   outline: none !important;
   box-shadow: none;
@@ -48,6 +55,11 @@
 .item-button:hover{
   background: #53b46e;
   color: white;
+}
+
+#category-select {
+  padding: 10px !important;
+  line-height: 1.5 !important;
 }
 
 .container-review {

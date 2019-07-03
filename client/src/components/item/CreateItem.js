@@ -8,8 +8,7 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
   } from 'react-places-autocomplete';
-
-
+import { toast } from 'react-toastify';
 
 class CreateItem extends Component {
     
@@ -30,33 +29,45 @@ class CreateItem extends Component {
                lat: 37.7749,
                lng: -122.4194
             },
-            errors: {}
+            errors: {
+                item_name: false,
+                item_image: false,
+                ar_file: false,
+                vr_file: false,
+                vr_file_name: false,
+                category: false,
+                description: false,
+                price: false,
+                bid_price: false,
+                address: false,
+                position: false
+            },
         }
     }
 
     handleChange = address => {
         this.setState({ address });
-      };
+    }
 
-      handleSelect = address => {
+    handleSelect = address => {
         geocodeByAddress(address)
-          .then(results => getLatLng(results[0]))
-          .then(latLng => {
+        .then(results => getLatLng(results[0]))
+        .then(latLng => {
              
-              this.setState({
+            this.setState({
                  position: latLng
-              })
-              console.log('Success', this.state.position)
-          })
-          .catch(error => console.error('Error', error));
-      };
+            })
+            console.log('Success', this.state.position)
+        })
+        .catch(error => console.error('Error', error));
+    }
 
     handleLocationChange = ({ position, address }) => {
  
         // Set new location
-        alert(position.lat)
+        //alert(position.lat)
         this.setState({ position, address });
-      }
+    }
 
     handleImage = event => {
         console.log('uploaded')
@@ -79,52 +90,116 @@ class CreateItem extends Component {
     }
 
     onChange = (e) => {
-        this.setState({[e.target.name]: e.target.value})
-    }
-
-    onChangeSelect = (e) => {
-        console.log(e.target.name);
-        console.log(e.target.value);
+        this.setState({[e.target.name]:e.target.value});
     }
 
     onSubmit = (e) => {
-        e.preventDefault()
-        var item_id = uuidv4();
-        let item_image = this.state.item_image
-        let vr_file = this.state.vr_file
-        let ar_file = this.state.ar_file
-        let formdata = new FormData()
-        formdata.append('item_id', item_id)
-        formdata.append('email', this.props.auth.user.email)
-        formdata.append('item_name', this.state.item_name)
-        formdata.append('filename', item_image)
-        formdata.append('ar_file', ar_file)
-        formdata.append('filename', vr_file)
-        formdata.append('vr_file_name', this.state.vr_file_name)
-        formdata.append('category', this.state.category)
-        formdata.append('description', this.state.description)
-        formdata.append('price', this.state.price)
-        formdata.append('bid_price', this.state.bid_price)
-        formdata.append('address', this.state.address)
-        formdata.append('longitude', this.state.position.lat)
-        formdata.append('latitude', this.state.position.lng)
-        if (ar_file) {
-            formdata.append('ar', ar_file.name)
-        }
-      
-        console.log("address is " + this.state.address)
-        axios.post('/items/createItem', formdata)
-            .then(res => 
-                {
-                    console.log("item 3423")
-                    console.log(res)
-                    window.location.reload()
-                    
-                })
-            .catch(err => console.log(err))
+        e.preventDefault();
 
-       
+        // form validation
+        let emptyFields = []
+
+        if(!this.state.item_name) {
+            emptyFields.push('item name');
+        }
+
+        if(this.state.vr_file && !this.state.vr_file_name) {
+            emptyFields.push('VR file name');
+        }
+
+        if(!this.state.category) {
+            emptyFields.push('category');
+        }
+
+        if(!this.state.description) {
+            emptyFields.push('description');
+        }
+
+        if(!this.state.price) {
+            emptyFields.push('price');
+        }
+
+        if(!this.state.address) {
+            emptyFields.push('location');
+        }
+
+        // if we're missing a required field, show
+        // error message and prompt user
+        if(emptyFields.length > 0) {
+            let s = emptyFields[0]
+            if(emptyFields.length > 1) {
+                let a = emptyFields.slice(1);
+                for(let i=0; i<a.length; i++) {
+                    s += ', ' + a[i];
+                }
+            }
+
+            let msg = 'Error: you must provide the following required field(s): ' + s;
+
+            toast.error(msg, {
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                newestOnTop: true,
+                className: "addtocart-toast-toast",
+                bodyClassName: "addtocart-toast-body",
+                progressClassName: "addtocart-toast-progress",
+                draggable: false,
+            });
+        } else {
+
+            var item_id = uuidv4();
+            let item_image = this.state.item_image;
+            let vr_file = this.state.vr_file;
+            let ar_file = this.state.ar_file;
+
+            let formdata = new FormData();
+
+            formdata.append('item_id', item_id);
+            formdata.append('email', this.props.auth.user.email);
+            formdata.append('item_name', this.state.item_name);
+            formdata.append('filename', item_image);
+            formdata.append('ar_file', ar_file);
+            formdata.append('filename', vr_file);
+            formdata.append('vr_file_name', this.state.vr_file_name);
+            formdata.append('category', this.state.category);
+            formdata.append('description', this.state.description);
+            formdata.append('price', this.state.price);
+            formdata.append('bid_price', this.state.bid_price);
+            formdata.append('address', this.state.address);
+            formdata.append('longitude', this.state.position.lat);
+            formdata.append('latitude', this.state.position.lng);
+
+            
+            if (ar_file) {
+                formdata.append('ar', ar_file.name)
+            }
+          
+            console.log("address is " + this.state.address)
+            axios.post('/items/createItem', formdata)
+                .then(res => 
+                    {
+                        console.log("item created");
+                        console.log(res);
+                        window.location.reload();
+
+                        let msg = "New item successfully created!";
+                        
+                        toast.success(msg, {
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            newestOnTop: true,
+                            className: "addtocart-toast-toast",
+                            bodyClassName: "addtocart-toast-body",
+                            progressClassName: "addtocart-toast-progress",
+                            draggable: false,
+                        });
+                    })
+                .catch(err => console.log(err));
         
+       
+        }
       
        
     }
@@ -142,7 +217,7 @@ class CreateItem extends Component {
                      <h1>Hi {this.props.auth.user.name}. Please create Item </h1>
                      <form onSubmit = {this.onSubmit} className="ui form">
                             <div className="field">
-                            <label> Item Name</label>
+                            <label>Item Name <span className="required-asterisk">*</span></label>
                             <input type="text" name="item_name" placeholder="Item Name"  onChange = {this.onChange}/>
                             </div>
 
@@ -163,7 +238,7 @@ class CreateItem extends Component {
                         </div>
 
                         <div className="field">
-                            <label> VR File Name</label>
+                            <label>VR File Name</label>
                             <input type="text" name="vr_file_name" placeholder="VR File Name"  onChange = {this.onChange}/>
                             </div>
 
@@ -172,8 +247,8 @@ class CreateItem extends Component {
                                     </div>  
                         
                         <div className="field">
-                            <label> Category </label>
-                            <select name="category" id="category-select" onChange={this.onChangeSelect}>
+                            <label>Category <span className="required-asterisk">*</span></label>
+                            <select name="category" id="category-select" onChange={this.onChange}>
                                 <option disabled selected value> -- select an option -- </option>
                                 <option value="appliances">Appliances</option>
                                 <option value="arts">Arts</option>
@@ -191,8 +266,8 @@ class CreateItem extends Component {
                                     </div> 
                         
                         <div className="field">
-                            <label> Description </label>
-                            <input type="text" name="description" placeholder="Description"  onChange = {this.onChange}/>
+                            <label>Description <span className="required-asterisk">*</span></label>
+                            <textarea name="description" placeholder="Description" rows="5" onChange = {this.onChange}/>
                         </div>
 
                                    <div className = "inputError">
@@ -203,7 +278,7 @@ class CreateItem extends Component {
 
 
                        <div className="field">
-                            <label> Price </label>
+                            <label>Price <span className="required-asterisk">*</span></label>
                             <input type="text" name="price" placeholder="Price"  onChange = {this.onChange}/>
                         </div>
 
@@ -215,8 +290,8 @@ class CreateItem extends Component {
 
                      
                      <div className="field">
-                            <label>Bid Price (optional) </label>
-                            <input type="text" name="bid_price" placeholder="Bid Price"  onChange = {this.onChange}/>
+                            <label>Starting Bid Price</label>
+                            <input type="text" name="bid_price" placeholder="Starting Bid Price"  onChange = {this.onChange}/>
                         </div>
 
                                    <div className = "inputError">
@@ -225,7 +300,7 @@ class CreateItem extends Component {
 
                     
                    <div className="field">
-                   <label>Input Location </label>
+                   <label>Location <span className="required-asterisk">*</span></label>
                    </div>
                    <PlacesAutocomplete
                                 value={this.state.address}
@@ -288,7 +363,11 @@ class CreateItem extends Component {
                 
                 </div>
                    
-                    <button className="ui button" type="submit">Submit</button>
+                    <button
+                        className="ui button"
+                        type="submit"
+                        >Submit
+                    </button>
                 
                    <div className="space">
                 
