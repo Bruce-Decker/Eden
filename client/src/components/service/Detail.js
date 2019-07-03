@@ -90,7 +90,7 @@ class Detail extends Component {
                 <Card className="service-list-category" style={{backgroundColor: "#f7f7ff", borderRadius: "1rem", border: "0"}}>
                   <Card.Body>
                     <div style={{marginBottom: "0.5rem", minHeight: "130px"}}>
-                      <div style={{display: this.state.map, animation: "0.3s fadein"}}>
+                      <div style={{display: this.state.map, animation: "0.25s fadein"}}>
                         <Map 
                           map={this.map}
                           lat={this.state.service.lat}
@@ -231,7 +231,7 @@ class Detail extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.setState({ map: "block" }), 900)
+    setTimeout(() => this.setState({ map: "block" }), 750)
   }
 
   handleDislike = (id, key) => {

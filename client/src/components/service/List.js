@@ -81,6 +81,7 @@ class List extends Component {
     lng = position.coords.longitude
     this.setState({ lat: lat, lng: lng })
     this.get(lat + latBound, lng + lngBound, lat - latBound, lng - lngBound)
+    window.sessionStorage.setItem('coords', JSON.stringify({ 'lat': lat, 'lng': lng }));
   }
 
   handleCenterChanged = () => {
@@ -112,6 +113,8 @@ class List extends Component {
     const swlat = bounds.na.j
     const swlng = bounds.ga.j
     this.get(nelat, nelng, swlat, swlng)
+    const { lat, lng } = this.state
+    window.sessionStorage.setItem('coords', JSON.stringify({ 'lat': lat, 'lng': lng }));
   }
 
   async get(nelat, nelng, swlat, swlng, page=1) {
@@ -148,7 +151,13 @@ class List extends Component {
   }
 
   async componentWillMount() {
-    navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError, { timeout:10000 });
+    if (window.sessionStorage.getItem("coords")) {
+      const { lat, lng } = JSON.parse(window.sessionStorage.getItem("coords"))
+      this.setState({ lat: lat, lng: lng })
+      this.get(lat + latBound, lng + lngBound, lat - latBound, lng - lngBound)
+    } else {
+      navigator.geolocation.getCurrentPosition(this.setCurrentPosition, this.handleError, { timeout:10000 });
+    }
   }
   
   render() {
