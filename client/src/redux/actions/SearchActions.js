@@ -4,19 +4,20 @@ import axios from 'axios';
 export const getSearchResults = (pageNumber) => dispatch => {
   // obtain url, containing search query
   let uri = window.location.href;
+  console.log(uri);
 
   // isolate search query
-  let cmp = uri.substring(uri.lastIndexOf('/') + 1);
+  let url = new URL(uri);
 
-  // remove any extra query parameters
-  if(cmp.indexOf('?') > -1) {
-    cmp = cmp.substring(0, cmp.indexOf('?'));
-  }
+  // search keyword
+  let kw = url.searchParams.get('kw');
 
-  let uri_dec = decodeURIComponent(cmp);
+  // search category
+  let cg = url.searchParams.get('cg');
+  
   let params = {
     simple: 'true',
-    keyword: uri_dec,
+    keyword: kw,
     pageNumber: pageNumber
   };
 
