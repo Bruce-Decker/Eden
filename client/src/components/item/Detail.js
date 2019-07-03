@@ -9,7 +9,15 @@ import Add from './Add'
 import Try from './Try'
 import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
-
+import appliances from '../../images/appliances.png';
+import arts from '../../images/arts.png';
+import books from '../../images/books.png';
+import clothing from '../../images/clothing.png';
+import computers from '../../images/computers.png';
+import electronics from '../../images/electronics.png';
+import games from '../../images/games.png';
+import home from '../../images/home.png';
+import clothingJpg from '../../images/clothing.jpg';
 
 class Detail extends Component {
   constructor(props){
@@ -34,38 +42,65 @@ class Detail extends Component {
     if (this.state.item != null) {
       const item = this.state.item
       return (
-        <div class="container-item">
-          <div class="row">
-          <div class="col-1"/>
-          <div class="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw"}}>
+        <div className="container-item">
+          <div className="row">
+          <div className="col-1"/>
+          <div className="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw"}}>
            
-            <img key={item.item_id} src= {item.item_image} alt="Rating" style={{width: "300px", height: "250px"}}/>    
+            <img
+              key={item.item_id}
+              className="item-detail-img"
+              src={item.item_image ? clothingJpg : getImage(item.category)}
+              alt="Item Image"
+            />    
           </div>
-          <div class="col-3" >
-            <div class="item-title">
+          <div className="col-3" >
+            <div className="item-title">
               {item.item_name}
               <span style={{marginLeft: "1rem"}}></span>
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
-            <div class="item-by">{item.category}</div>
-            <div class="item-desc"><Link to  = {`/vr/${item.item_id}`}>Try VR</Link></div>
-            <div class="item-desc">{item.description}</div>
+            <div className="item-by">{item.category}</div>
+            <div className="item-desc"><Link to  = {`/vr/${item.item_id}`}>Try VR</Link></div>
+            <div className="item-desc">{item.description}</div>
             <div>
               {Array.from(Array(item.average_rating), (e, i) => {
                 return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
               })}
             </div>
-            <div class="item-price">${item.price}</div>
+            <div className="item-price">${item.price}</div>
             <div ><CartAddButton item={this.state.item} cls={"addtocart-btn-lg"}/><span style={{marginLeft: "1rem"}}></span></div>
           </div>
           </div>
-          <div class="col-1"/>
+          <div className="col-1"/>
         </div>
       );
     } 
     return null
   }  
  
+}
+
+function getImage(category) {
+  switch (category) {
+    case "appliances":
+      return appliances
+    case "arts":
+      return arts
+    case "books":
+      return books
+    case "computers":
+      return computers
+    case "clothing":
+      return clothing
+    case "electronics":
+      return electronics
+    case "games":
+      return games
+    case "home":
+      return home
+    default:
+  }
 }
 
 export default Detail
