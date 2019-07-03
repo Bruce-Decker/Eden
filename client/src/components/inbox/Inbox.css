@@ -166,6 +166,12 @@ ul.labels-info li a i {
     height: 40px;
     padding: 0 20px;
 }
+
+.div-inbox {
+    border: 1px solid #d3d3d3;
+    margin-bottom: 0;
+}
+
 .table-inbox {
     border: 1px solid #d3d3d3;
     margin-bottom: 0;
@@ -177,6 +183,10 @@ ul.labels-info li a i {
     cursor: pointer;
 }
 .table-inbox tr td .fa-star.inbox-started, .table-inbox tr td .fa-star:hover {
+    color: #f78a09;
+}
+
+.inbox-started {
     color: #f78a09;
 }
 .table-inbox tr td .fa-star {
@@ -363,3 +373,69 @@ ul {
     padding: 0px;
     margin: 0px;
 }
+
+.message_time {
+    float: right;
+    margin-right: 10000px;
+}
+
+
+.inboxCheckBox {
+    margin-top: 10px;
+    margin-left: 12px;
+    padding-right: 24px;
+    float: left;
+}
+
+.floatLeft {
+  
+    float: left;
+}
+
+
+.inboxStar {
+    margin-top: 10px;
+    padding-right: 20px;
+}
+
+
+.unstar {
+    color: #afafaf
+}
+
+.unstar:hover {
+    color:  #ff6c60
+}
+
+
+.inboxUnreadNameFont  {
+    padding-top: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    float: left;
+}
+
+
+.inboxReadNameFont  {
+    padding-top: 12px;
+    font-size: 15px;
+    font-weight: 200;
+    font-family: 'Roboto', sans-serif;
+    float: left;
+   
+}
+
+#inboxReadNameFontSpace {
+    padding-right: 100px;
+}
+
+
+.eachMessageItem {
+    height: 45px;
+}
+
+.eachMessageItem:hover {
+    background-color: #D3D3D3
+}
+

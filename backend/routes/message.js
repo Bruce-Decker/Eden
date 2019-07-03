@@ -7,6 +7,7 @@ const uuidv4 = require('uuid/v4');
 router.post('/sendMessage', (req, res) => {
     var message_id = uuidv4()
     var sender_email = req.body.sender_email
+    var sender_name = req.body.sender_name
     var receiver_email = req.body.receiver_email
     var subject = req.body.subject
     var message = req.body.message
@@ -20,6 +21,7 @@ router.post('/sendMessage', (req, res) => {
     var data = {
        message_id,
        sender_email,
+       sender_name,
        receiver_email,
        subject,
        message,
@@ -39,6 +41,10 @@ router.post('/sendMessage', (req, res) => {
              res.send(newlyCreated);
         }
    })
+})
+
+router.get('/getIndividualMessage', (req, res) => {
+
 })
 
 
@@ -88,7 +94,7 @@ router.post('/starMessage', function(req, res) {
         },
         {
             isStarred: true
-        }, function(req ,res) {
+        }, function(err, docs) {
             if (err) {
                 res.send({Error: err})
               } else {
@@ -100,6 +106,45 @@ router.post('/starMessage', function(req, res) {
 })
 
 
+router.post('/unstarMessage', function(req, res) {
+    var message_id = req.body.message_id
+    Message.findOneAndUpdate(
+       {
+           message_id: message_id,
+       },
+       {
+           isStarred: false
+       }, function(err, docs) {
+           if (err) {
+               res.send({Error: err})
+             } else {
+               res.send(docs)
+           }
+       }
+
+    )
+})
+
+
+router.post('/readMessage', function(req, res) {
+    var message_id = req.body.message_id
+    Message.findOneAndUpdate(
+       {
+           message_id: message_id,
+       },
+       {
+          isRead: true
+       }, function(err, docs) {
+           if (err) {
+               res.send({Error: err})
+             } else {
+               res.send(docs)
+           }
+       }
+
+    )
+})
+
 
 router.post('/trashMessage', function(req, res) {
     var message_id = req.body.message_id
@@ -109,7 +154,27 @@ router.post('/trashMessage', function(req, res) {
        },
        {
            isTrashed: true
-       }, function(req ,res) {
+       }, function(err, docs) {
+           if (err) {
+               res.send({Error: err})
+             } else {
+               res.send(docs)
+           }
+       }
+
+    )
+})
+
+
+router.post('/untrashMessage', function(req, res) {
+    var message_id = req.body.message_id
+    Message.findOneAndUpdate(
+       {
+           message_id: message_id,
+       },
+       {
+           isTrashed: false
+       }, function(err, docs) {
            if (err) {
                res.send({Error: err})
              } else {
@@ -129,7 +194,7 @@ router.post('/deleteMessage', function(req, res) {
        },
        {
           isDeleted: true
-       }, function(req ,res) {
+       }, function(err, docs) {
            if (err) {
                res.send({Error: err})
              } else {

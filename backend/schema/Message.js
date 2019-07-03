@@ -6,6 +6,10 @@ const MessageSchema = new Schema({
        type: String,
        required: true
     },
+    sender_name: {
+        type: String,
+        required: true
+    },
     sender_email: {
         type: String,
         required: true

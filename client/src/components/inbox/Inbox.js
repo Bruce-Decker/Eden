@@ -4,11 +4,17 @@ import { connect } from 'react-redux'
 import './Inbox.css'
 import RegularBanner from '../banner/RegularBanner'
 import queryString from "query-string";
+import axios from 'axios'
+import { Card } from 'react-bootstrap'
 
 class Inbox extends Component {
 
     constructor() {
         super()
+        this.state = {
+              messages: [],
+              showMessage: false
+        }
     }
 
 
@@ -23,17 +29,25 @@ class Inbox extends Component {
     async componentDidMount() {
          var values = queryString.parse(this.props.location.search);
          var email_selection
+         var response
          for (var key in values) {
             email_selection = values[key]
          }
-
-         if (email_selection == "inbox") {
-             alert("inbox")
-         } else if (email_selection == "sent") {
-             alert("sent")
-         } else {
-             alert("else")
-         }
+   
+         
+        
+         if (email_selection == "inbox" || email_selection == "undefined") {
+            response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
+            this.setState({
+               messages: response.data,
+               showMessage: true
+            })
+            console.log(response)
+            console.log(this.state.messages)
+         } 
+         if (email_selection == "sent") {
+            
+         } 
    
     }
 
@@ -209,8 +223,102 @@ class Inbox extends Component {
                   </li>
                 </ul>
               </div>
+             
+              <div className="div-inbox">
+              
+                    {this.state.messages.map(message => 
+                     <Card className = "eachMessageItem">
+                        <div>
+                             {message.isRead ? 
+                                    <div className = "readMessage">
+                                       <div className="inboxCheckBox">
+                                              <input type="checkbox" className="mail-checkbox" />
+                                       </div>
+                                       {message.isStarred ?
+                                         <div className="floatLeft inboxStar">
+                                             <i className="fa fa-star inbox-started" />
+                                          </div>
+                                         :
+                                         <i className="fa fa-star unstar"/>
+                                       }
+                                       <div>
+                                           <h3 className = "inboxReadNameFont" id = "inboxReadNameFontSpace"> {message.sender_name}</h3>
+                                           <h3 className = "inboxReadNameFont"> {message.subject}</h3>
+                                          
+                                         
+                                       </div>
+                                      
+
+                                    </div>
+                            
+                                   : 
+
+                                   <div className = "readMessage">
+                                   <div className="inboxCheckBox">
+                                          <input type="checkbox" className="mail-checkbox" />
+                                   </div>
+                                   {message.isStarred ?
+                                     <div className="floatLeft inboxStar">
+                                         <i className="fa fa-star inbox-started" />
+                                      </div>
+                                     :
+                                     <div className="floatLeft inboxStar">
+                                      <i className="fa fa-star unstar"/>
+                                     </div>
+                                   }
+                                   <div>
+                                       <h3 className = "inboxUnreadNameFont"> {message.sender_name}</h3>
+                                   </div>
+
+                                </div>
+                            
+                            
+                             }
+                            
+                           
+                        </div>    
+                         </Card>
+                    )}
+                 
+              </div>
+             
               <table className="table table-inbox table-hover">
                 <tbody>
+               
+               
+                        {/* {this.state.messages.map(message => 
+                           <tr className="unread">
+                            { message.isRead ? 
+                             
+                             <tr className="unread">
+                             <td className="inbox-small-cells">
+                               <input type="checkbox" className="mail-checkbox" />
+                             </td>
+                             <td className="inbox-small-cells"><i className="fa fa-star" /></td>
+                             <td className="view-message  dont-show">PHPClass</td>
+                             <td className="view-message ">Added a new class: Login Class Fast Site</td>
+                             <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
+                             <td className="view-message  text-right">9:27 AM</td>
+                           </tr>
+                            
+                              :
+                              <tr className="unread">
+                    <td className="inbox-small-cells">
+                      <input type="checkbox" className="mail-checkbox" />
+                    </td>
+                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
+                    <td className="view-message  dont-show">PHPClass</td>
+                    <td className="view-message ">Added a new class: Login Class Fast Site</td>
+                    <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
+                    <td className="view-message  text-right">9:27 AM</td>
+                  </tr>
+                                      
+                           
+                            }
+                            </tr>
+                        )} */}
+                       
+                  
                   <tr className="unread">
                     <td className="inbox-small-cells">
                       <input type="checkbox" className="mail-checkbox" />
@@ -221,6 +329,7 @@ class Inbox extends Component {
                     <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
                     <td className="view-message  text-right">9:27 AM</td>
                   </tr>
+                 
                   <tr className="unread">
                     <td className="inbox-small-cells">
                       <input type="checkbox" className="mail-checkbox" />
