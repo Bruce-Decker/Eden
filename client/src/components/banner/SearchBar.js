@@ -25,7 +25,10 @@ class SearchBar extends Component {
     let val = this.state.value;
 
     if(!isEmpty(val)) {
-      var url = '/search/' + val;
+      var url = '/search?kw=' + val;
+
+      // TODO: get category from dropdown here
+
       this.props.history.push(url);
     }
   }

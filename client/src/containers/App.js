@@ -77,7 +77,7 @@ class App extends Component {
           <Route exact path="/createItem" component={CreateItem} />
           <Route exact path="/showShowAllUserItems/:email" component={ShowAllUserItems} />
           <Route exact path="/cart" component={Cart} />
-          <Route exact path="/search/:keyword" component={SearchResults} />
+          <Route exact path="/search" component={SearchResults} />
           <Route exact path="/checkout" component={Checkout} />
           <Route exact path="/payment" component={Payment} />
           <Route exact path="/vr/:item_id" component={VR} />

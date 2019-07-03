@@ -8,6 +8,14 @@
   display: inline-block;
 }
 
+.item-detail-img {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  max-width: 300px;
+  max-height: 300px;
+}
+
 .item-title {
   font-weight: bold;
   font-size: 2rem;
