@@ -416,6 +416,15 @@ ul {
     float: left;
 }
 
+.thirdInboxUnreadNameFont  {
+    padding-top: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    padding-right: 20px;
+}
+
+
 
 .inboxReadNameFont  {
     padding-top: 12px;
@@ -426,8 +435,38 @@ ul {
    
 }
 
+.thirdInboxReadNameFont  {
+    padding-top: 12px;
+    font-size: 15px;
+    font-weight: 200;
+    font-family: 'Roboto', sans-serif;
+    padding-right: 20px;
+   
+}
+
 #inboxReadNameFontSpace {
-    padding-right: 100px;
+  
+   
+}
+
+#inboxUnreadNameFontSpace {
+   
+   /* margin-right: 250px; */
+}
+
+.firstInboxContainer {
+    float:left;  
+    width: 250px;
+}
+
+.secondInboxContainer {
+    float:left;  
+    width: 300px;
+}
+
+.thirdInboxContainer {
+    float:right;  
+   
 }
 
 

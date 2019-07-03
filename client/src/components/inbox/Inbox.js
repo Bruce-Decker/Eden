@@ -6,6 +6,8 @@ import RegularBanner from '../banner/RegularBanner'
 import queryString from "query-string";
 import axios from 'axios'
 import { Card } from 'react-bootstrap'
+import moment from 'moment'
+import Moment from 'react-moment';
 
 class Inbox extends Component {
 
@@ -36,7 +38,7 @@ class Inbox extends Component {
    
          
         
-         if (email_selection == "inbox" || email_selection == "undefined") {
+         if (email_selection == "inbox" || email_selection == undefined) {
             response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
             this.setState({
                messages: response.data,
@@ -231,44 +233,70 @@ class Inbox extends Component {
                         <div>
                              {message.isRead ? 
                                     <div className = "readMessage">
-                                       <div className="inboxCheckBox">
-                                              <input type="checkbox" className="mail-checkbox" />
+                                      <div className = "firstInboxContainer">
+                                              <div className="inboxCheckBox">
+                                                      <input type="checkbox" className="mail-checkbox" />
+                                              </div>
+                                              {message.isStarred ?
+                                                <div className="floatLeft inboxStar">
+                                                    <i className="fa fa-star inbox-started" />
+                                                  </div>
+                                                :
+                                                <i className="fa fa-star unstar"/>
+                                              }
+                                              <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
+                                              {/* <div>
+                                                  <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
+                                                
+                                                  
+                                                
+                                              </div> */}
+                                      </div>
+                                      <div className = "secondInboxContainer">
+                                          <h3 className = "inboxReadNameFont"> {message.subject}</h3>
                                        </div>
-                                       {message.isStarred ?
-                                         <div className="floatLeft inboxStar">
-                                             <i className="fa fa-star inbox-started" />
-                                          </div>
-                                         :
-                                         <i className="fa fa-star unstar"/>
-                                       }
-                                       <div>
-                                           <h3 className = "inboxReadNameFont" id = "inboxReadNameFontSpace"> {message.sender_name}</h3>
-                                           <h3 className = "inboxReadNameFont"> {message.subject}</h3>
-                                          
-                                         
+
+                                       <div className = "thirdInboxContainer">
+                                          <h3 className = "thirdInboxReadNameFont"> 
+                                            
+                                             <Moment format="HH:mm YYYY/MM/DD">{message.time}</Moment> 
+                                             
+                                          </h3>
                                        </div>
+                                      
                                       
 
                                     </div>
                             
                                    : 
 
-                                   <div className = "readMessage">
-                                   <div className="inboxCheckBox">
-                                          <input type="checkbox" className="mail-checkbox" />
-                                   </div>
-                                   {message.isStarred ?
-                                     <div className="floatLeft inboxStar">
-                                         <i className="fa fa-star inbox-started" />
-                                      </div>
-                                     :
-                                     <div className="floatLeft inboxStar">
-                                      <i className="fa fa-star unstar"/>
-                                     </div>
-                                   }
-                                   <div>
-                                       <h3 className = "inboxUnreadNameFont"> {message.sender_name}</h3>
-                                   </div>
+                                    <div className = "readMessage">
+                                       <div className = "firstInboxContainer">
+                                          <div className="inboxCheckBox">
+                                                  <input type="checkbox" className="mail-checkbox" />
+                                          </div>
+                                          {message.isStarred ?
+                                            <div className="floatLeft inboxStar">
+                                                <i className="fa fa-star inbox-started" />
+                                              </div>
+                                            :
+                                            <div className="floatLeft inboxStar">
+                                              <i className="fa fa-star unstar"/>
+                                            </div>
+                                          }
+                                          
+                                          <h3 className = "inboxUnreadNameFont" id = "inboxUnreadNameFontSpace"> {message.sender_name}</h3>
+                                       </div>
+                                  <div className = "secondInboxContainer">
+                                           <h3 className = "inboxUnreadNameFont"> {message.subject}</h3>
+                                  </div>
+                                  <div className = "thirdInboxContainer">
+                                          <h3 className = "thirdInboxUnreadNameFont"> 
+                                            
+                                             <Moment format="HH:mm YYYY/MM/DD">{message.time}</Moment> 
+                                             
+                                          </h3>
+                                       </div>
 
                                 </div>
                             
@@ -319,7 +347,7 @@ class Inbox extends Component {
                         )} */}
                        
                   
-                  <tr className="unread">
+                  {/* <tr className="unread">
                     <td className="inbox-small-cells">
                       <input type="checkbox" className="mail-checkbox" />
                     </td>
@@ -529,7 +557,7 @@ class Inbox extends Component {
                     <td className="view-message view-message">Alireza Zare Login faild</td>
                     <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
                     <td className="view-message text-right">feb 14</td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
             </div>
