@@ -24,9 +24,9 @@ import write from '../../images/write.png'
 var Map
 const mapAttributes = {
   googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyCUocP7N8Bfa2KLWKYEfA-E7dIHfDkLwkM&v=3.31&libraries=geometry,drawing,places",
-  loadingElement: <div style={{ height: '130px' }} />,
-  containerElement: <div style={{ height: '130px' }} />,
-  mapElement: <div style={{ height: '130px' }} />,
+  loadingElement: <div style={{ minHeight: '130px', maxHeight: '130px' }} />,
+  containerElement: <div style={{ minHeight: '130px', maxHeight: '130px' }} />,
+  mapElement: <div style={{ minHeight: '130px', maxHeight: '130px' }} />,
 }
 
 class Detail extends Component {
@@ -39,7 +39,6 @@ class Detail extends Component {
       hasMore: true,
       comments: [],
       write: false,
-      map: "none"
     }
     this.page = 0
     this.map = React.createRef()
@@ -90,13 +89,11 @@ class Detail extends Component {
                 <Card className="service-list-category" style={{backgroundColor: "#f7f7ff", borderRadius: "1rem", border: "0"}}>
                   <Card.Body>
                     <div style={{marginBottom: "0.5rem", minHeight: "130px"}}>
-                      <div style={{display: this.state.map, animation: "0.25s fadein"}}>
-                        <Map 
-                          map={this.map}
-                          lat={this.state.service.lat}
-                          lng={this.state.service.lng}
-                        />
-                      </div>
+                      <Map 
+                        map={this.map}
+                        lat={this.state.service.lat}
+                        lng={this.state.service.lng}
+                      />
                     </div>
                     <Card.Text style={{color: "black"}}>
                       <Row>
@@ -228,10 +225,6 @@ class Detail extends Component {
     const response = await axios.get('/services/' + this.props.match.params.id)
     response.data[0].reviews.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
     this.setState({ service: response.data[0], loading: false })
-  }
-
-  componentDidMount() {
-    setTimeout(() => this.setState({ map: "block" }), 750)
   }
 
   handleDislike = (id, key) => {

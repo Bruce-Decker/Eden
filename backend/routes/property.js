@@ -25,8 +25,6 @@ router.get('/', function(req, res) {
     const user_name = req.query.user_name
     Property.find({
       user_name: user_name
-    }, {
-      user_id: 0
     }).then(async (properties) => {
       console.log(properties)
       res.json(properties);
@@ -50,8 +48,6 @@ router.get('/', function(req, res) {
       num_bed: { $gte: bed },
       home_type: type,
       listing_type: listing
-    }, {
-      user_id: 0
     }).then(async (properties) => {
       console.log(properties)
       res.json(properties);

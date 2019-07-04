@@ -59,7 +59,8 @@ const PropertySchema = new Schema({
     },
     user_id: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     user_name: {
         type: String,

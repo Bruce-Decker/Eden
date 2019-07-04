@@ -216,7 +216,7 @@ def services(db):
   names = ['CostLess Heating & Cooling Services', 'Hewlett Electric', 'Willow Glen Electric', 'Absolute Power', 'BDS Locksmith', 'Modern Lock & Security', 'San Jose Safe & Lock', 'Sonic Locksmith', 'Trusted Movers', 'Spartan Moving Systems', 'A2B Movers', 'American HVAC', 'Global Heating & Cooling Services', 'Frank\'s Yard Clean-Up', 'All Green Scape']
   desc = 'We take pride in our business by providing you 5 star service. What makes us different from other companies is that we make sure we show up on time, provide affordable pricing, and honest work. We are here for you to make sure we take care of your heating and cooling systems.'
   services = ['A/C Installation', 'A/C Repair', 'Air Duct Cleaning', 'Electric Furnace Installation', 'Electric Furnace Repair', 'Emergency Services', 'Flame Sensor Repair', 'Gas Furnace Installation', 'Gas Furnace Repair', 'Heater Installation', 'Heater Repair', 'Thermostat Repair']
-  categories = ['contractors', 'landscaping', 'electricians', 'locksmiths', 'cleaners', 'movers', 'havc', 'plumbers']
+  categories = ['contractors', 'landscaping', 'electricians', 'locksmiths', 'cleaners', 'movers', 'hvac', 'plumbers']
   servId = 0
 
   for i in range(1000):
@@ -272,7 +272,7 @@ def generate_comments():
              'There were too many problems to write about in detail, so I\'ll just list some of them. The workmen were nice but changed form day to day. After explaining what was to be done on one day, another plumber, installer, etc, would come in the following day and we\'d have to try to explain what was to be done all over again. Job took 4 times as along as expected. Several times parts of the job was done and then undone and then redone, due to a variety of issues.'
             ]
   dates = ['04/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '02/12/2019', '01/05/2019']
-  for i in range(1, randint(4,80)):
+  for i in range(1, randint(4,300)):
     rating = randint(1,5)
     date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')
     sum_rating += rating
@@ -282,6 +282,7 @@ def generate_comments():
       'rating': rating,
       'date': date,
       'user_name': user,
+      'user_id': randint(0,10),
       'comment': comments[randint(0, len(comments) - 1)],
       'upvote': {'A': True, 'adam': True, 'bob': True},
       'downvote': {'cindy': True, 'david': True}

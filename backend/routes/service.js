@@ -30,8 +30,8 @@ router.get('/', function(req, res) {
     Service.find({
       user_name: user_name
     }, {
-      user_id: 0,
-      "reviews.rating": 0
+      "reviews.rating": 0,
+      "reviews.comments": 0
     }).then(async (services) => {
       console.log(services)
       res.json(services);
@@ -51,8 +51,8 @@ router.get('/', function(req, res) {
       lng: { $gte: swlng, $lte: nelng },
       category: category
     }, {
-      user_id: 0,
-      "reviews.rating": 0
+      "reviews.rating": 0,
+      "reviews.comments": 0
     }).then(async (services) => {
       console.log(services)
       const start = (pageNumber - 1) * itemsPerPage
@@ -73,6 +73,8 @@ router.get('/:id', function(req, res) {
   const id = req.params.id
   Service.find({
     id: id
+  }, {
+    "reviews.comments.user_id": 0
   }).then(async (service) => {
     console.log(service)
     res.json(service);

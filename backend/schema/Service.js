@@ -58,51 +58,53 @@ const ServiceSchema = new Schema({
         type: Number,
         required: true
       },
-      comments: [
-        {
-          id: {
-            type: String,
-            required: true
-          },
-          user_id: {
-            type: String,
-            required: true
-          },
-          user_name: {
-            type: String,
-            required: true
-          },
-          rating: {
-            type: Number,
-            required: true
-          },
-          date: {
-            type: Date,
-            default: Date.now,
-            required: true
-          },
-          comment: {
-            type: String,
-            required: true
-          },
-          upvote: {
-            type: Object,
-            default: {},
-            additionalProperties: {
-              type: Boolean,
+      comments: {
+        type: [
+          {
+            id: {
+              type: String,
               required: true
-            }
-          },
-          downvote: {
-            type: Object,
-            default: {},
-            additionalProperties: {
-              type: Boolean,
+            },
+            user_id: {
+              type: String,
               required: true
+            },
+            user_name: {
+              type: String,
+              required: true
+            },
+            rating: {
+              type: Number,
+              required: true
+            },
+            date: {
+              type: Date,
+              default: Date.now,
+              required: true
+            },
+            comment: {
+              type: String,
+              required: true
+            },
+            upvote: {
+              type: Object,
+              default: {},
+              additionalProperties: {
+                type: Boolean,
+                required: true
+              }
+            },
+            downvote: {
+              type: Object,
+              default: {},
+              additionalProperties: {
+                type: Boolean,
+                required: true
+              }
             }
           }
-        }
-      ]
+        ]
+      }
     },
     lat: {
       type: Number,
@@ -114,7 +116,8 @@ const ServiceSchema = new Schema({
     },
     user_id: {
       type: String,
-      required: true
+      required: true,
+      select: false
     },
     user_name: {
       type: String,
