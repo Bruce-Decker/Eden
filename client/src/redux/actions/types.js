@@ -12,6 +12,7 @@ export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 
 /* Search Types */
 export const GET_SEARCH_RESULTS = 'GET_SEARCH_RESULTS'
+export const NO_SEARCH_RESULTS = 'NO_SEARCH_RESULTS'
 
 /* Other Types */
 export const ACTIVE_FACULTY = 'ACTIVE_FACULTY'

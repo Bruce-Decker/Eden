@@ -17,14 +17,14 @@ import tap from '../../images/tap.png';
 const categories = {
     images: [hammer, shovel, plug, key, broom, mover, ac, tap],
     services: ['Contractors', 'Landscaping', 'Electricians', 'Locksmiths', 'Cleaners', 'Movers', 'HVAC', 'Plumbers'],
-    descriptions: ['Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.',
-                   'Spicy jalapeno jowl meatloaf kevin tail pastrami short ribs bresaola sausage.']
+    descriptions: ['Find the best contractors who can finish construction projects swiftly and with high quality.',
+                   'Find the best landscapers who can transform your area to restore beauty and utility.',
+                   'Find the best electricians who can ensure that power is available and dependable in all areas.',
+                   'Find the best locksmiths who can secure your home, personal belongings, and peace of mind.',
+                   'Find the best cleaners who can restore spaces to pristine condition, perfect for entertaining.',
+                   'Find the best movers who can transport all your belongings in record time and condition.',
+                   'Find the best HVAC technicians who can improve the temperature conditions in your workspace.',
+                   'Find the best plumbers who can loosen the flow within critical pipes in your network.']
 }
 
 class Service extends Component {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './SearchResults.css';
 import CartAddButton from '../cart/CartAddButton';
+import Item from '../service/Item';
+
 import apple from '../../images/apple.png';
 import star from '../../images/rating.png';
 
@@ -41,35 +43,60 @@ class SearchResultItems extends Component {
         </div>
       );
     } else {
-      return (
-        <ul className="search-item-list">
-          {this.props.items.map(item => {
+      if (this.props.searchType == 'itm') {
+        return (
+          <ul className="search-item-list">
+            {
+              this.props.items.map(item => {
+                return (
+                  <li key={item.item_id} className="search-item row">
+                    <div className="col-1">
+                      <Link to={"/items/" + item.item_id}>
+                        <img onClick={() => window.scrollTo(0, 0)} 
+                             className="search-item-img" style={{width: "100%"}} src={item.item_image ? clothingJpg : getImage(item.category)} alt="Item"></img>
+                      </Link>
+                    </div>
+                    <div className="col-5">
+                      <Link to={"/items/" + item.item_id}>
+                        <div onClick={() => window.scrollTo(0, 0)}>{item.item_name}</div>
+                      </Link>
+                      <div>{item.description}</div>
+                      <div>{this.renderRating(item.average_rating)}</div>
+                    </div>
+                    <div className="col-1">
+                      <div>{"$" + item.price}</div>
+                    </div>
+                    <div className="col-1">
+                      <CartAddButton item={item} cls={"addtocart-btn-lg"}/>
+                    </div>
+                  </li>
+                )
+              })
+            }
+          </ul>
+        );
+      } else if (this.props.searchType == 'svc') {
+        return (
+          Array.from(this.props.items, (e, i) => {
             return (
-              <li key={item.item_id} className="search-item row">
-                <div className="col-1">
-                  <Link to={"/items/" + item.item_id}>
-                    <img onClick={() => window.scrollTo(0, 0)} 
-                         className="search-item-img" style={{width: "100%"}} src={item.item_image ? clothingJpg : getImage(item.category)} alt="Item"></img>
-                  </Link>
-                </div>
-                <div className="col-5">
-                  <Link to={"/items/" + item.item_id}>
-                    <div onClick={() => window.scrollTo(0, 0)}>{item.item_name}</div>
-                  </Link>
-                  <div>{item.description}</div>
-                  <div>{this.renderRating(item.average_rating)}</div>
-                </div>
-                <div className="col-1">
-                  <div>{"$" + item.price}</div>
-                </div>
-                <div className="col-1">
-                  <CartAddButton item={item} cls={"addtocart-btn-lg"}/>
-                </div>
-              </li>
+              <div key={i} style={{marginBottom: "2.5rem"}}>
+                <Item
+                  key={i}
+                  id={e._id}
+                  name={e.name}
+                  desc={e.desc}
+                  rating={e.rating}
+                  count={e.reviews.count}
+                  phone={e.phone}
+                  email={e.email}
+                  logo={e.logo}
+                  service={e}
+                />
+              </div>
             )
-          })}
-        </ul>
-      );
+          })
+        )
+      }
     }
   }
 }

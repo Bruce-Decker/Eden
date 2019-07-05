@@ -29,7 +29,13 @@ class SearchResults extends Component {
 
     // handle search queries from this page
     this.unlisten = this.props.history.listen((location, action) => {
-      this.props.getSearchResults(1);
+      let url = window.location.href;
+
+      // make sure we're on the search page before
+      // attempting to get search results
+      if(url.indexOf('search') > -1) {
+        this.props.getSearchResults(1);
+      }
     });
   }
 
@@ -54,7 +60,10 @@ class SearchResults extends Component {
     return (
       <div>
         {this.showBanner()}
-        <SearchResultItems items={this.props.search.items}/>
+        <SearchResultItems
+          items={this.props.search.items}
+          searchType={this.props.search.searchType}
+        />
         <div id='pagination'>
           <Pagination
             prevPageText='prev'

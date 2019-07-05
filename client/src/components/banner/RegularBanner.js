@@ -45,7 +45,7 @@ LogoutButton = (e) => {
               <div className="navbar-collapse collapse" id="navbar">
                   <ul className="navbar-nav mr-auto">
                   <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      <Dropdown.Toggle variant="success" id="dropdown-market-items">
                         Market Items
                       </Dropdown.Toggle>
                     <Dropdown.Menu>
@@ -55,11 +55,8 @@ LogoutButton = (e) => {
                       <Dropdown.Item href="/food">Food</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-                <li className="nav-item">
-                        <Link className="nav-link" to={`/showProfile/${this.props.auth.user.email}`} ></Link>
-                </li>
                 <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      <Dropdown.Toggle variant="success" id="dropdown-my-items">
                         My Items
                       </Dropdown.Toggle>
                     <Dropdown.Menu>

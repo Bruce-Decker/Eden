@@ -1,40 +1,59 @@
 .form-search {
-    float: right;
-    margin: 0px;
+  float: right;
+  margin: 0px;
+}
+
+.styled-select {
+ background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 93% 0;
+ overflow: hidden;
+ width: 130px;
+ float: left;
+ border-top-left-radius: 5px;
+ border-bottom-left-radius: 5px;
+ background-color: #28a745;
+}
+
+.styled-select select {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  height: 31px;
+  padding: 5px;
+  width: 268px;
+  color: #fff;
 }
 
 .input-search {
-    border-left: 1px solid #53b46e;
-    border-top: 1px solid #53b46e;
-    border-bottom: 1px solid #53b46e;
-    border-right: none;
-    padding: 4px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+  border-left: 1px solid #53b46e;
+  border-top: 1px solid #53b46e;
+  border-bottom: 1px solid #53b46e;
+  border-right: none;
+  padding: 4px;
 }
 
 .button-search {
-    color: black;
-    border-width: 1px;
-    border-color: #53b46e;
-    background-color: Transparent;
-    font-size: 1.25rem;
-    transition: .25s ease;
-    display: inline;
-    text-decoration: none;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+  color: black;
+  border-width: 1px;
+  border-color: #53b46e;
+  background-color: Transparent;
+  font-size: 1.25rem;
+  transition: .25s ease;
+  display: inline;
+  text-decoration: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
+
 .button-search:active, .button-search:focus {
-    outline: none !important;
-    box-shadow: none;
+  outline: none !important;
+  box-shadow: none;
 }
 
 .button-search:active {
-    border-style: solid;
+  border-style: solid;
 }
 
 .button-search:hover{
-    background: #53b46e;
-    color: white;
+  background: #53b46e;
+  color: white;
 }
