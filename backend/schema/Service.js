@@ -2,10 +2,6 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const ServiceSchema = new Schema({
-    id: {
-      type: String,
-      required: true
-    },
     address: {
       type: String,
       required: true
@@ -61,10 +57,6 @@ const ServiceSchema = new Schema({
       comments: {
         type: [
           {
-            id: {
-              type: String,
-              required: true
-            },
             user_id: {
               type: String,
               required: true
@@ -86,22 +78,16 @@ const ServiceSchema = new Schema({
               type: String,
               required: true
             },
-            upvote: {
-              type: Object,
-              default: {},
-              additionalProperties: {
-                type: Boolean,
-                required: true
+            upvote: [
+              {
+                type: String
               }
-            },
-            downvote: {
-              type: Object,
-              default: {},
-              additionalProperties: {
-                type: Boolean,
-                required: true
+            ],
+            downvote: [
+              {
+                type: String
               }
-            }
+            ]
           }
         ]
       }

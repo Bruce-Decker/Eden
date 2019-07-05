@@ -71,12 +71,12 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
   const id = req.params.id
-  Service.find({
-    id: id
+  Service.findOne({
+    _id: id
   }, {
     "reviews.comments.user_id": 0
   }).then(async (service) => {
-    console.log(service)
+    console.log(service.toObject())
     res.json(service);
   }).catch(err => {
     console.log(err);
@@ -100,30 +100,35 @@ router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'logo', ma
 router.post('/:sid/comments/:cid/downvote', function(req, res) {
   const user_name = req.body.user_name
   Service.findOne({
-    id: req.params.sid,
+    _id: req.params.sid,
+    "reviews.comments._id": req.params.cid
+  }, { 
+    "reviews.comments.$": 1
   }).then(async (service) => {
     service = service.toObject()
-    const index = service.reviews.comments.findIndex(obj => obj.id == req.params.cid);
-    let comment = service.reviews.comments[index]
-    if (!(user_name in comment.downvote)) {
-      if (user_name in comment.upvote) {
-        delete comment.upvote[user_name]
+    let comment = service.reviews.comments[0]
+    if (comment.downvote.indexOf(user_name) == -1) {
+      if (comment.upvote.indexOf(user_name) != -1) {
+        comment.upvote.splice(comment.upvote.indexOf(user_name), 1)
       }
-      comment.downvote[user_name] = true
+      comment.downvote.push(user_name)
     } else {
-      delete comment.downvote[user_name]
+      comment.downvote.splice(comment.downvote.indexOf(user_name), 1)
     }
-    service.reviews.comments[index] = comment
     Service.findOneAndUpdate({
-      id: req.params.sid,
+      _id: service._id,
+      "reviews.comments._id": comment._id
+    }, { 
+      "$set": {
+        "reviews.comments.$": comment
+      }
     },
-    service,
     function(err, data) {
       if (err) {
         console.log(err)
         res.json({ msg: 'An error occurred, please try again later.' });        
       } else {
-        console.log('service updated')
+        console.log(comment)
         res.json({ comment });
       }
     })
@@ -136,30 +141,35 @@ router.post('/:sid/comments/:cid/downvote', function(req, res) {
 router.post('/:sid/comments/:cid/upvote', function(req, res) {
   const user_name = req.body.user_name
   Service.findOne({
-    id: req.params.sid,
+    _id: req.params.sid,
+    "reviews.comments._id": req.params.cid
+  }, { 
+    "reviews.comments.$": 1
   }).then(async (service) => {
     service = service.toObject()
-    const index = service.reviews.comments.findIndex(obj => obj.id == req.params.cid);
-    let comment = service.reviews.comments[index]
-    if (!(user_name in comment.upvote)) {
-      if (user_name in comment.downvote) {
-        delete comment.downvote[user_name]
+    let comment = service.reviews.comments[0]
+    if (comment.upvote.indexOf(user_name) == -1) {
+      if (comment.downvote.indexOf(user_name) != -1) {
+        comment.downvote.splice(comment.downvote.indexOf(user_name), 1)
       }
-      comment.upvote[user_name] = true
+      comment.upvote.push(user_name)
     } else {
-      delete comment.upvote[user_name]
+      comment.upvote.splice(comment.upvote.indexOf(user_name), 1)
     }
-    service.reviews.comments[index] = comment
     Service.findOneAndUpdate({
-      id: req.params.sid,
+      _id: service._id,
+      "reviews.comments._id": comment._id
+    }, { 
+      "$set": {
+        "reviews.comments.$": comment
+      }
     },
-    service,
     function(err, data) {
       if (err) {
         console.log(err)
         res.json({ msg: 'An error occurred, please try again later.' });        
       } else {
-        console.log('service updated')
+        console.log(comment)
         res.json({ comment });
       }
     })
@@ -175,30 +185,38 @@ router.post('/:id/review', function(req, res) {
   const rating = req.body.rating
   const review = req.body.review
   Service.findOne({
-    id: req.params.id,
+    _id: req.params.id,
+  }, { 
+    "rating": 1,
+    "reviews.count": 1,
+    "reviews.rating": 1
   }).then(async (service) => {
     service = service.toObject()
     service.reviews.count += 1
     service.reviews.rating += rating
     service.rating = service.reviews.rating / service.reviews.count
     data = {
-      'id': uuidv4(),
       'rating': rating,
       'user_name': user_name,
       'user_id': user_id,
       'comment': review
     }
-    service.reviews.comments.push(data)
     Service.findOneAndUpdate({
-      id: req.params.id,
+      _id: req.params.id,
+    }, {
+      $push: {
+        "reviews.comments": data
+      },
+      "reviews.rating": service.reviews.rating,
+      "reviews.count": service.reviews.count,
+      rating: service.rating
     },
-    service,
     function(err, data) {
       if (err) {
         console.log(err)
         res.json({ msg: 'An error occurred, please try again later.' });        
       } else {
-        console.log('service updated')
+        console.log(service)
         res.json({ service });
       }
     })

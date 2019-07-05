@@ -218,7 +218,7 @@ class List extends Component {
               return  <div key={i} style={{marginBottom: "2.5rem"}}>
                         <Item 
                           key={i}
-                          id={e.id}
+                          id={e._id}
                           name={e.name}
                           desc={e.desc}
                           rating={e.rating}

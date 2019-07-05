@@ -29,13 +29,13 @@ class Review extends Component {
                 <Row style={{marginTop: "1rem"}}>
                   <Col style={{textAlign: "center"}}>
                     <div className="service-rating-vote">{Object.keys(this.props.comment.upvote).length}</div>
-                    <button className="service-rating-button" onClick={() => this.props.handleLike(this.props.comment.id, this.props.id)}>
+                    <button className="service-rating-button" onClick={() => this.props.handleLike(this.props.comment._id, this.props.id)}>
                       <img src={this.getVotingImage(1)} alt="Rating" className="service-rating-img"></img>
                     </button>
                   </Col>
                   <Col style={{textAlign: "center"}}>
                   <div className="service-rating-vote">{Object.keys(this.props.comment.downvote).length}</div>
-                    <button className="service-rating-button" onClick={() => this.props.handleDislike(this.props.comment.id, this.props.id)}>
+                    <button className="service-rating-button" onClick={() => this.props.handleDislike(this.props.comment._id, this.props.id)}>
                       <img src={this.getVotingImage(0)} alt="Rating" className="service-rating-img"></img>
                     </button>
                   </Col>
@@ -60,12 +60,12 @@ class Review extends Component {
 
   getVotingImage = (type) => {
     if (type) {
-      if (this.props.user_name in this.props.comment.upvote) {
+      if (this.props.comment.upvote.indexOf(this.props.user_name) !== -1) {
         return smiley_clicked
       }
       return smiley
     }
-    if (this.props.user_name in this.props.comment.downvote) {
+    if (this.props.comment.downvote.indexOf(this.props.user_name) !== -1) {
       return dislike_clicked
     }
     return dislike

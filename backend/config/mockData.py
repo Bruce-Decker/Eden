@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson import ObjectId
 from random import randint
 from random import randrange
 from datetime import datetime
@@ -219,7 +220,7 @@ def services(db):
   categories = ['contractors', 'landscaping', 'electricians', 'locksmiths', 'cleaners', 'movers', 'hvac', 'plumbers']
   servId = 0
 
-  for i in range(1000):
+  for _ in range(1000):
     servId += 1
     user = users[randint(0,10)]
     comments, sum_rating = generate_comments()
@@ -232,7 +233,7 @@ def services(db):
     name = names[randint(0, len(names) - 1)]
     category = categories[randint(0, len(categories) - 1)]
     service_data = {
-      'id': str(servId),
+      '_id': ObjectId(),
       'address': addresses[int(randrange(0,len(addresses)))],
       'state': 'CA',
       'user_id': str(user[0]),
@@ -272,20 +273,20 @@ def generate_comments():
              'There were too many problems to write about in detail, so I\'ll just list some of them. The workmen were nice but changed form day to day. After explaining what was to be done on one day, another plumber, installer, etc, would come in the following day and we\'d have to try to explain what was to be done all over again. Job took 4 times as along as expected. Several times parts of the job was done and then undone and then redone, due to a variety of issues.'
             ]
   dates = ['04/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '02/12/2019', '01/05/2019']
-  for i in range(1, randint(4,300)):
+  for _ in range(1, randint(5,500)):
     rating = randint(1,5)
     date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')
     sum_rating += rating
     user = users[randint(0,10)]
     data = {
-      'id': i,
+      '_id': ObjectId(),
       'rating': rating,
       'date': date,
       'user_name': user,
       'user_id': randint(0,10),
       'comment': comments[randint(0, len(comments) - 1)],
-      'upvote': {'A': True, 'adam': True, 'bob': True},
-      'downvote': {'cindy': True, 'david': True}
+      'upvote': [],
+      'downvote': []
     }
     result.append(data)
   return result, sum_rating

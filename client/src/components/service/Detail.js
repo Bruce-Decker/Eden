@@ -190,7 +190,7 @@ class Detail extends Component {
                 })}
               </InfiniteScroll>
               <Write 
-                id={this.state.service.id}
+                id={this.state.service._id}
                 auth={this.props.auth}
                 show={this.state.write}
                 name={this.state.service.name}
@@ -223,8 +223,8 @@ class Detail extends Component {
 
   async componentWillMount() {
     const response = await axios.get('/services/' + this.props.match.params.id)
-    response.data[0].reviews.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
-    this.setState({ service: response.data[0], loading: false })
+    response.data.reviews.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    this.setState({ service: response.data, loading: false })
   }
 
   handleDislike = (id, key) => {
