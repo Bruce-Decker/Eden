@@ -24,6 +24,10 @@ class Inbox extends Component {
         }
     }
 
+    starMessage = (message_id) => {
+          
+    }
+
 
     async componentWillReceiveProps(nextProps) {
       if (nextProps.location.search !== this.props.location.search) {    
@@ -162,6 +166,12 @@ class Inbox extends Component {
                    search: "?emailType=sent"
                 }}>
                      <i className="fa fa-envelope-o" /> Sent Mail
+
+                     {this.state.showInboxMessage || this.state.showSentMessage ? 
+                        <span className = "count_messages">
+                            {sent_response.data.length}
+                           </span>
+                          : null }
                 </Link>
 
               </li>

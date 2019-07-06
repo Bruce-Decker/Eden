@@ -26,26 +26,36 @@ const MessageSchema = new Schema({
         type: String,
         required: true
     },
-    isRead: {
-        type: Boolean,
-        required: true
-    },
-    isStarred: {
-        type: Boolean,
-        required: true
-    },
-    isTrashed: {
-        type: Boolean,
-        required: true
-    },
-    isDeleted: {
-        type: Boolean,
-        required: true
-    },
-    isDraft: {
-        type: Boolean,
-        required: true
-    },
+    isRead: [{
+       email: {
+          type: String,
+          required: true
+       }
+    }],
+    isStarred: [{
+        email: {
+           type: String,
+           required: true
+        }
+     }],
+    isTrashed: [{
+        email: {
+           type: String,
+           required: true
+        }
+     }],
+    isDeleted: [{
+        email: {
+           type: String,
+           required: true
+        }
+     }],
+    isDraft: [{
+        email: {
+           type: String,
+           required: true
+        }
+     }],
     replies: [
         {
             reply_id: {
