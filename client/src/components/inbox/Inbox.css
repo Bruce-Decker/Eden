@@ -478,3 +478,7 @@ ul {
     background-color: #D3D3D3
 }
 
+.count_messages {
+    float: right;
+}
+

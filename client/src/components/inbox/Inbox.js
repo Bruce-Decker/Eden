@@ -8,14 +8,19 @@ import axios from 'axios'
 import { Card } from 'react-bootstrap'
 import moment from 'moment'
 import Moment from 'react-moment';
+import Messages from './Messages'
 
+var inbox_response
+var sent_response
 class Inbox extends Component {
 
     constructor() {
         super()
         this.state = {
-              messages: [],
-              showMessage: false
+              inboxMessages: [],
+              sentMessages: [],
+              showInboxMessage: false,
+              showSentMessage: false
         }
     }
 
@@ -31,26 +36,32 @@ class Inbox extends Component {
     async componentDidMount() {
          var values = queryString.parse(this.props.location.search);
          var email_selection
-         var response
+
+       
          for (var key in values) {
             email_selection = values[key]
          }
    
-         
+         inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
+         sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
         
          if (email_selection == "inbox" || email_selection == undefined) {
-            response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
-            this.setState({
-               messages: response.data,
-               showMessage: true
-            })
-            console.log(response)
-            console.log(this.state.messages)
-         } 
+              this.setState({
+                inboxMessages: inbox_response.data,
+                showInboxMessage: true,
+                showSentMessage: false
+              })
+         }
+
          if (email_selection == "sent") {
-            
-         } 
-   
+              this.setState({
+                sentMessages: sent_response.data,
+                showSentMessage: true,
+                showInboxMessage: false
+            })
+         }
+
+         
     }
 
     render() {
@@ -128,15 +139,23 @@ class Inbox extends Component {
               </div>{/* /.modal */}
             </div>
             <ul className="inbox-nav inbox-divider">
-              <li className="active">
+              <li className={this.state.showInboxMessage ? "active" : ''}>
                 <Link to= {{
                       pathname: "/inbox/" + this.props.auth.user.email,
                       search: "?emailType=inbox"
                  }}>
-                    <i className="fa fa-inbox" /> Inbox <span className="label label-danger pull-right">2</span>
+                    <i className="fa fa-inbox" /> Inbox 
+                    
+                      {this.state.showInboxMessage || this.state.showSentMessage ? 
+                        <span className = "count_messages">
+                            {inbox_response.data.length}
+                           </span>
+                          : null }
+                           
+                  
                 </Link>
               </li>
-              <li>
+              <li className={this.state.showSentMessage ? "active" : ''}>
 
                 <Link to = {{
                    pathname: "/inbox/" + this.props.auth.user.email,
@@ -226,340 +245,26 @@ class Inbox extends Component {
                 </ul>
               </div>
              
-              <div className="div-inbox">
-              
-                    {this.state.messages.map(message => 
-                     <Card className = "eachMessageItem">
-                        <div>
-                             {message.isRead ? 
-                                    <div className = "readMessage">
-                                      <div className = "firstInboxContainer">
-                                              <div className="inboxCheckBox">
-                                                      <input type="checkbox" className="mail-checkbox" />
-                                              </div>
-                                              {message.isStarred ?
-                                                <div className="floatLeft inboxStar">
-                                                    <i className="fa fa-star inbox-started" />
-                                                  </div>
-                                                :
-                                                <i className="fa fa-star unstar"/>
-                                              }
-                                              <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
-                                              {/* <div>
-                                                  <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
-                                                
-                                                  
-                                                
-                                              </div> */}
-                                      </div>
-                                      <div className = "secondInboxContainer">
-                                          <h3 className = "inboxReadNameFont"> {message.subject}</h3>
-                                       </div>
 
-                                       <div className = "thirdInboxContainer">
-                                          <h3 className = "thirdInboxReadNameFont"> 
-                                            
-                                             <Moment format="HH:mm YYYY/MM/DD">{message.time}</Moment> 
-                                             
-                                          </h3>
-                                       </div>
-                                      
-                                      
 
-                                    </div>
-                            
-                                   : 
-
-                                    <div className = "readMessage">
-                                       <div className = "firstInboxContainer">
-                                          <div className="inboxCheckBox">
-                                                  <input type="checkbox" className="mail-checkbox" />
-                                          </div>
-                                          {message.isStarred ?
-                                            <div className="floatLeft inboxStar">
-                                                <i className="fa fa-star inbox-started" />
-                                              </div>
-                                            :
-                                            <div className="floatLeft inboxStar">
-                                              <i className="fa fa-star unstar"/>
-                                            </div>
-                                          }
-                                          
-                                          <h3 className = "inboxUnreadNameFont" id = "inboxUnreadNameFontSpace"> {message.sender_name}</h3>
-                                       </div>
-                                  <div className = "secondInboxContainer">
-                                           <h3 className = "inboxUnreadNameFont"> {message.subject}</h3>
-                                  </div>
-                                  <div className = "thirdInboxContainer">
-                                          <h3 className = "thirdInboxUnreadNameFont"> 
-                                            
-                                             <Moment format="HH:mm YYYY/MM/DD">{message.time}</Moment> 
-                                             
-                                          </h3>
-                                       </div>
-
-                                </div>
-                            
-                            
-                             }
-                            
-                           
-                        </div>    
-                         </Card>
-                    )}
-                 
-              </div>
+            {this.state.showInboxMessage ? 
+              <Messages messages = {this.state.inboxMessages} />
+              : null }
+            {this.state.showSentMessage ? 
+             <Messages messages = {this.state.sentMessages} />
+             : null }
              
-              <table className="table table-inbox table-hover">
-                <tbody>
-               
-               
-                        {/* {this.state.messages.map(message => 
-                           <tr className="unread">
-                            { message.isRead ? 
-                             
-                             <tr className="unread">
-                             <td className="inbox-small-cells">
-                               <input type="checkbox" className="mail-checkbox" />
-                             </td>
-                             <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                             <td className="view-message  dont-show">PHPClass</td>
-                             <td className="view-message ">Added a new class: Login Class Fast Site</td>
-                             <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                             <td className="view-message  text-right">9:27 AM</td>
-                           </tr>
-                            
-                              :
-                              <tr className="unread">
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message  dont-show">PHPClass</td>
-                    <td className="view-message ">Added a new class: Login Class Fast Site</td>
-                    <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message  text-right">9:27 AM</td>
-                  </tr>
-                                      
-                           
-                            }
-                            </tr>
-                        )} */}
-                       
-                  
-                  {/* <tr className="unread">
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message  dont-show">PHPClass</td>
-                    <td className="view-message ">Added a new class: Login Class Fast Site</td>
-                    <td className="view-message  inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message  text-right">9:27 AM</td>
-                  </tr>
-                 
-                  <tr className="unread">
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Google Webmaster </td>
-                    <td className="view-message">Improve the search presence of WebSite</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 15</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">JW Player</td>
-                    <td className="view-message">Last Chance: Upgrade to Pro for </td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 15</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Tim Reid, S P N</td>
-                    <td className="view-message">Boost Your Website Traffic</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">April 01</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">Freelancer.com <span className="label label-danger pull-right">urgent</span></td>
-                    <td className="view-message">Stop wasting your visitors </td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">May 23</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">WOW Slider </td>
-                    <td className="view-message">New WOW Slider v7.8 - 67% off</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">March 14</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">LinkedIn Pulse</td>
-                    <td className="view-message">The One Sign Your Co-Worker Will Stab</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">Feb 19</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Drupal Community<span className="label label-success pull-right">megazine</span></td>
-                    <td className="view-message view-message">Welcome to the Drupal Community</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 04</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Facebook</td>
-                    <td className="view-message view-message">Somebody requested a new password </td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">June 13</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Skype <span className="label label-info pull-right">family</span></td>
-                    <td className="view-message view-message">Password successfully changed</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 24</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">Google+</td>
-                    <td className="view-message">alireza, do you know</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 09</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="dont-show">Zoosk </td>
-                    <td className="view-message">7 new singles we think you'll like</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">May 14</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">LinkedIn </td>
-                    <td className="view-message">Alireza: Nokia Networks, System Group and </td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">February 25</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="dont-show">Facebook</td>
-                    <td className="view-message view-message">Your account was recently logged into</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">March 14</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Twitter</td>
-                    <td className="view-message">Your Twitter password has been changed</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">April 07</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">InternetSeer Website Monitoring</td>
-                    <td className="view-message">http://golddesigner.org/ Performance Report</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">July 14</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">AddMe.com</td>
-                    <td className="view-message">Submit Your Website to the AddMe Business Directory</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">August 10</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Terri Rexer, S P N</td>
-                    <td className="view-message view-message">Forget Google AdWords: Un-Limited Clicks fo</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">April 14</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Bertina </td>
-                    <td className="view-message">IMPORTANT: Don't lose your domains!</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">June 16</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star inbox-started" /></td>
-                    <td className="view-message dont-show">Laura Gaffin, S P N </td>
-                    <td className="view-message">Your Website On Google (Higher Rankings Are Better)</td>
-                    <td className="view-message inbox-small-cells" />
-                    <td className="view-message text-right">August 10</td>
-                  </tr>
-                  <tr className>
-                    <td className="inbox-small-cells">
-                      <input type="checkbox" className="mail-checkbox" />
-                    </td>
-                    <td className="inbox-small-cells"><i className="fa fa-star" /></td>
-                    <td className="view-message dont-show">Facebook</td>
-                    <td className="view-message view-message">Alireza Zare Login faild</td>
-                    <td className="view-message inbox-small-cells"><i className="fa fa-paperclip" /></td>
-                    <td className="view-message text-right">feb 14</td>
-                  </tr> */}
-                </tbody>
-              </table>
+             
+
+
+
+
+
+
+
+
+             
+              
             </div>
           </aside>
         </div>

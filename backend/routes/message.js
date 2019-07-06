@@ -77,7 +77,8 @@ router.post('/replyEmail', (req, res) => {
           {
              $push: {
                 replies: data
-             }
+             },
+             isRead: false
           }, function(err, docs) {
             if (err) {
               res.send({Error: err})
@@ -252,7 +253,8 @@ router.post('/deleteMessage', function(req, res) {
 router.get('/getInboxMessages/:receiver_email', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(receiver_email)
-    Message.find({receiver_email: receiver_email, isDraft: false, isDeleted: false, isTrashed: false})
+    Message.find().or([{receiver_email: receiver_email, isDraft: false, isDeleted: false, isTrashed: false},
+        {sender_email: receiver_email, "replies.0": {"$exists": true}, isDraft: false, isDeleted: false, isTrashed: false}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (docs) {
