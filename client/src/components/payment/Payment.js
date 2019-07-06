@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {CardElement, Elements, injectStripe, StripeProvider} from 'react-stripe-elements';
 import StripePayment from './StripePayment';
-//import './Payment.css';
+import styles from './Payment.css';
 //import {Pay} from './pay.js';
 import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
@@ -20,14 +20,21 @@ class Payment extends Component {
 
     render() {
         return (
-            <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-                <div className="example">
+            <div>
+                <RegularBanner/>
+                <div id="payment-header">
                     <h1>Payment</h1>
-                    <Elements>
-                        <StripePayment />
-                    </Elements>
                 </div>
-            </StripeProvider>
+                <div id='payment-container'>
+                    <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                        <div className="stripe-payment">
+                            <Elements>
+                                <StripePayment className={styles.cardPayment}/>
+                            </Elements>
+                        </div>
+                    </StripeProvider>
+                </div>
+            </div>
         );
     }
 
