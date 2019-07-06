@@ -1,19 +1,67 @@
+#div-search-result-items {
+  padding-right: 20rem;
+  padding-left: 20rem;
+  padding-top: 3rem;
+}
+
 .search-item-list {
-  margin-left: 5rem;
-  list-style-type: none;
 }
 
 .search-item {
+  padding: 10px 5px 10px 5px;
   margin-bottom: 1rem;
-  border: 1px solid darkgray;
+  border-radius: 30px;
+  background-color: #f5f5ff;
+  transition: .2s ease-in-out;
+  height: 180px;
+}
+
+.search-item:hover {
+  background-color: #fafaff;
 }
 
 .search-item-img {
   display: block;
   width: auto;
   height: auto;
-  max-width: 120px;
-  max-height: 120px;
+  max-width: 160px;
+  max-height: 160px;
+}
+
+.search-item-name {
+  font-size: 16pt;
+}
+
+.search-item-name, .search-item-price {
+  color: black;
+  font-weight: bold;
+}
+
+.search-item-price {
+  font-size: 14pt;
+  margin-top: 8px;
+}
+
+.search-item-rating, .search-item-price, .search-item-btn {
+  width: 33%;
+}
+
+.search-item-description {
+  color: #555;
+}
+
+.search-item-btm {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.search-item-list a:hover {
+  text-decoration: none;
+}
+
+.search-item-float {
+  float: left;
 }
 
 .sr-outer-div {

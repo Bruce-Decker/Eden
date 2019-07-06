@@ -60,10 +60,12 @@ class SearchResults extends Component {
     return (
       <div>
         {this.showBanner()}
-        <SearchResultItems
-          items={this.props.search.items}
-          searchType={this.props.search.searchType}
-        />
+        <div id='div-search-result-items'>
+          <SearchResultItems
+            items={this.props.search.items}
+            searchType={this.props.search.searchType}
+          />
+        </div>
         <div id='pagination'>
           <Pagination
             prevPageText='prev'

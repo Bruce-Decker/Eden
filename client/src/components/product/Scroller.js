@@ -38,7 +38,7 @@ class Scroller extends Component {
                     <Link to={"/items/" + rec.id}>
                       <span className={this.props.keyPrefix+"-title"} onClick={() => window.scrollTo(0, 0)}>{rec.name}</span>
                     </Link>
-                    <div><span className={this.props.keyPrefix+"-price"}>{'$'+rec.price}</span></div>
+                    <div><span className={this.props.keyPrefix+"-price"}>{'$'+rec.price.toFixed(2)}</span></div>
                     <StarRatings
                       rating={rec.avg_rating ? rec.avg_rating : 4+Math.random()}
                       starRatedColor='rgb(40,167,69)'

@@ -18,7 +18,10 @@ class CartAddButton extends Component {
     //console.log(this.props);
   }
 
-  handleClick() {
+  handleClick(e) {
+    // use this to prevent from going to item details
+    e.preventDefault();
+
     let email = this.props.auth.user.email;
     let item = this.props.item; // get item information from parent
 
