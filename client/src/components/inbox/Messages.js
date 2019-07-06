@@ -22,7 +22,7 @@ class Messages extends Component {
                     {this.props.messages.map(message => 
                      <Card className = "eachMessageItem">
                         <div>
-                             {message.isRead ? 
+                             {message.isRead.some(e => e.email === this.props.auth.user.email) ? 
                                     <div className = "readMessage">
                                       <div className = "firstInboxContainer">
                                               <div className="inboxCheckBox">

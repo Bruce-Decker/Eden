@@ -273,28 +273,29 @@ router.post('/deleteMessage', function(req, res) {
 router.get('/getInboxMessages/:receiver_email', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(receiver_email)
-    Message.find().or([{receiver_email: receiver_email, isDraft: { "$nin": [receiver_email] }, isDeleted: { "$nin": [receiver_email] }, isTrashed: { "$nin": [receiver_email] }},
-        {sender_email: receiver_email, "replies.0": {"$exists": true}, isDraft: { "$nin": [receiver_email] }, isDeleted: { "$nin": [receiver_email] }, isTrashed: { "$nin": [receiver_email] }}])
+    Message.find().or([{receiver_email: receiver_email, isDraft: { "$nin": [{email: receiver_email}] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }},
+        {sender_email: receiver_email, "replies.0": {"$exists": true}, isDraft: { "$nin": [{email: receiver_email}] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 })
 
 router.get('/getSentMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
+    console.log(sender_email)
     
-    Message.find({sender_email: sender_email, isDraft: {"$nin": [sender_email]}, isDeleted: {"$nin": [sender_email]}, isTrashed: {"$nin": [sender_email]}})
+    Message.find({sender_email: sender_email, isDraft: {"$nin": [{email: sender_email}]}, isDeleted: {"$nin": [{email: sender_email}]}, isTrashed: {"$nin": [{email: sender_email}]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 })
@@ -302,29 +303,29 @@ router.get('/getSentMessages/:sender_email', function(req, res) {
 router.get('/getStarredMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
     
-    Message.find({sender_email: sender_email, isStarred: {"$in": [sender_email]}, isDraft: {"$nin": [sender_email]}, isDeleted: {"$nin": [sender_email]}, isTrashed: {"$nin": [sender_email]}})
+    Message.find({sender_email: sender_email, isStarred: {"$in": [{email: sender_email}]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 })
 
 
 
-router.get('/getDraftedMessages/:sender_email', function(req, res) {
-    var sender_email = req.params.sender_email
+router.get('/getDraftedMessages', function(req, res) {
+    var sender_email = req.query.email
     
-    Message.find({sender_email: sender_email, isDraft: {"$in": [sender_email]}})
+    Message.find({sender_email: sender_email, isDraft: {"$in": [{email: sender_email}]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 })
@@ -333,13 +334,13 @@ router.get('/getDraftedMessages/:sender_email', function(req, res) {
 router.get('/getTrashedMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
     
-    Message.find({sender_email: sender_email, isTrashed: {"$in": [sender_email]}})
+    Message.find({sender_email: sender_email, isTrashed: {"$in": [{email: sender_email}]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 })
@@ -355,11 +356,10 @@ router.get('/getExchangedMessages/:receiver_email/:sender_email/:subject', funct
     Message.find().or([{receiver_email: receiver_email, sender_email:sender_email, subject: subject}, {receiver_email: sender_email, sender_email:receiver_email, subject: subject}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
-        if (docs) {
-
+        if (err) {
+            res.send({Error: err})
+          } else {
             res.send(docs)
-        } else {
-            res.send({})
         }
     });
 

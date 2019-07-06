@@ -50,6 +50,7 @@ class Inbox extends Component {
          sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
         
          if (email_selection == "inbox" || email_selection == undefined) {
+           console.log(inbox_response.data)
               this.setState({
                 inboxMessages: inbox_response.data,
                 showInboxMessage: true,
