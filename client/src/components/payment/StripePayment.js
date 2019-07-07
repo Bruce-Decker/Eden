@@ -90,7 +90,7 @@ class StripePayment extends Component {
     render() {
         return (
             <div className="checkout container">
-                <p>Would you like to complete the purchase?</p>
+                <p className="payment-para">Would you like to complete the purchase?</p>
                 {this.state.canMakePayment ?
                 <PaymentRequestButtonElement
                     paymentRequest={this.state.paymentRequest}
