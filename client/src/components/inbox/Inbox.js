@@ -20,13 +20,24 @@ class Inbox extends Component {
               inboxMessages: [],
               sentMessages: [],
               showInboxMessage: false,
-              showSentMessage: false
+              showSentMessage: false,
+              showIndividualMessage: false,
+              subject: '',
+              message: '',
+              sender_name: '',
+              sender_email: '',
+              receiver_email: '',
+              time: '',
+              replies: []
         }
     }
 
-    starMessage = (message_id) => {
-          
+
+    showIndividualMessage = (message_id) => {
+       alert(message_id)
     }
+
+   
 
 
     async componentWillReceiveProps(nextProps) {
@@ -40,36 +51,77 @@ class Inbox extends Component {
     async componentDidMount() {
          var values = queryString.parse(this.props.location.search);
          var email_selection
-
+         var message_id
+         var indivisual_message
+         console.log(values)
+         console.log(values["emailType"])
+ 
        
          for (var key in values) {
-            email_selection = values[key]
+           
+           if (key === "emailType") {
+              email_selection = values[key]
+           }
+           if (key === "message_id") {
+              
+               message_id = values[key]
+           }
          }
+
+        
    
          inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
          sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
         
          if (email_selection == "inbox" || email_selection == undefined) {
            console.log(inbox_response.data)
-              this.setState({
-                inboxMessages: inbox_response.data,
-                showInboxMessage: true,
-                showSentMessage: false
-              })
+              if (inbox_response.data) {
+                  this.setState({
+                    inboxMessages: inbox_response.data,
+                    showInboxMessage: true,
+                    showSentMessage: false
+                  })
+              }
          }
 
          if (email_selection == "sent") {
-              this.setState({
-                sentMessages: sent_response.data,
-                showSentMessage: true,
-                showInboxMessage: false
-            })
+            if (sent_response.data) {
+                this.setState({
+                  sentMessages: sent_response.data,
+                  showSentMessage: true,
+                  showInboxMessage: false
+               })
+            } 
+         }
+
+         if (email_selection == "readEachEmail") {
+
+           // alert(message_id)
+            console.log(message_id)
+            indivisual_message = await axios.get('/message/getIndividualMessage/' + message_id)
+            console.log(indivisual_message.data)
+            if (indivisual_message.data) {
+                  this.setState({
+                      showSentMessage: false,
+                      showInboxMessage: false,
+                      showIndividualMessage: true,
+                      subject: indivisual_message.data.subject,
+                      message: indivisual_message.data.message,
+                      sender_name: indivisual_message.data.sender_name,
+                      sender_email: indivisual_message.data.sender_email,
+                      receiver_email: indivisual_message.data.receiver_email,
+                      time: indivisual_message.data.time,
+                      replies: indivisual_message.data.replies
+                  })
+             }
+
          }
 
          
     }
 
     render() {
+      console.log(this.props)
         return (
             <div>
             <RegularBanner />
@@ -259,11 +311,17 @@ class Inbox extends Component {
 
 
             {this.state.showInboxMessage ? 
-              <Messages messages = {this.state.inboxMessages} />
+              <Messages messages = {this.state.inboxMessages} history = {this.props.history}/>
               : null }
             {this.state.showSentMessage ? 
-             <Messages messages = {this.state.sentMessages} />
+             <Messages messages = {this.state.sentMessages} history = {this.props.history}/>
              : null }
+
+             {this.state.showIndividualMessage ?
+               <div>
+                   <span>{this.state.subject}</span>
+              </div>
+              : null }
              
              
 

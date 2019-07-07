@@ -8,11 +8,48 @@ import axios from 'axios'
 import { Card } from 'react-bootstrap'
 import moment from 'moment'
 import Moment from 'react-moment';
-
+import { withRouter } from 'react-router-dom';
 
 class Messages extends Component {
     constructor(props) {
         super()
+    }
+
+    starMessage = (e, message_id) => {
+        e.stopPropagation();
+        var email = this.props.auth.user.email
+        var data = {
+            message_id,
+            email
+        }
+        console.log(data)
+        axios.post('/message/starMessage', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+    }
+
+
+    unstarMessage = (e, message_id) => {
+        e.stopPropagation();
+        var email = this.props.auth.user.email
+        var data = {
+            message_id,
+            email
+        }
+        console.log(data)
+        axios.post('/message/unstarMessage', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+    }
+
+    showIndividualMessage = (e, message_id) => {
+       this.props.history.push('/inbox/' + this.props.auth.user.email + "?emailType=readEachEmail&message_id=" + message_id)
     }
 
     render() {
@@ -20,7 +57,7 @@ class Messages extends Component {
         <div className="div-inbox">
               
                     {this.props.messages.map(message => 
-                     <Card className = "eachMessageItem">
+                     <Card className = "eachMessageItem" onClick = {(e) => this.showIndividualMessage(e, message.message_id)}>
                         <div>
                              {message.isRead.some(e => e.email === this.props.auth.user.email) ? 
                                     <div className = "readMessage">
@@ -66,12 +103,12 @@ class Messages extends Component {
                                           <div className="inboxCheckBox">
                                                   <input type="checkbox" className="mail-checkbox" />
                                           </div>
-                                          {message.isStarred ?
-                                            <div className="floatLeft inboxStar">
+                                          {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
+                                            <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
                                                 <i className="fa fa-star inbox-started" />
                                               </div>
                                             :
-                                            <div className="floatLeft inboxStar">
+                                            <div className="floatLeft inboxStar" onClick = {(e) =>  this.starMessage(e, message.message_id)}>
                                               <i className="fa fa-star unstar"/>
                                             </div>
                                           }

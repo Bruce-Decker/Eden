@@ -33,8 +33,8 @@ router.post('/sendMessage', (req, res) => {
    })
 })
 
-router.get('/getIndividualMessage', (req, res) => {
-  var message_id = req.body.message_id
+router.get('/getIndividualMessage/:message_id', (req, res) => {
+  var message_id = req.params.message_id
   Message.findOne({message_id: message_id}, function(err, docs){
        if (err) {
          res.send({err})
@@ -65,10 +65,14 @@ router.post('/replyEmail', (req, res) => {
             message_id: message_id,
           },
           {
+            $set: {
+                isRead: [{email: email}]
+             },
              $push: {
                 replies: data
-             },
-             isRead: false
+             }
+            
+
           }, function(err, docs) {
             if (err) {
               res.send({Error: err})
@@ -138,6 +142,7 @@ router.post('/starMessage', function(req, res) {
             if (err) {
                 res.send({Error: err})
               } else {
+                  console.log(docs)
                 res.send(docs)
             }
         }
