@@ -185,6 +185,7 @@ class Detail extends Component {
                               comment={e}
                               handleLike={this.handleLike}
                               handleDislike={this.handleDislike}
+                              handleDelete={this.handleDelete}
                             />
                           </div>
                 })}
@@ -223,7 +224,13 @@ class Detail extends Component {
 
   async componentWillMount() {
     const response = await axios.get('/services/' + this.props.match.params.id)
-    response.data.reviews.comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    response.data.reviews.comments.sort((a, b) =>  {
+      const user_name = this.props.auth.user.name
+      if ((a.user_name === user_name && b.user_name === user_name) || (a.user_name !== user_name && b.user_name !== user_name) ) {
+        return new Date(b.date) - new Date(a.date)
+      }
+      return a.user_name === user_name ? -1 : 1
+    });
     this.setState({ service: response.data, loading: false })
   }
 
@@ -271,6 +278,19 @@ class Detail extends Component {
 
   handleClose = () => {
     this.setState({ write: false })
+  }
+
+  handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this review?')) {
+      axios.delete('/services/' + this.state.service._id + '/comments/' + id, { data:{ user_id: this.props.auth.user.id } }
+      ).then(function (response) {
+        window.location.reload()
+      })
+      .catch(function (error) {
+        console.log(error);
+        window.alert('An error occurred, please try again later.')
+      });
+    }
   }
 
   getRatingImage = (rating) => {
