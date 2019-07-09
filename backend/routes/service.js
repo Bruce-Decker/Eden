@@ -251,19 +251,61 @@ router.delete('/:id', function(req, res) {
   const id = req.params.id
   const user_id = req.body.user_id
   Service.findOneAndDelete({ 
-      id: id,
-      user_id: user_id
+    id: id,
+    user_id: user_id
+  },
+  function(err) {
+    if (err) {
+      console.log(err)
+      res.json({ msg: 'An error occurred, please try again later.' });        
+    } else {
+      console.log('service deleted')
+      fs.removeSync('../client/public/images/service/' + id); 
+      res.json({ msg: 'service deleted' });
+    }
+  })
+})
+
+router.delete('/:sid/comments/:cid', function(req, res) {
+  const user_id = req.body.user_id
+  Service.findOne({
+    _id: req.params.sid,
+    "reviews.comments._id": req.params.cid
+  }, { 
+    rating: 1,
+    "reviews.rating": 1,
+    "reviews.count": 1,
+    "reviews.comments.$": 1
+  }).then(async (service) => {
+    service = service.toObject()
+    let comment = service.reviews.comments[0]
+    if (comment.user_id != user_id) throw 'invalid user id'
+    service.reviews.count -= 1
+    service.reviews.rating -= service.reviews.comments[0].rating
+    service.rating = service.reviews.count > 0 ? service.reviews.rating / service.reviews.count : 0
+    Service.findOneAndUpdate({
+      _id: req.params.sid,
+    }, {
+      $pull: {
+        "reviews.comments": { _id: req.params.cid }
+      },
+      "reviews.rating": service.reviews.rating,
+      "reviews.count": service.reviews.count,
+      rating: service.rating
     },
-    function(err) {
+    function(err, data) {
       if (err) {
         console.log(err)
         res.json({ msg: 'An error occurred, please try again later.' });        
       } else {
-        console.log('service deleted')
-        fs.removeSync('../client/public/images/service/' + id); 
-        res.json({ msg: 'service deleted' });
+        console.log("comment deleted")
+        res.json({ msg: "comment deleted"});
       }
-  })
+    })
+  }).catch(err => {
+    console.log(err);
+    res.json({ msg: 'An error occurred, please try again later.' });
+  });
 })
 
 function extractRequestData(req) {

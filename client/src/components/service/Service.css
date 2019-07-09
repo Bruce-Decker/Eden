@@ -229,6 +229,10 @@
   cursor: pointer;
 }
 
+.service-close:hover {
+  cursor: pointer;
+}
+
 #service-map-address {
   border: 0;
   outline: 0;

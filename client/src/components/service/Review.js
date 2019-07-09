@@ -8,14 +8,24 @@ import smiley from '../../images/smiley.png'
 import dislike from '../../images/dislike.png'
 import smiley_clicked from '../../images/smiley_clicked.png'
 import dislike_clicked from '../../images/dislike_clicked.png'
+import close from '../../images/close.png'
 
 
 class Review extends Component {
+  backgroundColor = "#f7f7ff"
   render() {
     const date = new Date(this.props.comment.date).toLocaleDateString("en-US")
     return (
       <div>
-        <Card id="service-item" className="service-list-item" style={{borderRadius: "1rem", backgroundColor: "#f7f7ff"}}>
+        <Card id="service-item" className="service-list-item" style={{borderRadius: "1rem", backgroundColor: this.backgroundColor}}>
+          {this.props.user_name === this.props.comment.user_name  && 
+            <img 
+              src={close} alt="close" 
+              className="service-close" 
+              style={{width: "20px", height: "20px", position: "absolute", right: "-10px", top: "-10px"}}
+              onClick={() => this.props.handleDelete(this.props.comment._id)}
+            />
+          }
           <Card.Body>
             <Row>
               <Col md={4}>
@@ -69,6 +79,12 @@ class Review extends Component {
       return dislike_clicked
     }
     return dislike
+  }
+
+  componentWillMount() {
+    if (this.props.user_name === this.props.comment.user_name) {
+      this.backgroundColor = "#f4fff5"
+    }
   }
 }
 
