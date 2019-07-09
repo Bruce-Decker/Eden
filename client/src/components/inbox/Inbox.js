@@ -9,9 +9,15 @@ import { Card } from 'react-bootstrap'
 import moment from 'moment'
 import Moment from 'react-moment';
 import Messages from './Messages'
+import Modal from 'react-modal';
+import ComposeModal from './ComposeModal'
 
 var inbox_response
 var sent_response
+
+
+Modal.setAppElement('#root')
+
 class Inbox extends Component {
 
     constructor() {
@@ -28,9 +34,24 @@ class Inbox extends Component {
               sender_email: '',
               receiver_email: '',
               time: '',
-              replies: []
+              replies: [],
+              modalIsOpen: false
         }
     }
+
+    openModal = () => {
+      this.setState({modalIsOpen: true});
+    }
+  
+    afterOpenModal = () => {
+      // references are now sync'd and can be accessed.
+      //this.subtitle.style.color = '#f00';
+    }
+  
+    closeModal = () => {
+      this.setState({modalIsOpen: false});
+    }
+  
 
 
     showIndividualMessage = (message_id) => {
@@ -110,6 +131,7 @@ class Inbox extends Component {
                       sender_name: indivisual_message.data.sender_name,
                       sender_email: indivisual_message.data.sender_email,
                       receiver_email: indivisual_message.data.receiver_email,
+                      receiver_name: indivisual_message.data.receiver_name,
                       time: indivisual_message.data.time,
                       replies: indivisual_message.data.replies
                   })
@@ -125,6 +147,13 @@ class Inbox extends Component {
         return (
             <div>
             <RegularBanner />
+            <ComposeModal 
+                 isOpen={this.state.modalIsOpen}
+                 onAfterOpen={this.afterOpenModal}
+                 onRequestClose={this.closeModal}
+                 contentLabel="Example Modal"
+            >
+            </ComposeModal>
             <div className="container">
         <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
         <div className="mail-box">
@@ -142,7 +171,7 @@ class Inbox extends Component {
               </a>
             </div>
             <div className="inbox-body">
-              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose">
+              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {this.openModal}>
                 Compose
               </a>
               {/* Modal */}
@@ -319,7 +348,34 @@ class Inbox extends Component {
 
              {this.state.showIndividualMessage ?
                <div>
-                   <span>{this.state.subject}</span>
+                   <div>
+                       <span className = "individual_message_label">Subject: </span>
+                       <span>{this.state.subject}</span>
+                  </div>
+                   <div>
+                          <span className = "individual_message_label">From: </span>
+                          <span>{this.state.sender_name}</span>
+                          <span>{`  <${this.state.sender_email}>`}</span>
+                   </div>
+                   <div>
+                       <span className = "individual_message_label">To: </span>
+                       <span>{this.state.receiver_name}</span>
+                     
+                      <span>{`  <${this.state.receiver_email}>`}</span>
+                        
+
+                   </div>
+                   <div className = "space">
+
+                  </div>
+                   <div>
+                          {this.state.message.split("\n").map((i,key) => {
+                                  return <div key={key}>{i}</div>;
+                            })}
+
+
+                  </div>
+
               </div>
               : null }
              

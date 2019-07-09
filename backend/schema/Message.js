@@ -18,6 +18,9 @@ const MessageSchema = new Schema({
         type: String,
         required: true
     },
+    receiver_name: {
+        type: String,
+    },
     subject: {
         type: String,
         required: true

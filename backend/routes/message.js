@@ -2,35 +2,86 @@ const express = require('express')
 const router = express.Router()
 const Message = require('../schema/Message')
 const uuidv4 = require('uuid/v4');
-
+const User = require('../schema/userModel');
 
 router.post('/sendMessage', (req, res) => {
     var message_id = uuidv4()
     var sender_email = req.body.sender_email
     var sender_name = req.body.sender_name
     var receiver_email = req.body.receiver_email
+    var receiver_name
     var subject = req.body.subject
     var message = req.body.message
-    var time = Date.now()
+    var isDraft
+     if (req.body.isDraft) {
+        isDraft = req.body.isDraft
+     }
     
-    var data = {
-       message_id,
-       sender_email,
-       sender_name,
-       receiver_email,
-       subject,
-       message,
-       time
-    }
 
-    Message.create(data, function(err, newlyCreated) {
+    User.findOne({email: receiver_email}, function(err, docs) {
         if (err) {
-            console.log("Error Data");
-             res.send({msg: "False"});
-        } else {
-             res.send(newlyCreated);
+            console.log(err)
+        } 
+        if (docs) {
+            receiver_name = docs.name
+            var time = Date.now()
+            var data
+         if (req.body.isDraft) {
+            data = {
+                message_id,
+                sender_email,
+                sender_name,
+                receiver_email,
+                receiver_name,
+                subject,
+                message,
+                isDraft,
+                time
+            }
+         } else {
+            data = {
+                message_id,
+                sender_email,
+                sender_name,
+                receiver_email,
+                receiver_name,
+                subject,
+                message,
+                time
+         }
+        } 
+            Message.create(data, function(err, newlyCreated) {
+                if (err) {
+                    console.log("Error Data");
+                     res.send({msg: "False"});
+                } else {
+                     res.send(newlyCreated);
+                }
+           })
         }
-   })
+    })
+    
+//     var time = Date.now()
+    
+//     var data = {
+//        message_id,
+//        sender_email,
+//        sender_name,
+//        receiver_email,
+//        receiver_name,
+//        subject,
+//        message,
+//        time
+//     }
+
+//     Message.create(data, function(err, newlyCreated) {
+//         if (err) {
+//             console.log("Error Data");
+//              res.send({msg: "False"});
+//         } else {
+//              res.send(newlyCreated);
+//         }
+//    })
 })
 
 router.get('/getIndividualMessage/:message_id', (req, res) => {
@@ -278,7 +329,7 @@ router.post('/deleteMessage', function(req, res) {
 router.get('/getInboxMessages/:receiver_email', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(receiver_email)
-    Message.find().or([{receiver_email: receiver_email, isDraft: { "$nin": [{email: receiver_email}] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }},
+    Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }},
         {sender_email: receiver_email, "replies.0": {"$exists": true}, isDraft: { "$nin": [{email: receiver_email}] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {

@@ -482,3 +482,15 @@ ul {
     float: right;
 }
 
+.individual_message_label {
+    font-weight: bold;
+}
+
+.email_user_container {
+    width: 600px;
+}
+
+.save_as_draft {
+    margin-left: 10px;
+}
+
