@@ -10,11 +10,11 @@ def main():
   #client = MongoClient("mongodb://localhost:27017/eden")
   db = client.test
 
-  # itemUser(db)
-  # cart(db)
-  item(db)
-  # properties(db)
-  # itemRatings(db)
+  #itemUser(db)
+  #cart(db)
+  #item(db)
+  #properties(db)
+  #itemRatings(db)
   #services(db)
 
 # ItemUser

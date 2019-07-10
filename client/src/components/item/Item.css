@@ -36,6 +36,14 @@
   font-size: 1.5rem;
 }
 
+.item-bids-hide {
+  display: none;
+}
+
+.item-bids-show {
+  display: block;
+}
+
 .required-asterisk {
   color: red;
   font-weight: bold;

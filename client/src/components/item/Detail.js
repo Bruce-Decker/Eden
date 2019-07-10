@@ -25,6 +25,9 @@ class Detail extends Component {
     this.state = {
       item: null
     };
+
+    this.getMaxBid = this.getMaxBid.bind(this);
+    this.getBidVisibility = this.getBidVisibility.bind(this);
   }
 
   async componentWillMount() {
@@ -36,6 +39,28 @@ class Detail extends Component {
         })
     }
    
+  }
+
+  getBidVisibility(bid_price) {
+    // no bid price means that bidding is not supported for this item
+    if (!('bid_price' in this.state.item) || bid_price == null) {
+      return 'item-bids-hide';
+    } else {
+      return 'item-bids-show';
+    }
+  }
+
+  getMaxBid(bids) {
+    if(bids.length === 0) {
+      return 'No bids yet!';
+    }
+
+    // get the object containing the max bid
+    let maxo = bids.reduce(function(prev, curr) {
+      return (prev.amount > curr.amount) ? prev : curr
+    });
+
+    return 'Current bid: $' + maxo.amount.toFixed(2) + ' -- ' + maxo.email;
   }
 
   render() {
@@ -68,8 +93,16 @@ class Detail extends Component {
                 return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
               })}
             </div>
-            <div className="item-price">${item.price}</div>
-            <div ><CartAddButton item={this.state.item} cls={"addtocart-btn-lg"}/><span style={{marginLeft: "1rem"}}></span></div>
+            <div className="item-price">${item.price.toFixed(2)}</div>
+            <div>
+              <CartAddButton item={this.state.item} cls={"addtocart-btn-sm"}/>
+              <span style={{marginLeft: "1rem"}}></span>
+            </div>
+            <hr/>
+            <div className={this.getBidVisibility(this.state.item.bids)}>
+              <span>{this.getMaxBid(this.state.item.bids)}</span>
+            </div>
+            <hr/>
           </div>
           </div>
           <div className="col-1"/>
