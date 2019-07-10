@@ -12,10 +12,10 @@ def main():
 
   # itemUser(db)
   # cart(db)
-  # item(db)
+  item(db)
   # properties(db)
   # itemRatings(db)
-  services(db)
+  #services(db)
 
 # ItemUser
 def itemUser(db):
@@ -92,7 +92,9 @@ def item(db):
           'description': '{0} {1} {2}'.format(a,c,i),
           'price': float(randrange(500,10000))/100,
           'average_rating': randint(1,5),
-          'ar': 'ar_default.png' if randint(0,1) > 0.5 else None
+          'ar': 'ar_default.png' if randint(0,1) > 0.5 else None,
+          'bid_price': float(randrange(1,100))/100,
+          'bids': generateBids(randint(0,5))
         }
 
         result = db.items.insert_one(item)
@@ -128,6 +130,26 @@ def item(db):
         result = db.itemUsers.insert_one(itemUser)
 
   print('Finished inserting {0} items into ItemUsers collection.'.format(itemId))
+
+def generateBids(k):
+  arr = []
+  emails = ['adam@gmail.com','bob@gmail.com','cindy@gmail.com','david@gmail.com','eric@gmail.com']
+  amounts = [2.00,2.50,3.00,3.50,4.00]
+  dates = ['04/06/2019', '03/01/2019', '05/08/2018', '11/24/2017', '02/12/2019', '01/05/2019']
+
+  if k == 0:
+    return arr
+  else:
+    for i in range(k):
+      date = datetime.strptime(dates[randint(0, len(dates) - 1)], '%m/%d/%Y')
+      bid = {
+        'email': emails[i],
+        'amount': amounts[i],
+        'time': date
+      }
+      arr.append(bid)
+  
+  return arr
 
 # Properties
 def properties(db):
