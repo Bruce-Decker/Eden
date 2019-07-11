@@ -30,8 +30,9 @@ router.get('/', function(req, res) {
     Service.find({
       user_name: user_name
     }, {
-      "reviews.rating": 0,
-      "reviews.comments": 0
+      "_id": 1,
+      "name": 1,
+      "rating": 1
     }).then(async (services) => {
       console.log(services)
       res.json(services);

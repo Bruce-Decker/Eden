@@ -1,9 +1,8 @@
 .service-title {
-  text-align: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
   font-weight: bold;
   font-size: 2rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .service-card-category .service-card-img{
@@ -231,6 +230,11 @@
 
 .service-close:hover {
   cursor: pointer;
+}
+
+.service-list:hover {
+  cursor: pointer;
+  background-color: #f4fff5;
 }
 
 #service-map-address {
