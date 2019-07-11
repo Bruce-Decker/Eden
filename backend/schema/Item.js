@@ -131,7 +131,18 @@ const ItemSchema = new Schema({
         type: String,
     },
     ar: String,
-    bid_price: Number // not required
+    bid_price: Number,
+    bids: [{
+        email: {
+            type: String
+        },
+        amount: {
+            type: Number
+        },
+        time: {
+            type: Date
+        }
+    }]
 })
 
 module.exports = Item = mongoose.model('item', ItemSchema);
