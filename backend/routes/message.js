@@ -84,13 +84,37 @@ router.post('/sendMessage', (req, res) => {
 //    })
 })
 
-router.get('/getIndividualMessage/:message_id', (req, res) => {
+router.get('/getIndividualMessage/:message_id/:email', (req, res) => {
   var message_id = req.params.message_id
+  var email = req.params.email
+  var data = {
+      email
+  }
+  console.log(email)
   Message.findOne({message_id: message_id}, function(err, docs){
        if (err) {
          res.send({err})
        } else {
            res.send(docs)
+           Message.findOneAndUpdate(
+            {
+                message_id: message_id,
+            },
+            {
+             $push: {
+                 isRead: data
+              }
+            }, function(err, docs) {
+                if (err) {
+                    //res.send({Error: err})
+                    console.log(err)
+                  } else {
+                    //res.send(docs)
+                    console.log(docs)
+                }
+            }
+     
+         )
        }
   })
 })
@@ -329,8 +353,8 @@ router.post('/deleteMessage', function(req, res) {
 router.get('/getInboxMessages/:receiver_email', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(receiver_email)
-    Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }},
-        {sender_email: receiver_email, "replies.0": {"$exists": true}, isDraft: { "$nin": [{email: receiver_email}] }, isDeleted: { "$nin": [{email: receiver_email}] }, isTrashed: { "$nin": [{email: receiver_email}] }}])
+    Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
+        {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {
@@ -345,7 +369,7 @@ router.get('/getSentMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
     console.log(sender_email)
     
-    Message.find({sender_email: sender_email, isDraft: {"$nin": [{email: sender_email}]}, isDeleted: {"$nin": [{email: sender_email}]}, isTrashed: {"$nin": [{email: sender_email}]}})
+    Message.find({sender_email: sender_email, 'isDraft.email': {"$nin": [sender_email]}, 'isDeleted.email': {"$nin": [sender_email]}, 'isTrashed.email': {"$nin": [sender_email]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {
@@ -358,8 +382,9 @@ router.get('/getSentMessages/:sender_email', function(req, res) {
 
 router.get('/getStarredMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
+    console.log(sender_email)
     
-    Message.find({sender_email: sender_email, isStarred: {"$in": [{email: sender_email}]}})
+    Message.find().or([{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}])
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {

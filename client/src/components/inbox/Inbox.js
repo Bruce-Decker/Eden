@@ -14,7 +14,7 @@ import ComposeModal from './ComposeModal'
 
 var inbox_response
 var sent_response
-
+var important_response
 
 Modal.setAppElement('#root')
 
@@ -23,10 +23,13 @@ class Inbox extends Component {
     constructor() {
         super()
         this.state = {
+              trashed_message_ids: [],
               inboxMessages: [],
               sentMessages: [],
+              importantMessages: [],
               showInboxMessage: false,
               showSentMessage: false,
+              showImportantMessage: false,
               showIndividualMessage: false,
               subject: '',
               message: '',
@@ -37,6 +40,26 @@ class Inbox extends Component {
               replies: [],
               modalIsOpen: false
         }
+    }
+
+
+    trashMessages = (message_id) => {
+      alert(message_id)
+     
+   }
+
+
+    selectTrashMessages = (e, message_id) => {
+        e.stopPropagation();
+       const trashed_message_ids = this.state.trashed_message_ids
+       let newArr = []
+       if (!trashed_message_ids.includes(message_id)) {
+          newArr = [...trashed_message_ids, message_id]
+       } else {
+           newArr = trashed_message_ids.filter(a => a !== message_id);
+       }
+
+       this.setState({ trashed_message_ids: newArr }, () => console.log('updated state', newArr))
     }
 
     openModal = () => {
@@ -93,6 +116,7 @@ class Inbox extends Component {
    
          inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
          sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
+         important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email)
         
          if (email_selection == "inbox" || email_selection == undefined) {
            console.log(inbox_response.data)
@@ -100,7 +124,8 @@ class Inbox extends Component {
                   this.setState({
                     inboxMessages: inbox_response.data,
                     showInboxMessage: true,
-                    showSentMessage: false
+                    showSentMessage: false,
+                    showImportantMessage: false
                   })
               }
          }
@@ -110,16 +135,30 @@ class Inbox extends Component {
                 this.setState({
                   sentMessages: sent_response.data,
                   showSentMessage: true,
-                  showInboxMessage: false
+                  showInboxMessage: false,
+                  showImportantMessage: false
                })
             } 
+         }
+
+         if (email_selection == "important") {
+           if (important_response.data) {
+              this.setState({
+                   importantMessages: important_response.data,
+                   showSentMessage: false,
+                   showInboxMessage: false,
+                   showImportantMessage: true
+
+              })
+           }
+           console.log(important_response.data)
          }
 
          if (email_selection == "readEachEmail") {
 
            // alert(message_id)
             console.log(message_id)
-            indivisual_message = await axios.get('/message/getIndividualMessage/' + message_id)
+            indivisual_message = await axios.get('/message/getIndividualMessage/' + message_id + '/' + this.props.auth.user.email)
             console.log(indivisual_message.data)
             if (indivisual_message.data) {
                   this.setState({
@@ -258,7 +297,15 @@ class Inbox extends Component {
 
               </li>
               <li>
-                <a href="#"><i className="fa fa-bookmark-o" /> Important</a>
+
+                 <Link to={{
+                     pathname: "/inbox/" + this.props.auth.user.email,
+                     search: "?emailType=important"
+                 }}>
+                     <i className="fa fa-bookmark-o" /> Important
+                     
+                </Link>
+
               </li>
               <li>
                 <a href="#"><i className=" fa fa-external-link" /> Drafts <span className="label label-info pull-right">30</span></a>
@@ -282,68 +329,24 @@ class Inbox extends Component {
               </form>
             </div>
             <div className="inbox-body">
-              <div className="mail-option">
-                <div className="chk-all">
-                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" />
-                  <div className="btn-group">
-                    <a data-toggle="dropdown" href="#" className="btn mini all" aria-expanded="false">
-                      All
-                      <i className="fa fa-angle-down " />
-                    </a>
-                    <ul className="dropdown-menu">
-                      <li><a href="#"> None</a></li>
-                      <li><a href="#"> Read</a></li>
-                      <li><a href="#"> Unread</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="btn-group">
-                  <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" className="btn mini tooltips">
-                    <i className=" fa fa-refresh" />
-                  </a>
-                </div>
-                <div className="btn-group hidden-phone">
-                  <a data-toggle="dropdown" href="#" className="btn mini blue" aria-expanded="false">
-                    More
-                    <i className="fa fa-angle-down " />
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
-                    <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
-                    <li className="divider" />
-                    <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul>
-                </div>
-                <div className="btn-group">
-                  <a data-toggle="dropdown" href="#" className="btn mini blue">
-                    Move to
-                    <i className="fa fa-angle-down " />
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
-                    <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
-                    <li className="divider" />
-                    <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul>
-                </div>
-                <ul className="unstyled inbox-pagination">
-                  <li><span>1-50 of 234</span></li>
-                  <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-left  pagination-left" /></a>
-                  </li>
-                  <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-right pagination-right" /></a>
-                  </li>
-                </ul>
-              </div>
-             
+
+
+
+
+
+
+            
 
 
             {this.state.showInboxMessage ? 
-              <Messages messages = {this.state.inboxMessages} history = {this.props.history}/>
+              <Messages messages = {this.state.inboxMessages} history = {this.props.history} />
               : null }
             {this.state.showSentMessage ? 
              <Messages messages = {this.state.sentMessages} history = {this.props.history}/>
+             : null }
+
+           {this.state.showImportantMessage ? 
+             <Messages messages = {this.state.importantMessages} history = {this.props.history} />
              : null }
 
              {this.state.showIndividualMessage ?
