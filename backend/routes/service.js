@@ -8,8 +8,11 @@ const uuidv4 = require('uuid/v4');
 const itemsPerPage = 15
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    var dir = '../client/public/images/service/' + req.body.id
-    if (file.fieldname === 'logo') {
+    var dir = '../client/public/images/service/' + req.body._id
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
+    if (file.fieldname === 'file') {
       dir += '/logo'
     }
     if (!fs.existsSync(dir)){
@@ -32,7 +35,8 @@ router.get('/', function(req, res) {
     }, {
       "_id": 1,
       "name": 1,
-      "rating": 1
+      "rating": 1,
+      "category": 1
     }).then(async (services) => {
       console.log(services)
       res.json(services);
@@ -85,8 +89,9 @@ router.get('/:id', function(req, res) {
   });
 });
 
-router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'logo', maxCount: 1}]), function(req, res) {
+router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'file', maxCount: 1}]), function(req, res) {
   const data = extractRequestData(req)
+  console.log(data)
   Service.create(data, function(err, _) {
     if (err) {
       console.log(err)
@@ -310,12 +315,13 @@ router.delete('/:sid/comments/:cid', function(req, res) {
 })
 
 function extractRequestData(req) {
-  const id = req.body.id
+  const _id = req.body._id
   const address = req.body.address
   const state = req.body.state
   const city = req.body.city
   const zip = req.body.zip
   const name = req.body.name
+  const category = req.body.type
   const desc = req.body.desc
   const email = req.body.email
   const phone = req.body.phone
@@ -327,24 +333,19 @@ function extractRequestData(req) {
   const logo = req.body.logo
   const images = req.body.images
   const data = {
-    id,
+    _id,
     address,
     state,
     city,
     zip,
     name,
+    category,
     desc,
     email,
     phone,
     services,
     lat,
     lng,
-    home_type,
-    listing_type,
-    num_bath,
-    num_bed,
-    space,
-    price,
     user_id,
     user_name,
     logo,

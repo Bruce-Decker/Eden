@@ -66,9 +66,9 @@ class Upload extends Component {
     )
   }
 
-  onDrop(picture) {
+  onDrop(pictures) {
     this.setState({
-        pictures: this.state.pictures.concat(picture),
+        pictures: pictures,
     });
   }
 

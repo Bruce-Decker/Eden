@@ -43,16 +43,19 @@ const ServiceSchema = new Schema({
     },
     rating: {
       type: Number,
-      required: true
+      required: true,
+      default: 0
     },
     reviews: {
       rating: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
       },
       count: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
       },
       comments: {
         type: [
