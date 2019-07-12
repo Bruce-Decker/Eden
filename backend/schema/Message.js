@@ -30,6 +30,7 @@ const MessageSchema = new Schema({
         required: true
     },
     isRead: [{
+        _id:false,
        email: {
           type: String,
           required: true

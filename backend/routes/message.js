@@ -98,12 +98,15 @@ router.get('/getIndividualMessage/:message_id/:email', (req, res) => {
            res.send(docs)
            Message.findOneAndUpdate(
             {
-                message_id: message_id,
+                message_id: message_id
             },
             {
-             $push: {
-                 isRead: data
-              }
+            //  $push: {
+            //      isRead: data
+            //   }
+             $addToSet: {
+                isRead: {email: email}
+             }
             }, function(err, docs) {
                 if (err) {
                     //res.send({Error: err})
@@ -277,6 +280,9 @@ router.post('/readMessage', function(req, res) {
 
 router.post('/trashMessage', function(req, res) {
     var message_id = req.body.message_id
+    message_id.forEach(function(element) {
+        console.log(element)
+    })
     var email = req.body.email
     var data = {
        email: email
@@ -397,10 +403,10 @@ router.get('/getStarredMessages/:sender_email', function(req, res) {
 
 
 
-router.get('/getDraftedMessages', function(req, res) {
-    var sender_email = req.query.email
+router.get('/getDraftedMessages/:sender_email', function(req, res) {
+    var sender_email = req.params.sender_email
     
-    Message.find({sender_email: sender_email, isDraft: {"$in": [{email: sender_email}]}})
+    Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {
@@ -415,7 +421,7 @@ router.get('/getDraftedMessages', function(req, res) {
 router.get('/getTrashedMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
     
-    Message.find({sender_email: sender_email, isTrashed: {"$in": [{email: sender_email}]}})
+    Message.find({sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {
