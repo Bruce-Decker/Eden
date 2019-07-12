@@ -44,6 +44,65 @@
   display: block;
 }
 
+.bid-max-amount {
+  font-weight: bold;
+}
+
+.bid-max-email-mine {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.bid-max-email-yours {
+  font-weight: bold;
+  color: #ef2828;
+}
+
+.make-bid-btn {
+  font-size: 12pt;
+  width: 115px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 10px;
+  color: white;
+  border-width: 1px;
+  border-color: #3091ff;
+  border-radius: 5px;
+  background-color: #3091ff;
+  transition: .25s ease;
+  text-decoration: none;
+}
+
+.make-bid-btn:active, .make-bid-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.make-bid-btn:active {
+  border-style: solid;
+}
+
+.make-bid-btn:hover {
+  font-size: 13pt;
+  background: transparent;
+  color: black;
+}
+
+.make-bid-dlr {
+  font-size: 13pt;
+  font-weight: bold;
+}
+
+.make-bid-txt {
+  width: 70px;
+  line-height: 18pt;
+  border: 1px solid #3091ff;
+  border-radius: 5px;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  font-size: 13pt;
+}
+
 .required-asterisk {
   color: red;
   font-weight: bold;

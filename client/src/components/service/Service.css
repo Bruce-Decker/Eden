@@ -237,6 +237,13 @@
   background-color: #f4fff5;
 }
 
+.service-offered {
+  background-color: #f7f7ff;
+  border-radius: 1rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
 #service-map-address {
   border: 0;
   outline: 0;
@@ -245,4 +252,22 @@
   color: #6c757d;
   font-size: 95%;
   width: 100%;
+}
+
+#service-offered {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #b6bbc0;
+  font-size: 95%;
+  margin-right: 0.25rem;
+}
+
+#service-address {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid #b6bbc0;
+  color: #6c757d;
+  font-size: 95%;
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Item.css';
 import { BrowserRouter as Route, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import axios from 'axios'
 
@@ -23,11 +25,14 @@ class Detail extends Component {
   constructor(props){
     super(props)
     this.state = {
-      item: null
+      item: null,
+      new_bid: -1
     };
 
     this.getMaxBid = this.getMaxBid.bind(this);
     this.getBidVisibility = this.getBidVisibility.bind(this);
+    this.handleClickBid = this.handleClickBid.bind(this);
+    this.handleNewBid = this.handleNewBid.bind(this);
   }
 
   async componentWillMount() {
@@ -60,7 +65,80 @@ class Detail extends Component {
       return (prev.amount > curr.amount) ? prev : curr
     });
 
-    return 'Current bid: $' + maxo.amount.toFixed(2) + ' -- ' + maxo.email;
+    let email_class = '';
+    let email = this.props.auth.user.email;
+    if(email === maxo.email) {
+      email_class = 'bid-max-email-mine';
+    } else {
+      email_class = 'bid-max-email-yours';
+    }
+
+    return (
+      <span>
+        <span className="bid-max-amount">
+          {maxo.amount.toFixed(2)}
+        </span>
+        <span>
+          &nbsp;--&nbsp;
+        </span>
+        <span className={email_class}>
+          {maxo.email}
+        </span>
+      </span>
+    );
+  }
+
+  handleClickBid() {
+    let bid = parseFloat(this.state.new_bid);
+    let email = this.props.auth.user.email;
+    
+    // get the object containing the max bid
+    let maxo = this.state.item.bids.reduce(function(prev, curr) {
+      return (prev.amount > curr.amount) ? prev : curr
+    });
+
+    if(email === maxo.email) {
+      toast.error("You already have the highest bid!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else if(bid <= maxo.amount) {
+      toast.error("Bid must be higher than the previous bid!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else {
+      toast.success("Bid successfully placed!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+
+      // TODO: update state
+    }
+  }
+
+  handleNewBid(e) {
+    this.setState({
+      new_bid: e.target.value
+    })
   }
 
   render() {
@@ -100,7 +178,12 @@ class Detail extends Component {
             </div>
             <hr/>
             <div className={this.getBidVisibility(this.state.item.bids)}>
-              <span>{this.getMaxBid(this.state.item.bids)}</span>
+              Current bid: ${this.getMaxBid(this.state.item.bids)}
+            </div>
+            <div>
+              <button className="make-bid-btn" onClick={this.handleClickBid}>Make a Bid</button>
+              <span className="make-bid-dlr">$</span>
+              <input type="text" class="make-bid-txt" onChange={this.handleNewBid}></input>
             </div>
             <hr/>
           </div>
@@ -108,8 +191,9 @@ class Detail extends Component {
           <div className="col-1"/>
         </div>
       );
-    } 
-    return null
+    } else {
+      return null;
+    }
   }  
  
 }
@@ -136,4 +220,30 @@ function getImage(category) {
   }
 }
 
-export default Detail
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+};
+
+export default connect(
+  mapStateToProps
+)(Detail);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

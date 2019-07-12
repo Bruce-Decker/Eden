@@ -20,11 +20,11 @@ class Item extends Component {
             <Card.Body>
               <Row>
                 <Col md={4}>
-                  <Card.Img className="service-list-img" src={'/images/service/' + this.props.logo}/>
+                  <Card.Img className="service-list-img" src={'/images/service/' + this.props.id + '/logo/' + this.props.logo}/>
                 </Col>
                 <Col>
                   <Card.Title style={{color: "black"}}>{this.props.name}</Card.Title>
-                  <Card.Text style={{color: "grey"}}>
+                  <Card.Text style={{color: "grey", minHeight: "60px"}}>
                     <LinesEllipsis
                       text={this.props.desc}
                       maxLine='3'
@@ -37,7 +37,10 @@ class Item extends Component {
                   {Array.from(Array(5), (e, i) => {
                     return <img key={i} src={this.getRatingImage(this.props.rating - i)} alt="Rating" style={{width: "18px", height: "18px", paddingBottom: "0.225rem", paddingRight: "0.225rem"}}></img>
                   })}
-                  <span style={{marginLeft: "1rem", color: "#53b46e"}}>{this.props.count} reviews</span>
+                  { this.props.count > 1 ? 
+                    <span style={{marginLeft: "1rem", color: "#53b46e"}}>{this.props.count} reviews</span> :
+                    <span style={{marginLeft: "1rem", color: "#53b46e"}}>{this.props.count} review</span> 
+                  }
                   <div style={{marginTop: "1rem", color: "black"}}>
                     <img className="service-contact-icon" alt="phone" src={phone}/> {this.props.phone}
                     <img className="service-contact-icon" alt="email" src={email} style={{marginLeft: "1.5rem"}}/> {this.props.email}

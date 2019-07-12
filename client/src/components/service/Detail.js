@@ -81,7 +81,10 @@ class Detail extends Component {
                   {Array.from(Array(5), (e, i) => {
                     return <img key={i} src={this.getRatingImage(this.state.service.rating - i)} alt="Rating" style={{width: "22px", height: "22px", paddingBottom: "0.25rem", paddingRight: "0.25rem"}}></img>
                   })}
-                  <span style={{marginLeft: "1rem", color: "#53b46e", fontSize: "1.1rem"}}>{this.state.service.reviews.count} reviews</span>
+                  { this.state.service.reviews.count > 1 ? 
+                    <span style={{marginLeft: "1rem", color: "#53b46e", fontSize: "1.1rem"}}>{this.state.service.reviews.count} reviews</span> :
+                    <span style={{marginLeft: "1rem", color: "#53b46e", fontSize: "1.1rem"}}>{this.state.service.reviews.count} review</span>
+                  }
                 </div>
                 <div style={{color: "rgb(165, 165, 165)"}}>{this.state.service.desc}</div>
               </Col>
@@ -127,7 +130,7 @@ class Detail extends Component {
                     <Carousel style={{minHeight: "280px"}}>
                       {Array.from(this.state.service.images, (e, i) => {
                         return  <div key={i}>
-                                  <Card.Img alt="img" src={'/images/service/' + e} className="d-block w-100 service-image"/>
+                                  <Card.Img alt="img" src={'/images/service/' + this.state.service._id + '/' + e} className="d-block w-100 service-image"/>
                                 </div>
                       })}
                     </Carousel>
@@ -178,6 +181,11 @@ class Detail extends Component {
                 loader={<Spinner style={{width: "35px", height: "35px", position: "absolute", left: "50%"}} animation="border" variant="success" />}
               >
                 {Array.from(this.state.comments, (e, i) => {
+                  if (e === undefined) {
+                    return  <div style={{minHeight: "200px", textAlign: "center", marginTop: "4rem", color: "grey", fontSize: "1.15rem"}}>
+                              Be the first to give a review!
+                            </div>
+                  }
                   return  <div key={i} style={{marginBottom: "2rem"}}>
                             <Review 
                               id={i}
