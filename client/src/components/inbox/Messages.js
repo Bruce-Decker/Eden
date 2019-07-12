@@ -23,10 +23,23 @@ class Messages extends Component {
     }
 
     trashMessages = () => {
-        alert("fdssdfdsf")
+       
+        var message_id_array = []
         this.state.selected_message_ids.map(id => {
-            console.log(id)
+            message_id_array.push(id)
         })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/trashMessage', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
        
        
      }

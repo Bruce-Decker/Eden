@@ -287,9 +287,11 @@ router.post('/trashMessage', function(req, res) {
     var data = {
        email: email
     }
-    Message.findOneAndUpdate(
+    Message.updateMany(
        {
-           message_id: message_id,
+        message_id: {
+            $in: message_id
+        }
        },
        {
           $push: {
@@ -310,7 +312,7 @@ router.post('/trashMessage', function(req, res) {
 router.post('/untrashMessage', function(req, res) {
     var message_id = req.body.message_id
     var email = req.body.email
-    Message.findOneAndUpdate(
+    Message.updateMany(
        {
            message_id: message_id,
        },
@@ -336,9 +338,15 @@ router.post('/deleteMessage', function(req, res) {
     var data = {
        email: email
     }
-    Message.findOneAndUpdate(
+    message_id.forEach(function(element) {
+        console.log("id is" + element)
+    })
+
+    Message.updateMany(
        {
-           message_id: message_id,
+           message_id: {
+               $in: message_id
+           }
        },
        {
          $push: {
@@ -418,10 +426,42 @@ router.get('/getDraftedMessages/:sender_email', function(req, res) {
 })
 
 
+router.get('/getDeletedMessages/:sender_email', function(req, res) {
+    var sender_email = req.params.sender_email
+    
+    Message.find({sender_email: sender_email, 'isDeleted.email': {"$in": [sender_email]}})
+     .sort({'time': 'desc'})
+     .exec(function(err, docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
+            res.send(docs)
+        }
+    });
+})
+
+
+
 router.get('/getTrashedMessages/:sender_email', function(req, res) {
     var sender_email = req.params.sender_email
     
     Message.find({sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}})
+     .sort({'time': 'desc'})
+     .exec(function(err, docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
+            res.send(docs)
+        }
+    });
+})
+
+
+
+router.get('/getAllMessages/:sender_email', function(req, res) {
+    var sender_email = req.params.sender_email
+    
+    Message.find({sender_email: sender_email})
      .sort({'time': 'desc'})
      .exec(function(err, docs) {
         if (err) {
