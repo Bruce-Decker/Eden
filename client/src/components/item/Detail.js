@@ -57,33 +57,42 @@ class Detail extends Component {
   }
 
   getMaxBid(bids) {
-    if(bids.length === 0) {
-      return 'No bids yet!';
-    }
-
-    // get the object containing the max bid
-    let maxo = bids.reduce(function(prev, curr) {
-      return (prev.amount > curr.amount) ? prev : curr
-    });
-
+    let eml = '';
+    let amt = -1;
     let email_class = '';
-    let email = this.props.auth.user.email;
-    if(email === maxo.email) {
-      email_class = 'bid-max-email-mine';
-    } else {
+
+    if(bids.length === 0) {
+      eml = 'Starting Bid'
+      amt = this.state.item.bid_price.toFixed(2);
       email_class = 'bid-max-email-yours';
+    } else {
+
+      // get the object containing the max bid
+      let maxo = bids.reduce(function(prev, curr) {
+        return (prev.amount > curr.amount) ? prev : curr
+      });
+
+      let email = this.props.auth.user.email;
+      if(email === maxo.email) {
+        email_class = 'bid-max-email-mine';
+      } else {
+        email_class = 'bid-max-email-yours';
+      }
+
+      eml = maxo.email;
+      amt = maxo.amount.toFixed(2);
     }
 
     return (
       <span>
         <span className="bid-max-amount">
-          {maxo.amount.toFixed(2)}
+          {amt}
         </span>
         <span>
           &nbsp;--&nbsp;
         </span>
         <span className={email_class}>
-          {maxo.email}
+          {eml}
         </span>
       </span>
     );
@@ -93,12 +102,31 @@ class Detail extends Component {
     let bid = parseFloat(this.state.new_bid);
     let email = this.props.auth.user.email;
     
-    // get the object containing the max bid
-    let maxo = this.state.item.bids.reduce(function(prev, curr) {
-      return (prev.amount > curr.amount) ? prev : curr
-    });
+    let maxo = null;
+    if(this.state.item.bids.length === 0) {
+      maxo = {
+        email: email,
+        amount: this.state.item.bid_price
+      }
+    } else {
+      // get the object containing the max bid
+      maxo = this.state.item.bids.reduce(function(prev, curr) {
+        return (prev.amount > curr.amount) ? prev : curr
+      });
+    }
 
-    if(email === maxo.email) {
+    if(email === this.state.item.email) {
+      toast.error("You cannot bid on your own item!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else if(email === maxo.email) {
       toast.error("You already have the highest bid!", {
         autoClose: 3000,
         hideProgressBar: false,
@@ -179,6 +207,7 @@ class Detail extends Component {
   }
 
   testBids(e) {
+    /*
     var copy = JSON.parse(JSON.stringify(this.state.item.bids));
     copy.pop();
     this.setState({
@@ -187,6 +216,7 @@ class Detail extends Component {
         bids: copy
       }
     });
+    */
     console.log(this.state);
   }
 
