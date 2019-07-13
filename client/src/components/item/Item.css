@@ -100,7 +100,12 @@
   border-radius: 5px;
   margin-left: 2px;
   margin-bottom: 2px;
-  font-size: 13pt;
+  font-size: 11pt;
+  padding-left: 4px;
+}
+
+.test-bids-btn {
+  display: none;
 }
 
 .required-asterisk {

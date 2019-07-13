@@ -4,13 +4,13 @@ import { BrowserRouter as Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import axios from 'axios'
+import axios from 'axios';
 
-import CartAddButton from '../cart/CartAddButton'
-import Add from './Add'
-import Try from './Try'
-import apple from '../../images/apple.png'
-import star from '../../images/rating.png'
+import CartAddButton from '../cart/CartAddButton';
+import Add from './Add';
+import Try from './Try';
+import apple from '../../images/apple.png';
+import star from '../../images/rating.png';
 import appliances from '../../images/appliances.png';
 import arts from '../../images/arts.png';
 import books from '../../images/books.png';
@@ -33,6 +33,7 @@ class Detail extends Component {
     this.getBidVisibility = this.getBidVisibility.bind(this);
     this.handleClickBid = this.handleClickBid.bind(this);
     this.handleNewBid = this.handleNewBid.bind(this);
+    this.testBids = this.testBids.bind(this);
   }
 
   async componentWillMount() {
@@ -131,14 +132,62 @@ class Detail extends Component {
         draggable: false,
       });
 
-      // TODO: update state
+      let dt = new Date();
+      let dtISO = dt.toISOString();
+
+      let new_bid_client = {
+        email: email,
+        amount: bid,
+        time: dtISO
+      }
+
+      // update the page elements by changing the component state
+      this.setState({
+        item: {
+          ...this.state.item,
+          bids: [
+            ...this.state.item.bids,
+            new_bid_client
+          ]
+        }
+      });
+
+      // actually persist the bid in the backend
+      let new_bid_server = {
+        email: email,
+        amount: bid,
+        iid: this.state.item.item_id
+      }
+
+      axios
+        .post('/bids/makeBid', new_bid_server)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 
   handleNewBid(e) {
+    let val1 = parseFloat(e.target.value);
+    let val2 = val1.toFixed(2);
     this.setState({
-      new_bid: e.target.value
+      new_bid: val2
     })
+  }
+
+  testBids(e) {
+    var copy = JSON.parse(JSON.stringify(this.state.item.bids));
+    copy.pop();
+    this.setState({
+      item: {
+        ...this.state.item,
+        bids: copy
+      }
+    });
+    console.log(this.state);
   }
 
   render() {
@@ -186,6 +235,7 @@ class Detail extends Component {
               <input type="text" class="make-bid-txt" onChange={this.handleNewBid}></input>
             </div>
             <hr/>
+            <button className="test-bids-btn" onClick={this.testBids}>TEST</button>
           </div>
           </div>
           <div className="col-1"/>
