@@ -15,6 +15,8 @@ import ComposeModal from './ComposeModal'
 var inbox_response
 var sent_response
 var important_response
+var drafted_message
+var email_selection
 
 Modal.setAppElement('#root')
 
@@ -23,14 +25,18 @@ class Inbox extends Component {
     constructor() {
         super()
         this.state = {
+              message_id: '',
               trashed_message_ids: [],
               inboxMessages: [],
               sentMessages: [],
               importantMessages: [],
+              draftedMessages: [],
+              isDraft: [],
               showInboxMessage: false,
               showSentMessage: false,
               showImportantMessage: false,
               showIndividualMessage: false,
+              showDraftedMessage: false,
               subject: '',
               message: '',
               sender_name: '',
@@ -38,7 +44,8 @@ class Inbox extends Component {
               receiver_email: '',
               time: '',
               replies: [],
-              modalIsOpen: false
+              modalIsOpen: false,
+              isEdit: false
         }
     }
 
@@ -62,8 +69,11 @@ class Inbox extends Component {
        this.setState({ trashed_message_ids: newArr }, () => console.log('updated state', newArr))
     }
 
-    openModal = () => {
-      this.setState({modalIsOpen: true});
+    openModal = (isEdit) => {
+      this.setState({
+        modalIsOpen: true,
+        isEdit: isEdit
+      });
     }
   
     afterOpenModal = () => {
@@ -94,9 +104,10 @@ class Inbox extends Component {
 
     async componentDidMount() {
          var values = queryString.parse(this.props.location.search);
-         var email_selection
+         
          var message_id
          var indivisual_message
+       
          console.log(values)
          console.log(values["emailType"])
  
@@ -117,7 +128,8 @@ class Inbox extends Component {
          inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
          sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
          important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email)
-        
+         drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
+
          if (email_selection == "inbox" || email_selection == undefined) {
            console.log(inbox_response.data)
               if (inbox_response.data) {
@@ -165,6 +177,7 @@ class Inbox extends Component {
                       showSentMessage: false,
                       showInboxMessage: false,
                       showIndividualMessage: true,
+                      message_id: this.state.message_id,
                       subject: indivisual_message.data.subject,
                       message: indivisual_message.data.message,
                       sender_name: indivisual_message.data.sender_name,
@@ -172,10 +185,29 @@ class Inbox extends Component {
                       receiver_email: indivisual_message.data.receiver_email,
                       receiver_name: indivisual_message.data.receiver_name,
                       time: indivisual_message.data.time,
-                      replies: indivisual_message.data.replies
+                      replies: indivisual_message.data.replies,
+                      isDraft: indivisual_message.data.isDraft,
+                      sentMessages: sent_response.data,
+                      importantMessages: important_response.data
                   })
              }
 
+         }
+
+
+         if (email_selection == "draft") {
+              drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
+              console.log(drafted_message.data)
+              if (drafted_message.data) {
+                      this.setState({
+                        draftedMessages: drafted_message.data,
+                        showSentMessage: false,
+                        showInboxMessage: false,
+                        showImportantMessage: false,
+                        showDraftedMessage: true
+
+                    })
+                  }
          }
 
          
@@ -186,13 +218,23 @@ class Inbox extends Component {
         return (
             <div>
             <RegularBanner />
-            <ComposeModal 
-                 isOpen={this.state.modalIsOpen}
-                 onAfterOpen={this.afterOpenModal}
-                 onRequestClose={this.closeModal}
-                 contentLabel="Example Modal"
-            >
-            </ComposeModal>
+            {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
+                      || this.state.showIndividualMessage  || this.state.showDraftedMessage ?
+                <ComposeModal 
+                    isOpen={this.state.modalIsOpen}
+                    onAfterOpen={this.afterOpenModal}
+                    onRequestClose={this.closeModal}
+                    contentLabel="Example Modal"
+                    isDraft = {this.state.isDraft}
+                    receiver_email = {this.state.receiver_email}
+                    subject = {this.state.subject}
+                    message = {this.state.message}
+                    isEdit = {this.state.isEdit}
+                    message_id = {this.state.message_id}
+                >
+                </ComposeModal>
+                : null }
+                
             <div className="container">
         <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
         <div className="mail-box">
@@ -210,7 +252,7 @@ class Inbox extends Component {
               </a>
             </div>
             <div className="inbox-body">
-              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {this.openModal}>
+              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false)}>
                 Compose
               </a>
               {/* Modal */}
@@ -271,7 +313,8 @@ class Inbox extends Component {
                  }}>
                     <i className="fa fa-inbox" /> Inbox 
                     
-                      {this.state.showInboxMessage || this.state.showSentMessage ? 
+                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
+                      || this.state.showIndividualMessage  || this.state.showDraftedMessage ? 
                         <span className = "count_messages">
                             {inbox_response.data.length}
                            </span>
@@ -288,7 +331,8 @@ class Inbox extends Component {
                 }}>
                      <i className="fa fa-envelope-o" /> Sent Mail
 
-                     {this.state.showInboxMessage || this.state.showSentMessage ? 
+                     {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
                         <span className = "count_messages">
                             {sent_response.data.length}
                            </span>
@@ -303,12 +347,33 @@ class Inbox extends Component {
                      search: "?emailType=important"
                  }}>
                      <i className="fa fa-bookmark-o" /> Important
+
+                     {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
+                        <span className = "count_messages">
+                            {important_response.data.length}
+                           </span>
+                          : null }
                      
                 </Link>
 
               </li>
               <li>
-                <a href="#"><i className=" fa fa-external-link" /> Drafts <span className="label label-info pull-right">30</span></a>
+                <Link to = {{
+                     pathname: "/inbox/" + this.props.auth.user.email,
+                     search: "?emailType=draft"
+                }}>
+                    <i className=" fa fa-external-link" /> Drafts 
+                       
+                       {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
+                        <span className = "count_messages">
+                            {drafted_message.data.length}
+                           </span>
+                          : null }
+                         
+                       
+                </Link>
               </li>
               <li>
                 <a href="#"><i className=" fa fa-trash-o" /> Trash</a>
@@ -349,6 +414,10 @@ class Inbox extends Component {
              <Messages messages = {this.state.importantMessages} history = {this.props.history} />
              : null }
 
+       {this.state.showDraftedMessage ? 
+             <Messages messages = {this.state.draftedMessages} history = {this.props.history} />
+             : null }
+
              {this.state.showIndividualMessage ?
                <div>
                    <div>
@@ -378,6 +447,14 @@ class Inbox extends Component {
 
 
                   </div>
+                  <div className = "space">
+
+                  </div>
+
+                  {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
+
+                          <button className="ui primary button" type="submit" onClick = {() => this.openModal(true)}>Edit</button>
+                          : null }
 
               </div>
               : null }

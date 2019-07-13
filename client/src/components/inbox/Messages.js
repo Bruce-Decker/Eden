@@ -9,6 +9,10 @@ import { Card } from 'react-bootstrap'
 import moment from 'moment'
 import Moment from 'react-moment';
 import { withRouter } from 'react-router-dom';
+import ComposeModal from './ComposeModal'
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root')
 
 class Messages extends Component {
     constructor(props) {
@@ -19,10 +23,23 @@ class Messages extends Component {
     }
 
     trashMessages = () => {
-        alert("fdssdfdsf")
+       
+        var message_id_array = []
         this.state.selected_message_ids.map(id => {
-            console.log(id)
+            message_id_array.push(id)
         })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/trashMessage', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
        
        
      }
@@ -112,6 +129,9 @@ class Messages extends Component {
        this.props.history.push('/inbox/' + this.props.auth.user.email + "?emailType=readEachEmail&message_id=" + message_id)
     }
 
+
+  
+
     render() {
        
         return (
@@ -196,13 +216,15 @@ class Messages extends Component {
                                               <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
                                                       <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)}/>
                                               </div>
-                                              {message.isStarred ?
-                                                <div className="floatLeft inboxStar">
-                                                    <i className="fa fa-star inbox-started" />
-                                                  </div>
-                                                :
-                                                <i className="fa fa-star unstar"/>
-                                              }
+                                              {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
+                                            <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
+                                                <i className="fa fa-star inbox-started" />
+                                              </div>
+                                            :
+                                            <div className="floatLeft inboxStar" onClick = {(e) =>  this.starMessage(e, message.message_id)}>
+                                              <i className="fa fa-star unstar"/>
+                                            </div>
+                                          }
                                               <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
                                               {/* <div>
                                                   <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
@@ -231,8 +253,8 @@ class Messages extends Component {
 
                                     <div className = "readMessage">
                                        <div className = "firstInboxContainer">
-                                          <div className="inboxCheckBox" onClick = {(e) => this.checkTrash(e, message.message_id)}>
-                                                  <input type="checkbox" className="mail-checkbox" />
+                                          <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
+                                                  <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)}/>
                                           </div>
                                           {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
