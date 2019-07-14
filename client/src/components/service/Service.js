@@ -74,10 +74,22 @@ class Service extends Component {
       logo: null,
       images: [],
       lat: default_lat,
-      lng: default_lng
+      lng: default_lng,
+      id: null,
+      name: '',
+      type: 'Contractors',
+      desc: '',
+      address: '',
+      city: '',
+      state: 'Alabama',
+      zip: '',
+      email: '',
+      phone: '',
+      isEdit: false,
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
 
     Map = compose(
       withProps(mapAttributes),
@@ -114,16 +126,27 @@ class Service extends Component {
               const service = props.services[i]
               return  <Link to={'/services/' + service._id} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
                         <Row className="service-list" style={{borderBottom: "1px solid #dee2e6", paddingTop: "0.5rem", paddingBottom: "0.5rem"}}>
-                          <Col xs={9} style={{paddingLeft: "2px"}}>
-                            <div style={{fontWeight: "600", color: "black"}}>
-                              <img src={getImage(service.category)} alt="category" style={{width: "18px", height: "18px", marginLeft: "15px", marginRight: "0.5rem"}}></img>
+                          <Col xs={1} style={{paddingTop: "0.7rem"}}>
+                            <img src={getImage(service.category)} alt="category" style={{width: "28px", height: "28px"}}></img>
+                          </Col>
+                          <Col>
+                            <div style={{fontWeight: "600", fontSize: "1rem", color: "black", paddingTop: "0.2rem", }}>
                               {service.name}
+                              <div>
+                                {Array.from(Array(5), (e, i) => {
+                                  return <img key={i} src={this.getRatingImage(service.rating - i)} alt="Rating" style={{width: "18px", height: "18px", paddingBottom: "0.225rem", paddingRight: "0.225rem"}}></img>
+                                })}
+                              </div>
                             </div>
                           </Col>
-                          <Col style={{float: "right", marginLeft: "0.25rem"}}>
-                            {Array.from(Array(5), (e, i) => {
-                              return <img key={i} src={this.getRatingImage(service.rating - i)} alt="Rating" style={{width: "18px", height: "18px", paddingBottom: "0.225rem", paddingLeft: "0.225rem"}}></img>
-                            })}
+                          <Col xs={2}>
+                            <div>
+                              <Link to={'/service/'} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
+                                <button className="service-button" style={{marginTop: "0.7rem", width: "100%"}} onClick={() => props.handleEdit(service._id)}>
+                                  Edit
+                                </button>
+                              </Link>
+                            </div>
                           </Col>
                         </Row>
                       </Link>
@@ -142,7 +165,7 @@ class Service extends Component {
             <Col style={{display: "grid"}}>
             </Col>
             <Col style={{display: "grid"}}>
-              <button className="property-close-button" onClick={props.handleClose}>
+              <button className="service-button" onClick={props.handleClose}>
                 Close
               </button>
             </Col>
@@ -164,12 +187,12 @@ class Service extends Component {
               <Form.Row>
                 <Form.Group as={Col}>
                   <Form.Label>Name</Form.Label>
-                  <Form.Control ref={this.name}/>
+                  <Form.Control ref={this.name} value={this.state.name} onChange={(e) => {this.setState({ name: e.target.value })}}/>
                 </Form.Group>
 
                 <Form.Group as={Col}>
                   <Form.Label>Service type</Form.Label>
-                  <Form.Control as="select" ref={this.type}>
+                  <Form.Control as="select" ref={this.type} value={this.state.type} onChange={(e) => {this.setState({ type: e.target.value })}}>
                     <option value="contractors">Contractors</option>
                     <option value="landscaping">Landscaping</option>
                     <option value="electricians">Electricians</option>
@@ -184,7 +207,7 @@ class Service extends Component {
 
               <Form.Group controlId="exampleForm.ControlTextarea1">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows="7" ref={this.desc}/>
+                <Form.Control as="textarea" rows="7" ref={this.desc} value={this.state.desc} onChange={(e) => {this.setState({ desc: e.target.value })}}/>
               </Form.Group>
 
               <Form.Group>
@@ -229,18 +252,18 @@ class Service extends Component {
 
               <Form.Group>
                 <Form.Label>Address</Form.Label>
-                <Form.Control ref={this.address}/>
+                <Form.Control ref={this.address} value={this.state.address} onChange={(e) => {this.setState({ address: e.target.value })}}/>
               </Form.Group>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>City</Form.Label>
-                  <Form.Control ref={this.city}/>
+                  <Form.Control ref={this.city} value={this.state.city} onChange={(e) => {this.setState({ city: e.target.value })}}/>
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>State</Form.Label>
-                  <Form.Control as="select" ref={this.usstate}>
+                  <Form.Control as="select" ref={this.usstate} value={this.state.state} onChange={(e) => {this.setState({ state: e.target.value })}}>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
@@ -297,7 +320,7 @@ class Service extends Component {
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Zip</Form.Label>
-                  <Form.Control ref={this.zip}/>
+                  <Form.Control ref={this.zip} value={this.state.zip} onChange={(e) => {this.setState({ zip: e.target.value })}}/>
                 </Form.Group>
               </Form.Row>
 
@@ -322,7 +345,7 @@ class Service extends Component {
                 buttonText='Choose your logo image'
                 onChange={this.onDropLogo}
                 imgExtension={['.jpg', '.png', '.jpeg']}
-                maxFileSize={5242880}
+                maxFileSize={10485760}
                 name="file"
                 singleImage="true"
               >
@@ -335,7 +358,7 @@ class Service extends Component {
                 buttonText='Choose advertisement images'
                 onChange={this.onDropImages}
                 imgExtension={['.jpg', '.png', '.jpeg']}
-                maxFileSize={5242880}
+                maxFileSize={10485760}
                 name="files"
               >
               </ImageUploader>
@@ -343,12 +366,12 @@ class Service extends Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" ref={this.email}/>
+                  <Form.Control type="email" ref={this.email} value={this.state.email} onChange={(e) => {this.setState({ email: e.target.value })}}/>
                 </Form.Group>
 
                 <Form.Group as={Col}>
                   <Form.Label>Phone number</Form.Label>
-                  <Form.Control ref={this.phone}/>
+                  <Form.Control ref={this.phone} value={this.state.phone} onChange={(e) => {this.setState({ phone: e.target.value })}}/>
                 </Form.Group>
               </Form.Row>
 
@@ -356,13 +379,20 @@ class Service extends Component {
           </Modal.Body>
           <Modal.Footer style={{display: "inline"}}>
             <Row style={{height: "40px"}}>
+              { this.state.isEdit && 
+                <Col style={{display: "grid"}}>
+                  <button className="service-delete-button" onClick={() => this.handleDelete(this.state.id)}>
+                    Delete
+                  </button>
+                </Col>
+              }
               <Col style={{display: "grid"}}>
-                <button className="property-upload-button" onClick={this.handleSubmit}>
+                <button className="service-button" onClick={this.handleSubmit}>
                   Post
                 </button>
               </Col>
               <Col style={{display: "grid"}}>
-                <button className="property-close-button" onClick={props.handleClose}>
+                <button className="service-button" onClick={props.handleClose}>
                   Close
                 </button>
               </Col>
@@ -402,11 +432,15 @@ class Service extends Component {
           show={this.state.list}
           services={this.state.services}
           handleClose={() => this.setState({list: false})}
+          handleEdit={this.handleEdit}
         />
         <Add
           show={this.state.add}
           map={this.map}
-          handleClose={() => this.setState({add: false})}
+          handleClose={() => {
+            this.setDefault()
+            this.setState({add: false, isEdit: false}
+          )}}
           handleAddService={this.handleAddService}
           handleRemoveService={this.handleRemoveService}
           offeredServices={this.state.offeredServices}
@@ -430,15 +464,53 @@ class Service extends Component {
   async handleSubmit() {
     if (this.isValid()) {
       const body = this.getData()
-      await axios.post('/services', body).then(function (response) {
+      if (!this.state.isEdit) {
+        await axios.post('/services', body).then(function (response) {
+          window.location = "/services/" + body.get("_id").toString()
+        }).catch(function (error) {
+          alert(error);
+        });
+      } else {
+        await axios.put('/services/' + this.state.id, body).then(function (response) {
+          window.location = "/services/" + body.get("_id").toString()
+        }).catch(function (error) {
+          alert(error);
+        });
+      }
+    }
+  }
+
+  async handleDelete(id) {
+    if (window.confirm('Are you sure you want to delete this service?')) {
+      await axios.delete('/services/' + id, { data:{ user_id: this.props.auth.user.id } }).then(function (response) {
         window.location.reload();
       }).catch(function (error) {
         alert(error);
       });
-    }
+    } 
   }
 
-  handleAddService = () => {
+  async handleEdit(_id) {
+    const response = await axios.get('/services/' + _id)
+    var { id, name, type, desc, address, city, state, zip, lat, lng, email, phone, offeredServices } = this.state;
+    id = response.data._id
+    name = response.data.name
+    type = response.data.category
+    desc = response.data.desc
+    address = response.data.address
+    city = response.data.city
+    state = response.data.state
+    zip = response.data.zip
+    lat = response.data.lat
+    lng = response.data.lng
+    email = response.data.email
+    phone = response.data.phone
+    offeredServices = response.data.services
+    this.setState({ id, name, type, desc, address, city, state, zip, lat, lng, email, phone, offeredServices })
+    this.setState({ add: true, isEdit: true})
+  }
+
+  handleAddService = (id) => {
     const input = document.getElementById("service-offered").value
     if (input !== '') {
       var { offeredServices } = this.state
@@ -484,6 +556,24 @@ class Service extends Component {
     });
   }
 
+  setDefault = () => {
+    this.setState({
+      offeredServices: [],
+      lat: default_lat,
+      lng: default_lng,
+      id: null,
+      name: '',
+      type: 'Contractors',
+      desc: '',
+      address: '',
+      city: '',
+      state: 'Alabama',
+      zip: '',
+      email: '',
+      phone: ''
+    })
+  }
+
   isAuthenticated = (type) => {
     if (!this.props.auth.isAuthenticated) {
       window.alert("Please log in and try again.")
@@ -506,7 +596,13 @@ class Service extends Component {
       this.phone.current.value !== '' &&
       this.state.offeredServices.length > 0
     ) {
-      if (!isEmailValid(this.email.current.value)) {
+      if (this.state.logo === null) {
+        alert('Please select your logo image.')
+        return false
+      } else if (this.state.images.length === 0) {
+        alert('Please add one or more advertisement images.')
+        return false
+      } else if (!isEmailValid(this.email.current.value)) {
         alert('Please enter a valid email address.')
         return false
       } else if (!isPhoneNumberValid(this.phone.current.value)) {
@@ -522,7 +618,7 @@ class Service extends Component {
 
   getData = () => {
     var data = new FormData()
-    data.append('_id', new ObjectID())
+    data.append('_id', this.state.id ? this.state.id : new ObjectID())
     data.append('name', this.name.current.value)
     data.append('type', this.type.current.value)
     data.append('address', this.address.current.value)

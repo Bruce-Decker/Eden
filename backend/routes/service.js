@@ -3,20 +3,21 @@ const router = express.Router();
 const Service = require('../schema/Service');
 var multer = require('multer');
 var fs = require('fs-extra');
-const uuidv4 = require('uuid/v4');
+
 
 const itemsPerPage = 15
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     var dir = '../client/public/images/service/' + req.body._id
-    if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir);
-    }
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir)
+    } 
     if (file.fieldname === 'file') {
       dir += '/logo'
-    }
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+      if (fs.existsSync(dir)){
+        fs.removeSync(dir)
+      }
+      fs.mkdirSync(dir)
     }
     cb(null, dir)
   },
@@ -58,7 +59,11 @@ router.get('/', function(req, res) {
     }, {
       "reviews.rating": 0,
       "reviews.comments": 0
-    }).then(async (services) => {
+    }, {
+      sort: {
+        "reviews.count": -1
+      }
+  }).then(async (services) => {
       console.log(services)
       const start = (pageNumber - 1) * itemsPerPage
       const ret = {
@@ -91,7 +96,6 @@ router.get('/:id', function(req, res) {
 
 router.post('/', upload.fields([{name: 'files', maxCount: 24}, {name: 'file', maxCount: 1}]), function(req, res) {
   const data = extractRequestData(req)
-  console.log(data)
   Service.create(data, function(err, _) {
     if (err) {
       console.log(err)
@@ -232,24 +236,34 @@ router.post('/:id/review', function(req, res) {
   });
 })
 
-router.put('/:id', function(req, res) {
+router.put('/:id', upload.fields([{name: 'files', maxCount: 24}, {name: 'file', maxCount: 1}]), function(req, res) {
   const id = req.params.id
   const user_id = req.body.user_id
   const data = extractRequestData(req)
   Service.findOneAndUpdate({
-      id: id,
-      user_id: user_id
-    }, 
-    data,
-    _,
-    function(err, data) {
-      if (err) {
-        console.log(err)
-        res.json({ msg: 'An error occurred, please try again later.' });        
-      } else {
-        console.log(data)
-        res.json({ data: data });
+    _id: id,
+    user_id: user_id
+  }, 
+  data,
+  function(err, data) {
+    if (err) {
+      console.log(err)
+      res.json({ msg: 'An error occurred, please try again later.' });        
+    } else {
+      console.log(data)
+      var directory = '../client/public/images/service/' + id
+      if (data != null) {
+        fs.readdir(directory, (err, files) => {
+          if (err) throw err;
+          for (const file of files) {
+            if (req.body.images.indexOf(file) == -1 && !fs.lstatSync(directory + '/' + file).isDirectory()) {
+              fs.removeSync(directory + '/' + file)
+            }
+          }
+        });
       }
+      res.json({ data: data });
+    }
   })
 })
 
@@ -257,10 +271,10 @@ router.delete('/:id', function(req, res) {
   const id = req.params.id
   const user_id = req.body.user_id
   Service.findOneAndDelete({ 
-    id: id,
+    _id: id,
     user_id: user_id
   },
-  function(err) {
+  function(err, doc) {
     if (err) {
       console.log(err)
       res.json({ msg: 'An error occurred, please try again later.' });        

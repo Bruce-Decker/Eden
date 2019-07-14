@@ -5,7 +5,7 @@ import Footer from '../footer/Footer';
 import Item from './Item';
 
 import axios from 'axios'
-
+import { connect } from 'react-redux'
 import { Row, Col, Modal, Form } from 'react-bootstrap';
 import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap } from "react-google-maps"
@@ -218,6 +218,8 @@ class List extends Component {
               return  <div key={i} style={{marginBottom: "2.5rem"}}>
                         <Item 
                           key={i}
+                          auth={this.props.auth}
+                          user_name={e.user_name}
                           id={e._id}
                           name={e.name}
                           desc={e.desc}
@@ -287,5 +289,8 @@ function getImage(category) {
   }
 }
 
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-export default List;
+export default connect(mapStateToProps)(List);
