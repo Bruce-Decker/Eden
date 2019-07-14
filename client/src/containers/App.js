@@ -71,7 +71,7 @@ class App extends Component {
           <Route exact path="/service/:category" component={List} />
           <Route exact path="/changeProfile" component = {ChangeProfile} />
           <Route exact path="/showProfile/:email" component = {ShowProfile} />
-          <Route exact path="/inbox/:email" component = {Inbox} />
+          <Route exact path="/inbox/:email/:page" component = {Inbox} />
           <Route exact path="/items/:id" component={Item} />
           <Route exact path="/services/:id" component={Detail} />
           <Route exact path="/createItem" component={CreateItem} />

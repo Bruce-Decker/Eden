@@ -22,6 +22,29 @@ class Messages extends Component {
         }
     }
 
+
+    increasePageNumber = (page_number, page_limit, total_messages) => { 
+     
+    var projected_num = (parseInt(page_number) + 1) * parseInt(page_limit)
+
+        if (projected_num <= total_messages) {
+                page_number = parseInt(page_number) + 1
+                
+                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=inbox")
+                window.location.reload()
+        }
+
+    }
+
+    decreasePageNumber = (page_number) => { 
+        if (page_number !== '0') {
+            page_number = parseInt(page_number) - 1
+        
+            this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=inbox")
+            window.location.reload()
+        }
+     }
+
     trashMessages = () => {
        
         var message_id_array = []
@@ -126,7 +149,7 @@ class Messages extends Component {
     }
 
     showIndividualMessage = (e, message_id) => {
-       this.props.history.push('/inbox/' + this.props.auth.user.email + "?emailType=readEachEmail&message_id=" + message_id)
+       this.props.history.push('/inbox/' + this.props.auth.user.email + "/individual/" + "?emailType=readEachEmail&message_id=" + message_id)
     }
 
 
@@ -194,12 +217,28 @@ class Messages extends Component {
 
 
                 <ul className="unstyled inbox-pagination">
-                  <li><span>1-50 of 234</span></li>
                   <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-left  pagination-left" /></a>
+                      <span>
+                    
+                            { parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   }
+                              
+                            
+                            { (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit) > parseInt(this.props.total_messages)
+                            ?
+                            - this.props.total_messages
+                             :  
+                              
+                                 - (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit)}
+                                
+                              {" "}  of  {" "}
+                            {this.props.total_messages}
+                      </span>
+                    </li>
+                  <li>
+                    <a className="np-btn" onClick = {() => this.decreasePageNumber(this.props.page_number)}><i className="fa fa-angle-left  pagination-left" /></a>
                   </li>
                   <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-right pagination-right" /></a>
+                    <a className="np-btn"  onClick = {() => this.increasePageNumber(this.props.page_number, this.props.page_limit, this.props.total_messages)}><i className="fa fa-angle-right pagination-right" /></a>
                   </li>
                 </ul>
               </div>

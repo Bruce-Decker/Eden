@@ -364,8 +364,46 @@ router.post('/deleteMessage', function(req, res) {
 })
 
 
-router.get('/getInboxMessages/:receiver_email', function(req, res) {
+router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
     var receiver_email = req.params.receiver_email
+    console.log(req.query.page)
+    var page = parseInt(req.params.page) || 0
+    var limit = parseInt(req.query.limit) || 10
+    var query = {$or: [{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
+    {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}]}
+
+    console.log(receiver_email)
+    Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
+        {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
+     .sort({'time': 'desc'})
+     .skip(page * limit)
+     .limit(limit)
+     .exec(function(err, docs) {
+        if (err) {
+            res.send({Error: err})
+          } else {
+           // res.send(docs)
+           Message.countDocuments(query).exec((count_error, countDocuments) => {
+            if (err) {
+              return res.json(count_error);
+            }
+            return res.json({
+              total: countDocuments,
+              page: page,
+              limit: limit,
+              pageSize: docs.length,
+              messages: docs
+            });
+          });
+        }
+    });
+})
+
+
+router.get('/getInboxMessages2/:receiver_email', function(req, res) {
+    var receiver_email = req.params.receiver_email
+   
+
     console.log(receiver_email)
     Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
         {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
@@ -374,7 +412,9 @@ router.get('/getInboxMessages/:receiver_email', function(req, res) {
         if (err) {
             res.send({Error: err})
           } else {
-            res.send(docs)
+           res.send(docs)
+          
+          
         }
     });
 })

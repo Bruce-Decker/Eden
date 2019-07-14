@@ -392,6 +392,12 @@ ul {
     float: left;
 }
 
+.floatRight {
+  
+    float: right;
+}
+
+
 
 .inboxStar {
     margin-top: 10px;
