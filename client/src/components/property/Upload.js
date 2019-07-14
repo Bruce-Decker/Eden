@@ -334,7 +334,7 @@ class Upload extends Component {
               buttonText='Choose images'
               onChange={this.onDrop}
               imgExtension={['.jpg', '.png', '.jpeg']}
-              maxFileSize={5242880}
+              maxFileSize={10485760}
               name="files"
             >
             </ImageUploader>

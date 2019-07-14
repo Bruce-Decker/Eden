@@ -12,11 +12,12 @@ import phone from '../../images/phone.png'
 
 
 class Item extends Component {
+  classID = "service-item"
   render() {
     return (
       <div>
         <Link to={'/services/' + this.props.id} style={{textDecoration: 'none'}} onClick={() => window.scrollTo(0, 0)}>
-          <Card id="service-item" className="service-list-item">
+          <Card id={this.classID} className="service-list-item">
             <Card.Body>
               <Row>
                 <Col md={4}>
@@ -52,6 +53,14 @@ class Item extends Component {
         </Link>
       </div>
     )
+  }
+
+  componentWillMount() {
+    if (this.props.auth.isAuthenticated) {
+      if (this.props.user_name === this.props.auth.user.name) {
+        this.classID = "service-item-user"
+      }
+    }
   }
 
   getRatingImage = (rating) => {
