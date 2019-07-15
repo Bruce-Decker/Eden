@@ -43,11 +43,12 @@ class Checkout extends Component {
 
       this.props.history.push({
         pathname: url,
-        state: charges
+        state: charges,
+        addresses: this.state
       });
 
-    console.log(this.props);
-    console.log(this.state);
+    //console.log(this.props);
+    //console.log(this.state);
   }
 
   render() {

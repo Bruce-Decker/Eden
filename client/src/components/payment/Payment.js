@@ -12,6 +12,16 @@ class Payment extends Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
+        this.charges = this.props.location.state;
+        this.billing_address = {
+            name: this.props.location.addresses ? this.props.location.addresses.bill_name:"",
+            address_line1: this.props.location.addresses ? this.props.location.addresses.bill_addr1:"",
+            address_line2: this.props.location.addresses ? this.props.location.addresses.bill_addr2:"",
+            address_city: this.props.location.addresses ? this.props.location.addresses.bill_city:"",
+            address_state: this.props.location.addresses ? this.props.location.addresses.bill_state:"",
+            address_zip: this.props.location.addresses ? this.props.location.addresses.bill_zip:"",
+            address_country: this.props.location.addresses ? this.props.location.addresses.bill_country:""
+        }
     }
 
     async submit(ev) {
@@ -29,7 +39,7 @@ class Payment extends Component {
                     <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
                         <div className="stripe-payment">
                             <Elements>
-                                <StripePayment className="cardPayment"/>
+                                <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address}/>
                             </Elements>
                         </div>
                     </StripeProvider>
@@ -39,7 +49,7 @@ class Payment extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props);
+        //console.log(this.billing_address);
     }
 }
 

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
@@ -18,10 +18,6 @@ const OrderSchema = new Schema({
         type: String,
         required: true
     },
-    credit_card_number: {
-        type: String,
-        required: true
-    },
     price: {
         type: Number,
         required: true
@@ -30,6 +26,6 @@ const OrderSchema = new Schema({
         type: Number,
         required: true
     }
-})
+});
 
 module.exports = Order = mongoose.model('order', OrderSchema);
