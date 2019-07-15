@@ -368,7 +368,7 @@ router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(req.query.page)
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 10
+    var limit = parseInt(req.query.limit) || 2
     var query = {$or: [{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
     {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}]}
 
@@ -400,67 +400,121 @@ router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
 })
 
 
-router.get('/getInboxMessages2/:receiver_email', function(req, res) {
-    var receiver_email = req.params.receiver_email
+// router.get('/getInboxMessages2/:receiver_email', function(req, res) {
+//     var receiver_email = req.params.receiver_email
    
 
-    console.log(receiver_email)
-    Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
-        {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
-     .sort({'time': 'desc'})
-     .exec(function(err, docs) {
-        if (err) {
-            res.send({Error: err})
-          } else {
-           res.send(docs)
+//     console.log(receiver_email)
+//     Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
+//         {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
+//      .sort({'time': 'desc'})
+//      .exec(function(err, docs) {
+//         if (err) {
+//             res.send({Error: err})
+//           } else {
+//            res.send(docs)
           
           
-        }
-    });
-})
+//         }
+//     });
+// })
 
-router.get('/getSentMessages/:sender_email', function(req, res) {
+router.get('/getSentMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
     console.log(sender_email)
-    
+    var page = parseInt(req.params.page) || 0
+    var limit = parseInt(req.query.limit) || 2
+    var query = {sender_email: sender_email, 'isDraft.email': {"$nin": [sender_email]}, 'isDeleted.email': {"$nin": [sender_email]}, 'isTrashed.email': {"$nin": [sender_email]}}
+
     Message.find({sender_email: sender_email, 'isDraft.email': {"$nin": [sender_email]}, 'isDeleted.email': {"$nin": [sender_email]}, 'isTrashed.email': {"$nin": [sender_email]}})
      .sort({'time': 'desc'})
+     .skip(page * limit)
+     .limit(limit)
      .exec(function(err, docs) {
         if (err) {
             res.send({Error: err})
           } else {
-            res.send(docs)
+            //res.send(docs)
+            Message.countDocuments(query).exec((count_error, countDocuments) => {
+                if (err) {
+                  return res.json(count_error);
+                }
+                return res.json({
+                  total: countDocuments,
+                  page: page,
+                  limit: limit,
+                  pageSize: docs.length,
+                  messages: docs
+                });
+              });
         }
     });
 })
 
-router.get('/getStarredMessages/:sender_email', function(req, res) {
+router.get('/getStarredMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
     console.log(sender_email)
+    var page = parseInt(req.params.page) || 0
+    var limit = parseInt(req.query.limit) || 2
+    var query = {$or: [{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}]}
+
     
     Message.find().or([{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}])
      .sort({'time': 'desc'})
+     .skip(page * limit)
+     .limit(limit)
      .exec(function(err, docs) {
         if (err) {
             res.send({Error: err})
           } else {
-            res.send(docs)
+            //res.send(docs)
+            Message.countDocuments(query).exec((count_error, countDocuments) => {
+                if (err) {
+                  return res.json(count_error);
+                }
+                return res.json({
+                  total: countDocuments,
+                  page: page,
+                  limit: limit,
+                  pageSize: docs.length,
+                  messages: docs
+                });
+              });
         }
     });
 })
 
 
 
-router.get('/getDraftedMessages/:sender_email', function(req, res) {
+router.get('/getDraftedMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
+
+    var page = parseInt(req.params.page) || 0
+   
+    var limit = parseInt(req.query.limit) || 2
+    var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}}
     
     Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}})
      .sort({'time': 'desc'})
+     .skip(page * limit)
+     .limit(limit)
      .exec(function(err, docs) {
         if (err) {
             res.send({Error: err})
           } else {
-            res.send(docs)
+            //res.send(docs)
+            Message.countDocuments(query).exec((count_error, countDocuments) => {
+                if (err) {
+                  return res.json(count_error);
+                }
+                return res.json({
+                  total: countDocuments,
+                  page: page,
+                  limit: limit,
+                  pageSize: docs.length,
+                  messages: docs
+                });
+              });
         }
     });
 })
@@ -482,16 +536,34 @@ router.get('/getDeletedMessages/:sender_email', function(req, res) {
 
 
 
-router.get('/getTrashedMessages/:sender_email', function(req, res) {
+router.get('/getTrashedMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
+
+    var page = parseInt(req.params.page) || 0
+    var limit = parseInt(req.query.limit) || 2
+    var query = {sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}}
     
     Message.find({sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}})
      .sort({'time': 'desc'})
+     .skip(page * limit)
+     .limit(limit)
      .exec(function(err, docs) {
         if (err) {
             res.send({Error: err})
           } else {
-            res.send(docs)
+            //res.send(docs)
+            Message.countDocuments(query).exec((count_error, countDocuments) => {
+                if (err) {
+                  return res.json(count_error);
+                }
+                return res.json({
+                  total: countDocuments,
+                  page: page,
+                  limit: limit,
+                  pageSize: docs.length,
+                  messages: docs
+                });
+              });
         }
     });
 })

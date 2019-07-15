@@ -23,26 +23,28 @@ class Messages extends Component {
     }
 
 
-    increasePageNumber = (page_number, page_limit, total_messages) => { 
+    increasePageNumber = (page_number, page_limit, total_messages, page_size) => { 
      
-    var projected_num = (parseInt(page_number) + 1) * parseInt(page_limit)
+    var projected_num = (parseInt(page_number) + 1) * parseInt(page_limit) 
 
-        if (projected_num <= total_messages) {
+        if (projected_num <= page_limit) {
                 page_number = parseInt(page_number) + 1
                 
-                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=inbox")
+                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" + this.props.emailType)
                 window.location.reload()
         }
 
     }
 
     decreasePageNumber = (page_number) => { 
-        if (page_number !== '0') {
+       
+         
             page_number = parseInt(page_number) - 1
-        
-            this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=inbox")
-            window.location.reload()
-        }
+            if (page_number >= 0) {
+                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType)
+                window.location.reload()
+            }
+       
      }
 
     trashMessages = () => {
@@ -218,6 +220,7 @@ class Messages extends Component {
 
                 <ul className="unstyled inbox-pagination">
                   <li>
+                     
                       <span>
                     
                             { parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   }
@@ -238,7 +241,7 @@ class Messages extends Component {
                     <a className="np-btn" onClick = {() => this.decreasePageNumber(this.props.page_number)}><i className="fa fa-angle-left  pagination-left" /></a>
                   </li>
                   <li>
-                    <a className="np-btn"  onClick = {() => this.increasePageNumber(this.props.page_number, this.props.page_limit, this.props.total_messages)}><i className="fa fa-angle-right pagination-right" /></a>
+                    <a className="np-btn"  onClick = {() => this.increasePageNumber(this.props.page_number, this.props.page_limit, this.props.total_messages, this.props.page_size)}><i className="fa fa-angle-right pagination-right" /></a>
                   </li>
                 </ul>
               </div>

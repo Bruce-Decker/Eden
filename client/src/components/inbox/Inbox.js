@@ -154,7 +154,7 @@ class Inbox extends Component {
          console.log(values)
          console.log(values["emailType"])
  
-       
+     
          for (var key in values) {
            
            if (key === "emailType") {
@@ -178,10 +178,10 @@ class Inbox extends Component {
         
    
          inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
-         sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
-         important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email)
-         drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
-         trash_response = await axios.get('/message/getTrashedMessages/' + this.props.match.params.email)
+         sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
+         important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
+         drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email + "/" + this.props.match.params.page)
+         trash_response = await axios.get('/message/getTrashedMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
 
          if (email_selection == "inbox" || email_selection == undefined) {
            console.log(inbox_response.data)
@@ -202,7 +202,10 @@ class Inbox extends Component {
          if (email_selection == "sent") {
             if (sent_response.data) {
                 this.setState({
-                  sentMessages: sent_response.data,
+                  sentMessages: sent_response.data.messages,
+                  total_messages: sent_response.data.total,
+                  page_size: sent_response.data.pageSize,
+                  page_limit: sent_response.data.limit,
                   showSentMessage: true,
                   showInboxMessage: false,
                   showImportantMessage: false,
@@ -214,7 +217,10 @@ class Inbox extends Component {
          if (email_selection == "important") {
            if (important_response.data) {
               this.setState({
-                   importantMessages: important_response.data,
+                   importantMessages: important_response.data.messages,
+                   total_messages: important_response.data.total,
+                   page_size: important_response.data.pageSize,
+                   page_limit: important_response.data.limit,
                    showSentMessage: false,
                    showInboxMessage: false,
                    showImportantMessage: true,
@@ -261,7 +267,10 @@ class Inbox extends Component {
               console.log(drafted_message.data)
               if (drafted_message.data) {
                       this.setState({
-                        draftedMessages: drafted_message.data,
+                        draftedMessages: drafted_message.data.messages,
+                        total_messages: drafted_message.data.total,
+                        page_size: drafted_message.data.pageSize,
+                        page_limit: drafted_message.data.limit,
                         showSentMessage: false,
                         showInboxMessage: false,
                         showImportantMessage: false,
@@ -276,7 +285,10 @@ class Inbox extends Component {
              if (trash_response.data) {
                console.log(trash_response)
                this.setState({
-                  trashMessages: trash_response.data,
+                  trashMessages: trash_response.data.messages,
+                  total_messages: trash_response.data.total,
+                  page_size: trash_response.data.pageSize,
+                  page_limit: trash_response.data.limit,
                   showSentMessage: false,
                   showInboxMessage: false,
                   showImportantMessage: false,
@@ -410,7 +422,7 @@ class Inbox extends Component {
               <li className={this.state.showSentMessage ? "active" : ''}>
 
                 <Link to = {{
-                   pathname: "/inbox/" + this.props.auth.user.email,
+                   pathname: "/inbox/" + this.props.auth.user.email + '/0',
                    search: "?emailType=sent"
                 }}>
                      <i className="fa fa-envelope-o" /> Sent Mail
@@ -419,16 +431,16 @@ class Inbox extends Component {
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
                        || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {sent_response.data.length}
+                            {sent_response.data.total}
                            </span>
                           : null }
                 </Link>
 
               </li>
-              <li>
+              <li className={this.state.showImportantMessage ? "active" : ''}>
 
                  <Link to={{
-                     pathname: "/inbox/" + this.props.auth.user.email,
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
                      search: "?emailType=important"
                  }}>
                      <i className="fa fa-bookmark-o" /> Important
@@ -437,16 +449,16 @@ class Inbox extends Component {
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
                        || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {important_response.data.length}
+                            {important_response.data.total}
                            </span>
                           : null }
                      
                 </Link>
 
               </li>
-              <li>
+              <li className={this.state.showDraftedMessage ? "active" : ''}>
                 <Link to = {{
-                     pathname: "/inbox/" + this.props.auth.user.email,
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
                      search: "?emailType=draft"
                 }}>
                     <i className=" fa fa-external-link" /> Drafts 
@@ -455,17 +467,17 @@ class Inbox extends Component {
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
                        || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {drafted_message.data.length}
+                            {drafted_message.data.total}
                            </span>
                           : null }
                          
                        
                 </Link>
               </li>
-              <li>
+              <li className={this.state.showTrashMessage ? "active" : ''}>
 
                 <Link to={{
-                     pathname: "/inbox/" + this.props.auth.user.email,
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
                      search: "?emailType=trash"
                 }}>
                       <i className=" fa fa-trash-o" /> Trash
@@ -473,7 +485,7 @@ class Inbox extends Component {
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
                        || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {trash_response.data.length}
+                            {trash_response.data.total}
                            </span>
                           : null }
                 </Link>
@@ -511,23 +523,54 @@ class Inbox extends Component {
                         total_messages = {this.state.total_messages}
                         page_size = {this.state.page_size}
                         page_limit = {this.state.page_limit}
+                        emailType = 'inbox'
                         />
               : null }
 
             {this.state.showSentMessage ? 
-             <Messages messages = {this.state.sentMessages} history = {this.props.history}/>
+             <Messages messages = {this.state.sentMessages} 
+                       history = {this.props.history}
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit} 
+                       emailType = 'sent' 
+                       />
              : null }
 
            {this.state.showImportantMessage ? 
-             <Messages messages = {this.state.importantMessages} history = {this.props.history} />
+             <Messages messages = {this.state.importantMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'important' 
+                       />
              : null }
 
        {this.state.showDraftedMessage ? 
-             <Messages messages = {this.state.draftedMessages} history = {this.props.history} page_number = {this.state.page_number}/>
+             <Messages messages = {this.state.draftedMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'draft' 
+                       
+                       />
              : null }
 
       {this.state.showTrashMessage ? 
-             <Messages messages = {this.state.trashMessages} history = {this.props.history} />
+             <Messages messages = {this.state.trashMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'trash' 
+                       
+                       />
              : null }
 
 
