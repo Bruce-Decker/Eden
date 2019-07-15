@@ -26,10 +26,9 @@ class Messages extends Component {
     increasePageNumber = (page_number, page_limit, total_messages, page_size) => { 
      
     var projected_num = (parseInt(page_number) + 1) * parseInt(page_limit) 
-
-        if (projected_num <= page_limit) {
+   
+        if (projected_num < total_messages) {
                 page_number = parseInt(page_number) + 1
-                
                 this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" + this.props.emailType)
                 window.location.reload()
         }
@@ -219,6 +218,7 @@ class Messages extends Component {
 
 
                 <ul className="unstyled inbox-pagination">
+                   
                   <li>
                      
                       <span>
@@ -226,14 +226,21 @@ class Messages extends Component {
                             { parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   }
                               
                             
-                            { (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit) > parseInt(this.props.total_messages)
+                            { (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit) >= parseInt(this.props.total_messages)
                             ?
-                            - this.props.total_messages
+
+                                        <span>
+                                            {parseInt(this.props.page_size) !== 1 ? 
+                                       
+                                            - this.props.total_messages
+                                            : null }
+                                        </span>
+
                              :  
                               
                                  - (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit)}
                                 
-                              {" "}  of  {" "}
+                              {" "}  of  {" total "}
                             {this.props.total_messages}
                       </span>
                     </li>

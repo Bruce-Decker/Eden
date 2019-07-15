@@ -368,7 +368,7 @@ router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(req.query.page)
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 2
+    var limit = parseInt(req.query.limit) || 3
     var query = {$or: [{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
     {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}]}
 
