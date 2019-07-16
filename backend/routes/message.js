@@ -315,6 +315,35 @@ router.post('/trashMessage', function(req, res) {
     )
 })
 
+router.post('/markAsDrafts', function(req, res) {
+    var message_id = req.body.message_id
+    message_id.forEach(function(element) {
+        console.log(element)
+    })
+    var email = req.body.email
+    
+    Message.updateMany(
+       {
+        message_id: {
+            $in: message_id
+        }
+       },
+       {
+        $push: {
+            isDraft: {email: email}
+          }
+       }, function(err, docs) {
+           if (err) {
+               res.send({Error: err})
+             } else {
+               res.send(docs)
+           }
+       }
+
+    )
+
+})
+
 
 router.post('/untrashMessage', function(req, res) {
     var message_id = req.body.message_id
@@ -463,10 +492,10 @@ router.get('/getStarredMessages/:sender_email/:page', function(req, res) {
     console.log(sender_email)
     var page = parseInt(req.params.page) || 0
     var limit = parseInt(req.query.limit) || 2
-    var query = {$or: [{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}]}
+    var query = {$or: [{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}]}
 
     
-    Message.find().or([{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}}])
+    Message.find().or([{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}])
      .sort({'time': 'desc'})
      .skip(page * limit)
      .limit(limit)
@@ -499,9 +528,9 @@ router.get('/getDraftedMessages/:sender_email/:page', function(req, res) {
     var page = parseInt(req.params.page) || 0
    
     var limit = parseInt(req.query.limit) || 2
-    var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}}
+    var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}
     
-    Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}})
+    Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }})
      .sort({'time': 'desc'})
      .skip(page * limit)
      .limit(limit)

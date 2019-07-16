@@ -315,6 +315,7 @@ class Inbox extends Component {
                       || this.state.showIndividualMessage  || this.state.showDraftedMessage 
                       || this.state.showTrashMessage ?
                 <ComposeModal 
+                    className = "ReactModal__Overlay"
                     isOpen={this.state.modalIsOpen}
                     onAfterOpen={this.afterOpenModal}
                     onRequestClose={this.closeModal}

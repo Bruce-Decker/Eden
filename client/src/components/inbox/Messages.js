@@ -11,6 +11,7 @@ import Moment from 'react-moment';
 import { withRouter } from 'react-router-dom';
 import ComposeModal from './ComposeModal'
 import Modal from 'react-modal';
+import { Dropdown } from 'react-bootstrap'
 
 Modal.setAppElement('#root')
 
@@ -67,6 +68,73 @@ class Messages extends Component {
        
        
      }
+
+     moveToInbox = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/moveToInbox', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToSent = () => {
+          alert("sent")
+     }
+
+     moveToImportant = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/markAsImportant', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToDrafts = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/markAsDrafts', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToTrash = () => {
+       alert("trash")
+     }
+
+     
 
 
     //  selectTrashMessages = (e, message_id) => {
@@ -181,7 +249,7 @@ class Messages extends Component {
                     <i className=" fa fa-refresh" />
                   </a>
                 </div>
-                <div className="btn-group hidden-phone">
+                {/* <div className="btn-group hidden-phone">
                   <a data-toggle="dropdown" href="#" className="btn mini blue" aria-expanded="false">
                     More
                     <i className="fa fa-angle-down " />
@@ -192,18 +260,37 @@ class Messages extends Component {
                     <li className="divider" />
                     <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
                   </ul>
-                </div>
+                </div> */}
                 <div className="btn-group">
-                  <a data-toggle="dropdown" href="#" className="btn mini blue">
+                  
+                <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-market-items">
+                        Mark as
+                      </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                   
+                    {this.props.emailType !== 'important' ?
+                      <Dropdown.Item onClick = {this.moveToImportant}>Important</Dropdown.Item>
+                      : null }
+                     {this.props.emailType !== 'draft' ?
+                         <Dropdown.Item onClick = {this.moveToDrafts}>Draft</Dropdown.Item>
+                         : null }
+                    {this.props.emailType !== 'trash' ?
+                      <Dropdown.Item onClick = {this.moveToTrash}>Trash</Dropdown.Item>
+                      : null }
+                    </Dropdown.Menu>
+                </Dropdown>
+                  {/* <a data-toggle="dropdown" href="#" className="btn mini blue">
                     Move to
                     <i className="fa fa-angle-down " />
                   </a>
+                   
                   <ul className="dropdown-menu">
                     <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
                     <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
                     <li className="divider" />
                     <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul>
+                  </ul> */}
                 </div>
                 
 
@@ -222,10 +309,12 @@ class Messages extends Component {
                   <li>
                      
                       <span>
+
+                         {parseInt(this.props.total_messages) !== 0 ? 
                     
-                            { parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   }
+                             parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   
                               
-                            
+                            : null }
                             { (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit) >= parseInt(this.props.total_messages)
                             ?
 
