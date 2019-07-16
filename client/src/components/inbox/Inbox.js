@@ -243,7 +243,7 @@ class Inbox extends Component {
                       showInboxMessage: false,
                       showIndividualMessage: true,
                       showTrashMessage: false,
-                      message_id: this.state.message_id,
+                      message_id: indivisual_message.data.message_id,
                       subject: indivisual_message.data.subject,
                       message: indivisual_message.data.message,
                       sender_name: indivisual_message.data.sender_name,
@@ -321,6 +321,7 @@ class Inbox extends Component {
                     contentLabel="Example Modal"
                     isDraft = {this.state.isDraft}
                     receiver_email = {this.state.receiver_email}
+                    sender_email = {this.state.sender_email}
                     subject = {this.state.subject}
                     message = {this.state.message}
                     isEdit = {this.state.isEdit}

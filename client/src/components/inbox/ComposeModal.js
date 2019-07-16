@@ -95,26 +95,41 @@ class ComposeModal extends Component {
                 console.log(data)
 
                 if (message && subject && receiver_email) {
-                    axios.post('/message/sendMessage', data) 
-                        .then(res => {
-                            console.log(res)
-                            if (this.props.isEdit) {
-                                var delete_data = {
-                                    message_id: this.props.message_id,
-                                    email: this.props.auth.user.email
-                                }
-                                axios.post('/message/deleteMessage', delete_data) 
-                                   .then(res => {
-                                       console.log(res)
-                                       window.location.reload()
-                                    })
-                                   .catch(err => console.log(err))
-                            } else {
-                                window.location.reload()
-                            }
-                           
-                        })
-                        .catch(err => console.log(err))
+                        if (!this.props.isReply) {
+                            axios.post('/message/sendMessage', data) 
+                                .then(res => {
+                                    console.log(res)
+                                    if (this.props.isEdit) {
+                                        var delete_data = {
+                                            message_id: this.props.message_id,
+                                            email: this.props.auth.user.email
+                                        }
+                                        axios.post('/message/deleteMessage', delete_data) 
+                                        .then(res => {
+                                            console.log(res)
+                                            window.location.reload()
+                                            })
+                                        .catch(err => console.log(err))
+                                    } else {
+                                        window.location.reload()
+                                    }
+                                
+                                })
+                                .catch(err => console.log(err))
+                         } else {
+                             data = {
+                                 message_id: this.props.message_id,
+                                 email: this.props.auth.user.email,
+                                 message: message
+                             }
+                            
+                             axios.post('/message/replyEmail', data) 
+                                .then(res => {
+                                    console.log(res)
+                                    window.location.reload()
+                                })
+                                .catch(err => console.log(err))
+                         } 
                 } else {
 
                     if (!receiver_email) {
@@ -147,14 +162,20 @@ class ComposeModal extends Component {
 
             <div className = "email_user_container">
                 <form onSubmit = {this.onSubmit} className="ui form">
-                <div className="field">
-                <label> Email </label>
-                {this.props.isDraft.some(e => e.email === this.props.auth.user.email) && this.props.isEdit ? 
-                    <input type="text" name="email" placeholder="Email Address"  value = {this.state.email} onChange = {this.onChange}/>
-                    : 
-                    <input type="text" name="email" placeholder="Email Address"   onChange = {this.onChange}/>
-                }
-                </div>
+                
+                
+                {!this.props.isReply ?
+                <div>
+                     <div className="field">
+                            <label> Email </label>
+                            {this.props.isDraft.some(e => e.email === this.props.auth.user.email) && this.props.isEdit ? 
+                                <input type="text" name="email" placeholder="Email Address"  value = {this.state.email} onChange = {this.onChange}/>
+                                : 
+                                <input type="text" name="email" placeholder="Email Address"   onChange = {this.onChange}/>
+                            }
+                         </div>
+                   
+             
                 <div className="field">
                 <label> Subject </label>
                 {this.props.isDraft.some(e => e.email === this.props.auth.user.email) && this.props.isEdit ? 
@@ -164,6 +185,8 @@ class ComposeModal extends Component {
 
                 }
                 </div>
+                </div>
+                 : null }
 
                 <div className="field">
                    <label for="comment">Message</label>
@@ -180,10 +203,12 @@ class ComposeModal extends Component {
                 </div>
                 <button className="ui button" type="submit">Submit</button>
                 <span className="save_as_draft">
-                <div className="ui read-only checkbox">
-                   <input type="checkbox" checked={this.state.saveAsDraft} onChange={this.toggleSaveAsDraft}/>
-                <label>Save as draft</label>
-               </div>
+                {!this.props.isReply ? 
+                     <div className="ui read-only checkbox">
+                        <input type="checkbox" checked={this.state.saveAsDraft} onChange={this.toggleSaveAsDraft}/>
+                        <label>Save as draft</label>
+                    </div>
+                    : null }
                </span>
                 
                 <div className="space">

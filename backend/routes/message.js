@@ -126,41 +126,48 @@ router.get('/getIndividualMessage/:message_id/:email', (req, res) => {
 router.post('/replyEmail', (req, res) => {
     var message_id = req.body.message_id
     var reply_id = uuidv4()
-    var name = req.body.name
     var email = req.body.email
     var message = req.body.message
     var time = Date.now()
-    var data = {
-        reply_id,
-        name,
-        email, 
-        message,
-        time
-    }
-    if (message) {
-        Message.findOneAndUpdate(
-          {
-            message_id: message_id,
-          },
-          {
-            $set: {
-                isRead: [{email: email}]
-             },
-             $push: {
-                replies: data
-             }
-            
-
-          }, function(err, docs) {
-            if (err) {
-              res.send({Error: err})
-            } else {
-              res.send(docs)
+    var data 
+    User.findOne({email: email}, function(err, user_result) {
+        if (err) {
+            res.send(err)
+        } 
+        if (user_result) {
+            data = {
+                reply_id,
+                name: user_result.name,
+                email, 
+                message,
+                time
             }
-          }
+                    if (message) {
+                        Message.findOneAndUpdate(
+                        {
+                            message_id: message_id,
+                        },
+                        {
+                            $set: {
+                                isRead: [{email: email}]
+                            },
+                            $push: {
+                                replies: data
+                            }
+                            
 
-        )
-    }
+                        }, function(err, docs) {
+                            if (err) {
+                            res.send({Error: err})
+                            } else {
+                            res.send(docs)
+                            }
+                        }
+
+                        )
+                    }
+        }
+    })
 })
 
 
