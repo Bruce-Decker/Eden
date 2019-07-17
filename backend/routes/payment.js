@@ -21,9 +21,9 @@ let paymentMethods= [
 router.post('/charge', function(req,res) {
     stripe.charges.create({
         amount: req.body.amount*100,
-        description: "Sample Charge",
+        description: req.body.description,
         currency: "usd",
-        source: "tok_mastercard"
+        source: req.body.stripe_token
     })
     .then(charge => {
         charge.amount = charge.amount/100;
@@ -32,7 +32,11 @@ router.post('/charge', function(req,res) {
     })
     .catch(err => {
         console.log("Error:", err);
-        res.status(500).send({error: "Purchase Failed"});
+        var paymentError = new Error();
+        paymentError.statusCode = 400;
+        paymentError.detail = err;
+        paymentError.message = "Purchase Failed";
+        res.send(paymentError);
     });
 });
 

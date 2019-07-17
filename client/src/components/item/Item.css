@@ -2,6 +2,10 @@
   margin-top: 3rem;
 }
 
+.createItem {
+  padding: 20px 10px 10px 10px;
+}
+
 .item-img {
   text-align: center;
   vertical-align: middle;
@@ -213,13 +217,65 @@
 
 .space {
   padding-bottom: 10px;
-  
- }
+}
 
-
- .ribbon_font {
+.ribbon_font {
   font-family: 'Pacifico', cursive;
- }
+}
+
+#shown-items-div1 a:hover {
+  text-decoration: none;
+}
+
+.shown-item-card {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 10px;
+  border-radius: 20px;
+  background-color: #f5f5ff;
+  transition: .1s ease-in-out;
+}
+
+.shown-item-card:hover {
+  background-color: #fafaff;
+}
+
+.shown-item-name {
+  font-weight: bold;
+}
+
+.shown-item-description {
+  font-weight: bold;
+}
+
+.shown-item-category {
+  font-weight: bold;
+}
+
+.shown-item-price {
+  font-weight: bold;
+}
+
+.shown-item-bid-price {
+  font-weight: bold;
+}
+
+.shown-item-text {
+  color: #222;
+}
+
+.shown-item-text:hover {
+  color: #222;
+}
+
+
+
+
+
+
+
+
+
 
 
  

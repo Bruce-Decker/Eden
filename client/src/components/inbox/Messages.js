@@ -11,6 +11,7 @@ import Moment from 'react-moment';
 import { withRouter } from 'react-router-dom';
 import ComposeModal from './ComposeModal'
 import Modal from 'react-modal';
+import { Dropdown } from 'react-bootstrap'
 
 Modal.setAppElement('#root')
 
@@ -21,6 +22,30 @@ class Messages extends Component {
             selected_message_ids: []
         }
     }
+
+
+    increasePageNumber = (page_number, page_limit, total_messages, page_size) => { 
+     
+    var projected_num = (parseInt(page_number) + 1) * parseInt(page_limit) 
+   
+        if (projected_num < total_messages) {
+                page_number = parseInt(page_number) + 1
+                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" + this.props.emailType)
+                window.location.reload()
+        }
+
+    }
+
+    decreasePageNumber = (page_number) => { 
+       
+         
+            page_number = parseInt(page_number) - 1
+            if (page_number >= 0) {
+                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType)
+                window.location.reload()
+            }
+       
+     }
 
     trashMessages = () => {
        
@@ -43,6 +68,73 @@ class Messages extends Component {
        
        
      }
+
+     moveToInbox = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/moveToInbox', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToSent = () => {
+          alert("sent")
+     }
+
+     moveToImportant = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/markAsImportant', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToDrafts = () => {
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/markAsDrafts', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+     }
+
+     moveToTrash = () => {
+       alert("trash")
+     }
+
+     
 
 
     //  selectTrashMessages = (e, message_id) => {
@@ -126,7 +218,7 @@ class Messages extends Component {
     }
 
     showIndividualMessage = (e, message_id) => {
-       this.props.history.push('/inbox/' + this.props.auth.user.email + "?emailType=readEachEmail&message_id=" + message_id)
+       this.props.history.push('/inbox/' + this.props.auth.user.email + "/individual/" + "?emailType=readEachEmail&message_id=" + message_id)
     }
 
 
@@ -157,7 +249,7 @@ class Messages extends Component {
                     <i className=" fa fa-refresh" />
                   </a>
                 </div>
-                <div className="btn-group hidden-phone">
+                {/* <div className="btn-group hidden-phone">
                   <a data-toggle="dropdown" href="#" className="btn mini blue" aria-expanded="false">
                     More
                     <i className="fa fa-angle-down " />
@@ -168,18 +260,37 @@ class Messages extends Component {
                     <li className="divider" />
                     <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
                   </ul>
-                </div>
+                </div> */}
                 <div className="btn-group">
-                  <a data-toggle="dropdown" href="#" className="btn mini blue">
+                  
+                <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-market-items">
+                        Mark as
+                      </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                   
+                    {this.props.emailType !== 'important' ?
+                      <Dropdown.Item onClick = {this.moveToImportant}>Important</Dropdown.Item>
+                      : null }
+                     {this.props.emailType !== 'draft' ?
+                         <Dropdown.Item onClick = {this.moveToDrafts}>Draft</Dropdown.Item>
+                         : null }
+                    {this.props.emailType !== 'trash' ?
+                      <Dropdown.Item onClick = {this.moveToTrash}>Trash</Dropdown.Item>
+                      : null }
+                    </Dropdown.Menu>
+                </Dropdown>
+                  {/* <a data-toggle="dropdown" href="#" className="btn mini blue">
                     Move to
                     <i className="fa fa-angle-down " />
                   </a>
+                   
                   <ul className="dropdown-menu">
                     <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
                     <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
                     <li className="divider" />
                     <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul>
+                  </ul> */}
                 </div>
                 
 
@@ -194,12 +305,39 @@ class Messages extends Component {
 
 
                 <ul className="unstyled inbox-pagination">
-                  <li><span>1-50 of 234</span></li>
+                   
                   <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-left  pagination-left" /></a>
+                     
+                      <span>
+
+                         {parseInt(this.props.total_messages) !== 0 ? 
+                    
+                             parseInt(this.props.page_number) * parseInt(this.props.page_limit) + 1   
+                              
+                            : null }
+                            { (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit) >= parseInt(this.props.total_messages)
+                            ?
+
+                                        <span>
+                                            {parseInt(this.props.page_size) !== 1 ? 
+                                       
+                                            - this.props.total_messages
+                                            : null }
+                                        </span>
+
+                             :  
+                              
+                                 - (parseInt(this.props.page_number) + 1) * parseInt(this.props.page_limit)}
+                                
+                              {" "}  of  {" total "}
+                            {this.props.total_messages}
+                      </span>
+                    </li>
+                  <li>
+                    <a className="np-btn" onClick = {() => this.decreasePageNumber(this.props.page_number)}><i className="fa fa-angle-left  pagination-left" /></a>
                   </li>
                   <li>
-                    <a className="np-btn" href="#"><i className="fa fa-angle-right pagination-right" /></a>
+                    <a className="np-btn"  onClick = {() => this.increasePageNumber(this.props.page_number, this.props.page_limit, this.props.total_messages, this.props.page_size)}><i className="fa fa-angle-right pagination-right" /></a>
                   </li>
                 </ul>
               </div>

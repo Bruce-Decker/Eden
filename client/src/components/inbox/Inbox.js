@@ -11,11 +11,13 @@ import Moment from 'react-moment';
 import Messages from './Messages'
 import Modal from 'react-modal';
 import ComposeModal from './ComposeModal'
+import Pagination from '../pagination/Pagination'
 
 var inbox_response
 var sent_response
 var important_response
 var drafted_message
+var trash_response
 var email_selection
 
 Modal.setAppElement('#root')
@@ -31,12 +33,14 @@ class Inbox extends Component {
               sentMessages: [],
               importantMessages: [],
               draftedMessages: [],
+              trashMessages: [],
               isDraft: [],
               showInboxMessage: false,
               showSentMessage: false,
               showImportantMessage: false,
               showIndividualMessage: false,
               showDraftedMessage: false,
+              showTrashMessage: false,
               subject: '',
               message: '',
               sender_name: '',
@@ -44,10 +48,47 @@ class Inbox extends Component {
               receiver_email: '',
               time: '',
               replies: [],
+              subreplies: [],
+              currentPage: null, 
+              totalPages: null ,
               modalIsOpen: false,
-              isEdit: false
+              replyModalIsOpen: false,
+              isEdit: false,
+              isReply: false,
+              page_number: 0,
+              total_messages: 0,
+              page_size: 0,
+              page_limit: 1
+             
         }
     }
+
+    increasePage = (page_number, items_per_page, total_items) => {
+    alert(total_items / items_per_page)
+    if (total_items / items_per_page > page_number + 1)
+       this.setState({
+          page_number: page_number + 1
+       })
+    }
+
+    decreasePage = (page_number) => {
+      this.setState({
+         page_number: page_number + 1
+      })
+   }
+
+    onPageChanged = data => {
+       
+      console.log(data)
+      const { replies }  = this.state;
+      const { currentPage, totalPages, pageLimit } = data;
+  
+      const offset = (currentPage - 1) * pageLimit;
+      const subreplies = replies.reverse().slice(offset, offset + pageLimit);
+  
+      this.setState({ currentPage, subreplies, totalPages });
+    }
+
 
 
     trashMessages = (message_id) => {
@@ -69,10 +110,11 @@ class Inbox extends Component {
        this.setState({ trashed_message_ids: newArr }, () => console.log('updated state', newArr))
     }
 
-    openModal = (isEdit) => {
+    openModal = (isEdit, isReply) => {
       this.setState({
         modalIsOpen: true,
-        isEdit: isEdit
+        isEdit: isEdit,
+        isReply: isReply
       });
     }
   
@@ -107,11 +149,12 @@ class Inbox extends Component {
          
          var message_id
          var indivisual_message
+         var page_number
        
          console.log(values)
          console.log(values["emailType"])
  
-       
+     
          for (var key in values) {
            
            if (key === "emailType") {
@@ -121,23 +164,37 @@ class Inbox extends Component {
               
                message_id = values[key]
            }
+
+            // if (key === "page") {
+            //   page_number = values[key]
+            //   this.setState({
+            //     page_number: parseInt(values[key])
+            //   })
+            //   alert(this.state.page_number)
+            // }
          }
 
         
+        
    
-         inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email)
-         sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email)
-         important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email)
-         drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
+         inbox_response = await axios.get('/message/getInboxMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
+         sent_response = await axios.get('/message/getSentMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
+         important_response = await axios.get('/message/getStarredMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
+         drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email + "/" + this.props.match.params.page)
+         trash_response = await axios.get('/message/getTrashedMessages/' + this.props.match.params.email + "/" + this.props.match.params.page)
 
          if (email_selection == "inbox" || email_selection == undefined) {
            console.log(inbox_response.data)
               if (inbox_response.data) {
                   this.setState({
-                    inboxMessages: inbox_response.data,
+                    inboxMessages: inbox_response.data.messages,
+                    total_messages: inbox_response.data.total,
+                    page_size: inbox_response.data.pageSize,
+                    page_limit: inbox_response.data.limit,
                     showInboxMessage: true,
                     showSentMessage: false,
-                    showImportantMessage: false
+                    showImportantMessage: false,
+                    showTrashMessage: false
                   })
               }
          }
@@ -145,10 +202,14 @@ class Inbox extends Component {
          if (email_selection == "sent") {
             if (sent_response.data) {
                 this.setState({
-                  sentMessages: sent_response.data,
+                  sentMessages: sent_response.data.messages,
+                  total_messages: sent_response.data.total,
+                  page_size: sent_response.data.pageSize,
+                  page_limit: sent_response.data.limit,
                   showSentMessage: true,
                   showInboxMessage: false,
-                  showImportantMessage: false
+                  showImportantMessage: false,
+                  showTrashMessage: false
                })
             } 
          }
@@ -156,10 +217,14 @@ class Inbox extends Component {
          if (email_selection == "important") {
            if (important_response.data) {
               this.setState({
-                   importantMessages: important_response.data,
+                   importantMessages: important_response.data.messages,
+                   total_messages: important_response.data.total,
+                   page_size: important_response.data.pageSize,
+                   page_limit: important_response.data.limit,
                    showSentMessage: false,
                    showInboxMessage: false,
-                   showImportantMessage: true
+                   showImportantMessage: true,
+                   showTrashMessage: false
 
               })
            }
@@ -177,7 +242,8 @@ class Inbox extends Component {
                       showSentMessage: false,
                       showInboxMessage: false,
                       showIndividualMessage: true,
-                      message_id: this.state.message_id,
+                      showTrashMessage: false,
+                      message_id: indivisual_message.data.message_id,
                       subject: indivisual_message.data.subject,
                       message: indivisual_message.data.message,
                       sender_name: indivisual_message.data.sender_name,
@@ -189,6 +255,7 @@ class Inbox extends Component {
                       isDraft: indivisual_message.data.isDraft,
                       sentMessages: sent_response.data,
                       importantMessages: important_response.data
+                     
                   })
              }
 
@@ -196,40 +263,70 @@ class Inbox extends Component {
 
 
          if (email_selection == "draft") {
-              drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
+              //drafted_message = await axios.get('/message/getDraftedMessages/' + this.props.auth.user.email)
               console.log(drafted_message.data)
               if (drafted_message.data) {
                       this.setState({
-                        draftedMessages: drafted_message.data,
+                        draftedMessages: drafted_message.data.messages,
+                        total_messages: drafted_message.data.total,
+                        page_size: drafted_message.data.pageSize,
+                        page_limit: drafted_message.data.limit,
                         showSentMessage: false,
                         showInboxMessage: false,
                         showImportantMessage: false,
-                        showDraftedMessage: true
+                        showDraftedMessage: true,
+                        showTrashMessage: false
 
                     })
                   }
+         }
+
+         if (email_selection == "trash") {
+             if (trash_response.data) {
+               console.log(trash_response)
+               this.setState({
+                  trashMessages: trash_response.data.messages,
+                  total_messages: trash_response.data.total,
+                  page_size: trash_response.data.pageSize,
+                  page_limit: trash_response.data.limit,
+                  showSentMessage: false,
+                  showInboxMessage: false,
+                  showImportantMessage: false,
+                  showDraftedMessage: false,
+                  showTrashMessage: true
+               })
+             }
          }
 
          
     }
 
     render() {
+
+
+      const { replies, subreplies, currentPage, totalPages } = this.state;
+      const totalReplies = replies.length;
+
       console.log(this.props)
         return (
             <div>
             <RegularBanner />
             {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
-                      || this.state.showIndividualMessage  || this.state.showDraftedMessage ?
+                      || this.state.showIndividualMessage  || this.state.showDraftedMessage 
+                      || this.state.showTrashMessage ?
                 <ComposeModal 
+                    className = "ReactModal__Overlay"
                     isOpen={this.state.modalIsOpen}
                     onAfterOpen={this.afterOpenModal}
                     onRequestClose={this.closeModal}
                     contentLabel="Example Modal"
                     isDraft = {this.state.isDraft}
                     receiver_email = {this.state.receiver_email}
+                    sender_email = {this.state.sender_email}
                     subject = {this.state.subject}
                     message = {this.state.message}
                     isEdit = {this.state.isEdit}
+                    isReply = {this.state.isReply}
                     message_id = {this.state.message_id}
                 >
                 </ComposeModal>
@@ -252,7 +349,7 @@ class Inbox extends Component {
               </a>
             </div>
             <div className="inbox-body">
-              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false)}>
+              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
                 Compose
               </a>
               {/* Modal */}
@@ -308,15 +405,16 @@ class Inbox extends Component {
             <ul className="inbox-nav inbox-divider">
               <li className={this.state.showInboxMessage ? "active" : ''}>
                 <Link to= {{
-                      pathname: "/inbox/" + this.props.auth.user.email,
+                      pathname: "/inbox/" + this.props.auth.user.email + '/0',
                       search: "?emailType=inbox"
                  }}>
                     <i className="fa fa-inbox" /> Inbox 
                     
                       {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
-                      || this.state.showIndividualMessage  || this.state.showDraftedMessage ? 
+                      || this.state.showIndividualMessage  || this.state.showDraftedMessage 
+                      || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {inbox_response.data.length}
+                            {inbox_response.data.total}
                            </span>
                           : null }
                            
@@ -326,57 +424,74 @@ class Inbox extends Component {
               <li className={this.state.showSentMessage ? "active" : ''}>
 
                 <Link to = {{
-                   pathname: "/inbox/" + this.props.auth.user.email,
+                   pathname: "/inbox/" + this.props.auth.user.email + '/0',
                    search: "?emailType=sent"
                 }}>
                      <i className="fa fa-envelope-o" /> Sent Mail
 
                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                       || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {sent_response.data.length}
+                            {sent_response.data.total}
                            </span>
                           : null }
                 </Link>
 
               </li>
-              <li>
+              <li className={this.state.showImportantMessage ? "active" : ''}>
 
                  <Link to={{
-                     pathname: "/inbox/" + this.props.auth.user.email,
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
                      search: "?emailType=important"
                  }}>
                      <i className="fa fa-bookmark-o" /> Important
 
                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                       || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {important_response.data.length}
+                            {important_response.data.total}
                            </span>
                           : null }
                      
                 </Link>
 
               </li>
-              <li>
+              <li className={this.state.showDraftedMessage ? "active" : ''}>
                 <Link to = {{
-                     pathname: "/inbox/" + this.props.auth.user.email,
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
                      search: "?emailType=draft"
                 }}>
                     <i className=" fa fa-external-link" /> Drafts 
                        
                        {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage ? 
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                       || this.state.showTrashMessage ? 
                         <span className = "count_messages">
-                            {drafted_message.data.length}
+                            {drafted_message.data.total}
                            </span>
                           : null }
                          
                        
                 </Link>
               </li>
-              <li>
-                <a href="#"><i className=" fa fa-trash-o" /> Trash</a>
+              <li className={this.state.showTrashMessage ? "active" : ''}>
+
+                <Link to={{
+                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                     search: "?emailType=trash"
+                }}>
+                      <i className=" fa fa-trash-o" /> Trash
+                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                       || this.state.showTrashMessage ? 
+                        <span className = "count_messages">
+                            {trash_response.data.total}
+                           </span>
+                          : null }
+                </Link>
+
               </li>
             </ul>
            
@@ -404,57 +519,155 @@ class Inbox extends Component {
 
 
             {this.state.showInboxMessage ? 
-              <Messages messages = {this.state.inboxMessages} history = {this.props.history} />
+              <Messages messages = {this.state.inboxMessages} 
+                        history = {this.props.history} 
+                        page_number = {this.props.match.params.page}
+                        total_messages = {this.state.total_messages}
+                        page_size = {this.state.page_size}
+                        page_limit = {this.state.page_limit}
+                        emailType = 'inbox'
+                        />
               : null }
+
             {this.state.showSentMessage ? 
-             <Messages messages = {this.state.sentMessages} history = {this.props.history}/>
+             <Messages messages = {this.state.sentMessages} 
+                       history = {this.props.history}
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit} 
+                       emailType = 'sent' 
+                       />
              : null }
 
            {this.state.showImportantMessage ? 
-             <Messages messages = {this.state.importantMessages} history = {this.props.history} />
+             <Messages messages = {this.state.importantMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'important' 
+                       />
              : null }
 
        {this.state.showDraftedMessage ? 
-             <Messages messages = {this.state.draftedMessages} history = {this.props.history} />
+             <Messages messages = {this.state.draftedMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'draft' 
+                       
+                       />
              : null }
+
+      {this.state.showTrashMessage ? 
+             <Messages messages = {this.state.trashMessages} 
+                       history = {this.props.history} 
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit}  
+                       emailType = 'trash' 
+                       
+                       />
+             : null }
+
+
 
              {this.state.showIndividualMessage ?
                <div>
-                   <div>
-                       <span className = "individual_message_label">Subject: </span>
-                       <span>{this.state.subject}</span>
-                  </div>
-                   <div>
-                          <span className = "individual_message_label">From: </span>
-                          <span>{this.state.sender_name}</span>
-                          <span>{`  <${this.state.sender_email}>`}</span>
-                   </div>
-                   <div>
-                       <span className = "individual_message_label">To: </span>
-                       <span>{this.state.receiver_name}</span>
-                     
-                      <span>{`  <${this.state.receiver_email}>`}</span>
-                        
+                        <div>
+                            <div>
+                                <span className = "individual_message_label">Subject: </span>
+                                <span>{this.state.subject}</span>
+                            </div>
+                            <div>
+                                    <span className = "individual_message_label">From: </span>
+                                    <span>{this.state.sender_name}</span>
+                                    <span>{`  <${this.state.sender_email}>`}</span>
+                            </div>
+                           
+                            <div>
+                                <span className = "individual_message_label">To: </span>
+                                <span>{this.state.receiver_name}</span>
+                              
+                                <span>{`  <${this.state.receiver_email}>`}</span>
+                                {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
+                                  null
 
-                   </div>
-                   <div className = "space">
+                                    : 
+                                    <div className = "floatRight">
+                                      <button className="ui primary button" onClick = {() => this.openModal(false, true)}>
+                                      <i className="fa fa-mail-reply" />
+                                    </button>
+                                    </div>
+                                    
+                                    }
 
-                  </div>
-                   <div>
-                          {this.state.message.split("\n").map((i,key) => {
-                                  return <div key={key}>{i}</div>;
-                            })}
+
+                                  
+
+                            </div>
+                            <div>
+                                    <span className = "individual_message_label">Time: </span>
+                                    <Moment format="HH:mm MM/DD/YYYY">{this.state.time}</Moment>
+                                 
+                            </div>
+                            <div className = "space">
+
+                            </div>
+                            <div>
+                                    {this.state.message.split("\n").map((i,key) => {
+                                            return <div key={key}>{i}</div>;
+                                      })}
 
 
-                  </div>
-                  <div className = "space">
+                            </div>
+                          
+                            <div className = "space">
 
-                  </div>
+                            </div>
 
-                  {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
+                            {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
 
-                          <button className="ui primary button" type="submit" onClick = {() => this.openModal(true)}>Edit</button>
-                          : null }
+                                    <button className="ui primary button" type="submit" onClick = {() => this.openModal(true, false)}>Edit</button>
+                                    : null }
+
+                        </div>
+                        <div>
+                          {this.state.subreplies.map(reply => 
+                          <div className = "well">
+                            <Card.Header>
+                              <div>
+                                    <span className = "individual_message_label">From: </span>
+                                    <span>{reply.name}</span>
+                                    <span>{`  <${reply.email}>`}</span>
+                              </div>
+                              <div>
+                                    <span className = "individual_message_label">Time: </span>
+                                 
+                                    <Moment format="HH:mm MM/DD/YYYY">{reply.time}</Moment> 
+                                  
+                              </div>
+                              <div className = "space">
+
+                              </div>
+                              <div>
+                                 {reply.message}
+
+                              </div>
+                            
+                            </Card.Header>
+                            <div className = "space"> 
+                            </div>
+                            </div>
+                          )}
+
+                        </div>
+                        <Pagination totalRecords={ totalReplies } pageLimit={2} pageNeighbours={1} onPageChanged={this.onPageChanged} />
 
               </div>
               : null }

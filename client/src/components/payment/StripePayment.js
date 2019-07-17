@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 import {
     CardElement,
     CardNumberElement,
@@ -10,6 +11,7 @@ import {
     Elements,
 } from 'react-stripe-elements';
 import './Payment.css';
+import {toast} from "react-toastify";
 
 const createOptions = () => {
     return {
@@ -60,6 +62,9 @@ class StripePayment extends Component {
         this.state = {
             canMakePayment: false,
             paymentRequest,
+            amount: 0,
+            billingAddress: {},
+            shippingAddress: {}
         };
     }
 
@@ -78,19 +83,38 @@ class StripePayment extends Component {
 
     async submit(ev) {
         // User clicked submit
+        var stripeToken = {};
         ev.preventDefault();
         if (this.props.stripe) {
-            this.props.stripe.createToken().then(this.props.handleResult);
+            this.props.stripe.createToken(this.state.billingAddress)
+                .then((data) => {
+                    stripeToken = data.token;
+                    var charge_details = {
+                        amount: this.state.amount,
+                        description: "sample charge",
+                        stripe_token: data.token
+                    };
+                    axios.post('http://localhost:5000/payment/charge', charge_details)
+                        .then(res =>
+                        {
+                            console.log("payment successfull!");
+                            console.log(res);
+                            window.location.href = '/paymentConfirmation';
+                        })
+                        .catch(err => console.log(err));
+                })
+                .then(this.props.handleResult);
         } else {
             console.log("Stripe.js hasn't loaded yet.");
         }
-        console.log("credit card payment")
+        console.log(this.props);
+        console.log("credit card payment"+ stripeToken.id);
     }
 
     render() {
         return (
             <div className="checkout container">
-                <p className="payment-para">Would you like to complete the purchase?</p>
+                <p className="payment-para">Enter your Payment information below to complete the order</p>
                 {this.state.canMakePayment ?
                 <PaymentRequestButtonElement
                     paymentRequest={this.state.paymentRequest}
@@ -113,6 +137,23 @@ class StripePayment extends Component {
                 <button className="payment-button-1" onClick={this.submit}>Pay</button>
             </div>
         );
+    }
+
+    componentDidMount(){
+        this.state.amount = this.props.amount.total;
+        this.state.billingAddress = this.props.billing_address;
+        //this.state.amount = this.props.amount.total;
+        console.log(this.state.billingAddress);
+    }
+
+    submitCharge(token) {
+       /* axios.post('http://localhost:5000/payment/createItem', {"test":"worked"})
+            .then(res =>
+            {
+                console.log("item created");
+                console.log(res);
+            })
+            .catch(err => console.log(err));*/
     }
 }
 
