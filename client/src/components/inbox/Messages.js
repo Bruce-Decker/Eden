@@ -19,7 +19,8 @@ class Messages extends Component {
     constructor(props) {
         super()
         this.state = {
-            selected_message_ids: []
+            selected_message_ids: [],
+            all_selected_message_ids: []
         }
     }
 
@@ -261,37 +262,7 @@ class Messages extends Component {
                     <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
                   </ul>
                 </div> */}
-                <div className="btn-group">
-                  
-                <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-market-items">
-                        Mark as
-                      </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                   
-                    {this.props.emailType !== 'important' ?
-                      <Dropdown.Item onClick = {this.moveToImportant}>Important</Dropdown.Item>
-                      : null }
-                     {this.props.emailType !== 'draft' ?
-                         <Dropdown.Item onClick = {this.moveToDrafts}>Draft</Dropdown.Item>
-                         : null }
-                    {this.props.emailType !== 'trash' ?
-                      <Dropdown.Item onClick = {this.moveToTrash}>Trash</Dropdown.Item>
-                      : null }
-                    </Dropdown.Menu>
-                </Dropdown>
-                  {/* <a data-toggle="dropdown" href="#" className="btn mini blue">
-                    Move to
-                    <i className="fa fa-angle-down " />
-                  </a>
-                   
-                  <ul className="dropdown-menu">
-                    <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
-                    <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
-                    <li className="divider" />
-                    <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul> */}
-                </div>
+               
                 
 
                 <div className="btn-group">
