@@ -2,6 +2,10 @@
   margin-top: 3rem;
 }
 
+.createItem {
+  padding: 20px 10px 10px 10px;
+}
+
 .item-img {
   text-align: center;
   vertical-align: middle;
