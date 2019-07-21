@@ -37,24 +37,28 @@ const MessageSchema = new Schema({
        }
     }],
     isStarred: [{
+        _id:false,
         email: {
            type: String,
            required: true
         }
      }],
     isTrashed: [{
+        _id:false,
         email: {
            type: String,
            required: true
         }
      }],
     isDeleted: [{
+        _id:false,
         email: {
            type: String,
            required: true
         }
      }],
     isDraft: [{
+        _id:false,
         email: {
            type: String,
            required: true

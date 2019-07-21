@@ -58,11 +58,15 @@ class Messages extends Component {
      }
 
      checkAllBox = () => {
+     if (!this.state.selectAll) {
         this.props.messages.map(message => {
             console.log(message.message_id)
             this.state.selected_message_ids.push(message.message_id)
             
         })
+     } else {
+        this.state.selected_message_ids = []
+     }
         this.setState({
             selectAll:  !this.state.selectAll
         })
@@ -90,22 +94,31 @@ class Messages extends Component {
        
      }
 
+
+     deleteMessages = () => {
+       
+        var message_id_array = []
+        this.state.selected_message_ids.map(id => {
+            message_id_array.push(id)
+        })
+
+        var data = {
+            message_id: message_id_array,
+            email: this.props.auth.user.email
+        }
+
+        axios.post('/message/deleteMessage', data)
+            .then(res => {
+                console.log(res.data)
+                window.location.reload()
+            })
+            .catch(err => console.log(err))
+       
+       
+     }
+
    
-     
 
-
-    //  selectTrashMessages = (e, message_id) => {
-    //     e.stopPropagation();
-    //    const trashed_message_ids = this.state.trashed_message_ids
-    //    let newArr = []
-    //    if (!trashed_message_ids.includes(message_id)) {
-    //       newArr = [...trashed_message_ids, message_id]
-    //    } else {
-    //        newArr = trashed_message_ids.filter(a => a !== message_id);
-    //    }
-
-    //    this.setState({ trashed_message_ids: newArr }, () => console.log('updated state', newArr))
-    // }
 
     preventTrigger = e => {
         e.stopPropagation();
@@ -128,18 +141,6 @@ class Messages extends Component {
     }
 
 
-    // checkTrash = (e, message_id) => {
-    //     e.stopPropagation();
-    //     //const trashed_message_ids = this.state.trashed_message_ids
-    //    let newArr = []
-    //    if (!this.state.trashed_message_ids.includes(message_id)) {
-    //       newArr = [...this.state.trashed_message_ids, message_id]
-    //    } else {
-    //        newArr = this.state.trashed_message_ids.filter(a => a !== message_id);
-    //    }
-
-    //    this.setState({ {this.state.trashed_message_ids}: newArr }, () => console.log('updated state', newArr))
-    // }
 
     starMessage = (e, message_id) => {
         e.stopPropagation();
@@ -212,7 +213,12 @@ class Messages extends Component {
                 <div className="btn-group">
                   <a data-toggle="dropdown" href="#" className="btn mini blue">
                   
+                  {this.props.emailType !== "trash" ?
                     <div href="#" onClick = {this.trashMessages}><i className=" fa fa-trash-o" /> Trash</div>
+
+                    : 
+                    <div href="#" onClick = {this.deleteMessages}><i className=" fa fa-trash-o" /> Delete</div>
+             }
                   </a>
                   
                 </div>
@@ -270,7 +276,7 @@ class Messages extends Component {
                                       <div className = "firstInboxContainer">
                                               <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
                                                   
-                                                      <input key = {message.message_id} type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selectAll}/>
+                                                      <input key = {message.message_id} type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selected_message_ids.includes(message.message_id)}/>
                                               </div>
                                               {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
@@ -304,7 +310,7 @@ class Messages extends Component {
                                     <div className = "readMessage">
                                        <div className = "firstInboxContainer">
                                           <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
-                                                  <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selectAll}/>
+                                                  <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selected_message_ids.includes(message.message_id)}/>
                                           </div>
                                           {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>

@@ -350,9 +350,7 @@ router.post('/untrashMessage', function(req, res) {
 router.post('/deleteMessage', function(req, res) {
     var message_id = req.body.message_id
     var email = req.body.email
-    var data = {
-       email: email
-    }
+   
     message_id.forEach(function(element) {
         console.log("id is" + element)
     })
@@ -365,7 +363,7 @@ router.post('/deleteMessage', function(req, res) {
        },
        {
          $push: {
-            isDeleted: data
+            isDeleted: {email: email}
           }
        }, function(err, docs) {
            if (err) {
@@ -381,22 +379,14 @@ router.post('/deleteMessage', function(req, res) {
 
 router.get('/getSearchedMessages/:email/:page', function(req, res) {
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 3
+    var limit = parseInt(req.query.limit) || 5
     console.log()
     var searchTerm = new RegExp(req.query.search, "i")
     console.log(searchTerm)
     var email = req.params.email
     var query = {$or: [{receiver_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
     {sender_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}]}
-    // Message.find().or([{receiver_email: email, subject: searchTerm}, {sender_email: email, subject: searchTerm}])
-    //     .exec(function(err, docs) {
-    //          if(err) {
-    //              res.send(err)
-    //          }
-    //          if (docs) {
-    //              res.send(docs)
-    //          }
-    //     })
+   
     Message.find().or([{receiver_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
         {sender_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}])
         .sort({'time': 'desc'})
@@ -428,7 +418,7 @@ router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
     var receiver_email = req.params.receiver_email
     console.log(req.query.page)
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 3
+    var limit = parseInt(req.query.limit) || 5
     var query = {$or: [{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
     {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}]}
 
@@ -465,7 +455,7 @@ router.get('/getSentMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
     console.log(sender_email)
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 2
+    var limit = parseInt(req.query.limit) || 5
     var query = {sender_email: sender_email, 'isDraft.email': {"$nin": [sender_email]}, 'isDeleted.email': {"$nin": [sender_email]}, 'isTrashed.email': {"$nin": [sender_email]}}
 
     Message.find({sender_email: sender_email, 'isDraft.email': {"$nin": [sender_email]}, 'isDeleted.email': {"$nin": [sender_email]}, 'isTrashed.email': {"$nin": [sender_email]}})
@@ -497,7 +487,7 @@ router.get('/getStarredMessages/:sender_email/:page', function(req, res) {
     var sender_email = req.params.sender_email
     console.log(sender_email)
     var page = parseInt(req.params.page) || 0
-    var limit = parseInt(req.query.limit) || 2
+    var limit = parseInt(req.query.limit) || 5
     var query = {$or: [{sender_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}, {receiver_email: sender_email, 'isStarred.email': {"$eq": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}]}
 
     
@@ -532,7 +522,7 @@ router.get('/getDraftedMessages/:sender_email/:page', function(req, res) {
 
     var page = parseInt(req.params.page) || 0
    
-    var limit = parseInt(req.query.limit) || 2
+    var limit = parseInt(req.query.limit) || 5
     var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}
     
     Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }})
@@ -582,9 +572,9 @@ router.get('/getTrashedMessages/:sender_email/:page', function(req, res) {
 
     var page = parseInt(req.params.page) || 0
     var limit = parseInt(req.query.limit) || 5
-    var query = {sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}}
+    var query = {sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}, 'isDeleted.email': { "$nin": [sender_email] }}
     
-    Message.find({sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}})
+    Message.find({sender_email: sender_email, 'isTrashed.email': {"$in": [sender_email]}, 'isDeleted.email': { "$nin": [sender_email] }})
      .sort({'time': 'desc'})
      .skip(page * limit)
      .limit(limit)
