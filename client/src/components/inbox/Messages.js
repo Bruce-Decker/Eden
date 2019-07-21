@@ -57,6 +57,10 @@ class Messages extends Component {
        
      }
 
+     refresh = () => {
+         window.location.reload()
+     }
+
      checkAllBox = () => {
      if (!this.state.selectAll) {
         this.props.messages.map(message => {
@@ -202,7 +206,7 @@ class Messages extends Component {
                     </ul>
                   </div>
                 </div>
-                <div className="btn-group">
+                <div className="btn-group" onClick = {this.refresh}>
                   <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" className="btn mini tooltips">
                     <i className=" fa fa-refresh" />
                   </a>

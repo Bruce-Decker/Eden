@@ -352,7 +352,7 @@ class Inbox extends Component {
       
         return (
             <div>
-            <RegularBanner />
+            <RegularBanner type = "inbox"/>
             {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
                       || this.state.showIndividualMessage  || this.state.showDraftedMessage 
                       || this.state.showTrashMessage || this.state.showSearchMessage ?

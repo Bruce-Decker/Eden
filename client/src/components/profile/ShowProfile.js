@@ -364,7 +364,8 @@ class ShowProfile extends Component {
           
         </Modal>
               {this.state.showProfile ? 
-                       <Card>
+                    <div style ={{width: "340px"}}>
+                       <Card.Header>
                             <img src = { this.state.image_path} height = "250" width = "300" />
                             <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
                             <div className = "sorts_mill_goudy_font">
@@ -379,14 +380,17 @@ class ShowProfile extends Component {
                                 <h5>Company: {this.state.company}</h5>
                                 <h5>About Me: {this.state.about_me}</h5>
                             </div>
-                      </Card> 
+                      </Card.Header> 
+                      </div>
                     : 
+                    <div style ={{width: "340px"}}>
                     
                     <Card>
                             <img src = {default_profile_image } height = "250" width = "300" />
                             <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
                            
                       </Card> 
+                      </div>
                     
                     
                     }

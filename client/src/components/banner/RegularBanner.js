@@ -62,6 +62,12 @@ LogoutButton = (e) => {
                     <Dropdown.Menu>
                       <Dropdown.Item href={`/showShowAllUserItems/:${this.props.auth.user.email}`}>My Listed Items</Dropdown.Item>
                       <Dropdown.Item href={`/createItem`}>Create Items</Dropdown.Item>
+                      <Dropdown.Item href={`/showProfile/${this.props.auth.user.email}`}>My Profile</Dropdown.Item>
+                      {this.props.type == "inbox"?
+                       null :
+                         <Dropdown.Item href={`/inbox/${this.props.auth.user.email}/0`}>My Inbox</Dropdown.Item>
+                     
+                      }
                      
                     </Dropdown.Menu>
                 </Dropdown>
@@ -71,6 +77,8 @@ LogoutButton = (e) => {
                       <li className="nav-item">
                         <Link className="nav-link" to={`/showProfile/${this.props.auth.user.email}`} >My Profile</Link>
                       </li>
+
+                     
                       
                      
                   </ul>
