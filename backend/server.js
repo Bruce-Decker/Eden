@@ -80,6 +80,7 @@ app.use(bodyParser.json({limit: '50mb', extended: true}));
 
 app.use(passport.initialize());
 
+
 app.use('/productionLoginRegister', productionLoginRegister);
 app.use('/userAuthentication', userAuthentication);
 app.use('/cart', cart);
@@ -96,7 +97,20 @@ app.use('/payment', payment);
 app.use('/recs', recs);
 app.use('/bids', bids);
 
-app.post('/test', function(req, res) {
+app.get('/', function(req, res) {
+    res.send("test")
+});
+
+app.get('/webhook/', function(req, res) {
+    
+    if (req.query['hub.verify_token'] === 'secret') {
+        res.send(req.query['hub.challenge'])
+    } 
+    res.send("Wrong token")
+})
+
+
+app.get('/test', function(req, res) {
     res.send("test")
 });
 
