@@ -20,7 +20,8 @@ class Messages extends Component {
         super()
         this.state = {
             selected_message_ids: [],
-            all_selected_message_ids: []
+            tempSelected_message_ids: [],
+            selectAll: false
         }
     }
 
@@ -31,7 +32,11 @@ class Messages extends Component {
    
         if (projected_num < total_messages) {
                 page_number = parseInt(page_number) + 1
-                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" + this.props.emailType)
+                if (this.props.type == "individual") {
+                    this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" + this.props.emailType)
+                } else {
+                    this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
+                }
                 window.location.reload()
         }
 
@@ -42,10 +47,25 @@ class Messages extends Component {
          
             page_number = parseInt(page_number) - 1
             if (page_number >= 0) {
-                this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType)
+                if (this.props.type == "individual") {
+                   this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType)
+                } else {
+                    this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
+                }
                 window.location.reload()
             }
        
+     }
+
+     checkAllBox = () => {
+        this.props.messages.map(message => {
+            console.log(message.message_id)
+            this.state.selected_message_ids.push(message.message_id)
+            
+        })
+        this.setState({
+            selectAll:  !this.state.selectAll
+        })
      }
 
     trashMessages = () => {
@@ -70,71 +90,7 @@ class Messages extends Component {
        
      }
 
-     moveToInbox = () => {
-        var message_id_array = []
-        this.state.selected_message_ids.map(id => {
-            message_id_array.push(id)
-        })
-
-        var data = {
-            message_id: message_id_array,
-            email: this.props.auth.user.email
-        }
-
-        axios.post('/message/moveToInbox', data)
-            .then(res => {
-                console.log(res.data)
-                window.location.reload()
-            })
-            .catch(err => console.log(err))
-     }
-
-     moveToSent = () => {
-          alert("sent")
-     }
-
-     moveToImportant = () => {
-        var message_id_array = []
-        this.state.selected_message_ids.map(id => {
-            message_id_array.push(id)
-        })
-
-        var data = {
-            message_id: message_id_array,
-            email: this.props.auth.user.email
-        }
-
-        axios.post('/message/markAsImportant', data)
-            .then(res => {
-                console.log(res.data)
-                window.location.reload()
-            })
-            .catch(err => console.log(err))
-     }
-
-     moveToDrafts = () => {
-        var message_id_array = []
-        this.state.selected_message_ids.map(id => {
-            message_id_array.push(id)
-        })
-
-        var data = {
-            message_id: message_id_array,
-            email: this.props.auth.user.email
-        }
-
-        axios.post('/message/markAsDrafts', data)
-            .then(res => {
-                console.log(res.data)
-                window.location.reload()
-            })
-            .catch(err => console.log(err))
-     }
-
-     moveToTrash = () => {
-       alert("trash")
-     }
-
+   
      
 
 
@@ -232,7 +188,7 @@ class Messages extends Component {
 
             <div className="mail-option">
                 <div className="chk-all">
-                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" />
+                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" onChange = {this.checkAllBox}/>
                   <div className="btn-group">
                     <a data-toggle="dropdown" href="#" className="btn mini all" aria-expanded="false">
                       All
@@ -250,18 +206,6 @@ class Messages extends Component {
                     <i className=" fa fa-refresh" />
                   </a>
                 </div>
-                {/* <div className="btn-group hidden-phone">
-                  <a data-toggle="dropdown" href="#" className="btn mini blue" aria-expanded="false">
-                    More
-                    <i className="fa fa-angle-down " />
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li><a href="#"><i className="fa fa-pencil" /> Mark as Read</a></li>
-                    <li><a href="#"><i className="fa fa-ban" /> Spam</a></li>
-                    <li className="divider" />
-                    <li><a href="#"><i className="fa fa-trash-o" /> Delete</a></li>
-                  </ul>
-                </div> */}
                
                 
 
@@ -314,16 +258,19 @@ class Messages extends Component {
               </div>
         <div className="div-inbox">
 
-
+      
               
                     {this.props.messages.map(message => 
                      <Card className = "eachMessageItem" onClick = {(e) => this.showIndividualMessage(e, message.message_id)}>
                         <div>
                              {message.isRead.some(e => e.email === this.props.auth.user.email) ? 
+                            
                                     <div className = "readMessage">
+                                       
                                       <div className = "firstInboxContainer">
                                               <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
-                                                      <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)}/>
+                                                  
+                                                      <input key = {message.message_id} type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selectAll}/>
                                               </div>
                                               {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
@@ -335,12 +282,6 @@ class Messages extends Component {
                                             </div>
                                           }
                                               <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
-                                              {/* <div>
-                                                  <h3 className = "inboxReadNameFont" > {message.sender_name}</h3>
-                                                
-                                                  
-                                                
-                                              </div> */}
                                       </div>
                                       <div className = "secondInboxContainer">
                                           <h3 className = "inboxReadNameFont"> {message.subject}</h3>
@@ -363,7 +304,7 @@ class Messages extends Component {
                                     <div className = "readMessage">
                                        <div className = "firstInboxContainer">
                                           <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
-                                                  <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)}/>
+                                                  <input type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selectAll}/>
                                           </div>
                                           {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
@@ -388,12 +329,8 @@ class Messages extends Component {
                                           </h3>
                                        </div>
 
-                                </div>
-                            
-                            
-                             }
-                            
-                           
+                                </div>   
+                             }                  
                         </div>    
                          </Card>
                     )}

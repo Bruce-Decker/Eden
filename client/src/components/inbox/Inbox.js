@@ -20,6 +20,7 @@ var drafted_message
 var trash_response
 var email_selection
 
+
 Modal.setAppElement('#root')
 
 class Inbox extends Component {
@@ -34,6 +35,7 @@ class Inbox extends Component {
               importantMessages: [],
               draftedMessages: [],
               trashMessages: [],
+              searchMessages: [],
               isDraft: [],
               showInboxMessage: false,
               showSentMessage: false,
@@ -41,6 +43,7 @@ class Inbox extends Component {
               showIndividualMessage: false,
               showDraftedMessage: false,
               showTrashMessage: false,
+              showSearchMessage: false,
               subject: '',
               message: '',
               sender_name: '',
@@ -58,7 +61,8 @@ class Inbox extends Component {
               page_number: 0,
               total_messages: 0,
               page_size: 0,
-              page_limit: 1
+              page_limit: 1,
+              searchTerm: ''
              
         }
     }
@@ -71,10 +75,24 @@ class Inbox extends Component {
        })
     }
 
+    onChange = (e) => {
+      
+      this.setState({[e.target.name]: e.target.value})
+     
+  } 
+
     decreasePage = (page_number) => {
       this.setState({
          page_number: page_number + 1
       })
+   }
+
+
+ onClickSearch = (searchTerm) => {
+    
+    
+     this.props.history.push('/inbox/' + this.props.auth.user.email + "/0?emailType=search&searchTerm=" + searchTerm)
+     
    }
 
     onPageChanged = data => {
@@ -91,10 +109,7 @@ class Inbox extends Component {
 
 
 
-    trashMessages = (message_id) => {
-      alert(message_id)
-     
-   }
+   
 
 
     selectTrashMessages = (e, message_id) => {
@@ -150,6 +165,7 @@ class Inbox extends Component {
          var message_id
          var indivisual_message
          var page_number
+         var searchTerm
        
          console.log(values)
          console.log(values["emailType"])
@@ -165,13 +181,15 @@ class Inbox extends Component {
                message_id = values[key]
            }
 
-            // if (key === "page") {
-            //   page_number = values[key]
-            //   this.setState({
-            //     page_number: parseInt(values[key])
-            //   })
-            //   alert(this.state.page_number)
-            // }
+           if (key === "searchTerm") {
+              
+            searchTerm = values[key]
+            this.setState({
+              searchTerm: searchTerm 
+            })
+           
+          }
+
          }
 
         
@@ -194,7 +212,8 @@ class Inbox extends Component {
                     showInboxMessage: true,
                     showSentMessage: false,
                     showImportantMessage: false,
-                    showTrashMessage: false
+                    showTrashMessage: false,
+                    showSearchMessage: false
                   })
               }
          }
@@ -209,7 +228,8 @@ class Inbox extends Component {
                   showSentMessage: true,
                   showInboxMessage: false,
                   showImportantMessage: false,
-                  showTrashMessage: false
+                  showTrashMessage: false,
+                  showSearchMessage: false
                })
             } 
          }
@@ -224,11 +244,32 @@ class Inbox extends Component {
                    showSentMessage: false,
                    showInboxMessage: false,
                    showImportantMessage: true,
-                   showTrashMessage: false
+                   showTrashMessage: false,
+                   showSearchMessage: false
 
               })
            }
            console.log(important_response.data)
+         }
+
+       
+
+         if (email_selection == "search") {
+             var search_response = await axios.get('/message/getSearchedMessages/' + this.props.match.params.email + "/" + this.props.match.params.page + "?search=" + searchTerm)
+             this.setState({
+                  searchMessages: search_response.data.messages,
+                  total_messages: search_response.data.total,
+                  page_size: search_response.data.pageSize,
+                  page_limit: search_response.data.limit,
+                  showSentMessage: false,
+                  showInboxMessage: false,
+                  showImportantMessage: false,
+                  showTrashMessage: false,
+                  showSearchMessage: true
+             })
+           
+
+             console.log(this.state.searchMessages)
          }
 
          if (email_selection == "readEachEmail") {
@@ -243,6 +284,7 @@ class Inbox extends Component {
                       showInboxMessage: false,
                       showIndividualMessage: true,
                       showTrashMessage: false,
+                      showSearchMessage: false,
                       message_id: indivisual_message.data.message_id,
                       subject: indivisual_message.data.subject,
                       message: indivisual_message.data.message,
@@ -307,13 +349,13 @@ class Inbox extends Component {
       const { replies, subreplies, currentPage, totalPages } = this.state;
       const totalReplies = replies.length;
 
-      console.log(this.props)
+      
         return (
             <div>
             <RegularBanner />
             {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
                       || this.state.showIndividualMessage  || this.state.showDraftedMessage 
-                      || this.state.showTrashMessage ?
+                      || this.state.showTrashMessage || this.state.showSearchMessage ?
                 <ComposeModal 
                     className = "ReactModal__Overlay"
                     isOpen={this.state.modalIsOpen}
@@ -338,6 +380,7 @@ class Inbox extends Component {
           <aside className="sm-side">
             <div className="user-head">
               <a className="inbox-avatar" href="javascript:;">
+            
                 <img width={64} height={60} src={`/images/${this.props.match.params.email}.jpg`} />
               </a>
               <div className="user-name">
@@ -349,9 +392,9 @@ class Inbox extends Component {
               </a>
             </div>
             <div className="inbox-body">
-              <a href="#myModal" data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
+              <div  data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
                 Compose
-              </a>
+              </div>
               {/* Modal */}
               <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabIndex={-1} id="myModal" className="modal fade" style={{display: 'none'}}>
                 <div className="modal-dialog">
@@ -412,7 +455,7 @@ class Inbox extends Component {
                     
                       {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
                       || this.state.showIndividualMessage  || this.state.showDraftedMessage 
-                      || this.state.showTrashMessage ? 
+                      || this.state.showTrashMessage || this.state.showSearchMessage ? 
                         <span className = "count_messages">
                             {inbox_response.data.total}
                            </span>
@@ -431,7 +474,7 @@ class Inbox extends Component {
 
                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage ? 
+                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
                         <span className = "count_messages">
                             {sent_response.data.total}
                            </span>
@@ -449,7 +492,7 @@ class Inbox extends Component {
 
                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage ? 
+                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
                         <span className = "count_messages">
                             {important_response.data.total}
                            </span>
@@ -467,7 +510,7 @@ class Inbox extends Component {
                        
                        {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage ? 
+                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
                         <span className = "count_messages">
                             {drafted_message.data.total}
                            </span>
@@ -485,7 +528,7 @@ class Inbox extends Component {
                       <i className=" fa fa-trash-o" /> Trash
                       {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage ? 
+                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
                         <span className = "count_messages">
                             {trash_response.data.total}
                            </span>
@@ -501,12 +544,12 @@ class Inbox extends Component {
           <aside className="lg-side">
             <div className="inbox-head">
               <h3>Inbox</h3>
-              <form action="#" className="pull-right position">
+              <div className="pull-right position">
                 <div className="input-append">
-                  <input type="text" className="sr-input" placeholder="Search Mail" />
-                  <button className="btn sr-btn" type="button"><i className="fa fa-search" /></button>
+                  <input type="text" className="sr-input" placeholder="Search Mail" name = "searchTerm" onChange={this.onChange}/>
+                  <button className="btn sr-btn" type="button" onClick = {() => this.onClickSearch(this.state.searchTerm)}><i className="fa fa-search"/></button>
                 </div>
-              </form>
+              </div>
             </div>
             <div className="inbox-body">
 
@@ -526,6 +569,7 @@ class Inbox extends Component {
                         page_size = {this.state.page_size}
                         page_limit = {this.state.page_limit}
                         emailType = 'inbox'
+                        type = "individual"
                         />
               : null }
 
@@ -537,7 +581,23 @@ class Inbox extends Component {
                        page_size = {this.state.page_size}
                        page_limit = {this.state.page_limit} 
                        emailType = 'sent' 
+                       type = "individual"
                        />
+             : null }
+
+
+      {this.state.showSearchMessage ? 
+             <Messages messages = {this.state.searchMessages} 
+                       history = {this.props.history}
+                       page_number = {this.props.match.params.page}
+                       total_messages = {this.state.total_messages}
+                       page_size = {this.state.page_size}
+                       page_limit = {this.state.page_limit} 
+                       emailType = 'search' 
+                       type = "search"
+                       searchTerm = {this.state.searchTerm}
+                       />
+           
              : null }
 
            {this.state.showImportantMessage ? 
@@ -548,6 +608,7 @@ class Inbox extends Component {
                        page_size = {this.state.page_size}
                        page_limit = {this.state.page_limit}  
                        emailType = 'important' 
+                       type = "individual"
                        />
              : null }
 
@@ -559,6 +620,7 @@ class Inbox extends Component {
                        page_size = {this.state.page_size}
                        page_limit = {this.state.page_limit}  
                        emailType = 'draft' 
+                       type = "individual"
                        
                        />
              : null }
@@ -571,6 +633,7 @@ class Inbox extends Component {
                        page_size = {this.state.page_size}
                        page_limit = {this.state.page_limit}  
                        emailType = 'trash' 
+                       type = "individual"
                        
                        />
              : null }
