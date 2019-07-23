@@ -47,55 +47,60 @@ class Detail extends Component {
    
   }
 
-  getBidVisibility(bid_price) {
+  getBidVisibility() {
     // no bid price means that bidding is not supported for this item
-    if (!('bid_price' in this.state.item) || bid_price == null) {
+    if (!('bid_price' in this.state.item) || this.state.item.bid_price == null) {
       return 'item-bids-hide';
     } else {
       return 'item-bids-show';
     }
   }
 
-  getMaxBid(bids) {
-    let eml = '';
-    let amt = -1;
-    let email_class = '';
+  getMaxBid() {
+    if(this.state.item.bid_price && this.state.item.bid_price != null) {
+      let bids = this.state.item.bids;
+      let eml = '';
+      let amt = -1;
+      let email_class = '';
 
-    if(bids.length === 0) {
-      eml = 'Starting Bid'
-      amt = this.state.item.bid_price.toFixed(2);
-      email_class = 'bid-max-email-yours';
-    } else {
-
-      // get the object containing the max bid
-      let maxo = bids.reduce(function(prev, curr) {
-        return (prev.amount > curr.amount) ? prev : curr
-      });
-
-      let email = this.props.auth.user.email;
-      if(email === maxo.email) {
-        email_class = 'bid-max-email-mine';
-      } else {
+      if(bids.length === 0) {
+        eml = 'Starting Bid'
+        amt = this.state.item.bid_price.toFixed(2);
         email_class = 'bid-max-email-yours';
+      } else {
+
+        // get the object containing the max bid
+        let maxo = bids.reduce(function(prev, curr) {
+          return (prev.amount > curr.amount) ? prev : curr
+        });
+
+        let email = this.props.auth.user.email;
+        if(email === maxo.email) {
+          email_class = 'bid-max-email-mine';
+        } else {
+          email_class = 'bid-max-email-yours';
+        }
+
+        eml = maxo.email;
+        amt = maxo.amount.toFixed(2);
       }
 
-      eml = maxo.email;
-      amt = maxo.amount.toFixed(2);
-    }
-
-    return (
-      <span>
-        <span className="bid-max-amount">
-          {amt}
-        </span>
+      return (
         <span>
-          &nbsp;--&nbsp;
+          <span className="bid-max-amount">
+            {amt}
+          </span>
+          <span>
+            &nbsp;--&nbsp;
+          </span>
+          <span className={email_class}>
+            {eml}
+          </span>
         </span>
-        <span className={email_class}>
-          {eml}
-        </span>
-      </span>
-    );
+      );
+    } else {
+      return 0.00;
+    }
   }
 
   handleClickBid() {
@@ -256,15 +261,17 @@ class Detail extends Component {
               <span style={{marginLeft: "1rem"}}></span>
             </div>
             <hr/>
-            <div className={this.getBidVisibility(this.state.item.bids)}>
-              Current bid: ${this.getMaxBid(this.state.item.bids)}
+            <div className={this.getBidVisibility()}>
+              <div>
+                Current bid: ${this.getMaxBid()}
+              </div>
+              <div>
+                <button className="make-bid-btn" onClick={this.handleClickBid}>Make a Bid</button>
+                <span className="make-bid-dlr">$</span>
+                <input type="text" class="make-bid-txt" onChange={this.handleNewBid}></input>
+              </div>
+              <hr/>
             </div>
-            <div>
-              <button className="make-bid-btn" onClick={this.handleClickBid}>Make a Bid</button>
-              <span className="make-bid-dlr">$</span>
-              <input type="text" class="make-bid-txt" onChange={this.handleNewBid}></input>
-            </div>
-            <hr/>
             <button className="test-bids-btn" onClick={this.testBids}>TEST</button>
           </div>
           </div>
