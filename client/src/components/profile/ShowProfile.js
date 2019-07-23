@@ -13,6 +13,7 @@ import isReachable from 'is-reachable';
 import Modal from 'react-modal';
 import ChangeProfile from './ChangeProfile'
 import default_profile_image from './default.png'
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 const customStyles = {
     content : {
@@ -218,20 +219,6 @@ class ShowProfile extends Component {
     }
 
      handleURL = async(url) => {
-        // var instance = axios.create({
-        //     baseURL: '/profile/' + this.props.match.params.email
-        //   });
-        //   var result = await instance.get('/')
-        //      .then(res => {
-        //         console.log(res)
-        //      })
-        //      .catch(err => {
-        //          console.log(err)
-                
-        //      })
-        //      return result
-       
-      
             console.log(url)
             //console.log(await isReachable(url));;
             var result = await isReachable(url)
@@ -379,6 +366,12 @@ class ShowProfile extends Component {
                                 <h5>Country: {this.state.country}</h5>
                                 <h5>Company: {this.state.company}</h5>
                                 <h5>About Me: {this.state.about_me}</h5>
+                                <MessengerCustomerChat
+    pageId="2292649427730564"
+    appId="466650420800999"
+    htmlRef={window.location.pathname}
+   
+  />
                             </div>
                       </Card.Header> 
                       </div>
@@ -397,6 +390,11 @@ class ShowProfile extends Component {
                 
                </div>
                <div className = "ShowProfileWallContainer">
+               <MessengerCustomerChat
+    pageId="2292649427730564"
+    appId="466650420800999"
+   
+  />
               
                        <Card>
                        <div class="non-semantic-protector"> 

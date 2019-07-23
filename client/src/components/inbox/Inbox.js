@@ -375,7 +375,8 @@ class Inbox extends Component {
                 : null }
                 
             <div className="container">
-        <link rel="stylesheet prefetch" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+          
+
         <div className="mail-box">
           <aside className="sm-side">
             <div className="user-head">
@@ -559,7 +560,7 @@ class Inbox extends Component {
 
 
             
-
+           
 
             {this.state.showInboxMessage ? 
               <Messages messages = {this.state.inboxMessages} 

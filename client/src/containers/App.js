@@ -33,6 +33,7 @@ import Property from '../components/property/Property';
 import Service from '../components/service/Service';
 import Detail from '../components/service/Detail';
 
+
 // Setup toastify for notifications
 toast.configure();
 if (localStorage.jwtToken) {
@@ -60,6 +61,7 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
         <div className="App">
+        
         
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
