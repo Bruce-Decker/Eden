@@ -5,6 +5,9 @@ import apple from '../../images/apple.png'
 import star from '../../images/rating.png'
 import map from '../../images/map.jpg'
 import axios from 'axios'
+import  delete_icon  from './delete_icon.png'
+import { connect } from 'react-redux'
+
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -40,7 +43,7 @@ class Review extends Component {
          lat: 37.7749,
          lng: -122.4194
       },
-      showMap: false
+      showReviews: false
   }
   }
 
@@ -55,7 +58,8 @@ class Review extends Component {
              lat: response.data[0].longitude,
              lng: response.data[0].latitude
           },
-          showMap: true
+          showReviews: true,
+          comments: response.data[0].comments
       })
       
    }
@@ -71,21 +75,108 @@ class Review extends Component {
   
     return (
       <div class="container-review">
-        <div class="item-header">Reviews </div>
       
-        <div class="row" style={{marginTop: "1rem"}}>
-          <div class="col-5">
-           
+          <div className = "itemReview">
+          <div class="item-header">Reviews </div>
+             {this.state.showReviews ?
+             <div>
+               {this.state.comments.map(comment => 
+                    <div className="container bootstrap snippet">
+                    <div className="col-sm-8">
+                      <div className="panel panel-white post panel-shadow">
+                        <div className="post-heading">
+                          <div className="pull-left image">
+
+                          <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                         
+                          </div>
+                          <div className="pull-left meta">
+                            <div className="title h5">
+                            <a href="#"><b>{comment.name} </b></a>
+                                        made a review.
+                            </div>
+                            <h6 className="text-muted time">{comment.time}</h6>
+                          </div>
+
+                          {comment.email === this.props.auth.user.email ?
+                                                   <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id)} height="15" width="15"/>  
+                                                    : null }
+                        </div> 
+                        <div className="post-description"> 
+                          <p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p>
+                          <div className="stats">
+                            <a href="#" className="btn btn-default stat-item">
+                              <i className="fa fa-thumbs-up icon" />2
+                            </a>
+                            <a href="#" className="btn btn-default stat-item">
+                              <i className="fa fa-share icon" />12
+                            </a>
+                          </div>
+                        </div>
+                        <div className="post-footer">
+                          <div className="input-group"> 
+                            <input className="form-control" placeholder="Add a comment" type="text" />
+                            <span className="input-group-addon">
+                              <a href="#"><i className="fa fa-edit" /></a>  
+                            </span>
+                          </div>
+                          <ul className="comments-list">
+                            <li className="comment">
+                              <a className="pull-left" href="#">
+                                <img className="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar" />
+                              </a>
+                              <div className="comment-body">
+                                <div className="comment-heading">
+                                  <h4 className="user">Gavino Free</h4>
+                                  <h5 className="time">5 minutes ago</h5>
+                                </div>
+                                <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
+                              </div>
+                             
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className = "space">
+                                  </div>
+
+                  </div>
+                  
+               )}
+                  </div>
+                  : null }
+                  
+              </div>
+      <div className = "eachItemMap">
               <LocationPicker
+                                
                                     containerElement={ <div style={ {height: '100%'} } /> }
                                     mapElement={ <div style={ {height: '400px'} } /> }
                                     defaultPosition={defaultPosition}
                                     onChange={this.handleLocationChange}
                                     zoom = {14}
                                 />
+                                </div>
+        
+      
+        <div class="row" style={{marginTop: "1rem"}}>
+          
+          
+        
+           
+              {/* <LocationPicker
+                                    containerElement={ <div style={ {height: '100%'} } /> }
+                                    mapElement={ <div style={ {height: '400px'} } /> }
+                                    defaultPosition={defaultPosition}
+                                    onChange={this.handleLocationChange}
+                                    zoom = {14}
+                                /> */}
                                 
          
-          </div>
+         
           <div class="col-7">
             <ul class="item-review-list">
               {reviews.map(review => {
@@ -115,4 +206,10 @@ class Review extends Component {
   }
 }
 
-export default Review;
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
+
+export default connect(mapStateToProps)(Review)

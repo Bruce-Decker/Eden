@@ -8,7 +8,7 @@ var Unzipper = require("decompress-zip");
 var path = require("path");
 var del = require('delete');
 var fs = require('fs');
-
+const User = require('../schema/userModel');
 
 var file_old_name
 //application/zip
@@ -66,34 +66,43 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
     const comment = req.body.comment
     const time = Date.now()
     const email = req.body.email
-    const name = req.body.name
+    var name 
     const item_id = req.params.item_id
-    const data = {
-       comment_id,
-       email,
-       name,
-       comment,
-       time
-    }
-    if (comment) {
-      Item.findOneAndUpdate(
-          {
-            item_id: item_id
-          },
-         {
-            $push: {
-               comments: data
-            }
-          }, function(err, docs) {
-            if (err) {
-              res.send({Error: err})
-            } else {
-              res.send(docs)
-            }
-          }
-        )
 
-    }
+    User.findOne({email: email}, function(err, docs) {
+      if (err) {
+        console.log(err)
+      } 
+        if (docs) {
+              name = docs.name
+              const data = {
+                comment_id,
+                email,
+                name,
+                comment,
+                time
+            }
+            if (comment) {
+              Item.findOneAndUpdate(
+                  {
+                    item_id: item_id
+                  },
+                {
+                    $push: {
+                      comments: data
+                    }
+                  }, function(err, docs) {
+                    if (err) {
+                      res.send({Error: err})
+                    } else {
+                      res.send(docs)
+                    }
+                  }
+                )
+            }
+        }
+
+    })
 })
 
 router.post('/deleteComment/:item_id', function(req, res) {
@@ -202,30 +211,35 @@ router.post('/downvote/:comment_id', function(req, res) {
 router.post('/reply/:comment_id', function(req, res) {
     var comment_id = req.params.comment_id
     var email = req.body.email
-    var name = req.body.name
+    var name 
     var reply_id =  uuidv4()
     var reply = req.body.reply
     var time = Date.now()
-    var data = {
-      reply_id,
-      email,
-      name,
-      reply,
-      time
-    }
-    Item.findOneAndUpdate(
-      {
-        "comments.comment_id": comment_id
-       }, {
-        $push: {
-           "comments.$.replies": data
-        }
-    }, function(err, docs) {
-       if (err) {
-         res.send({Error: err})
-       } else {
-         res.send(docs)
-       }
+    var data 
+
+    User.findOne({email: email}, function(err, docs) {
+      name = docs.name
+      data = {
+        reply_id,
+        email,
+        name,
+        reply,
+        time
+      }
+          Item.findOneAndUpdate(
+            {
+              "comments.comment_id": comment_id
+            }, {
+              $push: {
+                "comments.$.replies": data
+              }
+          }, function(err, results) {
+            if (err) {
+              res.send({Error: err})
+            } else {
+              res.send(results)
+            }
+          })
     })
 })
 

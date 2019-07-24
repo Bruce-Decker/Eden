@@ -26,7 +26,10 @@ class Detail extends Component {
     super(props)
     this.state = {
       item: null,
-      new_bid: -1
+      new_bid: -1,
+      showItem: false,
+      comments: ''
+
     };
 
     this.getMaxBid = this.getMaxBid.bind(this);
@@ -41,7 +44,10 @@ class Detail extends Component {
     console.log(response)
     if (response.data[0]) {
         this.setState({
-          item: response.data[0]
+          item: response.data[0],
+          showItem: true,
+          comments: response.data[0].comments
+
         })
     }
    
@@ -233,13 +239,19 @@ class Detail extends Component {
           <div className="row">
           <div className="col-1"/>
           <div className="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw"}}>
-           
+           {this.state.showItem ?
             <img
               key={item.item_id}
               className="item-detail-img"
-              src={item.item_image ? clothingJpg : getImage(item.category)}
+              src={item.item_image}
               alt="Item Image"
             />    
+            :  <img
+            key={item.item_id}
+            className="item-detail-img"
+            src={getImage(item.category)}
+            alt="Item Image"
+          />     }
           </div>
           <div className="col-3" >
             <div className="item-title">
@@ -248,7 +260,7 @@ class Detail extends Component {
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
             <div className="item-by">{item.category}</div>
-            <div className="item-desc"><Link to  = {`/vr/${item.item_id}`}>Try VR</Link></div>
+            <div className="item-desc"><Link to  = {`/vr/${item.item_id}`} target="_blank">Try VR</Link></div>
             <div className="item-desc">{item.description}</div>
             <div>
               {Array.from(Array(item.average_rating), (e, i) => {
