@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import {Route, Redirect } from 'react-router-dom'
 import './Inbox.css'
 import RegularBanner from '../banner/RegularBanner'
 import queryString from "query-string";
@@ -349,409 +350,419 @@ class Inbox extends Component {
       const { replies, subreplies, currentPage, totalPages } = this.state;
       const totalReplies = replies.length;
 
-      
+      // this.props.match.params.email
         return (
-            <div>
-            <RegularBanner type = "inbox"/>
-            {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
-                      || this.state.showIndividualMessage  || this.state.showDraftedMessage 
-                      || this.state.showTrashMessage || this.state.showSearchMessage ?
-                <ComposeModal 
-                    className = "ReactModal__Overlay"
-                    isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal}
-                    contentLabel="Example Modal"
-                    isDraft = {this.state.isDraft}
-                    receiver_email = {this.state.receiver_email}
-                    sender_email = {this.state.sender_email}
-                    subject = {this.state.subject}
-                    message = {this.state.message}
-                    isEdit = {this.state.isEdit}
-                    isReply = {this.state.isReply}
-                    message_id = {this.state.message_id}
-                >
-                </ComposeModal>
-                : null }
-                
-            <div className="container">
-          
 
-        <div className="mail-box">
-          <aside className="sm-side">
-            <div className="user-head">
-              <a className="inbox-avatar" href="javascript:;">
-            
-                <img width={64} height={60} src={`/images/${this.props.match.params.email}.jpg`} />
-              </a>
-              <div className="user-name">
-                <h5><a href="#">{this.props.auth.user.name}</a></h5>
-                <span><a href="#">{this.props.auth.user.email}</a></span>
-              </div>
-              <a className="mail-dropdown pull-right" href="javascript:;">
-                <i className="fa fa-chevron-down" />
-              </a>
-            </div>
-            <div className="inbox-body">
-              <div  data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
-                Compose
-              </div>
-              {/* Modal */}
-              <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabIndex={-1} id="myModal" className="modal fade" style={{display: 'none'}}>
-                <div className="modal-dialog">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <button aria-hidden="true" data-dismiss="modal" className="close" type="button">×</button>
-                      <h4 className="modal-title">Compose</h4>
-                    </div>
-                    <div className="modal-body">
-                      <form role="form" className="form-horizontal">
-                        <div className="form-group">
-                          <label className="col-lg-2 control-label">To</label>
-                          <div className="col-lg-10">
-                            <input type="text" placeholder id="inputEmail1" className="form-control" />
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label className="col-lg-2 control-label">Cc / Bcc</label>
-                          <div className="col-lg-10">
-                            <input type="text" placeholder id="cc" className="form-control" />
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label className="col-lg-2 control-label">Subject</label>
-                          <div className="col-lg-10">
-                            <input type="text" placeholder id="inputPassword1" className="form-control" />
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <label className="col-lg-2 control-label">Message</label>
-                          <div className="col-lg-10">
-                            <textarea rows={10} cols={30} className="form-control" id name defaultValue={""} />
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <div className="col-lg-offset-2 col-lg-10">
-                            <span className="btn green fileinput-button">
-                              <i className="fa fa-plus fa fa-white" />
-                              <span>Attachment</span>
-                              <input type="file" name="files[]" multiple />
-                            </span>
-                            <button className="btn btn-send" type="submit">Send</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>{/* /.modal-content */}
-                </div>{/* /.modal-dialog */}
-              </div>{/* /.modal */}
-            </div>
-            <ul className="inbox-nav inbox-divider">
-              <li className={this.state.showInboxMessage ? "active" : ''}>
-                <Link to= {{
-                      pathname: "/inbox/" + this.props.auth.user.email + '/0',
-                      search: "?emailType=inbox"
-                 }}>
-                    <i className="fa fa-inbox" /> Inbox 
-                    
-                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
-                      || this.state.showIndividualMessage  || this.state.showDraftedMessage 
-                      || this.state.showTrashMessage || this.state.showSearchMessage ? 
-                        <span className = "count_messages">
-                            {inbox_response.data.total}
-                           </span>
-                          : null }
-                           
-                  
-                </Link>
-              </li>
-              <li className={this.state.showSentMessage ? "active" : ''}>
+       
+                                              <div>
+                                              <RegularBanner type = "inbox"/>
 
-                <Link to = {{
-                   pathname: "/inbox/" + this.props.auth.user.email + '/0',
-                   search: "?emailType=sent"
-                }}>
-                     <i className="fa fa-envelope-o" /> Sent Mail
+                                            {this.props.match.params.email === this.props.auth.user.email ?
+                                            <div>
+                                              {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
+                                                        || this.state.showIndividualMessage  || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ?
+                                                  <ComposeModal 
+                                                      className = "ReactModal__Overlay"
+                                                      isOpen={this.state.modalIsOpen}
+                                                      onAfterOpen={this.afterOpenModal}
+                                                      onRequestClose={this.closeModal}
+                                                      contentLabel="Example Modal"
+                                                      isDraft = {this.state.isDraft}
+                                                      receiver_email = {this.state.receiver_email}
+                                                      sender_email = {this.state.sender_email}
+                                                      subject = {this.state.subject}
+                                                      message = {this.state.message}
+                                                      isEdit = {this.state.isEdit}
+                                                      isReply = {this.state.isReply}
+                                                      message_id = {this.state.message_id}
+                                                  >
+                                                  </ComposeModal>
+                                                  : null }
+                                                  
+                                              <div className="container">
+                                            
 
-                     {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
-                        <span className = "count_messages">
-                            {sent_response.data.total}
-                           </span>
-                          : null }
-                </Link>
+                                          <div className="mail-box">
+                                            <aside className="sm-side">
+                                              <div className="user-head">
+                                                <a className="inbox-avatar" href="javascript:;">
+                                              
+                                                  <img width={64} height={60} src={`/images/${this.props.match.params.email}.jpg`} />
+                                                </a>
+                                                <div className="user-name">
+                                                  <h5><a href="#">{this.props.auth.user.name}</a></h5>
+                                                  <span><a href="#">{this.props.auth.user.email}</a></span>
+                                                </div>
+                                                <a className="mail-dropdown pull-right" href="javascript:;">
+                                                  <i className="fa fa-chevron-down" />
+                                                </a>
+                                              </div>
+                                              <div className="inbox-body">
+                                                <div  data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
+                                                  Compose
+                                                </div>
+                                                {/* Modal */}
+                                                <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabIndex={-1} id="myModal" className="modal fade" style={{display: 'none'}}>
+                                                  <div className="modal-dialog">
+                                                    <div className="modal-content">
+                                                      <div className="modal-header">
+                                                        <button aria-hidden="true" data-dismiss="modal" className="close" type="button">×</button>
+                                                        <h4 className="modal-title">Compose</h4>
+                                                      </div>
+                                                      <div className="modal-body">
+                                                        <form role="form" className="form-horizontal">
+                                                          <div className="form-group">
+                                                            <label className="col-lg-2 control-label">To</label>
+                                                            <div className="col-lg-10">
+                                                              <input type="text" placeholder id="inputEmail1" className="form-control" />
+                                                            </div>
+                                                          </div>
+                                                          <div className="form-group">
+                                                            <label className="col-lg-2 control-label">Cc / Bcc</label>
+                                                            <div className="col-lg-10">
+                                                              <input type="text" placeholder id="cc" className="form-control" />
+                                                            </div>
+                                                          </div>
+                                                          <div className="form-group">
+                                                            <label className="col-lg-2 control-label">Subject</label>
+                                                            <div className="col-lg-10">
+                                                              <input type="text" placeholder id="inputPassword1" className="form-control" />
+                                                            </div>
+                                                          </div>
+                                                          <div className="form-group">
+                                                            <label className="col-lg-2 control-label">Message</label>
+                                                            <div className="col-lg-10">
+                                                              <textarea rows={10} cols={30} className="form-control" id name defaultValue={""} />
+                                                            </div>
+                                                          </div>
+                                                          <div className="form-group">
+                                                            <div className="col-lg-offset-2 col-lg-10">
+                                                              <span className="btn green fileinput-button">
+                                                                <i className="fa fa-plus fa fa-white" />
+                                                                <span>Attachment</span>
+                                                                <input type="file" name="files[]" multiple />
+                                                              </span>
+                                                              <button className="btn btn-send" type="submit">Send</button>
+                                                            </div>
+                                                          </div>
+                                                        </form>
+                                                      </div>
+                                                    </div>{/* /.modal-content */}
+                                                  </div>{/* /.modal-dialog */}
+                                                </div>{/* /.modal */}
+                                              </div>
+                                              <ul className="inbox-nav inbox-divider">
+                                                <li className={this.state.showInboxMessage ? "active" : ''}>
+                                                  <Link to= {{
+                                                        pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                                                        search: "?emailType=inbox"
+                                                  }}>
+                                                      <i className="fa fa-inbox" /> Inbox 
+                                                      
+                                                        {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage 
+                                                        || this.state.showIndividualMessage  || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ? 
+                                                          <span className = "count_messages">
+                                                              {inbox_response.data.total}
+                                                            </span>
+                                                            : null }
+                                                            
+                                                    
+                                                  </Link>
+                                                </li>
+                                                <li className={this.state.showSentMessage ? "active" : ''}>
 
-              </li>
-              <li className={this.state.showImportantMessage ? "active" : ''}>
+                                                  <Link to = {{
+                                                    pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                                                    search: "?emailType=sent"
+                                                  }}>
+                                                      <i className="fa fa-envelope-o" /> Sent Mail
 
-                 <Link to={{
-                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
-                     search: "?emailType=important"
-                 }}>
-                     <i className="fa fa-bookmark-o" /> Important
+                                                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                                                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ? 
+                                                          <span className = "count_messages">
+                                                              {sent_response.data.total}
+                                                            </span>
+                                                            : null }
+                                                  </Link>
 
-                     {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
-                        <span className = "count_messages">
-                            {important_response.data.total}
-                           </span>
-                          : null }
-                     
-                </Link>
+                                                </li>
+                                                <li className={this.state.showImportantMessage ? "active" : ''}>
 
-              </li>
-              <li className={this.state.showDraftedMessage ? "active" : ''}>
-                <Link to = {{
-                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
-                     search: "?emailType=draft"
-                }}>
-                    <i className=" fa fa-external-link" /> Drafts 
-                       
-                       {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
-                        <span className = "count_messages">
-                            {drafted_message.data.total}
-                           </span>
-                          : null }
-                         
-                       
-                </Link>
-              </li>
-              <li className={this.state.showTrashMessage ? "active" : ''}>
+                                                  <Link to={{
+                                                      pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                                                      search: "?emailType=important"
+                                                  }}>
+                                                      <i className="fa fa-bookmark-o" /> Important
 
-                <Link to={{
-                     pathname: "/inbox/" + this.props.auth.user.email + '/0',
-                     search: "?emailType=trash"
-                }}>
-                      <i className=" fa fa-trash-o" /> Trash
-                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
-                       || this.state.showIndividualMessage || this.state.showDraftedMessage 
-                       || this.state.showTrashMessage || this.state.showSearchMessage ? 
-                        <span className = "count_messages">
-                            {trash_response.data.total}
-                           </span>
-                          : null }
-                </Link>
+                                                      {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                                                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ? 
+                                                          <span className = "count_messages">
+                                                              {important_response.data.total}
+                                                            </span>
+                                                            : null }
+                                                      
+                                                  </Link>
 
-              </li>
-            </ul>
-           
-            
-           
-          </aside>
-          <aside className="lg-side">
-            <div className="inbox-head">
-              <h3>Inbox</h3>
-              <div className="pull-right position">
-                <div className="input-append">
-                  <input type="text" className="sr-input" placeholder="Search Mail" name = "searchTerm" onChange={this.onChange}/>
-                  <button className="btn sr-btn" type="button" onClick = {() => this.onClickSearch(this.state.searchTerm)}><i className="fa fa-search"/></button>
-                </div>
-              </div>
-            </div>
-            <div className="inbox-body">
+                                                </li>
+                                                <li className={this.state.showDraftedMessage ? "active" : ''}>
+                                                  <Link to = {{
+                                                      pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                                                      search: "?emailType=draft"
+                                                  }}>
+                                                      <i className=" fa fa-external-link" /> Drafts 
+                                                        
+                                                        {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                                                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ? 
+                                                          <span className = "count_messages">
+                                                              {drafted_message.data.total}
+                                                            </span>
+                                                            : null }
+                                                          
+                                                        
+                                                  </Link>
+                                                </li>
+                                                <li className={this.state.showTrashMessage ? "active" : ''}>
 
+                                                  <Link to={{
+                                                      pathname: "/inbox/" + this.props.auth.user.email + '/0',
+                                                      search: "?emailType=trash"
+                                                  }}>
+                                                        <i className=" fa fa-trash-o" /> Trash
+                                                        {this.state.showInboxMessage || this.state.showSentMessage || this.state.showImportantMessage
+                                                        || this.state.showIndividualMessage || this.state.showDraftedMessage 
+                                                        || this.state.showTrashMessage || this.state.showSearchMessage ? 
+                                                          <span className = "count_messages">
+                                                              {trash_response.data.total}
+                                                            </span>
+                                                            : null }
+                                                  </Link>
 
-
-
-
-
-            
-           
-
-            {this.state.showInboxMessage ? 
-              <Messages messages = {this.state.inboxMessages} 
-                        history = {this.props.history} 
-                        page_number = {this.props.match.params.page}
-                        total_messages = {this.state.total_messages}
-                        page_size = {this.state.page_size}
-                        page_limit = {this.state.page_limit}
-                        emailType = 'inbox'
-                        type = "individual"
-                        />
-              : null }
-
-            {this.state.showSentMessage ? 
-             <Messages messages = {this.state.sentMessages} 
-                       history = {this.props.history}
-                       page_number = {this.props.match.params.page}
-                       total_messages = {this.state.total_messages}
-                       page_size = {this.state.page_size}
-                       page_limit = {this.state.page_limit} 
-                       emailType = 'sent' 
-                       type = "individual"
-                       />
-             : null }
-
-
-      {this.state.showSearchMessage ? 
-             <Messages messages = {this.state.searchMessages} 
-                       history = {this.props.history}
-                       page_number = {this.props.match.params.page}
-                       total_messages = {this.state.total_messages}
-                       page_size = {this.state.page_size}
-                       page_limit = {this.state.page_limit} 
-                       emailType = 'search' 
-                       type = "search"
-                       searchTerm = {this.state.searchTerm}
-                       />
-           
-             : null }
-
-           {this.state.showImportantMessage ? 
-             <Messages messages = {this.state.importantMessages} 
-                       history = {this.props.history} 
-                       page_number = {this.props.match.params.page}
-                       total_messages = {this.state.total_messages}
-                       page_size = {this.state.page_size}
-                       page_limit = {this.state.page_limit}  
-                       emailType = 'important' 
-                       type = "individual"
-                       />
-             : null }
-
-       {this.state.showDraftedMessage ? 
-             <Messages messages = {this.state.draftedMessages} 
-                       history = {this.props.history} 
-                       page_number = {this.props.match.params.page}
-                       total_messages = {this.state.total_messages}
-                       page_size = {this.state.page_size}
-                       page_limit = {this.state.page_limit}  
-                       emailType = 'draft' 
-                       type = "individual"
-                       
-                       />
-             : null }
-
-      {this.state.showTrashMessage ? 
-             <Messages messages = {this.state.trashMessages} 
-                       history = {this.props.history} 
-                       page_number = {this.props.match.params.page}
-                       total_messages = {this.state.total_messages}
-                       page_size = {this.state.page_size}
-                       page_limit = {this.state.page_limit}  
-                       emailType = 'trash' 
-                       type = "individual"
-                       
-                       />
-             : null }
-
-
-
-             {this.state.showIndividualMessage ?
-               <div>
-                        <div>
-                            <div>
-                                <span className = "individual_message_label">Subject: </span>
-                                <span>{this.state.subject}</span>
-                            </div>
-                            <div>
-                                    <span className = "individual_message_label">From: </span>
-                                    <span>{this.state.sender_name}</span>
-                                    <span>{`  <${this.state.sender_email}>`}</span>
-                            </div>
-                           
-                            <div>
-                                <span className = "individual_message_label">To: </span>
-                                <span>{this.state.receiver_name}</span>
-                              
-                                <span>{`  <${this.state.receiver_email}>`}</span>
-                                {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
-                                  null
-
-                                    : 
-                                    <div className = "floatRight">
-                                      <button className="ui primary button" onClick = {() => this.openModal(false, true)}>
-                                      <i className="fa fa-mail-reply" />
-                                    </button>
-                                    </div>
-                                    
-                                    }
-
-
-                                  
-
-                            </div>
-                            <div>
-                                    <span className = "individual_message_label">Time: </span>
-                                    <Moment format="HH:mm MM/DD/YYYY">{this.state.time}</Moment>
-                                 
-                            </div>
-                            <div className = "space">
-
-                            </div>
-                            <div>
-                                    {this.state.message.split("\n").map((i,key) => {
-                                            return <div key={key}>{i}</div>;
-                                      })}
-
-
-                            </div>
-                          
-                            <div className = "space">
-
-                            </div>
-
-                            {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
-
-                                    <button className="ui primary button" type="submit" onClick = {() => this.openModal(true, false)}>Edit</button>
-                                    : null }
-
-                        </div>
-                        <div>
-                          {this.state.subreplies.map(reply => 
-                          <div className = "well">
-                            <Card.Header>
-                              <div>
-                                    <span className = "individual_message_label">From: </span>
-                                    <span>{reply.name}</span>
-                                    <span>{`  <${reply.email}>`}</span>
-                              </div>
-                              <div>
-                                    <span className = "individual_message_label">Time: </span>
-                                 
-                                    <Moment format="HH:mm MM/DD/YYYY">{reply.time}</Moment> 
-                                  
-                              </div>
-                              <div className = "space">
-
-                              </div>
-                              <div>
-                                 {reply.message}
-
-                              </div>
-                            
-                            </Card.Header>
-                            <div className = "space"> 
-                            </div>
-                            </div>
-                          )}
-
-                        </div>
-                        <Pagination totalRecords={ totalReplies } pageLimit={2} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-
-              </div>
-              : null }
-             
-             
+                                                </li>
+                                              </ul>
+                                            
+                                              
+                                            
+                                            </aside>
+                                            <aside className="lg-side">
+                                              <div className="inbox-head">
+                                                <h3>Inbox</h3>
+                                                <div className="pull-right position">
+                                                  <div className="input-append">
+                                                    <input type="text" className="sr-input" placeholder="Search Mail" name = "searchTerm" onChange={this.onChange}/>
+                                                    <button className="btn sr-btn" type="button" onClick = {() => this.onClickSearch(this.state.searchTerm)}><i className="fa fa-search"/></button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div className="inbox-body">
 
 
 
 
 
 
+                                              
+                                            
+
+                                              {this.state.showInboxMessage ? 
+                                                <Messages messages = {this.state.inboxMessages} 
+                                                          history = {this.props.history} 
+                                                          page_number = {this.props.match.params.page}
+                                                          total_messages = {this.state.total_messages}
+                                                          page_size = {this.state.page_size}
+                                                          page_limit = {this.state.page_limit}
+                                                          emailType = 'inbox'
+                                                          type = "individual"
+                                                          />
+                                                : null }
+
+                                              {this.state.showSentMessage ? 
+                                              <Messages messages = {this.state.sentMessages} 
+                                                        history = {this.props.history}
+                                                        page_number = {this.props.match.params.page}
+                                                        total_messages = {this.state.total_messages}
+                                                        page_size = {this.state.page_size}
+                                                        page_limit = {this.state.page_limit} 
+                                                        emailType = 'sent' 
+                                                        type = "individual"
+                                                        />
+                                              : null }
 
 
-             
-              
-            </div>
-          </aside>
-        </div>
-      </div>
-      </div>
+                                        {this.state.showSearchMessage ? 
+                                              <Messages messages = {this.state.searchMessages} 
+                                                        history = {this.props.history}
+                                                        page_number = {this.props.match.params.page}
+                                                        total_messages = {this.state.total_messages}
+                                                        page_size = {this.state.page_size}
+                                                        page_limit = {this.state.page_limit} 
+                                                        emailType = 'search' 
+                                                        type = "search"
+                                                        searchTerm = {this.state.searchTerm}
+                                                        />
+                                            
+                                              : null }
+
+                                            {this.state.showImportantMessage ? 
+                                              <Messages messages = {this.state.importantMessages} 
+                                                        history = {this.props.history} 
+                                                        page_number = {this.props.match.params.page}
+                                                        total_messages = {this.state.total_messages}
+                                                        page_size = {this.state.page_size}
+                                                        page_limit = {this.state.page_limit}  
+                                                        emailType = 'important' 
+                                                        type = "individual"
+                                                        />
+                                              : null }
+
+                                        {this.state.showDraftedMessage ? 
+                                              <Messages messages = {this.state.draftedMessages} 
+                                                        history = {this.props.history} 
+                                                        page_number = {this.props.match.params.page}
+                                                        total_messages = {this.state.total_messages}
+                                                        page_size = {this.state.page_size}
+                                                        page_limit = {this.state.page_limit}  
+                                                        emailType = 'draft' 
+                                                        type = "individual"
+                                                        
+                                                        />
+                                              : null }
+
+                                        {this.state.showTrashMessage ? 
+                                              <Messages messages = {this.state.trashMessages} 
+                                                        history = {this.props.history} 
+                                                        page_number = {this.props.match.params.page}
+                                                        total_messages = {this.state.total_messages}
+                                                        page_size = {this.state.page_size}
+                                                        page_limit = {this.state.page_limit}  
+                                                        emailType = 'trash' 
+                                                        type = "individual"
+                                                        
+                                                        />
+                                              : null }
+
+
+
+                                              {this.state.showIndividualMessage ?
+                                                <div>
+                                                          <div>
+                                                              <div>
+                                                                  <span className = "individual_message_label">Subject: </span>
+                                                                  <span>{this.state.subject}</span>
+                                                              </div>
+                                                              <div>
+                                                                      <span className = "individual_message_label">From: </span>
+                                                                      <span>{this.state.sender_name}</span>
+                                                                      <span>{`  <${this.state.sender_email}>`}</span>
+                                                              </div>
+                                                            
+                                                              <div>
+                                                                  <span className = "individual_message_label">To: </span>
+                                                                  <span>{this.state.receiver_name}</span>
+                                                                
+                                                                  <span>{`  <${this.state.receiver_email}>`}</span>
+                                                                  {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
+                                                                    null
+
+                                                                      : 
+                                                                      <div className = "floatRight">
+                                                                        <button className="ui primary button" onClick = {() => this.openModal(false, true)}>
+                                                                        <i className="fa fa-mail-reply" />
+                                                                      </button>
+                                                                      </div>
+                                                                      
+                                                                      }
+
+
+                                                                    
+
+                                                              </div>
+                                                              <div>
+                                                                      <span className = "individual_message_label">Time: </span>
+                                                                      <Moment format="HH:mm MM/DD/YYYY">{this.state.time}</Moment>
+                                                                  
+                                                              </div>
+                                                              <div className = "space">
+
+                                                              </div>
+                                                              <div>
+                                                                      {this.state.message.split("\n").map((i,key) => {
+                                                                              return <div key={key}>{i}</div>;
+                                                                        })}
+
+
+                                                              </div>
+                                                            
+                                                              <div className = "space">
+
+                                                              </div>
+
+                                                              {this.state.isDraft.some(e => e.email === this.props.auth.user.email) ?
+
+                                                                      <button className="ui primary button" type="submit" onClick = {() => this.openModal(true, false)}>Edit</button>
+                                                                      : null }
+
+                                                          </div>
+                                                          <div>
+                                                            {this.state.subreplies.map(reply => 
+                                                            <div className = "well">
+                                                              <Card.Header>
+                                                                <div>
+                                                                      <span className = "individual_message_label">From: </span>
+                                                                      <span>{reply.name}</span>
+                                                                      <span>{`  <${reply.email}>`}</span>
+                                                                </div>
+                                                                <div>
+                                                                      <span className = "individual_message_label">Time: </span>
+                                                                  
+                                                                      <Moment format="HH:mm MM/DD/YYYY">{reply.time}</Moment> 
+                                                                    
+                                                                </div>
+                                                                <div className = "space">
+
+                                                                </div>
+                                                                <div>
+                                                                  {reply.message}
+
+                                                                </div>
+                                                              
+                                                              </Card.Header>
+                                                              <div className = "space"> 
+                                                              </div>
+                                                              </div>
+                                                            )}
+
+                                                          </div>
+                                                          <Pagination totalRecords={ totalReplies } pageLimit={2} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+
+                                                </div>
+                                              
+                                                : null }
+                                              
+                                              
+
+
+
+
+
+
+
+
+                                              
+                                                
+                                              </div>
+                                            </aside>
+                                          </div>
+                                        </div>
+                                        </div>
+
+                                        : <Redirect to = "/" /> }
+                                        </div>
+
         )
 
     }
