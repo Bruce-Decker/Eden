@@ -260,7 +260,7 @@ class Detail extends Component {
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
             <div className="item-by">by<span> </span>
-              <Link to={"/showProfile/" + item.email} style={{color: "#53b46e"}}>
+              <Link to={"/showShowAllUserItems/" + item.email} style={{color: "#53b46e"}}>
                 <span>{item.user_name}</span>
               </Link>
             </div>
