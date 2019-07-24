@@ -259,7 +259,12 @@ class Detail extends Component {
               <span style={{marginLeft: "1rem"}}></span>
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
-            <div className="item-by">{item.category}</div>
+            <div className="item-by">by<span> </span>
+              <Link to={"/showProfile/" + item.email} style={{color: "#53b46e"}}>
+                <span>{item.user_name}</span>
+              </Link>
+            </div>
+            {/* <div className="item-by">{item.category}</div> */}
             <div className="item-desc"><Link to  = {`/vr/${item.item_id}`} target="_blank">Try VR</Link></div>
             <div className="item-desc">{item.description}</div>
             <div>

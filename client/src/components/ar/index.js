@@ -29,7 +29,7 @@ class Ar extends Component {
   async componentWillMount() {
     if (this.props.location.state == null) {
       const response = await axios.get('/items/' + this.props.match.params.id)
-      this.setState({ ar: response.data.ar, id: this.props.match.params.id})
+      this.setState({ ar: response.data[0].ar, id: this.props.match.params.id})
     } else {
       this.setState({ ar: this.props.location.state.ar, id: this.props.location.state.id})
     }

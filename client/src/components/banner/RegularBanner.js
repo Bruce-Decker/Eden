@@ -60,7 +60,7 @@ LogoutButton = (e) => {
                         My Items
                       </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item href={`/showShowAllUserItems/:${this.props.auth.user.email}`}>My Listed Items</Dropdown.Item>
+                      <Dropdown.Item href={`/showShowAllUserItems/${this.props.auth.user.email}`}>My Listed Items</Dropdown.Item>
                       <Dropdown.Item href={`/createItem`}>Create Items</Dropdown.Item>
                       <Dropdown.Item href={`/showProfile/${this.props.auth.user.email}`}>My Profile</Dropdown.Item>
                       {this.props.type == "inbox"?

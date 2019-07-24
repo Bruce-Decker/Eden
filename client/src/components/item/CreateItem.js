@@ -151,6 +151,7 @@ class CreateItem extends Component {
 
       formdata.append('item_id', item_id);
       formdata.append('email', this.props.auth.user.email);
+      formdata.append('user_name', this.props.auth.user.name);
       formdata.append('item_name', this.state.item_name);
       formdata.append('filename', item_image);
       formdata.append('ar_file', ar_file);

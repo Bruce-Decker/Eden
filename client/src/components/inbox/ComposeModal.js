@@ -36,7 +36,7 @@ class ComposeModal extends Component {
                 subject: this.props.subject,
                 message: this.props.message,
                 saveAsDraft: false,
-
+                updated: false,
                 errors: {}
             }
 
@@ -44,10 +44,16 @@ class ComposeModal extends Component {
        
     }
 
+    componentDidUpdate() {
+        if(this.state.email !== this.props.receiver_email && !this.state.updated && this.props.fromProfile) {
+            this.setState({email: this.props.receiver_email, updated: true})
+        }
+    }
+
     onChange = (e) => {
-      
+
         this.setState({[e.target.name]: e.target.value})
-       
+
     } 
 
     handleEmailPropsChange = (e) => {
@@ -107,10 +113,12 @@ class ComposeModal extends Component {
                                         axios.post('/message/deleteMessage', delete_data) 
                                         .then(res => {
                                             console.log(res)
+                                            this.props.clearState()
                                             window.location.reload()
                                             })
                                         .catch(err => console.log(err))
                                     } else {
+                                        this.props.clearState()
                                         window.location.reload()
                                     }
                                 
@@ -126,6 +134,7 @@ class ComposeModal extends Component {
                              axios.post('/message/replyEmail', data) 
                                 .then(res => {
                                     console.log(res)
+                                    this.props.clearState()
                                     window.location.reload()
                                 })
                                 .catch(err => console.log(err))
@@ -171,7 +180,10 @@ class ComposeModal extends Component {
                             {this.props.isDraft.some(e => e.email === this.props.auth.user.email) && this.props.isEdit ? 
                                 <input type="text" name="email" placeholder="Email Address"  value = {this.state.email} onChange = {this.onChange}/>
                                 : 
-                                <input type="text" name="email" placeholder="Email Address"   onChange = {this.onChange}/>
+                                this.props.fromProfile ?
+                                    <input type="text" name="email" placeholder="Email Address"  value = {this.state.email} onChange = {this.onChange}/>
+                                    :
+                                    <input type="text" name="email" placeholder="Email Address"  onChange = {this.onChange}/>
                             }
                          </div>
                    

@@ -350,6 +350,7 @@ class ShowProfile extends Component {
         
           
         </Modal>
+        
               {this.state.showProfile ? 
                     <div style ={{width: "340px"}}>
                        <Card.Header>
@@ -380,15 +381,32 @@ class ShowProfile extends Component {
                     
                     <Card>
                             <img src = {default_profile_image } height = "250" width = "300" />
-                            <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
-                           
+                            {(this.props.auth.user.email === this.props.match.params.email) &&
+                              <h4 onClick = {this.profileOpenModal} className = "edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
+                            }
+                            
                       </Card> 
+                      {(this.props.auth.user.email !== this.props.match.params.email) &&
+                      <div>
+                        <div>
+                          <Link to={"/showShowAllUserItems/" + this.props.match.params.email} style={{color: "black"}}>
+                            <button class="item-button" style={{marginLeft: "auto", marginRight: "auto", marginTop: "1.5rem", fontSize: "1.2rem", width: "100px"}}>Products</button>
+                          </Link>
+                        </div>
+                        <div>
+                          <Link to={{pathname: "/inbox/" + this.props.auth.user.email + "/0", state: {email: this.props.match.params.email}}} style={{color: "black"}}>
+                            <button class="item-button" style={{marginLeft: "auto", marginRight: "auto", marginTop: "0.5rem", fontSize: "1.2rem", width: "100px"}}>Contact</button>
+                          </Link>
+                        </div>
                       </div>
+                      }
+                    </div>
                     
                     
                     }
-                
+
                </div>
+               
                <div className = "ShowProfileWallContainer">
                <MessengerCustomerChat
     pageId="2292649427730564"

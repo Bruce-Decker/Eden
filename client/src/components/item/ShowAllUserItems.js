@@ -20,7 +20,7 @@ class ShowAllUserItems extends Component {
   }
 
   async componentDidMount() {
-    var response = await axios.get('/items/getAllItemsForUser/' + this.props.auth.user.email)
+    var response = await axios.get('/items/getAllItemsForUser/' + this.props.match.params.email)
     console.log(response)
     this.setState({
       items: response.data,
@@ -45,6 +45,14 @@ class ShowAllUserItems extends Component {
           <div id="shown-items-div2" className="items-row">
             { this.state.show ? 
             <div id="shown-items-div3">
+              {this.state.items.length > 0 && (!this.props.auth.isAuthenticated || (this.props.auth.isAuthenticated && (this.props.auth.user.email !== this.props.match.params.email))) &&
+                <div style={{marginBottom: "2rem"}}>
+                  <span style={{fontWeight: "bold", fontSize: "1.3rem"}}>Products sold by {this.state.items[0].user_name}</span>
+                  <Link to={"/showProfile/" + this.props.match.params.email} style={{color: "black"}}>
+                    <button class="item-button" style={{fontSize: "1rem", float: "right"}}>See user profile</button>
+                  </Link>
+                </div>
+              }
               { this.state.items.map(item =>
                 <Link to={"/items/" + item.item_id}>
                   <div className="row shown-item-card">
