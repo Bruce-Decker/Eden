@@ -60,6 +60,11 @@ class CartItems extends Component {
                     <Link to={"/items/" + cartItem.id}>
                       <span className="cart-item-title" onClick={() => window.scrollTo(0, 0)}>{cartItem.name}</span>
                     </Link>
+                    <div className="item-by">by<span> </span>
+                      <Link to={"/showShowAllUserItems/" + cartItem.seller} style={{color: "#53b46e"}}>
+                        <span>{cartItem.seller.split('@')[0]}</span>
+                      </Link>
+                    </div>
                     <div>{cartItem.description}</div>
                   </div>
                   <div className="col-2 cart-item-controls">
