@@ -53,16 +53,8 @@ LogoutButton = (e) => {
                       <li class="nav-item">
                         <Link class="nav-link" to="/property">Property</Link>
                       </li>
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/food">Food</Link>
-                      </li>
                   </ul>
                   <SearchBar/>
-                  <ul class="navbar-nav ml-auto">
-                      <li class="nav-item">
-                        <Link class="nav-link" to="/">Home</Link>
-                      </li>
-                  </ul>
               </div>
             </nav>
           </div>

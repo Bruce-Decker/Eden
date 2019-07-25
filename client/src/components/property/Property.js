@@ -238,6 +238,9 @@ class Property extends Component {
   }
 
   async search (price, bed, type, listing) {
+    if (this.map.current == null) {
+      return
+    }
     const bounds = this.map.current.getBounds()
     const nelat = bounds.na.l
     const nelng = bounds.ga.l

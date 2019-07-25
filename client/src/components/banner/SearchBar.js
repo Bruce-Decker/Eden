@@ -5,7 +5,8 @@ import './SearchBar.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import isEmpty from '../../validation/isEmpty.js';
-import search from '../../images/search.png';
+import search from '../../images/magnifier.png';
+import drop from '../../images/drop.png';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -14,7 +15,6 @@ class SearchBar extends Component {
       keyword: '',
       category: 'itm-all'
     };
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -49,7 +49,7 @@ class SearchBar extends Component {
     return (
       <form className="form-search" onSubmit={this.handleSubmit}>
         <div className="styled-select">
-          <select onChange={this.handleSelect}>
+          <select onChange={this.handleSelect} className="search-select">
             <option value="itm-all">All Items</option>
             <option value="itm-appliances">&emsp;Appliances</option>
             <option value="itm-arts">&emsp;Arts</option>
@@ -70,18 +70,18 @@ class SearchBar extends Component {
             <option value="svc-hvac">&emsp;HVAC</option>
             <option value="svc-plumbers">&emsp;Plumbers</option>
           </select>
+          <img src={drop} height="18" width="18" alt="Drop" style={{marginLeft: "-15px", zIndex: "-1", position: "relative"}}></img>
         </div>
 
         <input
           type="text"
           className="input-search"
-          placeholder="Search..."
           value={this.state.keyword}
           onChange={this.handleChange}
         />
 
         <button type="submit" className="button-search">
-          <img src={search} height="24" width="24" alt="Search"></img>
+          <img src={search} height="18" width="18" alt="Search"></img>
         </button>
       </form>
     );

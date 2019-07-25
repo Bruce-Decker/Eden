@@ -35,27 +35,29 @@ class LandingBanner extends Component {
               </div>
               <div className="navbar-collapse collapse" id="navbar">
                   <ul className="navbar-nav mr-auto">
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/product">Product</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/service">Service</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/property">Property</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/food">Food</Link>
-                      </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/product">Product</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/service">Service</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/property">Property</Link>
+                    </li>
                   </ul>
                   <SearchBar/>
                   <ul className="navbar-nav ml-auto">
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/login">Login</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/register">Register</Link>
-                      </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/cart" style={{paddingTop: "0.2rem", paddingBottom: "0"}}>
+                        <img src={cart} height="28" width="28" alt="Cart"></img>
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/register">Register</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/login">Login</Link>
+                    </li>
                   </ul>
               </div>
             </nav>
