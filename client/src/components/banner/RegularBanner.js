@@ -101,13 +101,13 @@ LogoutButton = (e) => {
                           <Dropdown.Item>
                             <Link id="dropdown-item" to={'/showShowAllUserItems/' + this.props.auth.user.email}>
                               <img src={burger} height="22" width="22" alt="Items" style={{marginRight: "0.5rem"}}></img>
-                              Listed Items
+                              Listed items
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Item id="dropdown-item">
                             <Link id="dropdown-item" to={'/createItem'}>
                               <img src={add} height="18" width="22" alt="Add" style={{marginRight: "0.5rem", marginBottom: "0.3rem"}}></img>
-                              Create Item
+                              Create item
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Divider />

@@ -38,9 +38,7 @@ class Home extends Component {
                   description="Venison chicken turducken, brisket pork loin meatloaf alcatra flank. Spare ribs cow venison flank picanha cupim, pancetta frankfurter porchetta shankle andouille."
                   color="#f2ffea"
                   image={property}></Category>
-        <Category category="Food"
-                  description="Meatloaf sirloin ham tenderloin chuck shoulder ball tip ribeye ham hock leberkas. Tail cow rump salami prosciutto capicola."
-                  image={food}></Category>
+        <div style={{marginTop: "2rem"}}></div>
         <Footer />
       </div>
     );
