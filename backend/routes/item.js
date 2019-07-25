@@ -362,6 +362,7 @@ router.post('/deleteReply/:comment_id', function(req, res) {
 router.post('/createItem', itemImageUpload.fields([{name: 'filename', maxCount: 2}, {name: 'ar_file', maxCount: 1}]), function(req, res) {
     const item_id = req.body.item_id
     const email = req.body.email
+    const user_name = req.body.user_name
     const item_name = req.body.item_name
     const item_image = "/item_images/" + item_id + '.jpg'
     const category = req.body.category
@@ -408,6 +409,7 @@ router.post('/createItem', itemImageUpload.fields([{name: 'filename', maxCount: 
 
     const data = {
        email,
+       user_name,
        item_id,
        item_name,
        item_image,

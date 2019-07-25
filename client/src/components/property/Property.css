@@ -161,6 +161,7 @@
   max-width: 100%;
   max-height: 300px;
   min-height: 300px;
+  object-fit: cover;
 }
 
 #property-button-style {

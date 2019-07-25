@@ -98,12 +98,13 @@ class StripePayment extends Component {
                         .then(res =>
                         {
                             console.log("payment successfull!");
-                            console.log(res);
+                            //console.log(res);
                             window.location.href = '/paymentConfirmation';
                         })
                         .catch(err => console.log(err));
                 })
-                .then(this.props.handleResult);
+                .then(this.props.handleResult)
+                .catch(err => this.setState({errorMessage: err.message}));
         } else {
             console.log("Stripe.js hasn't loaded yet.");
         }

@@ -1,0 +1,22 @@
+#dropdown-profile {
+  background-color: transparent;
+  border-color: transparent;
+  padding-left: 1.3rem;
+  box-shadow: none;
+}
+
+#dropdown-item {
+  outline: none;
+  text-decoration: none;
+  color: black;
+  transition: .25s ease;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#dropdown-item:hover {
+  outline: none !important;
+  text-decoration: none !important;
+  color: #53b46e;
+  box-shadow: none !important;
+}

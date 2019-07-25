@@ -50,6 +50,7 @@ class Inbox extends Component {
               sender_name: '',
               sender_email: '',
               receiver_email: '',
+              fromProfile: false,
               time: '',
               replies: [],
               subreplies: [],
@@ -141,6 +142,10 @@ class Inbox extends Component {
   
     closeModal = () => {
       this.setState({modalIsOpen: false});
+    }
+
+    clearState = () => {
+      this.props.history.replace(window.location.pathname, null)
     }
   
 
@@ -341,7 +346,10 @@ class Inbox extends Component {
              }
          }
 
-         
+         if (this.props.location.state != null) {
+            this.setState({ receiver_email: this.props.location.state.email, modalIsOpen: true, fromProfile: true })
+        }
+
     }
 
     render() {
@@ -376,6 +384,8 @@ class Inbox extends Component {
                                                       isEdit = {this.state.isEdit}
                                                       isReply = {this.state.isReply}
                                                       message_id = {this.state.message_id}
+                                                      fromProfile = {this.state.fromProfile}
+                                                      clearState = {this.clearState}
                                                   >
                                                   </ComposeModal>
                                                   : null }

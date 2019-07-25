@@ -7,6 +7,7 @@ import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
 
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Payment extends Component {
     constructor(props) {
@@ -29,23 +30,37 @@ class Payment extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <RegularBanner/>
-                <div id="payment-header">
-                    <h1 className="payment-h1">Payment</h1>
+        if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+            return null;
+        } else {
+            return (
+                <div>
+                    <RegularBanner/>
+                    <div id="payment-header">
+                        <h1 className="payment-h1">Payment</h1>
+                    </div>
+                    <div id='payment-container'>
+                        <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                            <div className="stripe-payment">
+                                <Elements>
+                                    <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address}/>
+                                </Elements>
+                            </div>
+                        </StripeProvider>
+                    </div>
                 </div>
-                <div id='payment-container'>
-                    <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
-                        <div className="stripe-payment">
-                            <Elements>
-                                <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address}/>
-                            </Elements>
-                        </div>
-                    </StripeProvider>
-                </div>
-            </div>
-        );
+            );
+        }
+    }
+
+    componentWillMount() {
+        if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+            let url = '/login';
+
+            this.props.history.push({
+                pathname: url
+            });
+        }
     }
 
     componentDidMount(){
@@ -53,4 +68,30 @@ class Payment extends Component {
     }
 }
 
-export default withRouter(Payment);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+};
+
+export default withRouter(connect(
+  mapStateToProps
+)(Payment));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

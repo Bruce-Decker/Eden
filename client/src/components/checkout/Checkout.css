@@ -16,6 +16,10 @@
   width: 500px;
 }
 
+#error-message {
+  visibility: hidden;
+}
+
 form {
   margin-top: 1rem;
 }

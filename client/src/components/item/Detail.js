@@ -55,7 +55,9 @@ class Detail extends Component {
 
   getBidVisibility() {
     // no bid price means that bidding is not supported for this item
-    if (!('bid_price' in this.state.item) || this.state.item.bid_price == null) {
+    // also do not allow bidding if no user is logged in
+    if (!('bid_price' in this.state.item) || this.state.item.bid_price == null
+       || !this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
       return 'item-bids-hide';
     } else {
       return 'item-bids-show';
@@ -259,7 +261,12 @@ class Detail extends Component {
               <span style={{marginLeft: "1rem"}}></span>
               <Try id={item.item_id} ar={item.ar}></Try>
             </div>
-            <div className="item-by">{item.category}</div>
+            <div className="item-by">by<span> </span>
+              <Link to={"/showShowAllUserItems/" + item.email} style={{color: "#53b46e"}}>
+                <span>{item.user_name}</span>
+              </Link>
+            </div>
+            {/* <div className="item-by">{item.category}</div> */}
             <div className="item-desc"><Link to  = {`/vr/${item.item_id}`} target="_blank">Try VR</Link></div>
             <div className="item-desc">{item.description}</div>
             <div>

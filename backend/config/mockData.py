@@ -12,7 +12,7 @@ def main():
 
   #itemUser(db)
   #cart(db)
-  #item(db)
+  # item(db)
   #properties(db)
   #itemRatings(db)
   #services(db)
@@ -77,6 +77,7 @@ def item(db):
   adjectives = ['cool','new','stylish','fun','hip','amazing','awesome','trendy','designer','faux']
   colors = ['red','orange','yellow','green','blue','purple','pink','white','black','gray']
   items = ['blazer','sweater','jacket','hoodie','pants','shorts','sweatpants','cardigan','vest','jeans']
+  users = [(0,'adam@gmail.com'),(1,'bob@gmail.com'),(2,'cindy@gmail.com'),(3,'david@gmail.com'),(4,'eric@gmail.com'),(5,'florence@gmail.com'),(6,'gary@gmail.com'),(7,'heather@gmail.com'),(8,'irene@gmail.com'),(9,'joe@gmail.com')]
   imgPath = 'clothing.jpg'
 
   itemId = 0
@@ -84,10 +85,13 @@ def item(db):
     for c in colors:
       for i in items:
         itemId += 1
+        user = users[randint(0,9)]
         item = {
           'item_id': str(itemId),
           'item_name': '{0} {1} {2}'.format(a,c,i),
           'item_image': imgPath,
+          'email': user[1],
+          'user_name': user[1].split('@')[0],
           'category': categories[int(randrange(0,len(categories)))],
           'description': '{0} {1} {2}'.format(a,c,i),
           'price': float(randrange(500,10000))/100,

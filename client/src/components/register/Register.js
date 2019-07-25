@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Register.css';
-import AuthBanner from '../banner/AuthBanner'
+import LandingBanner from '../banner/LandingBanner'
 import { registerUser } from '../../redux/actions/AuthenticationActions'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -48,7 +48,7 @@ onSubmit = (e) => {
       const { errors } = this.state;
       return (
         <div>
-        <AuthBanner />
+        <LandingBanner />
         <div className = "registerContainer">
         
           <form className="ui form" onSubmit = {this.onSubmit}>
