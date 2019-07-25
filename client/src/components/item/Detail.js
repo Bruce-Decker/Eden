@@ -55,7 +55,9 @@ class Detail extends Component {
 
   getBidVisibility() {
     // no bid price means that bidding is not supported for this item
-    if (!('bid_price' in this.state.item) || this.state.item.bid_price == null) {
+    // also do not allow bidding if no user is logged in
+    if (!('bid_price' in this.state.item) || this.state.item.bid_price == null
+       || !this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
       return 'item-bids-hide';
     } else {
       return 'item-bids-show';
