@@ -201,10 +201,10 @@
 }
 
 .createItem {
-    margin: 0 auto;
-    margin-top: 30px;
-    margin-right: 500px;
-    width: 600px;
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-right: 500px;
+  width: 600px;
 }
 
 .showItems {
@@ -285,15 +285,23 @@
   color: blue;
 }
 
+#writeReviewBtn {
+  height: 50px;
+  width: 175px;
+  font-size: 14pt;
+  margin-top: 10px;
+}
 
 .upper_review_comments {
-  margin-left: 430px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .review_comments {
-  /* width: 125%; */
-  margin-left: 400px;
+  /* width: 125%;
+  margin-left: 400px;*/
+  padding-right: 100px;
+  padding-left: 100px;
 }
 
 

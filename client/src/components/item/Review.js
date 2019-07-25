@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { Card } from 'react-bootstrap'
 import Modal from 'react-modal';
 import StarRatingComponent from 'react-star-rating-component';
+import { toast } from 'react-toastify';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -54,7 +55,7 @@ Modal.setAppElement("#root");
 
 class Review extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
    
@@ -67,8 +68,8 @@ class Review extends Component {
       comment: '',
       modalIsOpen: false,
       anonymous: false,
-      rating: 1
-  }
+      rating: 5
+    }
   }
 
   onStarClick(nextValue, prevValue, name) {
@@ -76,35 +77,64 @@ class Review extends Component {
   }
 
   submitComment = () => {
-    var comment = this.state.comment
-    var item_id = this.props.item_id
-    var star_rating = this.state.rating
-    var data
+    var comment = this.state.comment;
+    var item_id = this.props.item_id;
+    var star_rating = this.state.rating;
+    let data = null;
   
-    if (this.state.anonymous) {
-     data = {
-      comment: comment,
-      email: "Anonymous",
-      star_rating: star_rating,
-      name: "Anonymous"
-    }
-  } else { 
-      data = {
-        comment: comment,
-        email: this.props.auth.user.email,
-        star_rating: star_rating
+    if(!comment) {
+      toast.error("ERROR: Please enter a review!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else {
+      // always allow users to submit anonymous reviews
+      if (this.state.anonymous) {
+        data = {
+          comment: comment,
+          email: "Anonymous",
+          star_rating: star_rating,
+          name: "Anonymous"
+        }
+      } else {
+        // if the user is not logged in, don't allow them to submit a non-anonymous review
+        if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+          toast.error("ERROR: You must be logged in to submit a named review! However, you can still choose to submit an anonymous review.", {
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            newestOnTop: true,
+            className: "addtocart-toast-toast",
+            bodyClassName: "addtocart-toast-body",
+            progressClassName: "addtocart-toast-progress",
+            draggable: false,
+          });
+        } else {
+          data = {
+            comment: comment,
+            email: this.props.auth.user.email,
+            star_rating: star_rating
+          }
+        }
       }
-  }
+    }
 
-  
-    
-    axios.post('/items/postCommentForItem/' + item_id, data)
-    .then(res => {
-      console.log(res)
-      window.location.reload()
-    })
-  .catch(err => console.log(err))
-
+    // only make the request if the data is set properly
+    if(data) {
+      axios
+        .post('/items/postCommentForItem/' + item_id, data)
+        .then(res => {
+          console.log(res)
+          window.location.reload()
+        })
+        .catch(err => console.log(err))
+    }
   }
 
 
@@ -230,20 +260,17 @@ class Review extends Component {
     const response = await axios.get('/items/' + this.props.item_id)
     console.log(response.data[0].latitude)
     console.log(typeof(response.data[0].latitude))
-   if (response.data[0]) {
-        this.setState({
-          item: response.data[0],
-          position: {
-             lat: response.data[0].longitude,
-             lng: response.data[0].latitude
-          },
-          showReviews: true,
-          comments: response.data[0].comments
-      })
-      
-   }
-  
-   
+    if (response.data[0]) {
+      this.setState({
+        item: response.data[0],
+        position: {
+          lat: response.data[0].longitude,
+          lng: response.data[0].latitude
+        },
+        showReviews: true,
+        comments: response.data[0].comments
+      }) 
+    }
   }
 
   render() {
@@ -251,7 +278,7 @@ class Review extends Component {
     const defaultPosition = {
       lat: this.state.position.lat,
       lng: this.state.position.lng
-  };
+    };
   
     return (
       <div class="container-review">
@@ -303,8 +330,14 @@ class Review extends Component {
           <div className = "itemReview">
           <Card.Header>
           <div className = "upper_review_comments">
-             
-               <button type="button" onClick={this.openModal}  className="btn btn-primary">Write a reivew <i class="fas fa-pencil-alt"></i></button>
+            <button
+              id="writeReviewBtn"
+              type="button"
+              onClick={this.openModal}
+              className="btn btn-primary"
+            >
+              Write a review <i class="fas fa-pencil-alt"></i>
+            </button>
           </div>
              {this.state.showReviews ?
              
@@ -312,7 +345,7 @@ class Review extends Component {
                
                {this.state.comments.map(comment => 
                     <div className="container bootstrap snippet">
-                    <div className="col-sm-8">
+                    <div className="col-sm-12">
                       <div className="panel panel-white post panel-shadow">
                         <div className="post-heading">
                           <div className="pull-left image">
@@ -325,7 +358,7 @@ class Review extends Component {
                             <a href="#"><b>{comment.name} </b></a>
                                         made a review.
                             </div>
-                            <h6 className="text-muted time">{comment.time}</h6>
+                            <h6 className="text-muted time">{comment.time.substring(0,10) + ' ' + comment.time.substring(11,19)}</h6>
                           </div>
 
                           {comment.email === this.props.auth.user.email ?
@@ -384,12 +417,12 @@ class Review extends Component {
                             {comment.replies.map(reply =>
                                     <li className="comment">
                                       <a className="pull-left" href="#">
-                                      <img src={`/images/${reply.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                      <img src={`/images/${reply.email}.jpg`} className="img-circle avatar" alt="img" />
                                       </a>
                                       <div className="comment-body">
                                         <div className="comment-heading">
                                           <h4 className="user">{reply.name}</h4>
-                                          <h5 className="time">{reply.time}</h5>
+                                          <h5 className="time">{reply.time.substring(0,10) + ' ' + reply.time.substring(11,19)}</h5>
                                           {reply.email === this.props.auth.user.email ?
                                                           <img src = {delete_icon} className = "profile_delete_icon"  height="15" width="15" onClick = {() => this.deleteReply(comment.comment_id, reply.reply_id)}/>  
                                                            : null }
