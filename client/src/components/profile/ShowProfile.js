@@ -393,11 +393,13 @@ class ShowProfile extends Component {
                             <button class="item-button" style={{marginLeft: "auto", marginRight: "auto", marginTop: "1.5rem", fontSize: "1.2rem", width: "100px"}}>Products</button>
                           </Link>
                         </div>
-                        <div>
-                          <Link to={{pathname: "/inbox/" + this.props.auth.user.email + "/0", state: {email: this.props.match.params.email}}} style={{color: "black"}}>
-                            <button class="item-button" style={{marginLeft: "auto", marginRight: "auto", marginTop: "0.5rem", fontSize: "1.2rem", width: "100px"}}>Contact</button>
-                          </Link>
-                        </div>
+                        {this.props.auth.isAuthenticated &&
+                          <div>
+                            <Link to={{pathname: "/inbox/" + this.props.auth.user.email + "/0", state: {email: this.props.match.params.email}}} style={{color: "black"}}>
+                              <button class="item-button" style={{marginLeft: "auto", marginRight: "auto", marginTop: "0.5rem", fontSize: "1.2rem", width: "100px"}}>Contact</button>
+                            </Link>
+                          </div>
+                        }
                       </div>
                       }
                     </div>

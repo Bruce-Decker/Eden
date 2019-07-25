@@ -169,7 +169,7 @@ class Detail extends Component {
                 <div style={{marginTop: "3rem", fontSize: "1.5rem", fontWeight: "bold", marginBottom: "2rem"}}>Reviews</div>
               </Col>
               <Col>
-                <img src={write} alt="write" className="service-write-button" onClick={() => this.setState({ write: true })}/>
+                <img src={write} alt="write" className="service-write-button" onClick={this.handleOpen}/>
               </Col>
             </Row>
             <div style={{width: "600px", marginLeft: "auto", marginRight: "auto"}}>
@@ -282,6 +282,14 @@ class Detail extends Component {
     service.reviews.comments[key] = response.data.comment
     comments[key] = response.data.comment
     state.setState({ service: service, comments: comments })
+  }
+
+  handleOpen = () => {
+    if(this.props.auth.isAuthenticated) {
+      this.setState({ write: true })
+    } else {
+      window.alert('Please log in and try again.')
+    }
   }
 
   handleClose = () => {
