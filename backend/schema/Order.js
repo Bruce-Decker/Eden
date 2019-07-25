@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const uuidv1 = require('uuid/v1');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-    order_id: {
+    _id: {
         type: String,
-        required: true
+        default: uuidv1()
     },
     user_id: {
         type: String,
@@ -55,7 +56,7 @@ const OrderSchema = new Schema({
     },
     status: {
         type: String,
-        reuired: false
+        required: false
     }
 });
 
