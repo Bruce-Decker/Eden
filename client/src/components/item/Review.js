@@ -241,19 +241,34 @@ class Review extends Component {
      .catch(err => console.log(err))
   }
 
-  replyComment = (comment_id, email) => {
-   
-    var data = {
-      email: email,
-      reply: this.state.reply
-    }
-     axios.post('/items/reply/' + comment_id, data)
+  replyComment = (comment_id) => {
+    if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+      toast.error("ERROR: You must be logged in to comment on a review.", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else {
+      let email = this.props.auth.user.email;
+     
+      var data = {
+        email: email,
+        reply: this.state.reply
+      }
+
+      axios
+        .post('/items/reply/' + comment_id, data)
         .then(res => {
           console.log(res)
           window.location.reload()
         })
         .catch(err => console.log(err))
-        
+    }    
   }
 
   async componentDidMount() {
@@ -409,7 +424,7 @@ class Review extends Component {
                           <div className="input-group"> 
                             <input className="form-control" placeholder="Add a comment" type="text" name = "reply" onChange = {this.onChange}/>
                             <span className="input-group-addon">
-                              <button onClick = {() => this.replyComment(comment.comment_id, this.props.auth.user.email)}><i className="fa fa-edit" /></button>  
+                              <button onClick = {() => this.replyComment(comment.comment_id)}><i className="fa fa-edit" /></button>  
                             </span>
                           </div>
                           <ul className="comments-list">
