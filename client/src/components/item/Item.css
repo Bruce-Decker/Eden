@@ -148,7 +148,6 @@
 
 .container-review {
   margin-top: 5rem;
-  margin-left: 15rem;
   margin-bottom: 1rem;
 }
 
@@ -270,12 +269,31 @@
 
 
 .eachItemMap {
-  margin-right: 120px;
+  /* margin-right: 120px; */
 
 }
 
 .itemReview {
  margin-bottom: 30px;
+}
+
+#thumb_up_blue {
+  color: blue;
+}
+
+.write_review {
+  color: blue;
+}
+
+
+.upper_review_comments {
+  margin-left: 430px;
+  margin-bottom: 20px;
+}
+
+.review_comments {
+  /* width: 125%; */
+  margin-left: 400px;
 }
 
 

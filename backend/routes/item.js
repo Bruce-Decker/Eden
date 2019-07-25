@@ -66,53 +66,90 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
     const comment = req.body.comment
     const time = Date.now()
     const email = req.body.email
+    const star_rating = req.body.star_rating
     var name 
+    var data
     const item_id = req.params.item_id
+   
+  
+          User.findOne({email: email}, function(err, docs) {
+            if (err) {
+              console.log(err)
+            } 
 
-    User.findOne({email: email}, function(err, docs) {
-      if (err) {
-        console.log(err)
-      } 
-        if (docs) {
-              name = docs.name
-              const data = {
-                comment_id,
-                email,
-                name,
-                comment,
-                time
-            }
-            if (comment) {
-              Item.findOneAndUpdate(
-                  {
-                    item_id: item_id
-                  },
-                {
-                    $push: {
-                      comments: data
-                    }
-                  }, function(err, docs) {
-                    if (err) {
-                      res.send({Error: err})
-                    } else {
-                      res.send(docs)
-                    }
+        
+              if (docs) {
+                    data = {
+                      comment_id,
+                      email,
+                      name: docs.name,
+                      comment,
+                      time,
+                      star_rating
                   }
-                )
-            }
-        }
+                  console.log(data)
+                  if (comment) {
+                    Item.findOneAndUpdate(
+                        {
+                          item_id: item_id
+                        },
+                      {
+                          $push: {
+                            comments: data
+                          }
+                        }, function(err, docs) {
+                          if (err) {
+                            res.send({Error: err})
+                          } else {
+                            res.send(docs)
+                          }
+                        }
+                      )
+                  }
+              } else {
+                if (req.body.name ==="Anonymous") {
+                  name = req.body.name
+                  data = {
+                   comment_id,
+                   email,
+                   name: "Anonymous",
+                   comment,
+                   time,
+                   star_rating
+                 }
+                 if (comment) {
+                  Item.findOneAndUpdate(
+                      {
+                        item_id: item_id
+                      },
+                    {
+                        $push: {
+                          comments: data
+                        }
+                      }, function(err, docs) {
+                        if (err) {
+                          res.send({Error: err})
+                        } else {
+                          res.send(docs)
+                        }
+                      }
+                    )
+                }
+               }
+              }
 
-    })
+          })
 })
 
 router.post('/deleteComment/:item_id', function(req, res) {
     const item_id = req.params.item_id
     const comment_id = req.body.comment_id
-    const email = req.body.email
+   // const email = req.body.email
     Item.findOneAndUpdate(
       {
+        item_id: item_id,
         "comments.comment_id": comment_id,
-        "comments.email": email
+       // "comments.email": email
       },
      
        {
@@ -136,38 +173,65 @@ router.post('/upvote/:comment_id', function(req, res) {
    var comment_id = req.params.comment_id
    console.log(comment_id)
    var email = req.body.email
-   var name = req.body.name
-   const item_id = req.body.item_id
-   var data = {
-      name,
-      email
-   }
-   console.log(data)
-   if (email && name) {
-     console.log("test")
-
-      Item.findOneAndUpdate(
-         {
-          "comments.comment_id": comment_id
-         }, {
-          $pull: {
-            "comments.$.downvote": { email: email}
-         },
-            $push: {
-              "comments.$.upvote": data
-           }
-         },
-         function(err, docs) {
+   var data
+   if (email) {
+        User.findOne({email: email}, function(err, docs) {
           if (err) {
-            res.send({Error: err})
-          } else {
-            console.log("docs")
-            console.log(docs)
-            res.send(data)
+            console.log(err)
           }
-        }
-      )
+            if (docs) {
+                data = {
+                  name: docs.name,
+                  email
+               }
+                  Item.findOneAndUpdate(
+                    {
+                      "comments.comment_id": comment_id
+                    }, {
+                      $pull: {
+                        "comments.$.downvote": { email: email}
+                    },
+                        $push: {
+                          "comments.$.upvote": data
+                      }
+                    },
+                    function(err, results) {
+                      if (err) {
+                        res.send({Error: err})
+                      } else {
+                       
+                        res.send(results)
+                      }
+                    }
+                  )
+            }
+          })
    }
+})
+
+
+router.post('/undoUpvote/:comment_id', function(req, res) {
+   var comment_id = req.params.comment_id
+   var email = req.body.email
+   if (email) {
+     Item.findOneAndUpdate(
+        {
+          "comments.comment_id": comment_id
+        },
+        {
+            $pull: {
+               "comments.$.upvote": { email: email}
+             }
+        }, function(err, docs) {
+            if (err) {
+                console.log(err)
+              res.send({Error: err})
+            } else {
+              res.send(docs)
+            }
+
+        })
+ }
 })
 
 
@@ -175,37 +239,64 @@ router.post('/downvote/:comment_id', function(req, res) {
   var comment_id = req.params.comment_id
   console.log(comment_id)
   var email = req.body.email
-  var name = req.body.name
-  var data = {
-    name,
-    email
- }
+  var data 
+  if (email) {
+    User.findOne({email: email}, function(err, docs) {
+      if (err) {
+        console.log(err)
+      }
+        if (docs) {
+          data = {
+            name: docs.name,
+            email
+         }
+            Item.findOneAndUpdate(
+              {
+              "comments.comment_id": comment_id
+              }, {
+                $pull: {
+                  "comments.$.upvote": { email: email}
+                },
+                $push: {
+                  "comments.$.downvote": data
+              }
+              }, 
+              function(err, results) {
+              if (err) {
+                res.send({Error: err})
+              } else {
+                res.send(results)
+              }
+            }
+          )
+        }
+      })
+  }
+})
 
+
+router.post('/undoDownvote/:comment_id', function(req, res) {
+  var comment_id = req.params.comment_id
+  var email = req.body.email
   if (email) {
     Item.findOneAndUpdate(
-      {
-       "comments.comment_id": comment_id
-      }, {
-         $pull: {
-           "comments.$.upvote": { email: email}
-        },
-        $push: {
-          "comments.$.downvote": data
-       }
-      }, 
-      
-      function(err, docs) {
-       if (err) {
-         res.send({Error: err})
-       } else {
-         console.log("docs")
-         console.log(docs)
-        res.send(docs)
-       }
-     }
-   )
+       {
+         "comments.comment_id": comment_id
+       },
+       {
+           $pull: {
+              "comments.$.downvote": { email: email}
+            }
+       }, function(err, docs) {
+           if (err) {
+               console.log(err)
+             res.send({Error: err})
+           } else {
+             res.send(docs)
+           }
 
-  }
+       })
+}
 })
 
 router.post('/reply/:comment_id', function(req, res) {

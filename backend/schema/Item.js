@@ -34,6 +34,9 @@ const ItemSchema = new Schema({
     },
     comments: [
        {
+           star_rating: {
+            type: Number
+           },
            comment_id: {
              type: String,
              required: true,
@@ -57,6 +60,7 @@ const ItemSchema = new Schema({
            },
            upvote: [
                {
+                    _id:false,
                     name: {
                         type: String,
                         required: true
@@ -70,6 +74,7 @@ const ItemSchema = new Schema({
            ],
            downvote: [
                {
+                    _id:false,
                     name: {
                         type: String,
                         required: true

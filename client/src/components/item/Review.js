@@ -7,12 +7,29 @@ import map from '../../images/map.jpg'
 import axios from 'axios'
 import  delete_icon  from './delete_icon.png'
 import { connect } from 'react-redux'
+import { Card } from 'react-bootstrap'
+import Modal from 'react-modal';
+import StarRatingComponent from 'react-star-rating-component';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width: "700px",
+    height: "320px",
+    backgroundColor: 'rgba(0,0,0,.6)'
+   
+  }
+};
 
 const reviews = [
   {
@@ -33,6 +50,8 @@ const reviews = [
 
 var defaultPosition
 
+Modal.setAppElement("#root");
+
 class Review extends Component {
 
   constructor(props){
@@ -43,8 +62,168 @@ class Review extends Component {
          lat: 37.7749,
          lng: -122.4194
       },
-      showReviews: false
+      showReviews: false,
+      reply: '',
+      comment: '',
+      modalIsOpen: false,
+      anonymous: false,
+      rating: 1
   }
+  }
+
+  onStarClick(nextValue, prevValue, name) {
+    this.setState({rating: nextValue});
+  }
+
+  submitComment = () => {
+    var comment = this.state.comment
+    var item_id = this.props.item_id
+    var star_rating = this.state.rating
+    var data
+  
+    if (this.state.anonymous) {
+     data = {
+      comment: comment,
+      email: "Anonymous",
+      star_rating: star_rating,
+      name: "Anonymous"
+    }
+  } else { 
+      data = {
+        comment: comment,
+        email: this.props.auth.user.email,
+        star_rating: star_rating
+      }
+  }
+
+  
+    
+    axios.post('/items/postCommentForItem/' + item_id, data)
+    .then(res => {
+      console.log(res)
+      window.location.reload()
+    })
+  .catch(err => console.log(err))
+
+  }
+
+
+  toggleSubmitAsAnonymous= () => {
+    this.setState({
+      anonymous: !this.state.anonymous
+    });
+  }
+
+  openModal = () => {
+    this.setState({modalIsOpen: true});
+  }
+
+  afterOpenModal = () => {
+    // references are now sync'd and can be accessed.
+    //this.subtitle.style.color = '#f00';
+   
+  }
+
+  closeModal = () => {
+    this.setState({modalIsOpen: false});
+  }
+
+  
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+
+  upvoteComment = (comment_id, email) => {
+  
+    var data = {
+      email: email
+    }
+      axios.post('/items/upvote/' + comment_id, data)
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    .catch(err => console.log(err))
+  }
+
+  undoUpvoteComment = (comment_id, email) => {
+  
+    var data = {
+      email: email
+    }
+      axios.post('/items/undoUpvote/' + comment_id, data)
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    .catch(err => console.log(err))
+  }
+
+  undoDownvoteComment = (comment_id, email) => {
+  
+    var data = {
+      email: email
+    }
+      axios.post('/items/undoDownvote/' + comment_id, data)
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    .catch(err => console.log(err))
+  }
+
+  downvoteComment = (comment_id, email) => {
+  
+    var data = {
+      email: email
+    }
+      axios.post('/items/downvote/' + comment_id, data)
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+    .catch(err => console.log(err))
+  }
+
+  deleteComment = (comment_id) => {
+     var data = {
+      comment_id
+     }
+     axios.post('/items/deleteComment/' + this.props.item_id, data)
+     .then(res => {
+       console.log(res)
+       window.location.reload()
+     })
+    .catch(err => console.log(err))
+  }
+
+  deleteReply = (comment_id, reply_id) => {
+    var data = {
+      reply_id: reply_id
+    }
+    axios.post('/items/deleteReply/' + comment_id, data)
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      })
+     .catch(err => console.log(err))
+  }
+
+  replyComment = (comment_id, email) => {
+   
+    var data = {
+      email: email,
+      reply: this.state.reply
+    }
+     axios.post('/items/reply/' + comment_id, data)
+        .then(res => {
+          console.log(res)
+          window.location.reload()
+        })
+        .catch(err => console.log(err))
+        
   }
 
   async componentDidMount() {
@@ -68,6 +247,7 @@ class Review extends Component {
   }
 
   render() {
+    const { rating } = this.state;
     const defaultPosition = {
       lat: this.state.position.lat,
       lng: this.state.position.lng
@@ -75,11 +255,61 @@ class Review extends Component {
   
     return (
       <div class="container-review">
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          
+          <textarea className="form-control" name = "comment" rows="8" id="comment"  onChange = {this.onChange}></textarea>
+          <div>
+          <div className="space">
+                
+                </div>   
+       
+        <StarRatingComponent 
+          name="rate1" 
+          starCount={5}
+          value={rating}
+          onStarClick={this.onStarClick.bind(this)}
+        
+        />
+      </div>
+          <div className="space">
+                
+                </div>
+                <div className="field">
+                
+                </div>
+                <button className="ui button" type="submit" onClick = {this.submitComment}>Submit</button>
+                <span className="save_as_draft">
+             
+                     <div className="ui read-only checkbox">
+                        <input type="checkbox" checked={this.state.anonymous} onChange={this.toggleSubmitAsAnonymous}/>
+                        <label><b>Submit as an anonymous user</b></label>
+                    </div>
+                   
+               </span>
+                
+                <div className="space">
+                
+                </div>
+              
+                
+        </Modal>
       
           <div className = "itemReview">
-          <div class="item-header">Reviews </div>
+          <Card.Header>
+          <div className = "upper_review_comments">
+             
+               <button type="button" onClick={this.openModal}  className="btn btn-primary">Write a reivew <i class="fas fa-pencil-alt"></i></button>
+          </div>
              {this.state.showReviews ?
-             <div>
+             
+             <div className = "review_comments">
+               
                {this.state.comments.map(comment => 
                     <div className="container bootstrap snippet">
                     <div className="col-sm-8">
@@ -103,37 +333,73 @@ class Review extends Component {
                                                     : null }
                         </div> 
                         <div className="post-description"> 
-                          <p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p>
+                          <p>{comment.comment}</p>
+                      {comment.star_rating ?
+                          <StarRatingComponent 
+                              name="rate2" 
+                              editing={false}
+                              starCount={5}
+                              value={comment.star_rating}
+                       />
+                       :  <StarRatingComponent 
+                       name="rate2" 
+                       editing={false}
+                       starCount={5}
+                       value={1}
+                      /> }
                           <div className="stats">
-                            <a href="#" className="btn btn-default stat-item">
-                              <i className="fa fa-thumbs-up icon" />2
-                            </a>
-                            <a href="#" className="btn btn-default stat-item">
-                              <i className="fa fa-share icon" />12
-                            </a>
+                          { comment.upvote.some(element => element['email'] === this.props.auth.user.email) ?
+                                <button onClick = {() => this.undoUpvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
+                                  <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>{comment.upvote.length}
+                                </button>
+                                
+                                : 
+                                <button onClick = {() => this.upvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
+                                  <i className="fa fa-thumbs-up icon" />{comment.upvote.length}
+                                </button> }
+
+                          { comment.downvote.some(element => element['email'] === this.props.auth.user.email) ?
+                                <button onClick = {() => this.undoDownvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
+                                  <i className="fas fa-thumbs-down icon" id = "thumb_up_blue"/>{comment.downvote.length}
+                                </button>
+                                : 
+
+                                <button onClick = {() => this.downvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
+                                  <i className="fas fa-thumbs-down icon" />{comment.downvote.length}
+                          </button> }
+
+
+
                           </div>
                         </div>
                         <div className="post-footer">
                           <div className="input-group"> 
-                            <input className="form-control" placeholder="Add a comment" type="text" />
+                            <input className="form-control" placeholder="Add a comment" type="text" name = "reply" onChange = {this.onChange}/>
                             <span className="input-group-addon">
-                              <a href="#"><i className="fa fa-edit" /></a>  
+                              <button onClick = {() => this.replyComment(comment.comment_id, this.props.auth.user.email)}><i className="fa fa-edit" /></button>  
                             </span>
                           </div>
                           <ul className="comments-list">
-                            <li className="comment">
-                              <a className="pull-left" href="#">
-                                <img className="avatar" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar" />
-                              </a>
-                              <div className="comment-body">
-                                <div className="comment-heading">
-                                  <h4 className="user">Gavino Free</h4>
-                                  <h5 className="time">5 minutes ago</h5>
-                                </div>
-                                <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
-                              </div>
-                             
-                            </li>
+
+                            {comment.replies.map(reply =>
+                                    <li className="comment">
+                                      <a className="pull-left" href="#">
+                                      <img src={`/images/${reply.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                      </a>
+                                      <div className="comment-body">
+                                        <div className="comment-heading">
+                                          <h4 className="user">{reply.name}</h4>
+                                          <h5 className="time">{reply.time}</h5>
+                                          {reply.email === this.props.auth.user.email ?
+                                                          <img src = {delete_icon} className = "profile_delete_icon"  height="15" width="15" onClick = {() => this.deleteReply(comment.comment_id, reply.reply_id)}/>  
+                                                           : null }
+                                        </div>
+                                        <p>{reply.reply}</p>
+                                      </div>
+                                    
+                                    </li>
+                            )}
+                            
                           </ul>
                         </div>
                       </div>
@@ -148,8 +414,9 @@ class Review extends Component {
                )}
                   </div>
                   : null }
-                  
+                   </Card.Header>
               </div>
+              
       <div className = "eachItemMap">
               <LocationPicker
                                 
