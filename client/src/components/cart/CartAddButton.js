@@ -22,26 +22,40 @@ class CartAddButton extends Component {
     // use this to prevent from going to item details
     e.preventDefault();
 
-    let email = this.props.auth.user.email;
-    let item = this.props.item; // get item information from parent
+    if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+      toast.error("ERROR: you must be logged in to add items to the cart!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
+    } else {
 
-    let name = item.item_name || item.name;
-    toast.success(name + " was successfully added to the cart!", {
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      newestOnTop: true,
-      className: "addtocart-toast-toast",
-      bodyClassName: "addtocart-toast-body",
-      progressClassName: "addtocart-toast-progress",
-      draggable: false,
-    });
+      let email = this.props.auth.user.email;
+      let item = this.props.item; // get item information from parent
 
-    this.props.addToCart(email, item);
+      let name = item.item_name || item.name;
+      toast.success(name + " was successfully added to the cart!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
 
-    // hack to refresh cart page
-    if(window.location.pathname == "/cart") {
-      window.location.reload();
+      this.props.addToCart(email, item);
+
+      // hack to refresh cart page
+      if(window.location.pathname == "/cart") {
+        window.location.reload();
+      }
     }
   }
 

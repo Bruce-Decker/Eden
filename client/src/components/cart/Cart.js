@@ -9,6 +9,7 @@ import TopRatedItems from './TopRatedItems';
 import Footer from '../footer/Footer';
 import apple from '../../images/apple.png';
 
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getCartItems } from '../../redux/actions/CartActions';
 
@@ -49,8 +50,16 @@ class Cart extends Component {
   }
 
   componentWillMount() {
-    let email = this.props.auth.user.email;
-    this.props.getCartItems(email);
+    if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+      let url = '/login';
+
+      this.props.history.push({
+        pathname: url
+      });
+    } else {
+      let email = this.props.auth.user.email;
+      this.props.getCartItems(email);
+    }
   }
 
   componentDidMount() {
@@ -101,10 +110,10 @@ const mapStateToProps = state => {
   }
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Cart);
+)(Cart));
 
 
 

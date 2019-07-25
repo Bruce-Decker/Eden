@@ -6,6 +6,7 @@ import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
 
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class Checkout extends Component {
   constructor(props) {
@@ -284,9 +285,46 @@ class Checkout extends Component {
     );
   }
 
+  componentWillMount() {
+    if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+      let url = '/login';
+
+      this.props.history.push({
+        pathname: url
+      });
+    }
+  }
+
   componentDidMount() {
     this.errorMessageElement = document.getElementById("error-message");
   }
 }
 
-export default withRouter(Checkout);
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+};
+
+export default withRouter(connect(
+  mapStateToProps
+)(Checkout));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
