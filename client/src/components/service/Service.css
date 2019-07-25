@@ -44,6 +44,7 @@
   margin: auto;
   padding-left: 3rem;
   display: block;
+  object-fit: cover;
 }
 
 .service-list-item {
@@ -134,6 +135,7 @@
   max-width: 100%;
   max-height: 270px;
   min-height: 270px;
+  object-fit: cover;
 }
 
 .service-pn-item {
