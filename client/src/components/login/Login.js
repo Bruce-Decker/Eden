@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Login.css';
 import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
-import AuthBanner from '../banner/AuthBanner'
+import LandingBanner from '../banner/LandingBanner'
 import { connect } from 'react-redux'
 import { loginUser } from '../../redux/actions/AuthenticationActions'
 
@@ -47,7 +47,7 @@ onSubmit = (e) => {
       const { errors } = this.state
       return (
         <div>
-            <AuthBanner />
+            <LandingBanner />
             <div className = "loginContainer">
           
           <form onSubmit = {this.onSubmit} className="ui large form">

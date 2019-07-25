@@ -48,11 +48,6 @@ class LandingBanner extends Component {
                   <SearchBar/>
                   <ul className="navbar-nav ml-auto">
                     <li className="nav-item">
-                      <Link className="nav-link" to="/cart" style={{paddingTop: "0.2rem", paddingBottom: "0"}}>
-                        <img src={cart} height="28" width="28" alt="Cart"></img>
-                      </Link>
-                    </li>
-                    <li className="nav-item">
                       <Link className="nav-link" to="/register">Register</Link>
                     </li>
                     <li className="nav-item">
