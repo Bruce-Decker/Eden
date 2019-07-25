@@ -20,8 +20,10 @@ class RegularBanner extends Component {
 
 LogoutButton = (e) => {
    
-
-  this.props.logout();
+  if (window.confirm('Are you sure you want to log out?')) {
+    this.props.logout();
+    window.location = "/"
+  }
 }
     render() {
 
@@ -110,10 +112,10 @@ LogoutButton = (e) => {
                           </Dropdown.Item>
                           <Dropdown.Divider />
                           <Dropdown.Item id="dropdown-item">
-                            <Link id="dropdown-item" to="/" onClick={this.LogoutButton}>
+                            <div onClick={this.LogoutButton}>
                               <img src={log} height="20" width="22" alt="Logout" style={{marginRight: "0.5rem"}}></img>
                               Log out
-                            </Link>
+                            </div>
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
