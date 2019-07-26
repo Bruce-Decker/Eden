@@ -131,7 +131,7 @@ class Review extends Component {
         .post('/items/postCommentForItem/' + item_id, data)
         .then(res => {
           console.log(res)
-          window.location.reload()
+          this.componentDidMount()
         })
         .catch(err => console.log(err))
     }
@@ -173,7 +173,8 @@ class Review extends Component {
       axios.post('/items/upvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-        window.location.reload()
+       
+        this.componentDidMount()
       })
     .catch(err => console.log(err))
   }
@@ -186,7 +187,7 @@ class Review extends Component {
       axios.post('/items/undoUpvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-        window.location.reload()
+        this.componentDidMount()
       })
     .catch(err => console.log(err))
   }
@@ -199,7 +200,7 @@ class Review extends Component {
       axios.post('/items/undoDownvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-        window.location.reload()
+        this.componentDidMount()
       })
     .catch(err => console.log(err))
   }
@@ -212,7 +213,8 @@ class Review extends Component {
       axios.post('/items/downvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-        window.location.reload()
+      
+       this.componentDidMount()
       })
     .catch(err => console.log(err))
   }
@@ -224,7 +226,7 @@ class Review extends Component {
      axios.post('/items/deleteComment/' + this.props.item_id, data)
      .then(res => {
        console.log(res)
-       window.location.reload()
+       this.componentDidMount()
      })
     .catch(err => console.log(err))
   }
@@ -236,7 +238,7 @@ class Review extends Component {
     axios.post('/items/deleteReply/' + comment_id, data)
       .then(res => {
         console.log(res)
-        window.location.reload()
+        this.componentDidMount()
       })
      .catch(err => console.log(err))
   }
@@ -265,7 +267,7 @@ class Review extends Component {
         .post('/items/reply/' + comment_id, data)
         .then(res => {
           console.log(res)
-          window.location.reload()
+          this.componentDidMount()
         })
         .catch(err => console.log(err))
     }    
