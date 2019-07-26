@@ -9,6 +9,7 @@ var path = require("path");
 var del = require('delete');
 var fs = require('fs');
 const User = require('../schema/userModel');
+var reversePopulate = require('mongoose-reverse-populate');
 
 var file_old_name
 //application/zip

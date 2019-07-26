@@ -289,7 +289,7 @@ class Review extends Component {
           lng: response.data[0].latitude
         },
         showReviews: true,
-        comments: response.data[0].comments
+        comments: response.data[0].comments.reverse()
       }) 
     }
   }

@@ -298,7 +298,7 @@ class ShowProfile extends Component {
                             company: response.data[0].company,
                             about_me: response.data[0].about_me,
                             showProfile: true,
-                            posts: response.data[0].posts
+                            posts: response.data[0].posts.reverse()
                         })
             } 
             if (!response.data[0].profile_picture_path && response.data[0].email) {
@@ -465,7 +465,7 @@ class ShowProfile extends Component {
 
 
                
-                     {this.state.posts.reverse().map(post =>
+                     {this.state.posts.map(post =>
                               <div className="container bootstrap snippet">
                               <div className="col-sm-12">
                                 <div className="panel panel-white post panel-shadow">
