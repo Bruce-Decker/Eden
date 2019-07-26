@@ -56,7 +56,7 @@ class Item extends Component {
   }
 
   componentWillMount() {
-    if (this.props.auth.isAuthenticated) {
+    if (this.props.auth && this.props.auth.isAuthenticated) {
       if (this.props.user_name === this.props.auth.user.name) {
         this.classID = "service-item-user"
       }
