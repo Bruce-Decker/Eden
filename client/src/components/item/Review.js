@@ -132,6 +132,9 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
+          this.setState({
+            modalIsOpen: false
+          })
         })
         .catch(err => console.log(err))
     }
@@ -268,6 +271,7 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
+          this.setState({reply: ''})
         })
         .catch(err => console.log(err))
     }    
@@ -424,7 +428,7 @@ class Review extends Component {
                         </div>
                         <div className="post-footer">
                           <div className="input-group"> 
-                            <input className="form-control" placeholder="Add a comment" type="text" name = "reply" onChange = {this.onChange}/>
+                            <input className="form-control" placeholder="Add a comment" type="text" value = {this.state.reply} name = "reply" onChange = {this.onChange}/>
                             <span className="input-group-addon">
                               <button onClick = {() => this.replyComment(comment.comment_id)}><i className="fa fa-edit" /></button>  
                             </span>

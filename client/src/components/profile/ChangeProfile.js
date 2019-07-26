@@ -88,7 +88,9 @@ class ChangeProfile extends Component {
         // this.props.createProfile(formdata)
         console.log(formdata)
          axios.post('/profile/profileUpload', formdata)
-           .then(res => window.location.reload())
+           .then(res => {
+               window.location.reload()
+           })
            .catch(err => console.log(err))
        
     }

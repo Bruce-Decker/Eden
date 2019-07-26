@@ -108,7 +108,8 @@ class ShowProfile extends Component {
          axios.post('/profile/sharePost', data)
          .then(res => {
              console.log(res)
-             window.location.reload()
+             this.componentDidMount()
+             this.setState({share_post: ''})
          })
          .catch(err => console.log(err))
         
@@ -132,7 +133,10 @@ class ShowProfile extends Component {
             .then(res => {
                 console.log(res)
                
-                window.location.reload()
+                this.componentDidMount()
+                this.setState({
+                  comment: ''
+                })
                
             })
             .catch(err => console.log(err))
@@ -153,7 +157,7 @@ class ShowProfile extends Component {
         axios.post('/profile/likePost', data)
             .then(res => {
                 console.log(res)
-                window.location.reload()
+                this.componentDidMount()
             })
         .catch(err => console.log(err))
     }
@@ -168,7 +172,7 @@ class ShowProfile extends Component {
         axios.post('/profile/deletePost', data)
             .then(res => {
                 console.log(res)
-                window.location.reload()
+                this.componentDidMount()
             })
         .catch(err => console.log(err))
     }
@@ -185,7 +189,7 @@ class ShowProfile extends Component {
        axios.post('/profile/deleteCommentPost', data)
             .then(res => {
                 console.log(res)
-                window.location.reload()
+                this.componentDidMount()
             })
         .catch(err => console.log(err))
 
@@ -212,7 +216,7 @@ class ShowProfile extends Component {
         axios.post('/profile/unlikePost', data)
         .then(res => {
             console.log(res)
-            window.location.reload()
+            this.componentDidMount()
         })
         .catch(err => console.log(err))
     
@@ -430,7 +434,7 @@ class ShowProfile extends Component {
                              <div class="ui form">
                                     <div class="field">
                                       
-                                        <textarea  name = "share_post" onChange = {this.onChange}></textarea>
+                                        <textarea  name = "share_post" value = {this.state.share_post} onChange = {this.onChange}></textarea>
                                     </div>
                             </div>
                             <div>
@@ -461,7 +465,7 @@ class ShowProfile extends Component {
 
 
                
-                     {this.state.posts.map(post =>
+                     {this.state.posts.reverse().map(post =>
                               <div className="container bootstrap snippet">
                               <div className="col-sm-12">
                                 <div className="panel panel-white post panel-shadow">
@@ -540,7 +544,7 @@ class ShowProfile extends Component {
                                   <div className="post-footer">
                                      
                                     <div className="input-group"> 
-                                      <input className="form-control" name = "comment"  id="comment" ref={(ref) => this.comment= ref} placeholder="Add a comment" type="text" onChange = {this.onChange}/>
+                                      <input className="form-control" name = "comment"  id="comment" value = {this.state.comment} placeholder="Add a comment" type="text" onChange = {this.onChange}/>
                                       <span className="input-group-addon">
                                         <button href="#" onClick = {() => this.handleComment(post.post_id)}><i className="fa fa-edit" /></button>  
                                       </span>

@@ -37,7 +37,8 @@ class Messages extends Component {
                 } else {
                     this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
                 }
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
         }
 
     }
@@ -52,13 +53,15 @@ class Messages extends Component {
                 } else {
                     this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
                 }
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
             }
        
      }
 
      refresh = () => {
-         window.location.reload()
+         //window.location.reload()
+         this.props.onMessage()
      }
 
      checkAllBox = () => {
@@ -91,7 +94,8 @@ class Messages extends Component {
         axios.post('/message/trashMessage', data)
             .then(res => {
                 console.log(res.data)
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
             })
             .catch(err => console.log(err))
        
@@ -114,7 +118,8 @@ class Messages extends Component {
         axios.post('/message/deleteMessage', data)
             .then(res => {
                 console.log(res.data)
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
             })
             .catch(err => console.log(err))
        
@@ -157,7 +162,8 @@ class Messages extends Component {
         axios.post('/message/starMessage', data)
             .then(res => {
                 console.log(res.data)
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
             })
             .catch(err => console.log(err))
     }
@@ -174,7 +180,8 @@ class Messages extends Component {
         axios.post('/message/unstarMessage', data)
             .then(res => {
                 console.log(res.data)
-                window.location.reload()
+                //window.location.reload()
+                this.props.onMessage()
             })
             .catch(err => console.log(err))
     }

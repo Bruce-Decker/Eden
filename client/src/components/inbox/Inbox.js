@@ -154,6 +154,10 @@ class Inbox extends Component {
        alert(message_id)
     }
 
+    onMessage = () => {
+       this.componentDidMount()
+    }
+
    
 
 
@@ -589,6 +593,7 @@ class Inbox extends Component {
                                                           page_limit = {this.state.page_limit}
                                                           emailType = 'inbox'
                                                           type = "individual"
+                                                          onMessage = {this.onMessage}
                                                           />
                                                 : null }
 
@@ -601,6 +606,7 @@ class Inbox extends Component {
                                                         page_limit = {this.state.page_limit} 
                                                         emailType = 'sent' 
                                                         type = "individual"
+                                                        onMessage = {this.onMessage}
                                                         />
                                               : null }
 
@@ -615,6 +621,7 @@ class Inbox extends Component {
                                                         emailType = 'search' 
                                                         type = "search"
                                                         searchTerm = {this.state.searchTerm}
+                                                        onMessage = {this.onMessage}
                                                         />
                                             
                                               : null }
@@ -628,6 +635,7 @@ class Inbox extends Component {
                                                         page_limit = {this.state.page_limit}  
                                                         emailType = 'important' 
                                                         type = "individual"
+                                                        onMessage = {this.onMessage}
                                                         />
                                               : null }
 
@@ -640,6 +648,7 @@ class Inbox extends Component {
                                                         page_limit = {this.state.page_limit}  
                                                         emailType = 'draft' 
                                                         type = "individual"
+                                                        onMessage = {this.onMessage}
                                                         
                                                         />
                                               : null }
@@ -653,6 +662,7 @@ class Inbox extends Component {
                                                         page_limit = {this.state.page_limit}  
                                                         emailType = 'trash' 
                                                         type = "individual"
+                                                        onMessage = {this.onMessage}
                                                         
                                                         />
                                               : null }
