@@ -158,8 +158,10 @@ class Inbox extends Component {
 
 
     async componentWillReceiveProps(nextProps) {
-      if (nextProps.location.search !== this.props.location.search) {    
-           window.location.reload();
+     
+      if (nextProps.location.search !== this.props.location.search) {   
+ 
+        window.location.reload()
       }
 
     }
