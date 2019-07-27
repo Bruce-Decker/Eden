@@ -33,6 +33,20 @@ class CartAddButton extends Component {
         progressClassName: "addtocart-toast-progress",
         draggable: false,
       });
+    } else if(this.props.auth.user.email === this.props.item.email) {
+      // if the logged-in user is the one who listed this item,
+      // don't allow them to add it to the cart
+
+      toast.error("ERROR: you cannot add your own listed items to the cart!", {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        newestOnTop: true,
+        className: "addtocart-toast-toast",
+        bodyClassName: "addtocart-toast-body",
+        progressClassName: "addtocart-toast-progress",
+        draggable: false,
+      });
     } else {
 
       let email = this.props.auth.user.email;
