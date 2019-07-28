@@ -93,6 +93,7 @@ class StripePayment extends Component {
                         amount: this.state.amount,
                         description: "sample charge",
                         stripe_token: data.token
+                        //email: this.props.auth.user.email
                     };
                     axios.post('http://localhost:5000/payment/charge', charge_details)
                         .then(res =>
