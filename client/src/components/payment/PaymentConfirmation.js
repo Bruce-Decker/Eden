@@ -30,7 +30,14 @@ class PaymentConfirmation extends Component {
                         <h1 className="payment-h1">{this.state.payment_status} !!!!</h1>
                     </div>
                     <div>
-                        <button className="payment-button-1" onClick={this.submit}>Back to Home</button>
+                        <div class="row">
+                            <h1 className="payment-h1">Order Details</h1>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-1 offset-md-11">
+                                <button className="payment-home-button" onClick={this.submit}>Back to Home</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,8 +47,8 @@ class PaymentConfirmation extends Component {
     componentDidMount(){
         var order_id = new URLSearchParams(window.location.search).get('order_id');
         if(order_id !== '' || order_id !== '0000' || order_id !== undefined) {
-            this.state.payment_status = 'Payment Successful';
-            this.state.order_id = order_id;
+            this.setState({payment_status: 'Payment Successful'});
+            this.setState({order_id: order_id});
         }
     }
 }
