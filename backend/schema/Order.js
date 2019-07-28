@@ -3,7 +3,7 @@ const uuidv1 = require('uuid/v1');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-    _id: {
+    order_id: {
         type: String,
         default: uuidv1()
     },

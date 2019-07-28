@@ -27,7 +27,7 @@ router.post('/charge', function(req,res) {
         amount: req.body.amount*100,
         description: req.body.description,
         currency: "usd",
-        source: req.body.stripe_token
+        source: "tok_mastercard"//req.body.stripe_token
     })
     .then(charge => {
         charge.amount = charge.amount/100;
@@ -48,7 +48,6 @@ router.post('/charge', function(req,res) {
                 });
             };
 
-            var total_price = 0;
             // obtain description, category, and price from item details
             for(let i=0; i<items.length; i++) {
                 let obj = {};
@@ -65,13 +64,11 @@ router.post('/charge', function(req,res) {
                 obj['quantity'] = cur_item.quantity;
 
                 ret.push(obj);
-
-                total_price = total_price + (obj.price*obj.quantity);
             }
             const current_order = {
                 user_id: "1234",
                 email: email,
-                price: total_price.toString(),
+                price: req.body.amount,
                 items: ret
             };
 
@@ -270,6 +267,8 @@ router.post('/order', function(req,res) {
             user_id: "1234",
             email: email,
             price: total_price.toString(),
+            tracking_id: req.body.tracking_id,
+            payment_receipt_url: req.body.payment_url,
             items: ret
         };
 
