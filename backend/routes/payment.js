@@ -69,6 +69,7 @@ router.post('/charge', function(req,res) {
                 user_id: "1234",
                 email: email,
                 price: req.body.amount,
+                status: "processing",
                 items: ret
             };
 
