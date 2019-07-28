@@ -47,13 +47,13 @@ router.post('/create_label', function(req,res) {
       "units": "ounces"
     },
     "shipFrom": {
-      "name": req.body.shipFrom.name,
-      "street1": req.body.shipFrom.street1,
-      "street2": req.body.shipFrom.street2,
-      "city": req.body.shipFrom.city,
-      "state": req.body.shipFrom.state,
-      "postalCode": req.body.shipFrom.postalCode,
-      "country": req.body.shipFrom.country,
+      "name": "Eden Inc.",
+      "street1": "1 Washington Sq",
+      "street2": "",
+      "city": "San Jose",
+      "state": "CA",
+      "postalCode": "95192",
+      "country": "US",
       "residential": false
     },
     "shipTo": {
