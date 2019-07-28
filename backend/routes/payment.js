@@ -78,6 +78,7 @@ router.post('/charge', function(req,res) {
                     res.send({msg: "Failed to create Order", error: err});
                 } else {
                     console.log({msg: "Created Order successfully", data: current_order});
+                    charge.order = newlyCreated;
                     res.send(charge);
                 }
             });

@@ -68,9 +68,10 @@ router.post('/create_label', function(req,res) {
     },
     "testLabel": false
   };
+  //console.log(shipment_data);
   axios.post(shipStationServer + '/shipments/createlabel', shipment_data)
     .then(function (response) {
-      console.log(req.body.shipFrom.name);
+      //console.log(req.body.shipFrom.name);
       res.send(response.data);
     })
     .catch(function (error) {

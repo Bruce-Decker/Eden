@@ -22,6 +22,15 @@ class Payment extends Component {
             address_state: this.props.location.addresses ? this.props.location.addresses.bill_state:"",
             address_zip: this.props.location.addresses ? this.props.location.addresses.bill_zip:"",
             address_country: this.props.location.addresses ? this.props.location.addresses.bill_country:""
+        };
+        this.shipping_address = {
+            name: this.props.location.addresses ? this.props.location.addresses.ship_name:"",
+            address_line1: this.props.location.addresses ? this.props.location.addresses.ship_addr1:"",
+            address_line2: this.props.location.addresses ? this.props.location.addresses.ship_addr2:"",
+            address_city: this.props.location.addresses ? this.props.location.addresses.ship_city:"",
+            address_state: this.props.location.addresses ? this.props.location.addresses.ship_state:"",
+            address_zip: this.props.location.addresses ? this.props.location.addresses.ship_zip:"",
+            address_country: this.props.location.addresses ? this.props.location.addresses.ship_country:""
         }
     }
 
@@ -43,7 +52,7 @@ class Payment extends Component {
                         <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
                             <div className="stripe-payment">
                                 <Elements>
-                                    <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address}/>
+                                    <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address} shipping_address={this.shipping_address}/>
                                 </Elements>
                             </div>
                         </StripeProvider>

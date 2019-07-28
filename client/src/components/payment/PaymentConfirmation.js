@@ -10,7 +10,10 @@ class PaymentConfirmation extends Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
-
+        this.state = {
+            order_id: '',
+            payment_status: 'Payment Failed'
+        };
     }
 
     async submit(ev) {
@@ -22,18 +25,24 @@ class PaymentConfirmation extends Component {
         return (
             <div>
                 <RegularBanner/>
-                <div id="payment-header">
-                    <h1 className="payment-h1">Payment Successful !!!!</h1>
-                </div>
-                <div>
-                    <button className="payment-button-1" onClick={this.submit}>Back to Home</button>
+                <div class="container">
+                    <div id="payment-header">
+                        <h1 className="payment-h1">{this.state.payment_status} !!!!</h1>
+                    </div>
+                    <div>
+                        <button className="payment-button-1" onClick={this.submit}>Back to Home</button>
+                    </div>
                 </div>
             </div>
         );
     }
 
     componentDidMount(){
-        //console.log(this.billing_address);
+        var order_id = new URLSearchParams(window.location.search).get('order_id');
+        if(order_id !== '' || order_id !== '0000' || order_id !== undefined) {
+            this.state.payment_status = 'Payment Successful';
+            this.state.order_id = order_id;
+        }
     }
 }
 
