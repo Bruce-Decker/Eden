@@ -27,6 +27,7 @@ const message = require('./routes/message');
 const property = require('./routes/property');
 const service = require('./routes/service');
 const delivery = require('./routes/delivery');
+const shipment = require('./routes/shipment');
 const payment = require('./routes/payment');
 const recs = require('./routes/recs');
 const bids = require('./routes/bids');
@@ -93,6 +94,7 @@ app.use('/message', message);
 app.use('/properties', property);
 app.use('/services', service);
 app.use('/delivery', delivery);
+app.use('/shipment', shipment);
 app.use('/payment', payment);
 app.use('/recs', recs);
 app.use('/bids', bids);
@@ -107,7 +109,7 @@ app.get('/webhook/', function(req, res) {
         res.send(req.query['hub.challenge'])
     } 
     res.send("Wrong token")
-})
+});
 
 
 app.get('/test', function(req, res) {
