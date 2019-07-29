@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
 
-import { withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 class OrderItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            item_id: '',
             seller: '',
             item_name: '',
             item_image: '',
@@ -29,10 +30,36 @@ class OrderItem extends Component {
                     />
                 </div>
                 <div className="col-md-8">
-                    <p>name: {this.state.item_name}</p>
-                    <p>description: {this.state.description}</p>
-                    <p>price: {this.state.price}</p>
-                    <p>quantity: {this.state.quantity}</p>
+                    <Link to={"/items/" + this.state.item_id}>
+                        <div className="row shown-item-card">
+                            <div className="col-12">
+                                <div className="shown-item-text">
+                                    <span className="shown-item-name">Name:&nbsp;</span>
+                                    <span>{this.state.item_name}</span>
+                                </div>
+                                <div className="shown-item-text">
+                                    <span className="shown-item-description">Description:&nbsp;</span>
+                                    <span>{this.state.description}</span>
+                                </div>
+                                <div className="shown-item-text">
+                                    <span className="shown-item-category">Category:&nbsp;</span>
+                                    <span>{this.state.category}</span>
+                                </div>
+                                <div className="shown-item-text">
+                                    <span className="shown-item-price">Price:&nbsp;$</span>
+                                    <span>{this.state.price}</span>
+                                </div>
+                                <div className={"shown-item-text "}>
+                                    <span className="shown-item-bid-price">Quantity:&nbsp;</span>
+                                    <span>{this.state.quantity}</span>
+                                </div>
+                                <div className={"shown-item-text "}>
+                                    <span className="shown-item-bid-price">Seller:&nbsp;</span>
+                                    <span>{this.state.seller}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
         );
@@ -40,6 +67,7 @@ class OrderItem extends Component {
 
     componentDidMount(){
         //console.log(this.props.orderDetails);
+        this.setState({item_id:this.props.itemDetail.item_id});
         this.setState({seller:this.props.itemDetail.seller});
         this.setState({item_name:this.props.itemDetail.item_name});
         this.setState({item_image:this.props.itemDetail.item_image});
