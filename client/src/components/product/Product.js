@@ -145,7 +145,7 @@ class Product extends Component {
     allow="microphone;"
     width="350"
     height="430"
-    src="https://console.dialogflow.com/api-client/demo/embedded/760b7903-b307-4c1f-9f5f-f283b2433542">
+    src="https://console.dialogflow.com/api-client/demo/embedded/8d649ded-c666-4e29-90da-a32e7cd37712">
 </iframe>
         </Modal>
 

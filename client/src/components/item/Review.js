@@ -471,7 +471,7 @@ class Review extends Component {
                    </Card.Header>
               </div>
               
-      <div className = "eachItemMap">
+      {/* <div className = "eachItemMap">
               <LocationPicker
                                 
                                     containerElement={ <div style={ {height: '100%'} } /> }
@@ -480,25 +480,18 @@ class Review extends Component {
                                     onChange={this.handleLocationChange}
                                     zoom = {14}
                                 />
-                                </div>
+                                </div> */}
         
       
         <div class="row" style={{marginTop: "1rem"}}>
           
           
         
-           
-              {/* <LocationPicker
-                                    containerElement={ <div style={ {height: '100%'} } /> }
-                                    mapElement={ <div style={ {height: '400px'} } /> }
-                                    defaultPosition={defaultPosition}
-                                    onChange={this.handleLocationChange}
-                                    zoom = {14}
-                                /> */}
+          
                                 
          
          
-          <div class="col-7">
+          {/* <div class="col-7">
             <ul class="item-review-list">
               {reviews.map(review => {
                 return (
@@ -520,7 +513,7 @@ class Review extends Component {
                 )
               })}
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     );
