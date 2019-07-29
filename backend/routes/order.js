@@ -7,7 +7,7 @@ router.post('/addPostChargeInfo', function(req,res) {
   const trackingId = req.body.trackingId;
   const orderId = req.body.orderId;
 
-  Order.update( {'order_id': orderId},
+  Order.update( {'_id': orderId},
     { $set: {'tracking_id': trackingId, 'payment_receipt_url': paymentReceiptUrl, 'status': 'In-progress'} }, function(err, result) {
       if (err) {
         console.log("Failed to update order " + orderId);
@@ -22,6 +22,17 @@ router.post('/addPostChargeInfo', function(req,res) {
 router.post('/getAllOrders', function(req,res) {
     const email = req.body.email;
     Order.find({email: email}, function(err, docs) {
+        if (err) {
+            res.send(err)
+        } else {
+            res.send(docs)
+        }
+    })
+});
+
+router.get('/:id', function(req,res) {
+    const order_id = req.params.id;
+    Order.find({_id: order_id}, function(err, docs) {
         if (err) {
             res.send(err)
         } else {

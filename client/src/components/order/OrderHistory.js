@@ -42,9 +42,19 @@ class PaymentConfirmation extends Component {
         );
     }
 
+    componentWillMount() {
+        if(!this.props.auth || !this.props.auth.user || !this.props.auth.user.email) {
+            let url = '/login';
+
+            this.props.history.push({
+                pathname: url
+            });
+        }
+    }
+
     componentDidMount(){
         //console.log(this.props.auth.user.email);
-        axios.post('http://localhost:5000/order/getAllOrders', {
+        axios.post('/order/getAllOrders', {
             email: this.props.auth.user.email
         })
         .then((response) => {

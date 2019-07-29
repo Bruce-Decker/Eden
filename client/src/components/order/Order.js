@@ -21,7 +21,7 @@ class Order extends Component {
         return (
             <div className="order-item">
                 <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-12 order-id-title">
                         <h6>Order #: {this.state.orderId}</h6>
                     </div>
                 </div>
@@ -44,7 +44,7 @@ class Order extends Component {
 
     componentDidMount(){
         //console.log(this.props.orderDetails);
-        this.setState({orderId:this.props.orderDetails.order_id});
+        this.setState({orderId:this.props.orderDetails._id});
         this.setState({price:this.props.orderDetails.price});
         this.setState({status:this.props.orderDetails.status});
         this.setState({items: this.props.orderDetails.items});
