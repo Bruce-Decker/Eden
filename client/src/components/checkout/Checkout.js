@@ -297,6 +297,8 @@ class Checkout extends Component {
 
   componentDidMount() {
     this.errorMessageElement = document.getElementById("error-message");
+    sessionStorage.removeItem('order_id');
+    sessionStorage.removeItem('payment_receipt_url');
   }
 }
 

@@ -108,7 +108,7 @@ class StripePayment extends Component {
                             //console.log(res.data.receipt_url);
                             //window.location.href = '/paymentConfirmation';
                         })
-                        .catch(err => console.log(err));
+                        .catch(err => {return err;});
                 })
                 .then(this.props.handleResult)
                 .then(()=>{
@@ -126,15 +126,24 @@ class StripePayment extends Component {
                     axios.post('http://localhost:5000/shipment/create_label', shipment_details)
                       .then(res =>
                       {
-                        console.log("Shipment label created successfull!");
-                        sessionStorage.setItem('tracking_number', res.data.trackingNumber);
-                        //console.log(res.data.trackingNumber);
-                        //window.location.href = '/paymentConfirmation';
+                          console.log("Shipment label created successful!");
+                          var order_updated_data = {
+                              orderId: sessionStorage.getItem('order_id'),
+                              paymentReceiptUrl: sessionStorage.getItem('payment_receipt_url'),
+                              trackingId: res.data.trackingNumber
+                          };
+                          console.log(order_updated_data);
+                          axios.post('http://localhost:5000/order/addPostChargeInfo', order_updated_data)
+                              .then(orderUpdateRes =>
+                              {
+                                  console.log("Order updated successfull!");
+                              })
+                              .catch(err => {return err});
                       })
                       .then(() => {
                           window.location.href = '/paymentConfirmation?order_id='+sessionStorage.getItem('order_id');
                       })
-                      .catch(err => console.log(err));
+                      .catch(err => {return err});
                 })
                 .catch(err => this.setState({errorMessage: err.message}));
         } else {
