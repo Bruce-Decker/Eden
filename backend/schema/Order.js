@@ -3,11 +3,15 @@ const uuidv1 = require('uuid/v1');
 const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema({
-    _id: {
+    order_id: {
         type: String,
         default: uuidv1()
     },
     user_id: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true
     },
@@ -28,7 +32,15 @@ const OrderSchema = new Schema({
             type: String,
             required: false
         },
+        seller: {
+            type: String,
+            required: false
+        },
         description: {
+            type: String,
+            required: false
+        },
+        category: {
             type: String,
             required: false
         },
@@ -56,7 +68,7 @@ const OrderSchema = new Schema({
     },
     status: {
         type: String,
-        required: false
+        required: true
     }
 });
 

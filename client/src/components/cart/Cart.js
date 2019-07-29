@@ -58,6 +58,7 @@ class Cart extends Component {
       });
     } else {
       let email = this.props.auth.user.email;
+      sessionStorage.setItem('email', email);
       this.props.getCartItems(email);
     }
   }

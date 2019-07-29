@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const Order = require('../schema/Order');
+const Cart = require('../schema/Cart');
+const Item = require('../schema/Item');
 const keys = require('../key/keys');
 const stripe = require("stripe")(keys.stripeApiKey);
 const bodyParser = require("body-parser");
@@ -19,15 +22,70 @@ let paymentMethods= [
     ];
 
 router.post('/charge', function(req,res) {
+    const email = req.body.email;
     stripe.charges.create({
         amount: req.body.amount*100,
         description: req.body.description,
         currency: "usd",
-        source: req.body.stripe_token
+        source: "tok_mastercard"//req.body.stripe_token
     })
     .then(charge => {
         charge.amount = charge.amount/100;
-        res.send(charge)
+        Cart.findOne({email: email},{ _id: 0 }).then(async (cart) => {
+            let items = cart._doc.items;
+            let ret = [];
+
+            // use promise to enforce synchronous results
+            let itemPromise = (iid) => {
+                return new Promise((resolve, reject) => {
+                    Item.findOne({
+                        item_id: iid
+                    }).then(dbItem => {
+                        resolve(dbItem);
+                    }).catch(err => {
+                        reject(err);
+                    });
+                });
+            };
+
+            // obtain description, category, and price from item details
+            for(let i=0; i<items.length; i++) {
+                let obj = {};
+                let cur_item = items[i];
+                let dbItem = await itemPromise(cur_item.item_id);
+
+                obj['item_id'] = dbItem._doc.item_id;
+                obj['seller'] = dbItem._doc.email;
+                obj['item_name'] = dbItem._doc.item_name;
+                obj['item_image'] = dbItem._doc.item_image;
+                obj['description'] = dbItem._doc.description;
+                obj['category'] = dbItem._doc.category;
+                obj['price'] = dbItem._doc.price;
+                obj['quantity'] = cur_item.quantity;
+
+                ret.push(obj);
+            }
+            const current_order = {
+                user_id: "1234",
+                email: email,
+                price: req.body.amount,
+                status: "processing",
+                items: ret
+            };
+
+            Order.create(current_order, function(err, newlyCreated) {
+                if (err) {
+                    res.send({msg: "Failed to create Order", error: err});
+                } else {
+                    console.log({msg: "Created Order successfully", data: current_order});
+                    charge.order = newlyCreated;
+                    res.send(charge);
+                }
+            });
+        }).catch(err => {
+            console.log(err);
+            res.json({ msg: 'ERROR: no cart found for user' });
+        });
         //TODO clear cart and save payment and cart data to purchasedItem table
     })
     .catch(err => {
@@ -167,4 +225,65 @@ router.get('/payment_intents/:id/status', async (req, res) => {
     res.json({paymentIntent: {status: paymentIntent.status}});
 });
 
+router.post('/order', function(req,res) {
+    const email = req.body.email;
+
+    Cart.findOne({email: email},{ _id: 0 }).then(async (cart) => {
+        let items = cart._doc.items;
+        let ret = [];
+
+        // use promise to enforce synchronous results
+        let itemPromise = (iid) => {
+            return new Promise((resolve, reject) => {
+                Item.findOne({
+                    item_id: iid
+                }).then(dbItem => {
+                    resolve(dbItem);
+                }).catch(err => {
+                    reject(err);
+                });
+            });
+        };
+
+        var total_price = 0;
+        // obtain description, category, and price from item details
+        for(let i=0; i<items.length; i++) {
+            let obj = {};
+            let cur_item = items[i];
+            let dbItem = await itemPromise(cur_item.item_id);
+
+            obj['item_id'] = dbItem._doc.item_id;
+            obj['seller'] = dbItem._doc.email;
+            obj['item_name'] = dbItem._doc.item_name;
+            obj['item_image'] = dbItem._doc.item_image;
+            obj['description'] = dbItem._doc.description;
+            obj['category'] = dbItem._doc.category;
+            obj['price'] = dbItem._doc.price;
+            obj['quantity'] = cur_item.quantity;
+
+            ret.push(obj);
+
+            total_price = total_price + (obj.price*obj.quantity);
+        }
+        const current_order = {
+            user_id: "1234",
+            email: email,
+            price: total_price.toString(),
+            tracking_id: req.body.tracking_id,
+            payment_receipt_url: req.body.payment_url,
+            items: ret
+        };
+
+        Order.create(current_order, function(err, newlyCreated) {
+            if (err) {
+                res.send({msg: "Failed to create Order", error: err});
+            } else {
+                res.send({msg: "Created Order successfully", data: current_order});
+            }
+        });
+    }).catch(err => {
+        console.log(err);
+        res.json({ msg: 'ERROR: no cart found for user' });
+    });
+});
 module.exports = router;

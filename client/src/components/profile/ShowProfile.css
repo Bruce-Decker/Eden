@@ -1,122 +1,122 @@
 .ShowProfileContainer {
-    float: left;
-    margin: 0 auto;
-    margin-top: 30px;
-    margin-left: 10px;
-    width: 300px;
-    
+  float: left;
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-left: 10px;
+  width: 300px;
 }
 
 .ShowProfileWallContainer {
-    float: left;
-    margin-top: 20px;
-    padding-left: 40px;
-    width: 800px;
-    
+  float: left;
+  margin-top: 20px;
+  padding-left: 40px;
+  width: 800px; 
 }
 
 .sorts_mill_goudy_font > * {
-    font-family: 'Sorts Mill Goudy', serif;
+  font-family: 'Sorts Mill Goudy', serif;
 }
 
 .non-semantic-protector { 
-   
-    background-color: 	#9ACD32;
+  background-color: 	#9ACD32;
 }
 
 
 .ribbon {
-    font-size: 16px !important;
-    /* This ribbon is based on a 16px font side and a 24px vertical rhythm. I've used em's to position each element for scalability. If you want to use a different font size you may have to play with the position of the ribbon elements */
-   
-    width: 50%;
-       
-    position: relative;
-    background: #FFD700;
-    color: #fff;
-    text-align: center;
-    padding: 1em 2em; /* Adjust to suit */
-    margin: 2em auto 3em; /* Based on 24px vertical rhythm. 48px bottom margin - normally 24 but the ribbon 'graphics' take up 24px themselves so we double it. */
-   }
-   .ribbon:before, .ribbon:after {
-    content: "";
-    position: absolute;
-    display: block;
-    bottom: -1em;
-    border: 1.5em solid #DAA520	;
-    z-index: -1;
-   }
-   .ribbon:before {
-    left: -2em;
-    border-right-width: 1.5em;
-    border-left-color: transparent;
-   }
-   .ribbon:after {
-    right: -2em;
-    border-left-width: 1.5em;
-    border-right-color: transparent;
-   }
-   .ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
-    content: "";
-    position: absolute;
-    display: block;
-    border-style: solid;
-    border-color:#FFA500 transparent transparent transparent;
-    bottom: -1em;
-   }
-   .ribbon .ribbon-content:before {
-    left: 0;
-    border-width: 1em 0 0 1em;
-   }
-   .ribbon .ribbon-content:after {
-    right: 0;
-    border-width: 1em 1em 0 0;
-   }
+  font-size: 16px !important;
+  /* This ribbon is based on a 16px font side and a 24px vertical rhythm. I've used em's to position each element for scalability. If you want to use a different font size you may have to play with the position of the ribbon elements */
+ 
+  width: 50%;
+     
+  position: relative;
+  background: #FFD700;
+  color: #fff;
+  text-align: center;
+  padding: 1em 2em; /* Adjust to suit */
+  margin: 2em auto 3em; /* Based on 24px vertical rhythm. 48px bottom margin - normally 24 but the ribbon 'graphics' take up 24px themselves so we double it. */
+}
 
+.ribbon:before, .ribbon:after {
+  content: "";
+  position: absolute;
+  display: block;
+  bottom: -1em;
+  border: 1.5em solid #DAA520	;
+  z-index: -1;
+}
 
+.ribbon:before {
+  left: -2em;
+  border-right-width: 1.5em;
+  border-left-color: transparent;
+}
 
-   .profile_space1 {
-    padding-bottom: 10px;
-    background-color: #90EE90
+.ribbon:after {
+  right: -2em;
+  border-left-width: 1.5em;
+  border-right-color: transparent;
+}
 
-   }
+.ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
+  content: "";
+  position: absolute;
+  display: block;
+  border-style: solid;
+  border-color:#FFA500 transparent transparent transparent;
+  bottom: -1em;
+}
 
-   .profile_space2 {
-    padding-bottom: 10px;
-    background-color: #7FFFD4
-   }
+.ribbon .ribbon-content:before {
+  left: 0;
+  border-width: 1em 0 0 1em;
+}
 
+.ribbon .ribbon-content:after {
+  right: 0;
+  border-width: 1em 1em 0 0;
+}
 
-   .share_button{
-   
-    transition-duration: 0.4s;
-    font-family: 'Pacifico', cursive;
-    background-color: #4CAF50; 
-    border: none;
-    color: white;
-    height: 50px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    display: inline-block;
-    width: 200px;
-    width: 75%;
-    float: left;
-  }
+.profile_space1 {
+  padding-bottom: 10px;
+  background-color: #90EE90
+}
+
+.profile_space2 {
+  padding-bottom: 10px;
+  background-color: #7FFFD4
+}
+
+.share_button{
+  font-weight: bold;
+  transition-duration: 0.4s;
+  background-color: #4CAF50; 
+  border: none;
+  color: white;
+  height: 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  display: inline-block;
+  width: 60%;
+  float: right;
+}
 
 .share_button:hover {
-    background-color: 	#00FF7F; /* Green */
-    color: white;
+  background-color: 	#00FF7F; /* Green */
+  color: white;
 }
 
 .anonymous {
   background-color: #00CED1;
   padding-top: 15px;
+  color: white;
+  font-weight: bold;
   height: 50px;
   text-align: center;
-  width: 25%;
+  width: 40%;
   float: left;
+  transition-duration: 0.4s;
 }
 
 .anonymous:hover {
@@ -124,27 +124,28 @@
   color: white;
 }
 
-
+.anonymous-label {
+  color: white !important;
+}
 
 .showPosts {
-    padding-top: 50px;
+  padding-top: 50px;
 }
-
-
-  
-
 
 .panel-shadow {
-    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+  box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
 }
+
 .panel-white {
   border: 1px solid #dddddd;
 }
+
 .panel-white  .panel-heading {
   color: #333;
   background-color: #fff;
   border-color: #ddd;
 }
+
 .panel-white  .panel-footer {
   background-color: #fff;
   border-color: #ddd;
@@ -154,78 +155,95 @@
   height: 95px;
   padding: 20px 15px;
 }
+
 .post .post-heading .avatar {
   width: 60px;
   height: 60px;
   display: block;
   margin-right: 15px;
 }
+
 .post .post-heading .meta .title {
   margin-bottom: 0;
 }
+
 .post .post-heading .meta .title a {
   color: black;
 }
+
 .post .post-heading .meta .title a:hover {
   color: #aaaaaa;
 }
+
 .post .post-heading .meta .time {
   margin-top: 8px;
   color: #999;
 }
+
 .post .post-image .image {
   width: 100%;
   height: auto;
 }
+
 .post .post-description {
   padding: 15px;
 }
+
 .post .post-description p {
   font-size: 14px;
 }
+
 .post .post-description .stats {
   margin-top: 20px;
 }
+
 .post .post-description .stats .stat-item {
   display: inline-block;
   margin-right: 8px;
   border-radius: 0.1rem;
 }
 
-
 .btn.btn-default.stat-item  {
-     padding-top: 0rem;
-     padding-right: 0rem;
-     padding-left: 0rem;
+  padding-top: 0rem;
+  padding-right: 0rem;
+  padding-left: 0rem;
 }
+
 .post .post-description .stats .stat-item .icon {
   margin-right: 8px;
 }
+
 .post .post-footer {
   border-top: 1px solid #ddd;
   padding: 15px;
 }
+
 .post .post-footer .input-group-addon a {
   color: #454545;
 }
+
 .post .post-footer .comments-list {
   padding: 0;
   margin-top: 20px;
   list-style-type: none;
 }
+
 .post .post-footer .comments-list .comment {
   display: block;
   width: 100%;
   margin: 20px 0;
 }
+
 .post .post-footer .comments-list .comment .avatar {
   width: 35px;
   height: 35px;
 }
+
 .post .post-footer .comments-list .comment .comment-heading {
   display: block;
   width: 100%;
 }
+
 .post .post-footer .comments-list .comment .comment-heading .user {
   font-size: 14px;
   font-weight: bold;
@@ -233,15 +251,18 @@
   margin-top: 0;
   margin-right: 10px;
 }
+
 .post .post-footer .comments-list .comment .comment-heading .time {
   font-size: 12px;
   color: #aaa;
   margin-top: 0;
   display: inline;
 }
+
 .post .post-footer .comments-list .comment .comment-body {
   margin-left: 50px;
 }
+
 .post .post-footer .comments-list .comment > .comments-list {
   margin-left: 50px;
 }
@@ -251,25 +272,32 @@
 }
 
 .profile_delete_icon {
-    float: right;
-    
+  float: right; 
 }
 
 .profile_picutures_like {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .profile_picutures_like_button {
-    position: absolute;
-    bottom: 10px;
+  position: absolute;
+  bottom: 10px;
 }
 
 .edit_profile_h4 {
   color: blue;
 }
+
+.edit_profile_h4:hover {
+  color: darkblue;
+  text-decoration: underline;
+  cursor: pointer;
+}
  
-/* #9ACD32 */
-/* #ADFF2F
-#00FF00 */
+
+
+
+
+
 
 

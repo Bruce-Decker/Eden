@@ -89,27 +89,59 @@ class StripePayment extends Component {
             this.props.stripe.createToken(this.state.billingAddress)
                 .then((data) => {
                     stripeToken = data.token;
+                    sessionStorage.setItem('stripe_token', JSON.stringify(stripeToken));
+                })
+                .then(() => {
                     var charge_details = {
                         amount: this.state.amount,
                         description: "sample charge",
-                        stripe_token: data.token
+                        stripe_token: JSON.parse(sessionStorage.getItem('stripe_token')),
+                        email: sessionStorage.getItem('email')
                     };
+                    sessionStorage.removeItem('stripe_token');
                     axios.post('http://localhost:5000/payment/charge', charge_details)
                         .then(res =>
                         {
                             console.log("payment successfull!");
-                            //console.log(res);
-                            window.location.href = '/paymentConfirmation';
+                            sessionStorage.setItem('order_id', res.data.order.order_id !== null? res.data.order.order_id : "0000");
+                            sessionStorage.setItem('payment_receipt_url', res.data.receipt_url);
+                            //console.log(res.data.receipt_url);
+                            //window.location.href = '/paymentConfirmation';
                         })
                         .catch(err => console.log(err));
                 })
                 .then(this.props.handleResult)
+                .then(()=>{
+                    var shipment_details = {
+                      shipTo: {
+                        name: this.state.shippingAddress.name,
+                        street1: this.state.shippingAddress.address_line1,
+                        street2: this.state.shippingAddress.address_line2,
+                        city: this.state.shippingAddress.address_city,
+                        state: this.state.shippingAddress.address_state,
+                        postalCode: this.state.shippingAddress.address_zip,
+                        country: this.state.shippingAddress.address_country
+                      }
+                    };
+                    axios.post('http://localhost:5000/shipment/create_label', shipment_details)
+                      .then(res =>
+                      {
+                        console.log("Shipment label created successfull!");
+                        sessionStorage.setItem('tracking_number', res.data.trackingNumber);
+                        //console.log(res.data.trackingNumber);
+                        //window.location.href = '/paymentConfirmation';
+                      })
+                      .then(() => {
+                          window.location.href = '/paymentConfirmation?order_id='+sessionStorage.getItem('order_id');
+                      })
+                      .catch(err => console.log(err));
+                })
                 .catch(err => this.setState({errorMessage: err.message}));
         } else {
             console.log("Stripe.js hasn't loaded yet.");
         }
-        console.log(this.props);
-        console.log("credit card payment"+ stripeToken.id);
+        //console.log(this.props);
+        //console.log("credit card payment"+ stripeToken.id);
     }
 
     render() {
@@ -143,8 +175,9 @@ class StripePayment extends Component {
     componentDidMount(){
         this.state.amount = this.props.amount.total;
         this.state.billingAddress = this.props.billing_address;
+        this.state.shippingAddress = this.props.shipping_address;
         //this.state.amount = this.props.amount.total;
-        console.log(this.state.billingAddress);
+        //console.log(this.state.billingAddress);
     }
 
     submitCharge(token) {
