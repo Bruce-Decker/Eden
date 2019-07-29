@@ -29,7 +29,7 @@ class OrderItem extends Component {
                         alt="Item Image"
                     />
                 </div>
-                <div className="col-md-8">
+                <div className="col-md-7">
                     <Link to={"/items/" + this.state.item_id}>
                         <div className="row shown-item-card">
                             <div className="col-12">

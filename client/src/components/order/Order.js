@@ -28,6 +28,16 @@ class Order extends Component {
                 {this.state.items.map((value, index) => {
                     return <OrderItem itemDetail={value}></OrderItem>
                 })}
+                <div className="row">
+                    <div className="col-md-4 shown-item-text">
+                        <span className="shown-item-price">Total Price:&nbsp;</span>
+                        <span>{this.state.price}</span>
+                    </div>
+                    <div className="col-md-4">
+                        <span className="shown-item-price">Status:&nbsp;</span>
+                        <span>{this.state.status}</span>
+                    </div>
+                </div>
             </div>
         );
     }
