@@ -4,12 +4,16 @@ import star from '../../images/rating.png'
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 import CartAddButton from '../cart/CartAddButton';
 
-class Item extends Component {
-  
-  constructor() {
-     super()
-  }
+import appliances from '../../images/appliances.png';
+import arts from '../../images/arts.png';
+import books from '../../images/books.png';
+import clothing from '../../images/clothing.png';
+import computers from '../../images/computers.png';
+import electronics from '../../images/electronics.png';
+import games from '../../images/games.png';
+import home from '../../images/home.png';
 
+class Item extends Component {
   
 
   render() {
@@ -17,10 +21,16 @@ class Item extends Component {
       <div>
         <div className="items-row">
           <div className="row">
-              <div className="col-4" style={{backgroundColor: "#f2ffea", textAlign: "center", lineHeight: "275px"}}>
+              <div className="col-4" style={{textAlign: "center", lineHeight: "275px"}}>
 
                  <Link to={"/items/" + this.props.item.item_id}>                       
-                        <img key={this.props.item.item_id} src= {this.props.item.item_image} alt="Rating" style={{width: "250px", height: "250px"}}/>                      
+                        <img 
+                          key={this.props.item.item_id} 
+                          src= {this.props.item.item_image} 
+                          alt="Rating" 
+                          style={{width: "250px", height: "250px"}}
+                          onError={(e)=>{e.target.onerror=null; e.target.src=getImage(this.props.item.category)}}
+                        />
                   </Link>
 
               </div>
@@ -50,6 +60,28 @@ class Item extends Component {
     )
   }
 
+}
+
+function getImage(category) {
+  switch (category) {
+    case "appliances":
+      return appliances
+    case "arts":
+      return arts
+    case "books":
+      return books
+    case "computers":
+      return computers
+    case "clothing":
+      return clothing
+    case "electronics":
+      return electronics
+    case "games":
+      return games
+    case "home":
+      return home
+    default:
+  }
 }
 
 export default Item;

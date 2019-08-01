@@ -240,19 +240,21 @@ class Detail extends Component {
         <div className="container-item">
           <div className="row">
           <div className="col-1"/>
-          <div className="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw"}}>
+          <div className="col-6 align-items-center item-img" style={{paddingLeft: "8vw", paddingRight: "8vw", marginTop: "auto", marginBottom: "auto"}}>
            {this.state.showItem ?
             <img
               key={item.item_id}
               className="item-detail-img"
               src={item.item_image}
               alt="Item Image"
+              onError={(e)=>{e.target.onerror=null; e.target.src=getImage(item.category)}}
             />    
             :  <img
             key={item.item_id}
             className="item-detail-img"
             src={getImage(item.category)}
             alt="Item Image"
+            onError={(e)=>{e.target.onerror=null; e.target.src=getImage(item.category)}}
           />     }
           </div>
           <div className="col-3" >

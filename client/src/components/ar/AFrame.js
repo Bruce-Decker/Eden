@@ -7,7 +7,7 @@ import { AFrameRenderer, Marker } from 'react-web-ar'
 class AFrame extends Component {
   z = 0
   x = 0
-  scale = 5
+  scale = 6.5
   render() {
     const ar = this.props.ar
     const id = this.props.id

@@ -53,6 +53,7 @@ class Detail extends Component {
                                 className="d-block w-100 property-image"
                                 src={'/images/property/' + this.props.property.id + '/' + this.props.property.images[i]}
                                 alt={i}
+                                onError={(e)=>{e.target.onerror=null; e.target.style="object-fit: contain"; e.target.src="/images/property/default.png"}}
                               />
                             </Carousel.Item>
                     })}
