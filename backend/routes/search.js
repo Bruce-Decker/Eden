@@ -85,7 +85,6 @@ router.get('/getSearchResults', function(req,res) {
           {'services': {'$elemMatch': {'$regex': re}}}
         ]
       },{
-        _id: 0,
         "reviews.rating": 0,
         "reviews.comments": 0
       }).skip((pageNumber - 1) * itemsPerPage).then((itms) => {
@@ -124,7 +123,6 @@ router.get('/getSearchResults', function(req,res) {
           }
         ]
       },{
-        _id: 0,
         "reviews.rating": 0,
         "reviews.comments": 0
       }).skip((pageNumber - 1) * itemsPerPage).then((itms) => {
