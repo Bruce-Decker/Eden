@@ -108,21 +108,22 @@ import gray_jeans from '../../images/clothing/gray_jeans.jpg';
 
 class Item extends Component {
   
-  constructor() {
-     super()
-  }
-
-  
 
   render() {
     return (
       <div>
         <div className="items-row">
           <div className="row">
-              <div className="col-4" style={{backgroundColor: "#f2ffea", textAlign: "center", lineHeight: "275px"}}>
+              <div className="col-4" style={{textAlign: "center", lineHeight: "275px"}}>
 
                  <Link to={"/items/" + this.props.item.item_id}>                       
-                        <img key={this.props.item.item_id} src= {getImage(this.props.item.item_name, this.props.item.category)} alt="Rating" style={{width: "250px", height: "250px"}}/>                      
+                        <img 
+                          key={this.props.item.item_id} 
+                          src= {getImage(this.props.item.item_name, this.props.item.category)} 
+                          alt="Rating" 
+                          style={{width: "250px", height: "250px"}}
+                          onError={(e)=>{e.target.onerror=null; e.target.src=getImage(this.props.item.item_name, this.props.item.category)}}
+                        />
                   </Link>
 
               </div>

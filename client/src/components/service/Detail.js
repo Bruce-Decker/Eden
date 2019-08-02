@@ -130,7 +130,12 @@ class Detail extends Component {
                     <Carousel style={{minHeight: "280px"}}>
                       {Array.from(this.state.service.images, (e, i) => {
                         return  <div key={i}>
-                                  <Card.Img alt="img" src={'/images/service/' + this.state.service._id + '/' + e} className="d-block w-100 service-image"/>
+                                  <Card.Img 
+                                    alt="img" 
+                                    src={'/images/service/' + this.state.service._id + '/' + e} 
+                                    className="d-block w-100 service-image"
+                                    onError={(e)=>{e.target.onerror=null; e.target.style="object-fit: contain"; e.target.src="/images/service/default.png"}}
+                                  />
                                 </div>
                       })}
                     </Carousel>
