@@ -73,16 +73,19 @@
 .rfy-img {
   padding: 10px 10px 0px 10px;
   max-width: 80%;
+  max-height: 118px;
 }
 
 .bsl-img {
   padding: 10px 10px 0px 10px;
   max-width: 80%;
+  max-height: 118px;
 }
 
 .dls-img {
   padding: 10px 10px 0px 10px;
   max-width: 80%;
+  max-height: 118px;
 }
 
 .rfy-price {
