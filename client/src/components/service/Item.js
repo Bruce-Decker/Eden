@@ -21,7 +21,11 @@ class Item extends Component {
             <Card.Body>
               <Row>
                 <Col md={4}>
-                  <Card.Img className="service-list-img" src={'/images/service/' + this.props.id + '/logo/' + this.props.logo}/>
+                  <Card.Img 
+                    className="service-list-img" 
+                    src={'/images/service/' + this.props.id + '/logo/' + this.props.logo}
+                    onError={(e)=>{e.target.onerror=null; e.target.style="object-fit: contain"; e.target.src="/images/service/default.png"}}
+                  />
                 </Col>
                 <Col>
                   <Card.Title style={{color: "black"}}>{this.props.name}</Card.Title>

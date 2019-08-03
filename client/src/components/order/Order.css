@@ -1,0 +1,28 @@
+.order-history-header {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.order-history-title {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.orders-list {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.order-id-title {
+    margin-bottom: 12px;
+}
+
+.order-item {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    padding: 24px;
+    border: 2px solid #53b46e;
+    border-radius: 5px;
+}

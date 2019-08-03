@@ -52,7 +52,7 @@ class Payment extends Component {
                         <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
                             <div className="stripe-payment">
                                 <Elements>
-                                    <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address} shipping_address={this.shipping_address}/>
+                                    <StripePayment className="cardPayment" amount={this.charges} billing_address={this.billing_address} shipping_address={this.shipping_address} navigate={this.props.history}/>
                                 </Elements>
                             </div>
                         </StripeProvider>

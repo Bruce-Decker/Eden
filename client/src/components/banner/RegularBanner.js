@@ -11,6 +11,7 @@ import profile from '../../images/profile.png';
 import add from '../../images/add.png';
 import burger from '../../images/burger.png';
 import SearchBar from './SearchBar';
+import orderHistory from '../../images/Order-History.svg';
 import './Banner.css'
 
 import { connect } from 'react-redux';
@@ -24,7 +25,7 @@ LogoutButton = (e) => {
     this.props.logout();
     window.location = "/"
   }
-}
+};
     render() {
 
       return (
@@ -94,10 +95,10 @@ LogoutButton = (e) => {
                           </Dropdown.Item>
                           <Dropdown.Item>
                             <Link id="dropdown-item" to={'/inbox/' + this.props.auth.user.email + '/0'}>
-                              <img src={email} height="16" width="22" alt="Email" style={{marginRight: "0.5rem"}}></img>
-                              Inbox
+                                <img src={email} height="16" width="22" alt="Email" style={{marginRight: "0.5rem"}}></img>
+                                Inbox
                             </Link>
-                          </Dropdown.Item>
+                        </Dropdown.Item>
                           <Dropdown.Item>
                             <Link id="dropdown-item" to={'/showShowAllUserItems/' + this.props.auth.user.email}>
                               <img src={burger} height="22" width="22" alt="Items" style={{marginRight: "0.5rem"}}></img>
@@ -108,6 +109,12 @@ LogoutButton = (e) => {
                             <Link id="dropdown-item" to={'/createItem'}>
                               <img src={add} height="18" width="22" alt="Add" style={{marginRight: "0.5rem", marginBottom: "0.3rem"}}></img>
                               Create item
+                            </Link>
+                          </Dropdown.Item>
+                          <Dropdown.Item id="dropdown-item">
+                            <Link id="dropdown-item" to={'/orderHistory'}>
+                              <img src={orderHistory} height="18" width="22" alt="Add" style={{marginRight: "0.5rem", marginBottom: "0.3rem"}}></img>
+                              My Orders
                             </Link>
                           </Dropdown.Item>
                           <Dropdown.Divider />
@@ -134,7 +141,7 @@ LogoutButton = (e) => {
 const mapStateToProps = (state) => ({
   auth: state.auth,
   errors: state.errors
-})
+});
  
 
 
