@@ -71,6 +71,10 @@ class ShowProfile extends Component {
     }
   }
 
+  defaultImage = (e) => {
+    e.target.src = `/images/default.png`
+  }
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -409,7 +413,7 @@ class ShowProfile extends Component {
                     <div className="panel panel-white post panel-shadow">
                       <div className="post-heading">
                         <div className="pull-left image">
-                          <img src={`/images/${post.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                          <img src={`/images/${post.email}.jpg`} className="img-circle avatar" alt="user profile image" onError={this.defaultImage}/>
                         </div>
                         <div className="pull-left meta">
                           <div className="title h5">
@@ -472,7 +476,7 @@ class ShowProfile extends Component {
                           <ul className="comments-list">
                             <li className="comment">
                               <a className="pull-left" href="#">
-                                <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                                <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" onError={this.defaultImage}/>
                               </a>
                               <div className="comment-body">
                                 <div className="comment-heading">
