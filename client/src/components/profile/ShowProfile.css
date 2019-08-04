@@ -293,6 +293,11 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.loading_image {
+  margin-right: 100px;
+
+}
  
 
 

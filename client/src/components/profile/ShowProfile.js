@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import './ShowProfile.css';
 import { Card } from 'react-bootstrap';
 import  delete_icon  from './delete_icon.png';
+import  loading_icon  from './loading.gif';
 import  isUrl  from 'is-valid-http-url';
 import MicrolinkCard from '@microlink/react';
 import request from 'request-promise';
@@ -14,6 +15,7 @@ import Modal from 'react-modal';
 import ChangeProfile from './ChangeProfile';
 import default_profile_image from './default.png';
 import MessengerCustomerChat from 'react-messenger-customer-chat';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const customStyles = {
   content : {
@@ -63,12 +65,15 @@ class ShowProfile extends Component {
       showProfile: false,
       share_post: '',
       posts: [],
+      scroll_posts: [],
+      hasMore: true,
       comment: '',
       modalIsOpen: false,
       profileModalIsOpen: false,
       post_like: [],
       anonymous: false
     }
+    this.post_array = []
   }
 
   defaultImage = (e) => {
@@ -253,6 +258,31 @@ class ShowProfile extends Component {
     this.setState({profileModalIsOpen: false});
   }
 
+  loadFunc = () => {
+    console.log("loadFunc")
+    var temp_posts = this.state.posts.slice(this.state.scroll_posts.length, this.state.scroll_posts.length + 2)
+    if (this.state.scroll_posts.length < this.state.posts.length) {
+      
+     
+        console.log("succesfully lazy load")
+       
+     
+       this.setState({
+        scroll_posts: [...this.state.scroll_posts.concat(temp_posts)]
+      
+      })
+       
+
+    } else {
+      this.setState({
+       hasMore: false
+      
+      })
+    }
+    
+      
+  }
+
   async componentDidMount() {
     const response = await axios.get('/profile/' + this.props.match.params.email);
    
@@ -275,12 +305,23 @@ class ShowProfile extends Component {
           posts: response.data[0].posts.reverse()
         });
       } 
+     
       if (!response.data[0].profile_picture_path && response.data[0].email) {
         this.setState({
           showProfile: false,
           posts: response.data[0].posts
         });
+        this.post_array =  response.data[0].posts
       }
+      var temp_array = []
+      for (var i = 0; i < 2; i++) {
+        temp_array.push(this.state.posts[i])
+      }
+
+      this.setState({
+        scroll_posts: temp_array,
+      })
+    
     }
   }
 
@@ -407,7 +448,17 @@ class ShowProfile extends Component {
             <Card>
             {this.state.showProfile ? 
               <div>
-              {this.state.posts.map(post =>
+                <InfiniteScroll
+                  pageStart={0}
+                  loadMore={this.loadFunc}
+                  hasMore={this.state.hasMore}
+                  loader={<div className="loader" key={0}>
+                 
+                 <img style = {{height: "100px", marginLeft: "280px"}} src = {loading_icon} />
+    
+             </div>}
+>
+              {this.state.scroll_posts.map(post =>
                 <div className="container bootstrap snippet">
                   <div className="col-sm-12">
                     <div className="panel panel-white post panel-shadow">
@@ -498,10 +549,12 @@ class ShowProfile extends Component {
                   </div>
                 </div>       
                 )}
+                </InfiniteScroll>
               </div>
               :
               <div>
-              {this.state.posts.map(post =>
+       
+              {this.state.scroll_posts.map(post =>
                 <div className="container bootstrap snippet">
                   <div className="col-sm-12">
                     <div className="panel panel-white post panel-shadow">
@@ -589,6 +642,7 @@ class ShowProfile extends Component {
                     </div>
                   </div>      
                 )}
+        
               </div>
               }
             </Card>

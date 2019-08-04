@@ -15,6 +15,7 @@
     "is-valid-http-url": "^1.0.2",
     "jest-cli": "^24.8.0",
     "jwt-decode": "^2.2.0",
+    "lodash.debounce": "^4.0.8",
     "markerwithlabel": "^2.0.2",
     "moment": "^2.24.0",
     "path": "^0.12.7",
