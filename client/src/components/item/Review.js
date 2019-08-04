@@ -75,6 +75,7 @@ class Review extends Component {
       anonymous: false,
       rating: 5
     }
+    this.toal_comments = 0
   }
 
   onStarClick(nextValue, prevValue, name) {
@@ -137,6 +138,7 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
+          this.loadFunc()
           this.setState({
             modalIsOpen: false
           })
@@ -183,6 +185,7 @@ class Review extends Component {
         console.log(res)
        
         this.componentDidMount()
+        this.loadFunc()
       })
     .catch(err => console.log(err))
   }
@@ -196,6 +199,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
+        this.loadFunc()
       })
     .catch(err => console.log(err))
   }
@@ -209,6 +213,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
+        this.loadFunc()
       })
     .catch(err => console.log(err))
   }
@@ -223,6 +228,7 @@ class Review extends Component {
         console.log(res)
       
        this.componentDidMount()
+       this.loadFunc()
       })
     .catch(err => console.log(err))
   }
@@ -235,6 +241,7 @@ class Review extends Component {
      .then(res => {
        console.log(res)
        this.componentDidMount()
+       this.loadFunc()
      })
     .catch(err => console.log(err))
   }
@@ -247,6 +254,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
+        this.loadFunc()
       })
      .catch(err => console.log(err))
   }
@@ -276,6 +284,7 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
+          this.loadFunc()
           this.setState({reply: ''})
         })
         .catch(err => console.log(err))
@@ -287,6 +296,8 @@ class Review extends Component {
     console.log(response.data[0].latitude)
     console.log(typeof(response.data[0].latitude))
     if (response.data[0]) {
+      this.toal_comments = response.data[0].comments.length
+      console.log(this.toal_comments)
       this.setState({
         item: response.data[0],
         position: {
@@ -321,7 +332,7 @@ class Review extends Component {
   loadFunc = () => {
     console.log("loadFunc")
     var temp_comments = this.state.comments.slice(this.state.scroll_comments.length, this.state.scroll_comments.length + 1)
-    if (this.state.scroll_comments.length < this.state.comments.length) {
+    if (this.state.scroll_comments.length < this.toal_comments) {
         console.log("succesfully lazy load")
         console.log(this.state.scroll_comments.length)
        this.setState({
