@@ -297,14 +297,23 @@ class Review extends Component {
         comments: response.data[0].comments.reverse()
       }) 
 
+      // var temp_array = []
+      // for (var i = 0; i < 1; i++) {
+      //   temp_array.push(this.state.comments[i])
+      // }
       var temp_array = []
-      for (var i = 0; i < 1; i++) {
-        temp_array.push(this.state.comments[i])
+      if (this.state.comments.length > 0) {
+          temp_array.push(this.state.comments[0])
+          this.setState({
+            scroll_comments: temp_array,
+          })
+      } else {
+        this.setState({
+          scroll_comments: this.state.comments
+        })
+
       }
 
-      this.setState({
-        scroll_comments: temp_array,
-      })
     }
 
   }
@@ -398,7 +407,7 @@ class Review extends Component {
                 hasMore={this.state.hasMore}
                 loader={<div className="loader" key={0}>
                  
-                 <img style = {{height: "100px", marginLeft: "380px"}} src = {loading_icon} />
+                 <img style = {{height: "100px", marginLeft: "680px"}} src = {loading_icon} />
     
              </div>
               

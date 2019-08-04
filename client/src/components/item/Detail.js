@@ -371,7 +371,9 @@ class Detail extends Component {
               </Link>
             </div>
             {/* <div className="item-by">{item.category}</div> */}
+            {item.vr_file_path ?
             <div className="item-desc"><Link to  = {`/vr/${item.item_id}`} target="_blank">Try VR</Link></div>
+            : null }
             <div className="item-desc">{item.description}</div>
             <div>
               {Array.from(Array(item.average_rating), (e, i) => {
