@@ -345,14 +345,16 @@ class Detail extends Component {
             <img
               key={item.item_id}
               className="item-detail-img"
-              src={getImage(item.item_name, item.category)}
+              src={getImage(item.item_name, item.category, item.item_id)}
+              //src = {`/item_images/${item.item_id}.jpg`}
               alt="Item Image"
               onError={(e)=>{e.target.onerror=null; e.target.src=getImage(item.category)}}
             />    
             :  <img
             key={item.item_id}
             className="item-detail-img"
-            src={getImage(item.item_name, item.category)}
+            src={getImage(item.item_name, item.category, item.item_id)}
+            //src = {`/item_images/${item.item_id}.jpg`}
             alt="Item Image"
             onError={(e)=>{e.target.onerror=null; e.target.src=getImage(item.category)}}
           />     }
@@ -406,7 +408,7 @@ class Detail extends Component {
  
 }
 
-function getImage(name, category) {
+function getImage(name, category, id) {
   let m = {
     'red_blazer': red_blazer,
     'orange_blazer': orange_blazer,
@@ -518,7 +520,12 @@ function getImage(name, category) {
   if(k in m) {
     return m[k];
   } else {
-    return clothingJpg;
+    if (id) {
+      return `/item_images/${id}.jpg`;
+    } else {
+      return clothingJpg;
+    }
+   
   }
 }
 

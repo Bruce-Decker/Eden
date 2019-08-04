@@ -127,10 +127,10 @@ class Item extends Component {
                  <Link to={"/items/" + this.props.item.item_id}>                       
                         <img 
                           key={this.props.item.item_id} 
-                          src= {getImage(this.props.item.item_name, this.props.item.category)} 
+                          src= {getImage(this.props.item.item_name, this.props.item.category, this.props.item.item_id)} 
                           alt="Rating" 
                           style={{width: "250px", height: "250px"}}
-                          onError={(e)=>{e.target.onerror=null; e.target.src=getImage(this.props.item.item_name, this.props.item.category)}}
+                          onError={(e)=>{e.target.onerror=null; e.target.src=getImage(this.props.item.item_name, this.props.item.category, this.props.item.item_id)}}
                         />
                   </Link>
 
@@ -163,7 +163,7 @@ class Item extends Component {
 
 }
 
-function getImage(name, category) {
+function getImage(name, category, id) {
   console.log(name);
   console.log(category);
   let m = {
@@ -277,7 +277,12 @@ function getImage(name, category) {
   if(k in m) {
     return m[k];
   } else {
-    return clothingJpg;
+    if (id) {
+      return `/item_images/${id}.jpg`
+    } else {
+      return clothingJpg;
+    }
+    
   }
 }
 
