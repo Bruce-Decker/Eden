@@ -11,6 +11,8 @@ import { Card } from 'react-bootstrap'
 import Modal from 'react-modal';
 import StarRatingComponent from 'react-star-rating-component';
 import { toast } from 'react-toastify';
+import InfiniteScroll from 'react-infinite-scroller';
+import  loading_icon  from './loading.gif';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -66,6 +68,9 @@ class Review extends Component {
       showReviews: false,
       reply: '',
       comment: '',
+      comments: [],
+      scroll_comments: [],
+      hasMore: true,
       modalIsOpen: false,
       anonymous: false,
       rating: 5
@@ -291,6 +296,32 @@ class Review extends Component {
         showReviews: true,
         comments: response.data[0].comments.reverse()
       }) 
+
+      var temp_array = []
+      for (var i = 0; i < 1; i++) {
+        temp_array.push(this.state.comments[i])
+      }
+
+      this.setState({
+        scroll_comments: temp_array,
+      })
+    }
+
+  }
+
+  loadFunc = () => {
+    console.log("loadFunc")
+    var temp_comments = this.state.comments.slice(this.state.scroll_comments.length, this.state.scroll_comments.length + 1)
+    if (this.state.scroll_comments.length < this.state.comments.length) {
+        console.log("succesfully lazy load")
+        console.log(this.state.scroll_comments.length)
+       this.setState({
+         scroll_comments: [...this.state.scroll_comments.concat(temp_comments)]
+      })
+    } else {
+      this.setState({
+       hasMore: false
+      })
     }
   }
 
@@ -361,10 +392,22 @@ class Review extends Component {
             </button>
           </div>
              {this.state.showReviews ?
+            <InfiniteScroll
+                pageStart={0}
+                loadMore={this.loadFunc}
+                hasMore={this.state.hasMore}
+                loader={<div className="loader" key={0}>
+                 
+                 <img style = {{height: "100px", marginLeft: "380px"}} src = {loading_icon} />
+    
+             </div>
+              
+              }
+            >
              
              <div className = "review_comments">
                
-               {this.state.comments.map(comment => 
+               {this.state.scroll_comments.map(comment => 
                     <div className="container bootstrap snippet">
                     <div className="col-sm-12">
                       <div className="panel panel-white post panel-shadow">
@@ -467,6 +510,7 @@ class Review extends Component {
                   
                )}
                   </div>
+                  </InfiniteScroll>
                   : null }
                    </Card.Header>
               </div>
