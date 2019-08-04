@@ -141,7 +141,7 @@ class Item extends Component {
                 <div className="items-name">{this.props.item.item_name}</div>
               </Link>
               <div>
-                {Array.from(Array(this.props.item.average_rating), (e, i) => {
+                {Array.from(Array(this.props.star_rating), (e, i) => {
                   return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
                 })}
               </div>

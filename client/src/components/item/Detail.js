@@ -128,6 +128,8 @@ class Detail extends Component {
       item: null,
       new_bid: -1,
       showItem: false,
+      showStars: false,
+      star_rating: 1,
       comments: ''
 
     };
@@ -149,6 +151,16 @@ class Detail extends Component {
           comments: response.data[0].comments
 
         })
+        if (response.data[0].comments.length > 0) {
+            var sum = 0
+            response.data[0].comments.map(comment => {
+                 sum = sum + comment.star_rating
+            })
+            this.setState({
+               star_rating: Math.round(sum / response.data[0].comments.length),
+               showStars: true
+            })
+        }
     }
    
   }
@@ -376,9 +388,13 @@ class Detail extends Component {
             : null }
             <div className="item-desc">{item.description}</div>
             <div>
-              {Array.from(Array(item.average_rating), (e, i) => {
-                return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
-              })}
+            {this.state.showStars ?
+            <span>
+                {Array.from(Array(this.state.star_rating), (e, i) => {
+                  return <img key={i} src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
+                })}
+                </span>
+                : null }
             </div>
             <div className="item-price">${item.price.toFixed(2)}</div>
             <div>

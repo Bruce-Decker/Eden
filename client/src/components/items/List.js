@@ -24,10 +24,30 @@ class List extends Component {
     })
   }
 
+  helper = (item) => {
+    var sum = 0
+    item.comments.map(comment => {
+       sum = sum + comment.star_rating
+    })
+    return Math.round(sum / item.comments.length)
+  }
+
   render() {
     if (this.state.items != null) {
+      
       const items = this.state.items.map((item) =>
-        <Item key={item.item_id} item={item}/>
+    <div>
+        {item.comments.length > 0 ?
+            <Item key={item.item_id} item={item} star_rating = { 
+                this.helper(item)
+               
+             }/>
+            : 
+            <Item key={item.item_id} item={item} star_rating = {0}/>
+        }
+        </div>
+      
+     
       );
       
       return (
