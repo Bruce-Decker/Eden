@@ -9,8 +9,8 @@
 }
 
 .payment-button-1 {
-    width: 110px;
     margin-top: 24px;
+    padding: 2px 12px;
     float: right;
     color: white;
     border-width: 1px;

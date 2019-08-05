@@ -194,16 +194,16 @@ class StripePayment extends Component {
                 <div className="error" role="alert">
                     {this.state.errorMessage}
                 </div>
-                <button id="stripe-payment-button" className="payment-button-1" onClick={this.submit}>Pay</button>
+                <button id="stripe-payment-button" className="payment-button-1" onClick={this.submit}>Pay ${this.state.amount}</button>
             </div>
         );
     }
 
     componentDidMount(){
-        this.state.amount = this.props.amount.total;
-        this.state.billingAddress = this.props.billing_address;
-        this.state.shippingAddress = this.props.shipping_address;
-        this.state.navigate = this.props.navigate;
+        this.setState({amount: this.props.amount.total});
+        this.setState({billingAddress: this.props.billing_address});
+        this.setState({shippingAddress: this.props.shipping_address});
+        this.setState({navigate: this.props.navigate});
         //this.state.amount = this.props.amount.total;
         //console.log(this.state.billingAddress);
 
