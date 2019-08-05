@@ -61,15 +61,15 @@ class PaymentConfirmation extends Component {
                             <div className="row">
                                 <div className="col-md-4 shown-item-text">
                                     <span className="shown-item-price">Payment Receipt:&nbsp;</span>
-                                    <span><a href={this.state.order_details.receipt} target="_blank">Click Here</a></span>
+                                    <span><a href={this.state.order_details.payment_receipt_url} target="_blank">Click Here</a></span>
                                 </div>
                                 <div className="col-md-4">
                                     <span className="shown-item-price">Carrier:&nbsp;</span>
-                                    <span>{this.state.order_details.carrier}</span>
+                                    <span>{this.state.order_details.carrierCode}</span>
                                 </div>
                                 <div className="col-md-4">
                                     <span className="shown-item-price">Tracking Number:&nbsp;</span>
-                                    <span>{this.state.order_details.trackingNumber}</span>
+                                    <span>{this.state.order_details.tracking_id}</span>
                                 </div>
                             </div>
                         </div>

@@ -105,66 +105,70 @@ class StripePayment extends Component {
             console.log("Stripe.js hasn't loaded yet.");
         }
         this.setState({stripeToken: stripeToken});
+        if(typeof stripeToken === 'undefined'){
+            this.setState({errorMessage: "check the payment information and try again"})
+        }
+        else {
+            const charge_details = {
+                amount: this.state.amount,
+                description: "sample charge",
+                stripe_token: stripeToken.id,
+                email: sessionStorage.getItem('email')
+            };
 
-        const charge_details = {
-            amount: this.state.amount,
-            description: "sample charge",
-            stripe_token: stripeToken,
-            email: sessionStorage.getItem('email')
-        };
+            const paymentResponse = await axios.post('/payment/charge', charge_details)
+              .then(res => {
+                  console.log("payment successfull!");
+                  return {'order_id': res.data.order._id, 'payment_receipt_url': res.data.receipt_url};
+              })
+              .catch(err => {
+                  this.setState({errorMessage: "Payment Failed! Try again"});
+                  return err;
+              });
+            //console.log(paymentResponse);
 
-        const paymentResponse = await axios.post('/payment/charge', charge_details)
-            .then(res => {
-                console.log("payment successfull!");
-                return {'order_id': res.data.order._id, 'payment_receipt_url': res.data.receipt_url};
-            })
-            .catch(err => {
-                this.setState({errorMessage: "Payment Failed! Try again"});
-                return err;
-            });
-        //console.log(paymentResponse);
+            var shipment_details = {
+                shipTo: {
+                    name: this.state.shippingAddress.name,
+                    street1: this.state.shippingAddress.address_line1,
+                    street2: this.state.shippingAddress.address_line2,
+                    city: this.state.shippingAddress.address_city,
+                    state: this.state.shippingAddress.address_state,
+                    postalCode: this.state.shippingAddress.address_zip,
+                    country: this.state.shippingAddress.address_country
+                },
+                carrierCode: "fedex"
+            };
+            var shipping_info = await axios.post('/shipment/create_label', shipment_details)
+              .then(async res => {
+                  console.log("Shipment label created successful!");
+                  return res.data;
+              })
+              .catch(err => {
+                  return err;
+              });
 
-        var shipment_details = {
-            shipTo: {
-                name: this.state.shippingAddress.name,
-                street1: this.state.shippingAddress.address_line1,
-                street2: this.state.shippingAddress.address_line2,
-                city: this.state.shippingAddress.address_city,
-                state: this.state.shippingAddress.address_state,
-                postalCode: this.state.shippingAddress.address_zip,
-                country: this.state.shippingAddress.address_country
-            },
-            carrierCode: "fedex"
-        };
-        var shipping_info = await axios.post('/shipment/create_label', shipment_details)
-            .then(async res => {
-                console.log("Shipment label created successful!");
-                return res.data;
-            })
-            .catch(err => {
-                return err;
-            });
+            var order_updated_data = {
+                orderId: paymentResponse.order_id,
+                paymentReceiptUrl: paymentResponse.payment_receipt_url,
+                trackingId: shipping_info.trackingNumber,
+                carrierCode: shipping_info.carrierCode
+            };
 
-        var order_updated_data = {
-            orderId: paymentResponse.order_id,
-            paymentReceiptUrl: paymentResponse.payment_receipt_url,
-            trackingId: shipping_info.trackingNumber,
-            carrierCode: shipping_info.carrierCode
-        };
-
-        await axios.post('/order/addPostChargeInfo', order_updated_data)
-            .then(res => {
-                console.log("Order updated successfull!");
-                //window.location.href = '/paymentConfirmation?order_id=' + sessionStorage.getItem('order_id');
-                this.state.navigate.push({
-                    pathname: '/paymentConfirmation',
-                    order_id: paymentResponse.order_id
-                });
-            })
-            .catch(err => {
-                return err;
-            });
-        //console.log(context);
+            await axios.post('/order/addPostChargeInfo', order_updated_data)
+              .then(res => {
+                  console.log("Order updated successfull!");
+                  //window.location.href = '/paymentConfirmation?order_id=' + sessionStorage.getItem('order_id');
+                  this.state.navigate.push({
+                      pathname: '/paymentConfirmation',
+                      order_id: paymentResponse.order_id
+                  });
+              })
+              .catch(err => {
+                  return err;
+              });
+            //console.log(context);
+        }
     }
 
     render() {
