@@ -38,6 +38,7 @@ class StripePayment extends Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
+        this.stripePaymentButtonElement = null;
 
         const paymentRequest = props.stripe.paymentRequest({
             country: 'US',
@@ -77,6 +78,7 @@ class StripePayment extends Component {
     };
 
     handleChange = ({error}) => {
+        this.stripePaymentButtonElement.disabled = false;
         if (error) {
             this.setState({errorMessage: error.message});
         }
@@ -87,6 +89,7 @@ class StripePayment extends Component {
 
     async submit(ev) {
         // User clicked submit
+        this.stripePaymentButtonElement.disabled = true;
         var stripeToken = {};
         ev.preventDefault();
         if (this.props.stripe) {
@@ -116,6 +119,7 @@ class StripePayment extends Component {
                 return {'order_id': res.data.order._id, 'payment_receipt_url': res.data.receipt_url};
             })
             .catch(err => {
+                this.setState({errorMessage: "Payment Failed! Try again"});
                 return err;
             });
         //console.log(paymentResponse);
@@ -129,7 +133,8 @@ class StripePayment extends Component {
                 state: this.state.shippingAddress.address_state,
                 postalCode: this.state.shippingAddress.address_zip,
                 country: this.state.shippingAddress.address_country
-            }
+            },
+            carrierCode: "fedex"
         };
         var shipping_info = await axios.post('/shipment/create_label', shipment_details)
             .then(async res => {
@@ -143,23 +148,23 @@ class StripePayment extends Component {
         var order_updated_data = {
             orderId: paymentResponse.order_id,
             paymentReceiptUrl: paymentResponse.payment_receipt_url,
-            trackingId: shipping_info.trackingNumber
+            trackingId: shipping_info.trackingNumber,
+            carrierCode: shipping_info.carrierCode
         };
 
-        var updatedOrder = await axios.post('/order/addPostChargeInfo', order_updated_data)
+        await axios.post('/order/addPostChargeInfo', order_updated_data)
             .then(res => {
                 console.log("Order updated successfull!");
                 //window.location.href = '/paymentConfirmation?order_id=' + sessionStorage.getItem('order_id');
-                return res.data;
+                this.state.navigate.push({
+                    pathname: '/paymentConfirmation',
+                    order_id: paymentResponse.order_id
+                });
             })
             .catch(err => {
                 return err;
             });
         //console.log(context);
-        this.state.navigate.push({
-            pathname: '/paymentConfirmation',
-            order_id: paymentResponse.order_id
-        });
     }
 
     render() {
@@ -185,7 +190,7 @@ class StripePayment extends Component {
                 <div className="error" role="alert">
                     {this.state.errorMessage}
                 </div>
-                <button className="payment-button-1" onClick={this.submit}>Pay</button>
+                <button id="stripe-payment-button" className="payment-button-1" onClick={this.submit}>Pay</button>
             </div>
         );
     }
@@ -197,6 +202,8 @@ class StripePayment extends Component {
         this.state.navigate = this.props.navigate;
         //this.state.amount = this.props.amount.total;
         //console.log(this.state.billingAddress);
+
+        this.stripePaymentButtonElement = document.getElementById("stripe-payment-button");
     }
 
     submitCharge(token) {

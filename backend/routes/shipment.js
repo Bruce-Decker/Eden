@@ -37,7 +37,7 @@ router.post('/create_label', function(req,res) {
 
   today = mm + '/' + dd + '/' + yyyy;
   const shipment_data = {
-    "carrierCode": "fedex",
+    "carrierCode": req.body.carrierCode,
     "serviceCode": "fedex_ground",
     "packageCode": "package",
     "confirmation": "delivery",

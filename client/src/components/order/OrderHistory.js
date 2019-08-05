@@ -58,7 +58,16 @@ class PaymentConfirmation extends Component {
             email: this.props.auth.user.email
         })
         .then((response) => {
-            this.setState({orders: response.data});
+            var orders = [];
+            for(var i in response.data){
+                if(response.data[i].status !== 'processing'){
+                    orders.push(response.data[i]);
+                }
+                else {
+                    console.log(response.data[i]);
+                }
+            }
+            this.setState({orders: orders});
         })
         .catch(function (error) {
             return error;

@@ -65,6 +65,10 @@
     font-weight: 500;
 }
 
+.payment-order-details {
+    visibility: hidden;
+}
+
 .payment-home-button {
     width: 140px;
     height: 48px;

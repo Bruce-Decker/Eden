@@ -24,10 +24,10 @@ let paymentMethods= [
 router.post('/charge', function(req,res) {
     const email = req.body.email;
     stripe.charges.create({
-        amount: req.body.amount*100,
+        amount: (parseInt(req.body.amount*100)).toString(),
         description: req.body.description,
         currency: "usd",
-        source: "tok_mastercard"//req.body.stripe_token
+        source: req.body.stripe_token //"tok_mastercard"
     })
     .then(charge => {
         charge.amount = charge.amount/100;
@@ -83,17 +83,17 @@ router.post('/charge', function(req,res) {
                 }
             });
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             res.json({ msg: 'ERROR: no cart found for user' });
         });
-        //TODO clear cart and save payment and cart data to purchasedItem table
     })
     .catch(err => {
-        console.log("Error:", err);
+        //console.log("Error:", err);
         var paymentError = new Error();
-        paymentError.statusCode = 400;
+        //paymentError.statusCode = 400;
         paymentError.detail = err;
         paymentError.message = "Purchase Failed";
+        res.status(500);
         res.send(paymentError);
     });
 });

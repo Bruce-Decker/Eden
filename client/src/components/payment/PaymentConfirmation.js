@@ -12,6 +12,8 @@ class PaymentConfirmation extends Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
+        this.orderDetailsTitleElement = null;
+        this.orderDetailsElement = null;
         this.state = {
             order_details: {
                 items: []
@@ -34,10 +36,10 @@ class PaymentConfirmation extends Component {
                         <h1 className="payment-h1">{this.state.payment_status} !!!!</h1>
                     </div>
                     <div>
-                        <div class="row">
+                        <div id="payment-order-details-title" class="row payment-order-details">
                             <h1 className="payment-h1">Order Details</h1>
                         </div>
-                        <div className="order-item">
+                        <div id="payment-order-title" className="order-item payment-order-details">
                             <div className="row">
                                 <div className="col-md-12 order-id-title">
                                     <h6>Order #: {this.state.order_details._id}</h6>
@@ -56,6 +58,20 @@ class PaymentConfirmation extends Component {
                                     <span>{this.state.order_details.status}</span>
                                 </div>
                             </div>
+                            <div className="row">
+                                <div className="col-md-4 shown-item-text">
+                                    <span className="shown-item-price">Payment Receipt:&nbsp;</span>
+                                    <span><a href={this.state.order_details.receipt} target="_blank">Click Here</a></span>
+                                </div>
+                                <div className="col-md-4">
+                                    <span className="shown-item-price">Carrier:&nbsp;</span>
+                                    <span>{this.state.order_details.carrier}</span>
+                                </div>
+                                <div className="col-md-4">
+                                    <span className="shown-item-price">Tracking Number:&nbsp;</span>
+                                    <span>{this.state.order_details.trackingNumber}</span>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-md-1 offset-md-11">
@@ -69,10 +85,14 @@ class PaymentConfirmation extends Component {
     }
 
     async componentDidMount() {
-        var order_id = '5d3f3a0f7638875170dcbfe9'; //this.props.location.hasOwnProperty('order_id') ? this.props.location.order_id : '';
+        this.orderDetailsTitleElement = document.getElementById("payment-order-details-title");
+        this.orderDetailsElement = document.getElementById("payment-order-title");
+        var order_id = this.props.location.hasOwnProperty('order_id') ? this.props.location.order_id : '';
         if (order_id !== '' && order_id !== '0000' && order_id !== undefined) {
             this.setState({payment_status: 'Payment Successful'});
             //this.setState({order_id: order_id});
+            this.orderDetailsTitleElement.style.visibility = "visible";
+            this.orderDetailsElement.style.visibility = "visible";
 
             await axios.get('/order/' + order_id)
                 .then((response) => {
@@ -83,6 +103,12 @@ class PaymentConfirmation extends Component {
                     return error;
                 });
         }
+        /*else {
+            alert("Order is Invalid!");
+            this.props.history.push({
+                pathname: "/"
+            });
+        }*/
     }
 }
 
