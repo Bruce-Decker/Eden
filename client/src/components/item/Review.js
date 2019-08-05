@@ -104,9 +104,9 @@ class Review extends Component {
       if (this.state.anonymous) {
         data = {
           comment: comment,
-          email: "Anonymous",
+          email: this.props.auth.user.email,
           star_rating: star_rating,
-          name: "Anonymous"
+          isAnonymous: true
         }
       } else {
         // if the user is not logged in, don't allow them to submit a non-anonymous review
@@ -125,7 +125,8 @@ class Review extends Component {
           data = {
             comment: comment,
             email: this.props.auth.user.email,
-            star_rating: star_rating
+            star_rating: star_rating,
+            isAnonymous: false
           }
         }
       }
@@ -436,13 +437,19 @@ class Review extends Component {
                       <div className="panel panel-white post panel-shadow">
                         <div className="post-heading">
                           <div className="pull-left image">
-
+                         {!comment.isAnonymous ?
                           <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+
+                          : 
+                         <img src={`/images/Anonymous.jpg`} className="img-circle avatar" alt="user profile image" /> }
                          
                           </div>
                           <div className="pull-left meta">
                             <div className="title h5">
-                            <a href="#"><b>{comment.name} </b></a>
+                            {!comment.isAnonymous ?
+                                <a href="#"><b>{comment.name} </b></a>
+                                : 
+                            <a href="#"><b>Anonymous </b></a> }
                                         made a review.
                             </div>
                             <h6 className="text-muted time">{comment.time.substring(0,10) + ' ' + comment.time.substring(11,19)}</h6>

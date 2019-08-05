@@ -72,8 +72,6 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
     var name 
     var data
     const item_id = req.params.item_id
-   
-  
           User.findOne({email: email}, function(err, docs) {
             if (err) {
               console.log(err)
@@ -118,7 +116,8 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
                    name: "Anonymous",
                    comment,
                    time,
-                   star_rating
+                   star_rating,
+                   isAnonymous
                  }
                  if (comment) {
                   Item.findOneAndUpdate(
