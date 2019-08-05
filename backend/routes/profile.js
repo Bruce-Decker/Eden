@@ -102,6 +102,8 @@ router.get('/:email', function(req, res) {
 
 router.post('/sharePost', function(req, res) {
      var post_id = uuidv4()
+     var isAnonymous = req.body.isAnonymous
+      console.log(isAnonymous)
      var email = req.body.email
      var profile_owner_email = req.body.profile_owner_email
      var name = req.body.name
@@ -112,7 +114,8 @@ router.post('/sharePost', function(req, res) {
          post_id,
          email,
          post,
-         time
+         time,
+         isAnonymous
      }
      if (post) {
         Profile.findOneAndUpdate(

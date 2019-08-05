@@ -87,23 +87,27 @@ class ShowProfile extends Component {
 
   handleClick = () => {
     var post = this.state.share_post;
-    var name;
-    var email; 
+
     var profile_owner_email = this.props.match.params.email;
-    
+    var isAnonymous
+    var name = this.props.auth.user.name;
+    var email = this.props.auth.user.email;
     if (!this.state.anonymous) {
-      name = this.props.auth.user.name;
-      email = this.props.auth.user.email;
+    
+      isAnonymous = false
+
     } else {
-      name = "Anonymous";
-      email = "Anonymous";
+      // name = "Anonymous";
+      // email = "Anonymous";
+      isAnonymous = true
     }
 
     var data = {
       post,
       name,
       email,
-      profile_owner_email
+      profile_owner_email,
+      isAnonymous
     };
 
      axios
@@ -484,11 +488,17 @@ class ShowProfile extends Component {
                     <div className="panel panel-white post panel-shadow">
                       <div className="post-heading">
                         <div className="pull-left image">
+                          {!post.isAnonymous ?
                           <img src={`/images/${post.email}.jpg`} className="img-circle avatar" alt="user profile image" onError={this.defaultImage}/>
+                          : 
+                          <img src={`/images/Anonymous.jpg`} className="img-circle avatar" alt="user profile image" onError={this.defaultImage}/> }
                         </div>
                         <div className="pull-left meta">
                           <div className="title h5">
+                          {!post.isAnonymous ?
                             <a href="#"><b>{post.name} </b></a>
+                            : 
+                          <a href="#"><b>Anonymous </b></a> }
                                       made a post. 
                           </div>
                           <h6 className="text-muted time">{post.time.substring(0,10) + ' ' + post.time.substring(11,19)}</h6>

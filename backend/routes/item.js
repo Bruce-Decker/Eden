@@ -68,6 +68,7 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
     const time = Date.now()
     const email = req.body.email
     const star_rating = req.body.star_rating
+    const isAnonymous = req.body.isAnonymous
     var name 
     var data
     const item_id = req.params.item_id
@@ -86,7 +87,8 @@ router.post('/postCommentForItem/:item_id', function(req, res) {
                       name: docs.name,
                       comment,
                       time,
-                      star_rating
+                      star_rating,
+                      isAnonymous
                   }
                   console.log(data)
                   if (comment) {

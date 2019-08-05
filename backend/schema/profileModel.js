@@ -36,6 +36,10 @@ const ProfileSchema = new Schema({
       ],
     posts: [
         {
+            isAnonymous: {
+                type: Boolean,
+                required: true
+            },
             post_id: {
                 type: String,
                 required: true

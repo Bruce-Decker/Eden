@@ -38,6 +38,10 @@ const ItemSchema = new Schema({
     },
     comments: [
        {
+           isAnonymous: {
+              type: Boolean,
+              required: true
+           },
            star_rating: {
             type: Number
            },
