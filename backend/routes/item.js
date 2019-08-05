@@ -61,6 +61,19 @@ const itemImageUpload = multer({
   fileFilter: itemImageFilter
 })
 
+router.get('/getIfUserPosted/:item_id', function(req, res) {
+     var item_id = req.params.item_id
+     var email = req.body.email
+     Item.findOne({item_id: item_id, "comments.email": email}, function(err, docs) {
+         if (err) {
+           res.send(err)
+         } else {
+           res.send(docs)
+         }
+     })
+
+})
+
 
 router.post('/postCommentForItem/:item_id', function(req, res) {
     const comment_id = uuidv4()

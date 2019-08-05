@@ -34,6 +34,20 @@ const customStyles = {
   }
 };
 
+const customStyles2 = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    width: "600px",
+    height: "190px",
+    backgroundColor: "rgb(48,48,48)"
+  }
+};
+
 const reviews = [
   {
     user: 'John',
@@ -73,7 +87,9 @@ class Review extends Component {
       hasMore: true,
       modalIsOpen: false,
       anonymous: false,
-      rating: 5
+      rating: 5,
+      hasCommented: false,
+      existing_comment_id: ""
     }
     this.toal_comments = null
   }
@@ -155,8 +171,12 @@ class Review extends Component {
     });
   }
 
-  openModal = () => {
+  openWriteReviewModal = () => {
     this.setState({modalIsOpen: true});
+  }
+
+  cancelModal = () => {
+    this.setState({modalIsOpen: false});
   }
 
   afterOpenModal = () => {
@@ -242,6 +262,9 @@ class Review extends Component {
      .then(res => {
        console.log(res)
        this.componentDidMount()
+       this.setState({
+          hasCommented: false
+       })
 
      })
     .catch(err => console.log(err))
@@ -308,6 +331,15 @@ class Review extends Component {
         comments: response.data[0].comments.reverse()
       }) 
 
+      response.data[0].comments.map(comment => {
+          if (comment.email == this.props.auth.user.email) {
+             this.setState({
+                hasCommented: true,
+                existing_comment_id: comment.comment_id
+             })
+          }
+      })
+
       // var temp_array = []
       // for (var i = 0; i < 1; i++) {
       //   temp_array.push(this.state.comments[i])
@@ -359,7 +391,7 @@ class Review extends Component {
     return (
       <div class="container-review">
         <Modal
-          isOpen={this.state.modalIsOpen}
+          isOpen={this.state.modalIsOpen && !this.state.hasCommented}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           style={customStyles}
@@ -402,18 +434,46 @@ class Review extends Component {
               
                 
         </Modal>
+
+        <Modal
+          isOpen={this.state.modalIsOpen && this.state.hasCommented}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles2}
+          contentLabel="Example Modal"
+        >
+          <h3 style = {{color: "white"}}>You have an existing comment for this item. Do you want to delete it? </h3>
+          <div style = {{textAlign: "center", marginTop: "50px"}}>
+              <button type="button" className="btn btn-danger" onClick = {() => this.deleteComment(this.state.existing_comment_id)} style = {{marginRight: "40px", height: "40px", width: "100px"}}>Delete</button>
+              <button type="button" className="btn btn-primary" onClick = {this.cancelModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
+          </div>
+
+        </Modal>
       
           <div className = "itemReview">
           <Card.Header>
           <div className = "upper_review_comments">
-            <button
-              id="writeReviewBtn"
-              type="button"
-              onClick={this.openModal}
-              className="btn btn-primary"
-            >
-              Write a review <i class="fas fa-pencil-alt"></i>
-            </button>
+            {this.state.hasCommented ?
+                <button
+                  id="writeReviewBtn"
+                  type="button"
+                  onClick={this.openWriteReviewModal}
+                  className="btn btn-primary"
+                >
+                  Write a review <i class="fas fa-pencil-alt"></i>
+                </button>
+
+                :
+                <button
+                id="writeReviewBtn"
+                type="button"
+                onClick={this.openWriteReviewModal}
+                className="btn btn-primary"
+              >
+                Write a review <i class="fas fa-pencil-alt"></i>
+              </button>
+                
+                }
           </div>
              {this.state.showReviews ?
             <InfiniteScroll
