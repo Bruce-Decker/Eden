@@ -75,7 +75,7 @@ class Review extends Component {
       anonymous: false,
       rating: 5
     }
-    this.toal_comments = 0
+    this.toal_comments = null
   }
 
   onStarClick(nextValue, prevValue, name) {
@@ -138,7 +138,7 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
-          this.loadFunc()
+      
           this.setState({
             modalIsOpen: false
           })
@@ -185,7 +185,7 @@ class Review extends Component {
         console.log(res)
        
         this.componentDidMount()
-        this.loadFunc()
+
       })
     .catch(err => console.log(err))
   }
@@ -199,7 +199,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
-        this.loadFunc()
+
       })
     .catch(err => console.log(err))
   }
@@ -213,7 +213,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
-        this.loadFunc()
+   
       })
     .catch(err => console.log(err))
   }
@@ -228,7 +228,7 @@ class Review extends Component {
         console.log(res)
       
        this.componentDidMount()
-       this.loadFunc()
+
       })
     .catch(err => console.log(err))
   }
@@ -241,7 +241,7 @@ class Review extends Component {
      .then(res => {
        console.log(res)
        this.componentDidMount()
-       this.loadFunc()
+
      })
     .catch(err => console.log(err))
   }
@@ -254,7 +254,7 @@ class Review extends Component {
       .then(res => {
         console.log(res)
         this.componentDidMount()
-        this.loadFunc()
+    
       })
      .catch(err => console.log(err))
   }
@@ -284,7 +284,6 @@ class Review extends Component {
         .then(res => {
           console.log(res)
           this.componentDidMount()
-          this.loadFunc()
           this.setState({reply: ''})
         })
         .catch(err => console.log(err))
@@ -326,23 +325,27 @@ class Review extends Component {
       }
 
     }
+    this.loadFunc()
 
   }
 
   loadFunc = () => {
     console.log("loadFunc")
     var temp_comments = this.state.comments.slice(this.state.scroll_comments.length, this.state.scroll_comments.length + 1)
-    if (this.state.scroll_comments.length < this.toal_comments) {
-        console.log("succesfully lazy load")
-        console.log(this.state.scroll_comments.length)
-       this.setState({
-         scroll_comments: [...this.state.scroll_comments.concat(temp_comments)]
-      })
-    } else {
-      this.setState({
-       hasMore: false
-      })
-    }
+      if (this.toal_comments) {
+              if (this.state.scroll_comments.length < this.toal_comments) {
+                  console.log("succesfully lazy load")
+                  console.log(this.state.scroll_comments.length)
+                this.setState({
+                  scroll_comments: [...this.state.scroll_comments.concat(temp_comments)],
+                  hasMore: true
+                })
+              } else {
+                this.setState({
+                hasMore: false
+                })
+              }
+      }
   }
 
   render() {

@@ -74,6 +74,7 @@ class ShowProfile extends Component {
       anonymous: false
     }
     this.post_array = []
+    this.total_posts = null
   }
 
   defaultImage = (e) => {
@@ -110,6 +111,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+      
         this.setState({share_post: ''});
       })
       .catch(err => console.log(err))
@@ -134,6 +136,7 @@ class ShowProfile extends Component {
         console.log(res);
        
         this.componentDidMount();
+      
         this.setState({
           comment: ''
         });
@@ -158,6 +161,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+       
       })
       .catch(err => console.log(err))
   }
@@ -174,6 +178,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+       
       })
       .catch(err => console.log(err))
   }
@@ -193,6 +198,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+      
       })
       .catch(err => console.log(err))
   }
@@ -217,6 +223,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+     
       })
       .catch(err => console.log(err))
   }
@@ -260,24 +267,31 @@ class ShowProfile extends Component {
 
   loadFunc = () => {
     console.log("loadFunc")
+    
     var temp_posts = this.state.posts.slice(this.state.scroll_posts.length, this.state.scroll_posts.length + 2)
-    if (this.state.scroll_posts.length < this.state.posts.length) {
-      
-     
-        console.log("succesfully lazy load")
-       
-     
-       this.setState({
-        scroll_posts: [...this.state.scroll_posts.concat(temp_posts)]
-      
-      })
-       
+    if (this.total_posts) {
+        
+          if (this.state.scroll_posts.length < this.total_posts) {
+            
+          
+              console.log("succesfully lazy load")
+            
+          
+            this.setState({
+              scroll_posts: [...this.state.scroll_posts.concat(temp_posts)],
+              hasMore: true
+            
+            })
+            
 
-    } else {
-      this.setState({
-       hasMore: false
-      
-      })
+          } else {
+            console.log(this.state.scroll_posts.length)
+            console.log(this.total_posts)
+            this.setState({
+            hasMore: false
+            
+            })
+          }
     }
     
       
@@ -287,7 +301,9 @@ class ShowProfile extends Component {
     const response = await axios.get('/profile/' + this.props.match.params.email);
    
     if (response.data[0]) {
+      this.total_posts = response.data[0].posts.length
       if (response.data[0].profile_picture_path && response.data[0].email) {
+       
         this.setState({
           image_path: response.data[0].profile_picture_path,
           first_name: response.data[0].first_name,
@@ -303,7 +319,10 @@ class ShowProfile extends Component {
           about_me: response.data[0].about_me,
           showProfile: true,
           posts: response.data[0].posts.reverse()
+          
         });
+       
+      
       } 
      
       if (!response.data[0].profile_picture_path && response.data[0].email) {
@@ -323,6 +342,7 @@ class ShowProfile extends Component {
       })
     
     }
+    this.loadFunc()
   }
 
   render() {
