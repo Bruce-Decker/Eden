@@ -102,6 +102,13 @@ class PaymentConfirmation extends Component {
                 .catch(function (error) {
                     return error;
                 });
+            await axios.post('/cart/clear', {email: this.state.order_details.email})
+                .then(res => {
+                  console.log(res);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
         }
         /*else {
             alert("Order is Invalid!");
