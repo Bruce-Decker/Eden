@@ -10,24 +10,28 @@ const bodyParser = require("body-parser");
 let paymentMethods= [
     // 'ach_credit_transfer', // usd (ACH Credit Transfer payments must be in U.S. Dollars)
     'alipay', // aud, cad, eur, gbp, hkd, jpy, nzd, sgd, or usd.
-    'bancontact', // eur (Bancontact must always use Euros)
+    //'bancontact', // eur (Bancontact must always use Euros)
     'card', // many (https://stripe.com/docs/currencies#presentment-currencies)
-    'eps', // eur (EPS must always use Euros)
-    'ideal', // eur (iDEAL must always use Euros)
-    'giropay', // eur (Giropay must always use Euros)
-    'multibanco', // eur (Multibanco must always use Euros)
+    //'eps', // eur (EPS must always use Euros)
+    //'ideal', // eur (iDEAL must always use Euros)
+    //'giropay', // eur (Giropay must always use Euros)
+    //'multibanco', // eur (Multibanco must always use Euros)
     // 'sepa_debit', // Restricted. See docs for activation details: https://stripe.com/docs/sources/sepa-debit
-    'sofort', // eur (SOFORT must always use Euros)
+    //'sofort', // eur (SOFORT must always use Euros)
     'wechat', // aud, cad, eur, gbp, hkd, jpy, sgd, or usd.
     ];
 
 router.post('/charge', function(req,res) {
     const email = req.body.email;
+    var stripe_token = "";
+    if(req.body.stripe_token !== '' && req.body.stripe_token != null){
+        stripe_token = "tok_mastercard";
+    }
     stripe.charges.create({
-        amount: req.body.amount*100,
+        amount: (parseInt(req.body.amount*100)).toString(),
         description: req.body.description,
         currency: "usd",
-        source: "tok_mastercard"//req.body.stripe_token
+        source: stripe_token //req.body.stripe_token
     })
     .then(charge => {
         charge.amount = charge.amount/100;
@@ -83,17 +87,17 @@ router.post('/charge', function(req,res) {
                 }
             });
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             res.json({ msg: 'ERROR: no cart found for user' });
         });
-        //TODO clear cart and save payment and cart data to purchasedItem table
     })
     .catch(err => {
-        console.log("Error:", err);
+        //console.log("Error:", err);
         var paymentError = new Error();
-        paymentError.statusCode = 400;
+        //paymentError.statusCode = 400;
         paymentError.detail = err;
         paymentError.message = "Purchase Failed";
+        res.status(500);
         res.send(paymentError);
     });
 });
@@ -286,4 +290,5 @@ router.post('/order', function(req,res) {
         res.json({ msg: 'ERROR: no cart found for user' });
     });
 });
+
 module.exports = router;

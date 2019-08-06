@@ -21,27 +21,26 @@ import PlacesAutocomplete, {
 
 const customStyles = {
   content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
     width: "700px",
     height: "320px",
     backgroundColor: 'rgba(0,0,0,.6)'
-   
   }
 };
 
 const customStyles2 = {
   content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
     width: "600px",
     height: "190px",
     backgroundColor: "rgb(48,48,48)"
@@ -72,12 +71,11 @@ Modal.setAppElement("#root");
 class Review extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-   
       position: {
-         lat: 37.7749,
-         lng: -122.4194
+        lat: 37.7749,
+        lng: -122.4194
       },
       showReviews: false,
       reply: '',
@@ -90,8 +88,9 @@ class Review extends Component {
       rating: 5,
       hasCommented: false,
       existing_comment_id: ""
-    }
-    this.toal_comments = null
+    };
+
+    this.toal_comments = null;
   }
 
   onStarClick(nextValue, prevValue, name) {
@@ -182,105 +181,102 @@ class Review extends Component {
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
     //this.subtitle.style.color = '#f00';
-   
   }
 
   closeModal = () => {
     this.setState({modalIsOpen: false});
   }
 
-  
-
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  };
-
+  }
 
   upvoteComment = (comment_id, email) => {
-  
     var data = {
       email: email
     }
-      axios.post('/items/upvote/' + comment_id, data)
+
+    axios
+      .post('/items/upvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-       
         this.componentDidMount()
-
       })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
 
   undoUpvoteComment = (comment_id, email) => {
-  
     var data = {
       email: email
     }
-      axios.post('/items/undoUpvote/' + comment_id, data)
+
+    axios
+      .post('/items/undoUpvote/' + comment_id, data)
       .then(res => {
         console.log(res)
         this.componentDidMount()
 
       })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
 
   undoDownvoteComment = (comment_id, email) => {
-  
     var data = {
       email: email
     }
-      axios.post('/items/undoDownvote/' + comment_id, data)
+
+    axios
+      .post('/items/undoDownvote/' + comment_id, data)
       .then(res => {
         console.log(res)
         this.componentDidMount()
-   
       })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
 
   downvoteComment = (comment_id, email) => {
-  
     var data = {
       email: email
     }
-      axios.post('/items/downvote/' + comment_id, data)
+
+    axios.post('/items/downvote/' + comment_id, data)
       .then(res => {
         console.log(res)
-      
-       this.componentDidMount()
-
+        this.componentDidMount()
       })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
 
   deleteComment = (comment_id) => {
      var data = {
       comment_id
      }
-     axios.post('/items/deleteComment/' + this.props.item_id, data)
-     .then(res => {
-       console.log(res)
-       this.componentDidMount()
-       this.setState({
-          hasCommented: false
-       })
 
-     })
-    .catch(err => console.log(err))
+     axios
+      .post('/items/deleteComment/' + this.props.item_id, data)
+      .then(res => {
+        console.log(res)
+        this.componentDidMount()
+        this.setState({
+          hasCommented: false
+        })
+
+      })
+      .catch(err => console.log(err))
   }
 
   deleteReply = (comment_id, reply_id) => {
     var data = {
       reply_id: reply_id
     }
-    axios.post('/items/deleteReply/' + comment_id, data)
+
+    axios
+      .post('/items/deleteReply/' + comment_id, data)
       .then(res => {
         console.log(res)
         this.componentDidMount()
-    
       })
-     .catch(err => console.log(err))
+      .catch(err => console.log(err))
   }
 
   replyComment = (comment_id) => {
@@ -332,19 +328,15 @@ class Review extends Component {
       }) 
 
       response.data[0].comments.map(comment => {
-          if (comment.email == this.props.auth.user.email) {
-             this.setState({
-                hasCommented: true,
-                existing_comment_id: comment.comment_id
-             })
-          }
+        if (comment.email == this.props.auth.user.email) {
+          this.setState({
+            hasCommented: true,
+            existing_comment_id: comment.comment_id
+          })
+        }
       })
 
-      // var temp_array = []
-      // for (var i = 0; i < 1; i++) {
-      //   temp_array.push(this.state.comments[i])
-      // }
-      var temp_array = []
+      var temp_array = [];
       if (this.state.comments.length > 0) {
           temp_array.push(this.state.comments[0])
           this.setState({
@@ -354,31 +346,30 @@ class Review extends Component {
         this.setState({
           scroll_comments: this.state.comments
         })
-
       }
-
     }
-    this.loadFunc()
 
+    this.loadFunc();
   }
 
   loadFunc = () => {
-    console.log("loadFunc")
-    var temp_comments = this.state.comments.slice(this.state.scroll_comments.length, this.state.scroll_comments.length + 1)
-      if (this.toal_comments) {
-              if (this.state.scroll_comments.length < this.toal_comments) {
-                  console.log("succesfully lazy load")
-                  console.log(this.state.scroll_comments.length)
-                this.setState({
-                  scroll_comments: [...this.state.scroll_comments.concat(temp_comments)],
-                  hasMore: true
-                })
-              } else {
-                this.setState({
-                hasMore: false
-                })
-              }
+    console.log("loadFunc");
+    var temp_comments = this.state.comments.slice(this.state.scroll_comments.length, this.state.scroll_comments.length + 1);
+    
+    if (this.toal_comments) {
+      if (this.state.scroll_comments.length < this.toal_comments) {
+        console.log("succesfully lazy load");
+        console.log(this.state.scroll_comments.length);
+        this.setState({
+          scroll_comments: [...this.state.scroll_comments.concat(temp_comments)],
+          hasMore: true
+        });
+      } else {
+        this.setState({
+          hasMore: false
+        });
       }
+    }
   }
 
   render() {
@@ -397,42 +388,36 @@ class Review extends Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          
           <textarea className="form-control" name = "comment" rows="8" id="comment"  onChange = {this.onChange}></textarea>
           <div>
+            <div className="space">
+                  
+            </div>   
+         
+            <StarRatingComponent 
+              name="rate1" 
+              starCount={5}
+              value={rating}
+              onStarClick={this.onStarClick.bind(this)}
+            
+            />
+          </div>
           <div className="space">
                 
-                </div>   
-       
-        <StarRatingComponent 
-          name="rate1" 
-          starCount={5}
-          value={rating}
-          onStarClick={this.onStarClick.bind(this)}
-        
-        />
-      </div>
+          </div>
+          <div className="field">
+                
+          </div>
+          <button className="ui button" type="submit" onClick = {this.submitComment}>Submit</button>
+          <span className="save_as_draft">
+            <div className="ui read-only checkbox">
+              <input type="checkbox" checked={this.state.anonymous} onChange={this.toggleSubmitAsAnonymous}/>
+              <label><b>Submit as an anonymous user</b></label>
+            </div>    
+          </span>
           <div className="space">
-                
-                </div>
-                <div className="field">
-                
-                </div>
-                <button className="ui button" type="submit" onClick = {this.submitComment}>Submit</button>
-                <span className="save_as_draft">
-             
-                     <div className="ui read-only checkbox">
-                        <input type="checkbox" checked={this.state.anonymous} onChange={this.toggleSubmitAsAnonymous}/>
-                        <label><b>Submit as an anonymous user</b></label>
-                    </div>
-                   
-               </span>
-                
-                <div className="space">
-                
-                </div>
-              
-                
+          
+          </div> 
         </Modal>
 
         <Modal
@@ -444,16 +429,15 @@ class Review extends Component {
         >
           <h3 style = {{color: "white"}}>You have an existing comment for this item. Do you want to delete it? </h3>
           <div style = {{textAlign: "center", marginTop: "50px"}}>
-              <button type="button" className="btn btn-danger" onClick = {() => this.deleteComment(this.state.existing_comment_id)} style = {{marginRight: "40px", height: "40px", width: "100px"}}>Delete</button>
-              <button type="button" className="btn btn-primary" onClick = {this.cancelModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
+            <button type="button" className="btn btn-danger" onClick = {() => this.deleteComment(this.state.existing_comment_id)} style = {{marginRight: "40px", height: "40px", width: "100px"}}>Delete</button>
+            <button type="button" className="btn btn-primary" onClick = {this.cancelModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
           </div>
-
         </Modal>
       
-          <div className = "itemReview">
+        <div className = "itemReview">
           <Card.Header>
-          <div className = "upper_review_comments">
-            {this.state.hasCommented ?
+            <div className = "upper_review_comments">
+              {this.state.hasCommented ?
                 <button
                   id="writeReviewBtn"
                   type="button"
@@ -469,191 +453,134 @@ class Review extends Component {
                 type="button"
                 onClick={this.openWriteReviewModal}
                 className="btn btn-primary"
-              >
-                Write a review <i class="fas fa-pencil-alt"></i>
-              </button>
-                
-                }
-          </div>
-             {this.state.showReviews ?
-            <InfiniteScroll
+                >
+                  Write a review <i class="fas fa-pencil-alt"></i>
+                </button>
+              }
+            </div>
+            {this.state.showReviews ?
+              <InfiniteScroll
                 pageStart={0}
                 loadMore={this.loadFunc}
                 hasMore={this.state.hasMore}
                 loader={<div className="loader" key={0}>
-                 
-                 <img style = {{height: "100px", marginLeft: "680px"}} src = {loading_icon} />
-    
-             </div>
-              
-              }
-            >
+                    <img style = {{height: "100px", marginLeft: "680px"}} src = {loading_icon} />
+                  </div>
+                }
+              >
              
-             <div className = "review_comments">
-               
-               {this.state.scroll_comments.map(comment => 
+                <div className = "review_comments">
+                  {this.state.scroll_comments.map(comment => 
                     <div className="container bootstrap snippet">
-                    <div className="col-sm-12">
-                      <div className="panel panel-white post panel-shadow">
-                        <div className="post-heading">
-                          <div className="pull-left image">
-                         {!comment.isAnonymous ?
-                          <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
-
-                          : 
-                         <img src={`/images/Anonymous.jpg`} className="img-circle avatar" alt="user profile image" /> }
-                         
-                          </div>
-                          <div className="pull-left meta">
-                            <div className="title h5">
-                            {!comment.isAnonymous ?
-                                <a href="#"><b>{comment.name} </b></a>
-                                : 
-                            <a href="#"><b>Anonymous </b></a> }
-                                        made a review.
+                      <div className="col-sm-12">
+                        <div className="panel panel-white post panel-shadow">
+                          <div className="post-heading">
+                            <div className="pull-left image">
+                              {!comment.isAnonymous ?
+                                <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
+                              : 
+                                <img src={`/images/Anonymous.jpg`} className="img-circle avatar" alt="user profile image" />
+                              }
                             </div>
-                            <h6 className="text-muted time">{comment.time.substring(0,10) + ' ' + comment.time.substring(11,19)}</h6>
-                          </div>
-
-                          {comment.email === this.props.auth.user.email ?
+                            <div className="pull-left meta">
+                              <div className="title h5">
+                                {!comment.isAnonymous ?
+                                  <a href="#"><b>{comment.name} </b></a>
+                                : 
+                                  <a href="#"><b>Anonymous </b></a>
+                                }
+                                          made a review.
+                              </div>
+                              <h6 className="text-muted time">{comment.time.substring(0,10) + ' ' + comment.time.substring(11,19)}</h6>
+                            </div>
+                            {comment.email === this.props.auth.user.email ?
                                                    <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id)} height="15" width="15"/>  
                                                     : null }
-                        </div> 
-                        <div className="post-description"> 
-                          <p>{comment.comment}</p>
-                      {comment.star_rating ?
-                          <StarRatingComponent 
-                              name="rate2" 
-                              editing={false}
-                              starCount={5}
-                              value={comment.star_rating}
-                       />
-                       :  <StarRatingComponent 
-                       name="rate2" 
-                       editing={false}
-                       starCount={5}
-                       value={1}
-                      /> }
-                          <div className="stats">
-                          { comment.upvote.some(element => element['email'] === this.props.auth.user.email) ?
+                          </div> 
+                          <div className="post-description"> 
+                            <p>{comment.comment}</p>
+                            {comment.star_rating ?
+                              <StarRatingComponent 
+                                  name="rate2" 
+                                  editing={false}
+                                  starCount={5}
+                                  value={comment.star_rating}
+                              />
+                            :
+                              <StarRatingComponent 
+                               name="rate2" 
+                               editing={false}
+                               starCount={5}
+                               value={1}
+                              />
+                            }
+                            <div className="stats">
+                              {comment.upvote.some(element => element['email'] === this.props.auth.user.email) ?
                                 <button onClick = {() => this.undoUpvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
                                   <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>{comment.upvote.length}
                                 </button>
-                                
-                                : 
+                              : 
                                 <button onClick = {() => this.upvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
                                   <i className="fa fa-thumbs-up icon" />{comment.upvote.length}
-                                </button> }
+                                </button>
+                              }
 
-                          { comment.downvote.some(element => element['email'] === this.props.auth.user.email) ?
+                              {comment.downvote.some(element => element['email'] === this.props.auth.user.email) ?
                                 <button onClick = {() => this.undoDownvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
                                   <i className="fas fa-thumbs-down icon" id = "thumb_up_blue"/>{comment.downvote.length}
                                 </button>
-                                : 
-
+                              : 
                                 <button onClick = {() => this.downvoteComment(comment.comment_id, this.props.auth.user.email)} className="btn btn-default stat-item">
                                   <i className="fas fa-thumbs-down icon" />{comment.downvote.length}
-                          </button> }
-
-
-
+                                </button>
+                              }
+                            </div>
                           </div>
-                        </div>
-                        <div className="post-footer">
-                          <div className="input-group"> 
-                            <input className="form-control" placeholder="Add a comment" type="text" value = {this.state.reply} name = "reply" onChange = {this.onChange}/>
-                            <span className="input-group-addon">
-                              <button onClick = {() => this.replyComment(comment.comment_id)}><i className="fa fa-edit" /></button>  
-                            </span>
-                          </div>
-                          <ul className="comments-list">
-
-                            {comment.replies.map(reply =>
-                                    <li className="comment">
-                                      <a className="pull-left" href="#">
-                                      <img src={`/images/${reply.email}.jpg`} className="img-circle avatar" alt="img" />
-                                      </a>
-                                      <div className="comment-body">
-                                        <div className="comment-heading">
-                                          <h4 className="user">{reply.name}</h4>
-                                          <h5 className="time">{reply.time.substring(0,10) + ' ' + reply.time.substring(11,19)}</h5>
-                                          {reply.email === this.props.auth.user.email ?
-                                                          <img src = {delete_icon} className = "profile_delete_icon"  height="15" width="15" onClick = {() => this.deleteReply(comment.comment_id, reply.reply_id)}/>  
-                                                           : null }
-                                        </div>
-                                        <p>{reply.reply}</p>
-                                      </div>
-                                    
-                                    </li>
-                            )}
-                            
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-
-
-                    <div className = "space">
+                          <div className="post-footer">
+                            <div className="input-group"> 
+                              <input className="form-control" placeholder="Add a comment" type="text" value = {this.state.reply} name = "reply" onChange = {this.onChange}/>
+                              <span className="input-group-addon">
+                                <button onClick = {() => this.replyComment(comment.comment_id)}><i className="fa fa-edit" /></button>  
+                              </span>
+                            </div>
+                            <ul className="comments-list">
+                              {comment.replies.map(reply =>
+                                <li className="comment">
+                                  <a className="pull-left" href="#">
+                                  <img src={`/images/${reply.email}.jpg`} className="img-circle avatar" alt="img" />
+                                  </a>
+                                  <div className="comment-body">
+                                    <div className="comment-heading">
+                                      <h4 className="user">{reply.name}</h4>
+                                      <h5 className="time">{reply.time.substring(0,10) + ' ' + reply.time.substring(11,19)}</h5>
+                                      {reply.email === this.props.auth.user.email ?
+                                                      <img src = {delete_icon} className = "profile_delete_icon"  height="15" width="15" onClick = {() => this.deleteReply(comment.comment_id, reply.reply_id)}/>  
+                                                       : null }
+                                    </div>
+                                    <p>{reply.reply}</p>
                                   </div>
-
-                  </div>
-                  
-               )}
-                  </div>
-                  </InfiniteScroll>
-                  : null }
-                   </Card.Header>
-              </div>
-              
-      {/* <div className = "eachItemMap">
-              <LocationPicker
                                 
-                                    containerElement={ <div style={ {height: '100%'} } /> }
-                                    mapElement={ <div style={ {height: '400px'} } /> }
-                                    defaultPosition={defaultPosition}
-                                    onChange={this.handleLocationChange}
-                                    zoom = {14}
-                                />
-                                </div> */}
-        
-      
-        <div class="row" style={{marginTop: "1rem"}}>
-          
-          
-        
-          
-                                
-         
-         
-          {/* <div class="col-7">
-            <ul class="item-review-list">
-              {reviews.map(review => {
-                return (
-                  <li key={review.user} class="item-review-item row">
-                    <div class="col-3">
-                      <img class="item-recommendation-img" style={{width: "100%"}} src={review.img} alt="Item"></img>
-                      <div class="item-recommendation-title">{review.user}</div>
-                    </div>
-                    <div class="col-6">
-                      <div>{review.review}</div>
-                      <div>
-                        {review.rating.map(i => {
-                          return <img key={i} class="item-rating" src={star} alt="Rating" style={{width: "16px", height: "16px"}}></img>
-                        })}
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
-                      <div style={{marginTop: "1rem", color: "#888888"}}>{review.date}</div>
+                      <div className = "space">
+                      </div>
                     </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </div> */}
+                  )}
+                </div>
+              </InfiniteScroll>
+            : null }
+          </Card.Header>
+        </div>
+        <div class="row" style={{marginTop: "1rem"}}>
         </div>
       </div>
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
@@ -661,3 +588,25 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps)(Review)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

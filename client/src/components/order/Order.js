@@ -13,6 +13,9 @@ class Order extends Component {
             orderId:'',
             price: '',
             status: '',
+            receipt: '',
+            carrier: '',
+            trackingNumber: '',
             items: []
         }
     }
@@ -38,6 +41,20 @@ class Order extends Component {
                         <span>{this.state.status}</span>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col-md-4 shown-item-text">
+                        <span className="shown-item-price">Payment Receipt:&nbsp;</span>
+                        <span><a href={this.state.receipt} target="_blank">Click Here</a></span>
+                    </div>
+                    <div className="col-md-4">
+                        <span className="shown-item-price">Carrier:&nbsp;</span>
+                        <span>{this.state.carrier}</span>
+                    </div>
+                    <div className="col-md-4">
+                        <span className="shown-item-price">Tracking Number:&nbsp;</span>
+                        <span>{this.state.trackingNumber}</span>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -48,6 +65,9 @@ class Order extends Component {
         this.setState({price:this.props.orderDetails.price});
         this.setState({status:this.props.orderDetails.status});
         this.setState({items: this.props.orderDetails.items});
+        this.setState({receipt: this.props.orderDetails.payment_receipt_url});
+        this.setState({carrier: this.props.orderDetails.carrierCode});
+        this.setState({trackingNumber: this.props.orderDetails.tracking_id});
     }
 }
 

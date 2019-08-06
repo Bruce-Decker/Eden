@@ -54,6 +54,10 @@ const OrderSchema = new Schema({
         },
         bid_price: Number
     }],
+    carrierCode: {
+        type: String,
+        required: false
+    },
     tracking_id: {
         type: String,
         required: false

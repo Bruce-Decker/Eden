@@ -382,7 +382,6 @@ class Detail extends Component {
                 <span>{item.user_name}</span>
               </Link>
             </div>
-            {/* <div className="item-by">{item.category}</div> */}
             {item.vr_file_path ?
             <div className="item-desc"><Link to  = {`/vr/${item.item_id}`} target="_blank">Try VR</Link></div>
             : null }

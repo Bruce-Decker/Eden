@@ -65,7 +65,7 @@ router.post('/addToCart', function(req, res) {
         msg: '',
         newItem: true,
         iid: iid
-      }
+      };
 
       if (result == null) {
         Cart.update( {'email': email },
@@ -139,7 +139,7 @@ router.get('/getCartItems', function(req,res) {
 
   Cart.findOne({email: email},{ _id: 0 }).then(async (cart) => {
     let items = cart._doc.items;
-    let ret = []
+    let ret = [];
 
     // use promise to enforce synchronous results
     let itemPromise = (iid) => {
@@ -156,7 +156,7 @@ router.get('/getCartItems', function(req,res) {
 
     // obtain description, category, and price from item details
     for(let i=0; i<items.length; i++) {
-      let obj = {}
+      let obj = {};
       let cur_item = items[i];
       let dbItem = await itemPromise(cur_item.item_id);
 
@@ -178,6 +178,21 @@ router.get('/getCartItems', function(req,res) {
     console.log(err);
     res.json({ msg: 'ERROR: no cart found for user' });
   });
+});
+
+router.post('/clear', function(req,res) {
+  const email = req.body.email;
+
+  Cart.update( {'email': email},
+    {$set: {items: []}}, function(err, result) {
+      if (err) {
+        console.log("Failed to clear cart");
+        res.send(err);
+      } else {
+        console.log("Cart was cleared successfully");
+        res.send(result);
+      }
+    });
 });
 
 module.exports = router;
