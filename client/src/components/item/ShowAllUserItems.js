@@ -5,6 +5,7 @@ import axios from 'axios';
 import star from '../../images/rating.png';
 import { Card } from 'react-bootstrap';
 import './Item.css';
+import close from '../../images/close.png'
 
 import { BrowserRouter as Route, Link } from 'react-router-dom';
 
@@ -37,6 +38,12 @@ class ShowAllUserItems extends Component {
     }
   }
 
+  handleDelete(id) {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+      // TODO
+    }
+  }
+
   render() {
     return (
       <div>
@@ -54,32 +61,42 @@ class ShowAllUserItems extends Component {
                 </div>
               }
               { this.state.items.map(item =>
-                <Link to={"/items/" + item.item_id}>
-                  <div className="row shown-item-card">
-                    <div className="col-12">
-                      <div className="shown-item-text">
-                        <span className="shown-item-name">Name:&nbsp;</span>
-                        <span>{item.item_name}</span>
-                      </div>
-                      <div className="shown-item-text">
-                        <span className="shown-item-description">Description:&nbsp;</span>
-                        <span>{item.description}</span>
-                      </div>
-                      <div className="shown-item-text">
-                        <span className="shown-item-category">Category:&nbsp;</span>
-                        <span>{item.category}</span>
-                      </div>
-                      <div className="shown-item-text">
-                        <span className="shown-item-price">Price:&nbsp;$</span>
-                        <span>{item.price}</span>
-                      </div>
-                      <div className={"shown-item-text " + this.getBidVisibility(item)}>
-                        <span className="shown-item-bid-price">Bid Price:&nbsp;$</span>
-                        <span>{item.bid_price}</span>
+                <div>
+                  {(this.props.auth.isAuthenticated && (this.props.auth.user.email === this.props.match.params.email)) && 
+                    <img 
+                      src={close} alt="close" 
+                      className="service-close" 
+                      style={{width: "20px", height: "20px", position: "relative", right: "25px", top: "20px"}}
+                      onClick={() => this.handleDelete(item.item_id)}
+                    />
+                  }
+                  <Link to={"/items/" + item.item_id}>
+                    <div className="row shown-item-card">
+                      <div className="col-12">
+                        <div className="shown-item-text">
+                          <span className="shown-item-name">Name:&nbsp;</span>
+                          <span>{item.item_name}</span>
+                        </div>
+                        <div className="shown-item-text">
+                          <span className="shown-item-description">Description:&nbsp;</span>
+                          <span>{item.description}</span>
+                        </div>
+                        <div className="shown-item-text">
+                          <span className="shown-item-category">Category:&nbsp;</span>
+                          <span>{item.category}</span>
+                        </div>
+                        <div className="shown-item-text">
+                          <span className="shown-item-price">Price:&nbsp;$</span>
+                          <span>{item.price}</span>
+                        </div>
+                        <div className={"shown-item-text " + this.getBidVisibility(item)}>
+                          <span className="shown-item-bid-price">Bid Price:&nbsp;$</span>
+                          <span>{item.bid_price}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               )}
             </div>
             : null }
