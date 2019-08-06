@@ -87,35 +87,35 @@ class PaymentConfirmation extends Component {
     async componentDidMount() {
         this.orderDetailsTitleElement = document.getElementById("payment-order-details-title");
         this.orderDetailsElement = document.getElementById("payment-order-title");
-        var order_id = this.props.location.hasOwnProperty('order_id') ? this.props.location.order_id : '';
+        const order_id = this.props.location.hasOwnProperty('order_id') ? this.props.location.order_id : '';
         if (order_id !== '' && order_id !== '0000' && order_id !== undefined) {
-            this.setState({payment_status: 'Payment Successful'});
-            //this.setState({order_id: order_id});
-            this.orderDetailsTitleElement.style.visibility = "visible";
-            this.orderDetailsElement.style.visibility = "visible";
+              this.setState({payment_status: 'Payment Successful'});
+              //this.setState({order_id: order_id});
+              this.orderDetailsTitleElement.style.visibility = "visible";
+              this.orderDetailsElement.style.visibility = "visible";
 
-            await axios.get('/order/' + order_id)
-                .then((response) => {
-                    this.setState({order_details: response.data[0]});
-                    console.log(response.data[0]);
-                })
-                .catch(function (error) {
-                    return error;
-                });
-            await axios.post('/cart/clear', {email: this.state.order_details.email})
-                .then(res => {
-                  console.log(res);
-                })
-                .catch(err => {
-                  console.log(err);
-                });
-        }
-        /*else {
-            alert("Order is Invalid!");
-            this.props.history.push({
-                pathname: "/"
-            });
-        }*/
+              await axios.get('/order/' + order_id)
+                  .then((response) => {
+                      this.setState({order_details: response.data[0]});
+                      console.log(response.data[0]);
+                  })
+                  .catch(function (error) {
+                      return error;
+                  });
+              await axios.post('/cart/clear', {email: this.state.order_details.email})
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+          }
+          /*else {
+              alert("Order is Invalid!");
+              this.props.history.push({
+                  pathname: "/"
+              });
+          }*/
     }
 }
 
