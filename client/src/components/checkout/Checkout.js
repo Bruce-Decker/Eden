@@ -8,6 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
+import SelectUSState from 'react-select-us-states';
 
 import RegularBanner from '../banner/RegularBanner';
 import Footer from '../footer/Footer';
@@ -22,6 +23,7 @@ class CheckoutClassic extends Component {
     this.isBillingAddrValid = false;
     this.isShippingAddrValid = false;
     this.errorMessageElement = null;
+    this.isShippingAddrDifferent = false;
 
     this.state = {
       ship_name: '',
@@ -49,6 +51,16 @@ class CheckoutClassic extends Component {
     this.errorMessageElement.style.visibility = "hidden";
   }
 
+  setShippingState(stateAbbr) {
+    this.setState({ship_state: stateAbbr});
+    this.errorMessageElement.style.visibility = "hidden";
+  }
+
+  setBillingState(stateAbbr) {
+    this.setState({bill_state: stateAbbr});
+    this.errorMessageElement.style.visibility = "hidden";
+  }
+
   handleClick() {
     let url = '/payment';
     let charges = this.props.location.state;
@@ -56,9 +68,9 @@ class CheckoutClassic extends Component {
 
     if(this.isShippingAddrValid && this.isBillingAddrValid) {
       this.props.history.push({
-          pathname: url,
-          state: charges,
-          addresses: this.state
+        pathname: url,
+        state: charges,
+        addresses: this.state
       });
     }
     else {
@@ -68,14 +80,6 @@ class CheckoutClassic extends Component {
   }
 
   checkValid() {
-    if(this.state.bill_name !== '' &&
-      this.state.bill_addr1 !== '' &&
-      this.state.bill_city !== '' &&
-      this.state.bill_state !== '' &&
-      this.state.bill_zip !== '' &&
-      this.state.bill_country !== '') {
-      this.isBillingAddrValid = true;
-    }
     if(this.state.ship_name !== '' &&
       this.state.ship_addr1 !== ''&&
       this.state.ship_city !== ''&&
@@ -83,6 +87,26 @@ class CheckoutClassic extends Component {
       this.state.ship_zip !== ''&&
       this.state.ship_country !== '') {
       this.isShippingAddrValid = true;
+    }
+    if(this.isShippingAddrDifferent) {
+      if(this.state.bill_name !== '' &&
+        this.state.bill_addr1 !== '' &&
+        this.state.bill_city !== '' &&
+        this.state.bill_state !== '' &&
+        this.state.bill_zip !== '' &&
+        this.state.bill_country !== '') {
+        this.isBillingAddrValid = true;
+      }
+    }
+    else {
+      this.state.bill_name = this.state.ship_name;
+      this.state.bill_addr1 = this.state.ship_addr1;
+      this.state.bill_addr2 = this.state.ship_addr2;
+      this.state.bill_city = this.state.ship_city;
+      this.state.bill_state = this.state.ship_state;
+      this.state.bill_zip = this.state.ship_zip;
+      this.state.bill_country = this.state.ship_country;
+      this.isBillingAddrValid = true;
     }
   }
 
@@ -92,6 +116,7 @@ class CheckoutClassic extends Component {
     var addressSectionElement = document.getElementById("address-section");
     if(e.target.checked){
       subtitle.innerText = "Shipping Address";
+      this.isShippingAddrDifferent = true;
       billingSectionElement.removeAttribute("hidden");
       addressSectionElement.classList.remove("col-md-6");
       addressSectionElement.classList.remove("offset-md-3");
@@ -99,6 +124,7 @@ class CheckoutClassic extends Component {
       //addressSectionElement.classList.add("offset-md-1");
     }
     else {
+      this.isShippingAddrDifferent = false;
       subtitle.innerText = "Shipping & Billing Address";
       billingSectionElement.setAttribute("hidden", "true");
       addressSectionElement.classList.remove("col-md-5");
@@ -122,93 +148,91 @@ class CheckoutClassic extends Component {
           <div class="row">
             <div id="address-section" class="col-md-6 offset-md-3">
               <h3 id="checkout-subtitle" class="checkout-subtitle">Shipping & Billing Address</h3>
-                <form className="ui form" onSubmit = {this.onSubmit}>
-                  <div className="field">
-                    <label>Full Name<span className='req'>*</span></label>
-                    <input type="text"
-                           placeholder="John Doe"
-                           name="ship_name"
-                           aria-label="Full Name"
-                           autoComplete="off"
-                           value={this.state.ship_name}
-                           onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <label>Address Line 1<span className='req'>*</span> (street, P.O. box, company name)</label>
-                    <input type="text"
-                           placeholder="123 Wall Street"
-                           name="ship_addr1"
-                           aria-label="Address Line 1"
-                           autoComplete="off"
-                           value={this.state.ship_addr1}
-                           onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <label>Address Line 2 (apartment, suite, unit, building, floor)</label>
-                    <input type="text"
-                           placeholder="Apt 456"
-                           name="ship_addr2"
-                           aria-label="Address Line 2"
-                           autoComplete="off"
-                           value={this.state.ship_addr2}
-                           onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="field">
-                    <label>City<span className='req'>*</span></label>
-                    <input type="text"
-                           placeholder="San Jose"
-                           name="ship_city"
-                           aria-label="City"
-                           autoComplete="off"
-                           value={this.state.ship_city}
-                           onChange={this.onChange}
-                    />
-                  </div>
-                  <div className='three-col-row'>
-                    <div className='three-col-col'>
-                      <div className="field">
-                        <label>State/Province/Region<span className='req'>*</span></label>
-                        <input type="text"
-                               placeholder="California"
-                               name="ship_state"
-                               aria-label="State"
-                               autoComplete="off"
-                               value={this.state.ship_state}
-                               onChange={this.onChange}
-                        />
-                      </div>
-                    </div>
-                    <div className='center-col'>
-                      <div className="field">
-                        <label>Zip/Postal Code<span className='req'>*</span></label>
-                        <input type="text"
-                               placeholder="95192"
-                               name="ship_zip"
-                               aria-label="Zip"
-                               autoComplete="off"
-                               value={this.state.ship_zip}
-                               onChange={this.onChange}
-                        />
-                      </div>
-                    </div>
-                    <div className='three-col-col'>
-                      <div className="field">
-                        <label>Country<span className='req'>*</span></label>
-                        <input type="text"
-                               placeholder="United States"
-                               name="ship_country"
-                               aria-label="Country"
-                               autoComplete="off"
-                               value={this.state.ship_country}
-                               onChange={this.onChange}
-                        />
-                      </div>
+              <form className="ui form" onSubmit = {this.onSubmit}>
+                <div className="field">
+                  <label>Full Name<span className='req'>*</span></label>
+                  <input type="text"
+                         placeholder="John Doe"
+                         name="ship_name"
+                         aria-label="Full Name"
+                         autoComplete="off"
+                         value={this.state.ship_name}
+                         onChange={this.onChange}
+                  />
+                </div>
+                <div className="field">
+                  <label>Address Line 1<span className='req'>*</span> (street, P.O. box, company name)</label>
+                  <input type="text"
+                         placeholder="123 Wall Street"
+                         name="ship_addr1"
+                         aria-label="Address Line 1"
+                         autoComplete="off"
+                         value={this.state.ship_addr1}
+                         onChange={this.onChange}
+                  />
+                </div>
+                <div className="field">
+                  <label>Address Line 2 (apartment, suite, unit, building, floor)</label>
+                  <input type="text"
+                         placeholder="Apt 456"
+                         name="ship_addr2"
+                         aria-label="Address Line 2"
+                         autoComplete="off"
+                         value={this.state.ship_addr2}
+                         onChange={this.onChange}
+                  />
+                </div>
+                <div className="field">
+                  <label>City<span className='req'>*</span></label>
+                  <input type="text"
+                         placeholder="San Jose"
+                         name="ship_city"
+                         aria-label="City"
+                         autoComplete="off"
+                         value={this.state.ship_city}
+                         onChange={this.onChange}
+                  />
+                </div>
+                <div className='three-col-row'>
+                  <div className='three-col-col'>
+                    <div className="field">
+                      <label>State/Province/Region<span className='req'>*</span></label>
+                      <SelectUSState placeholder="California"
+                                     name="ship_state"
+                                     aria-label="State"
+                                     value={this.state.ship_state}
+                                     onChange={this.setShippingState.bind(this)}
+                      />
                     </div>
                   </div>
-                </form>
+                  <div className='center-col'>
+                    <div className="field">
+                      <label>Zip/Postal Code<span className='req'>*</span></label>
+                      <input type="text"
+                             placeholder="95192"
+                             name="ship_zip"
+                             aria-label="Zip"
+                             autoComplete="off"
+                             value={this.state.ship_zip}
+                             onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                  <div className='three-col-col'>
+                    <div className="field">
+                      <label>Country<span className='req'>*</span></label>
+                      <input type="text"
+                             placeholder="United States"
+                             name="ship_country"
+                             aria-label="Country"
+                             autoComplete="off"
+                             value={this.state.ship_country}
+                             onChange={this.onChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
             <div id="billing-section" className="col-md-5 offset-md-1" hidden>
               <h3 className="checkout-subtitle">Billing Address</h3>
@@ -261,13 +285,11 @@ class CheckoutClassic extends Component {
                   <div className='three-col-col'>
                     <div className="field">
                       <label>State/Province/Region<span className='req'>*</span></label>
-                      <input type="text"
-                             placeholder="California"
-                             name="bill_state"
-                             aria-label="State"
-                             autoComplete="off"
-                             value={this.state.bill_state}
-                             onChange={this.onChange}
+                      <SelectUSState placeholder="California"
+                                     name="bill_state"
+                                     aria-label="State"
+                                     value={this.state.bill_state}
+                                     onChange={this.setBillingState}
                       />
                     </div>
                   </div>
@@ -318,10 +340,10 @@ class CheckoutClassic extends Component {
               </div>
             </div>
           </div>
-            <div id='checkout-submit'>
-              <button className="checkout-button" onClick={this.handleClick}>Checkout</button>
-            </div>
-            <Footer/>
+          <div id='checkout-submit'>
+            <button className="checkout-button" onClick={this.handleClick}>Checkout</button>
+          </div>
+          <Footer/>
         </div>
       </div>
     );
