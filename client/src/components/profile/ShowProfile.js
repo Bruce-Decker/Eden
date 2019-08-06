@@ -388,7 +388,9 @@ class ShowProfile extends Component {
             <div style ={{width: "340px"}}>
               <Card.Header>
                 <img src={this.state.image_path} height="250" width="300" />
+                {this.props.auth.user.email == this.props.match.params.email ?
                 <h4 onClick={this.profileOpenModal} className="edit_profile_h4"> <i class="fas fa-user"></i> Edit Profile </h4> 
+                :  null }
                 <div className="">
                   <div>First Name: {this.state.first_name}</div>
                   <div>Last Name: {this.state.last_name}</div>
@@ -441,6 +443,7 @@ class ShowProfile extends Component {
             pageId="2292649427730564"
             appId="466650420800999"
           />
+          {this.props.auth.user.email == this.props.match.params.email ?
           <Card>
             <div class="non-semantic-protector"> 
               <h1 class="ribbon">
@@ -466,6 +469,7 @@ class ShowProfile extends Component {
               <button type="button" className="share_button" onClick={this.handleClick}>Share</button>
             </div>      
           </Card> 
+          : null }
           <div className="showPosts">
             <div className="space">
             </div>

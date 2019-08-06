@@ -34,6 +34,7 @@ import { BrowserRouter , Route, Link, Switch } from 'react-router-dom';
 import Property from '../components/property/Property';
 import Service from '../components/service/Service';
 import Detail from '../components/service/Detail';
+import SecureRoute from '../components/secure/SecureRoute'
 
 
 // Setup toastify for notifications
@@ -82,8 +83,13 @@ class App extends Component {
           <Route exact path="/showShowAllUserItems/:email" component={ShowAllUserItems} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search" component={SearchResults} />
-          <Route exact path="/checkout" component={Checkout} />
-          <Route exact path="/payment" component={Payment} />
+          <Switch>
+             <SecureRoute exact path="/checkout" component={Checkout} />
+          </Switch>
+          <Switch>
+             <SecureRoute exact path="/payment" component={Payment} />
+          </Switch>
+
           <Route exact path="/paymentConfirmation" component={PaymentConfirmation} />
           <Route exact path="/orderHistory" component={OrderHistory} />
           <Route exact path="/vr/:item_id" component={VR} />
