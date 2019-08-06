@@ -19,6 +19,15 @@
     margin-bottom: 12px;
 }
 
+.order-item-img {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    max-width: 150px;
+    max-height: 150px;
+    margin-left: 48px;
+}
+
 .order-item {
     margin-top: 24px;
     margin-bottom: 24px;

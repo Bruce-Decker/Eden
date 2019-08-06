@@ -16,6 +16,7 @@ class Order extends Component {
             receipt: '',
             carrier: '',
             trackingNumber: '',
+            orderDate: '',
             items: []
         }
     }
@@ -24,8 +25,11 @@ class Order extends Component {
         return (
             <div className="order-item">
                 <div className="row">
-                    <div className="col-md-12 order-id-title">
+                    <div className="col-md-8 order-id-title">
                         <h6>Order #: {this.state.orderId}</h6>
+                    </div>
+                    <div className="col-md-4">
+                        <h6>Placed on: {this.state.orderDate}</h6>
                     </div>
                 </div>
                 {this.state.items.map((value, index) => {
@@ -68,6 +72,11 @@ class Order extends Component {
         this.setState({receipt: this.props.orderDetails.payment_receipt_url});
         this.setState({carrier: this.props.orderDetails.carrierCode});
         this.setState({trackingNumber: this.props.orderDetails.tracking_id});
+        const orderDate = new Date(this.props.orderDetails.createdAt);
+        const dd = String(orderDate.getDate()).padStart(2, '0');
+        const mm = String(orderDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = orderDate.getFullYear();
+        this.setState({orderDate: mm + '/' + dd + '/' + yyyy});
     }
 }
 

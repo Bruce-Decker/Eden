@@ -126,7 +126,7 @@ class OrderItem extends Component {
             <div className="row">
                 <div className="col-md-4">
                     <img
-                        className="item-detail-img"
+                        className="order-item-img"
                         src={getImage(this.state.item_name, this.state.category)}
                         alt="Item Image"
                     />
