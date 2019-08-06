@@ -1,6 +1,6 @@
 #checkout-header {
   margin-top: 3rem;
-  margin-bottom: 2rem;
+  margin-bottom: 12px;
   text-align: center;
 }
 
@@ -69,8 +69,8 @@ form {
   font-size: 1.5rem;
   transition: .25s ease;
   text-decoration: none;
-  width: 175px;
-  height: 60px;
+  width: 150px;
+  height: 50px;
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
@@ -87,4 +87,12 @@ form {
   background: transparent;
   color: black;
   font-size: 1.6rem;
+}
+
+.checkout-subtitle {
+  text-align: center;
+}
+
+.checkout-address-switch {
+    margin-top: 12px;
 }
