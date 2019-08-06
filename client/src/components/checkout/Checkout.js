@@ -289,7 +289,7 @@ class CheckoutClassic extends Component {
                                      name="bill_state"
                                      aria-label="State"
                                      value={this.state.bill_state}
-                                     onChange={this.setBillingState}
+                                     onChange={this.setBillingState.bind(this)}
                       />
                     </div>
                   </div>
