@@ -26,7 +26,22 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     width: "420px",
-    height: "420px"
+    height: "420px",
+    backgroundColor: "rgb(32,32,32)"
+  }
+};
+
+const customStyles2 = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: "600px",
+    height: "190px",
+    backgroundColor: "rgb(32,32,32)"
   }
 };
 
@@ -40,7 +55,8 @@ const edit_profile_customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     width: "650px",
-    height: "500px"
+    height: "500px",
+    backgroundColor: 'rgba(0,0,0,.6)'
   }
 };
 
@@ -58,18 +74,19 @@ class ShowProfile extends Component {
       email: '',
       phone_number: '',
       address: '',
-      city: '',
       country: '',
       company: '',
       about_me: '',
       showProfile: false,
       loadPosts: false,
       share_post: '',
+      post_id: '',
       posts: [],
       scroll_posts: [],
       hasMore: true,
       comment: '',
       modalIsOpen: false,
+      permissionModalIsOpen: false,
       profileModalIsOpen: false,
       post_like: [],
       anonymous: false
@@ -110,6 +127,7 @@ class ShowProfile extends Component {
       profile_owner_email,
       isAnonymous
     };
+    console.log(data)
 
      axios
       .post('/profile/sharePost', data)
@@ -186,6 +204,9 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+        this.setState({
+          permissionModalIsOpen: false
+        })
       
        
       })
@@ -252,6 +273,22 @@ class ShowProfile extends Component {
       post_like: post_like
     });
   }
+
+  openPermissionModal = (post_id) => {
+    this.setState({
+      permissionModalIsOpen: true,
+      post_id: post_id
+    });
+  }
+
+  cancelPermissionModal = () => {
+    this.setState({permissionModalIsOpen: false});
+  }
+
+  closePermissionModal = () => {
+    this.setState({permissionModalIsOpen: false});
+  }
+
  
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
@@ -325,7 +362,6 @@ class ShowProfile extends Component {
           email: response.data[0].email,
           phone_number: response.data[0].phone_number,
           address: response.data[0].address,
-          city: response.data[0].city,
           country: response.data[0].country,
           company: response.data[0].company,
           about_me: response.data[0].about_me,
@@ -399,6 +435,20 @@ class ShowProfile extends Component {
           </Modal>
 
           <Modal
+          isOpen={this.state.permissionModalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closePermissionModal}
+          style={customStyles2}
+          contentLabel="Example Modal"
+        >
+          <h3 style = {{color: "white"}}>Are you sure you want to delete this post? </h3>
+          <div style = {{textAlign: "center", marginTop: "50px"}}>
+            <button type="button" className="btn btn-danger" onClick = {() => this.deletePost(this.state.post_id)} style = {{marginRight: "40px", height: "40px", width: "100px"}}>Delete</button>
+            <button type="button" className="btn btn-primary" onClick = {this.cancelPermissionModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
+          </div>
+        </Modal>
+
+          <Modal
             isOpen={this.state.profileModalIsOpen}
             onAfterOpen={this.profileAfterOpenModal}
             onRequestClose={this.profileCloseModal}
@@ -421,7 +471,6 @@ class ShowProfile extends Component {
                   <div>Gender: {this.state.gender}</div>
                   <div>Email: {this.state.email}</div>
                   <div>Phone Number: {this.state.phone_number}</div>
-                  <div>City: {this.state.city}</div>
                   <div>Country: {this.state.country}</div>
                   <div>Company: {this.state.company}</div>
                   <div>About Me: {this.state.about_me}</div>
@@ -531,7 +580,7 @@ class ShowProfile extends Component {
                           <h6 className="text-muted time">{post.time.substring(0,10) + ' ' + post.time.substring(11,19)}</h6>
                         </div>
                           {post.email === this.props.auth.user.email ?
-                                         <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deletePost(post.post_id)} height="15" width="15"/>  
+                                         <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.openPermissionModal(post.post_id)} height="15" width="15"/>  
                                           : null }
                       </div> 
                       <div className="post-description"> 

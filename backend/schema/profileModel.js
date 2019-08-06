@@ -6,8 +6,6 @@ const ProfileSchema = new Schema({
     last_name: String,
     username: String,
     DOB: String,
-    address: String,
-    city: String,
     country: String,
     company: String,
     gender: String,

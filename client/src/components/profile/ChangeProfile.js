@@ -22,7 +22,6 @@ class ChangeProfile extends Component {
             gender: '',
             email: '',
             phone_number: '',
-            city: '',
             country: '',
             company: '',
             about_me: '',
@@ -76,7 +75,6 @@ class ChangeProfile extends Component {
        
         formdata.append('phone_number', this.state.phone_number)
         formdata.append('address', this.state.address)
-        formdata.append('city', this.state.city)
         formdata.append('country', this.state.country)
         formdata.append('company', this.state.company)
         formdata.append('about_me', this.state.about_me)
@@ -111,10 +109,10 @@ class ChangeProfile extends Component {
             <div>
              
                 <div className = "ChangeProfileContainer">
-                   <h1> User profile </h1>
+                   <h1 style = {{color: "White"}}> User profile </h1>
                    <form onSubmit = {this.onSubmit} className="ui form">
                 <div className="field">
-                <label> First Name</label>
+                <label style = {{color: "White"}}> First Name</label>
                 <input type="text" name="first_name" placeholder="First Name"  onChange = {this.onChange}/>
                 </div>
 
@@ -123,7 +121,7 @@ class ChangeProfile extends Component {
                                     </div>  
 
                 <div className="field">
-                <label> Last Name</label>
+                <label style = {{color: "White"}}> Last Name</label>
                 <input type="text" name="last_name" placeholder="Last Name"  onChange = {this.onChange}/>
                 </div>
 
@@ -132,7 +130,7 @@ class ChangeProfile extends Component {
                                     </div> 
 
                                     <div className="field">
-                <label> DOB </label>
+                <label style = {{color: "White"}}> DOB </label>
                 <input type="text" name="DOB" placeholder="Date of Birth"  onChange = {this.onChange}/>
                 </div>
 
@@ -140,7 +138,7 @@ class ChangeProfile extends Component {
                                             {errors.DOB }
                                     </div>  
                                     <div className="field">
-                  <label> Gender </label>
+                  <label style = {{color: "White"}}> Gender </label>
                   <input type="text" name="gender" placeholder="Gender"  onChange = {this.onChange}/>
                 </div>
 
@@ -150,7 +148,7 @@ class ChangeProfile extends Component {
 
                 
                <div className="field">
-                <label> Upload an image </label>
+                <label style = {{color: "White"}}> Upload an image </label>
                 <input type="file" name="filename" id="fileToUpload"  onChange = {this.handleFile}/>
                 </div>
 
@@ -165,7 +163,7 @@ class ChangeProfile extends Component {
                 
 
                 <div className="field">
-                <label> Phone Number </label>
+                <label style = {{color: "White"}}> Phone Number </label>
                 <input type="text" name="phone_number" placeholder="Phone Number"  onChange = {this.onChange}/>
                 </div>
 
@@ -178,17 +176,10 @@ class ChangeProfile extends Component {
                
               
 
-                <div className="field">
-                  <label> City </label>
-                  <input type="text" name="city" placeholder="City"  onChange = {this.onChange}/>
-                </div>
-
-                                   <div className = "inputError">
-                                            {errors.city }
-                                    </div> 
+               
 
                 <div className="field">
-                  <label> Country </label>
+                  <label style = {{color: "White"}}> Country </label>
                   <input type="text" name="country" placeholder="Country"  onChange = {this.onChange}/>
                 </div>
 
@@ -197,7 +188,7 @@ class ChangeProfile extends Component {
                                     </div>
 
                 <div className="field">
-                  <label> Company </label>
+                  <label style = {{color: "White"}}> Company </label>
                   <input type="text" name="company" placeholder="Company"  onChange = {this.onChange}/>
                 </div>
 
@@ -207,7 +198,7 @@ class ChangeProfile extends Component {
 
 
                 <div className="field">
-                     <label>Input Location </label>
+                     <label style = {{color: "White"}}>Input Location </label>
                 </div>
                 
                  <PlacesAutocomplete
@@ -254,7 +245,7 @@ class ChangeProfile extends Component {
 
 
          <div>
-                            <h1>{this.state.address}</h1>
+                            <h1 style = {{color: "white"}}>{this.state.address}</h1>
                             <div>
                             <LocationPicker
                                 containerElement={ <div style={ {height: '100%'} } /> }
@@ -271,7 +262,7 @@ class ChangeProfile extends Component {
 
 
                 <div className="field">
-                   <label for="comment">About me:</label>
+                   <label for="comment" style = {{color: "White"}}>About me:</label>
                 <textarea className="form-control" name = "about_me" rows="5" id="comment"  onChange = {this.onChange}></textarea>
                 </div>
 

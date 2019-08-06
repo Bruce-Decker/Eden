@@ -29,7 +29,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     width: "700px",
     height: "320px",
-    backgroundColor: 'rgba(0,0,0,.6)'
+    backgroundColor: "rgb(32,32,32)"
   }
 };
 
@@ -43,26 +43,11 @@ const customStyles2 = {
     transform: 'translate(-50%, -50%)',
     width: "600px",
     height: "190px",
-    backgroundColor: "rgb(48,48,48)"
+    backgroundColor: "rgb(32,32,32)"
   }
 };
 
-const reviews = [
-  {
-    user: 'John',
-    img: apple,
-    review: 'Apples are extremely rich in important antioxidants, flavanoids, and dietary fiber. The phytonutrients and antioxidants in apples may help reduce the risk of developing cancer, hypertension, diabetes, and heart disease.',
-    date: '2 days ago',
-    rating: [1, 2, 3, 4]
-  },
-  {
-    user: 'Bob',
-    img: apple,
-    review: 'Apples are high in fiber and water — two qualities that make them filling.',
-    date: '6 days ago',
-    rating: [1, 2, 3]
-  },
-]
+
 
 var defaultPosition
 
