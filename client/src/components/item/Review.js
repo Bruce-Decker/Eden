@@ -84,10 +84,12 @@ class Review extends Component {
       scroll_comments: [],
       hasMore: true,
       modalIsOpen: false,
+      permissionModalIsOpen: false,
       anonymous: false,
       rating: 5,
       hasCommented: false,
-      existing_comment_id: ""
+      existing_comment_id: "",
+      comment_id: ""
     };
 
     this.toal_comments = null;
@@ -174,8 +176,19 @@ class Review extends Component {
     this.setState({modalIsOpen: true});
   }
 
+  openPermissionModal = (comment_id) => {
+    this.setState({
+      permissionModalIsOpen: true,
+      comment_id: comment_id
+    });
+  }
+
   cancelModal = () => {
     this.setState({modalIsOpen: false});
+  }
+
+  cancelPermissionModal = () => {
+    this.setState({permissionModalIsOpen: false});
   }
 
   afterOpenModal = () => {
@@ -185,6 +198,10 @@ class Review extends Component {
 
   closeModal = () => {
     this.setState({modalIsOpen: false});
+  }
+
+  closePermissionModal = () => {
+    this.setState({permissionModalIsOpen: false});
   }
 
   onChange = e => {
@@ -258,7 +275,8 @@ class Review extends Component {
         console.log(res)
         this.componentDidMount()
         this.setState({
-          hasCommented: false
+          hasCommented: false,
+          permissionModalIsOpen: false
         })
 
       })
@@ -350,6 +368,11 @@ class Review extends Component {
     }
 
     this.loadFunc();
+    if (this.state.comments == 0) {
+      this.setState({
+        hasMore: false
+      })
+    }
   }
 
   loadFunc = () => {
@@ -433,6 +456,21 @@ class Review extends Component {
             <button type="button" className="btn btn-primary" onClick = {this.cancelModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
           </div>
         </Modal>
+
+
+        <Modal
+          isOpen={this.state.permissionModalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closePermissionModal}
+          style={customStyles2}
+          contentLabel="Example Modal"
+        >
+          <h3 style = {{color: "white"}}>Are you sure you want to delete this comment? </h3>
+          <div style = {{textAlign: "center", marginTop: "50px"}}>
+            <button type="button" className="btn btn-danger" onClick = {() => this.deleteComment(this.state.comment_id)} style = {{marginRight: "40px", height: "40px", width: "100px"}}>Delete</button>
+            <button type="button" className="btn btn-primary" onClick = {this.cancelPermissionModal} style = {{height: "40px", width: "100px"}}>Cancel</button>
+          </div>
+        </Modal>
       
         <div className = "itemReview">
           <Card.Header>
@@ -494,7 +532,7 @@ class Review extends Component {
                               <h6 className="text-muted time">{comment.time.substring(0,10) + ' ' + comment.time.substring(11,19)}</h6>
                             </div>
                             {comment.email === this.props.auth.user.email ?
-                                                   <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id)} height="15" width="15"/>  
+                                                   <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.openPermissionModal(comment.comment_id)} height="15" width="15"/>  
                                                     : null }
                           </div> 
                           <div className="post-description"> 

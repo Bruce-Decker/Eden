@@ -63,6 +63,7 @@ class ShowProfile extends Component {
       company: '',
       about_me: '',
       showProfile: false,
+      loadPosts: false,
       share_post: '',
       posts: [],
       scroll_posts: [],
@@ -116,6 +117,7 @@ class ShowProfile extends Component {
         console.log(res);
         this.componentDidMount();
       
+      
         this.setState({share_post: ''});
       })
       .catch(err => console.log(err))
@@ -139,7 +141,8 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
        
-        this.componentDidMount();
+       this.componentDidMount();
+   
       
         this.setState({
           comment: ''
@@ -165,6 +168,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+    
        
       })
       .catch(err => console.log(err))
@@ -182,6 +186,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+      
        
       })
       .catch(err => console.log(err))
@@ -202,6 +207,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+
       
       })
       .catch(err => console.log(err))
@@ -227,6 +233,7 @@ class ShowProfile extends Component {
       .then(res => {
         console.log(res);
         this.componentDidMount();
+    
      
       })
       .catch(err => console.log(err))
@@ -269,10 +276,10 @@ class ShowProfile extends Component {
     this.setState({profileModalIsOpen: false});
   }
 
-  loadFunc = () => {
+  loadFunc = async () => {
     console.log("loadFunc")
     
-    var temp_posts = this.state.posts.slice(this.state.scroll_posts.length, this.state.scroll_posts.length + 2)
+    var temp_posts = await this.state.posts.slice(this.state.scroll_posts.length, this.state.scroll_posts.length + 2)
     if (this.total_posts) {
         
           if (this.state.scroll_posts.length < this.total_posts) {
@@ -283,7 +290,8 @@ class ShowProfile extends Component {
           
             this.setState({
               scroll_posts: [...this.state.scroll_posts.concat(temp_posts)],
-              hasMore: true
+              hasMore: true,
+              loadPosts: true
             
             })
             
@@ -321,8 +329,8 @@ class ShowProfile extends Component {
           country: response.data[0].country,
           company: response.data[0].company,
           about_me: response.data[0].about_me,
-          showProfile: true,
-          posts: response.data[0].posts.reverse()
+          posts: response.data[0].posts.reverse(),
+          showProfile: true
           
         });
        
@@ -337,15 +345,30 @@ class ShowProfile extends Component {
         this.post_array =  response.data[0].posts
       }
       var temp_array = []
-      for (var i = 0; i < 2; i++) {
-        temp_array.push(this.state.posts[i])
-      }
+      console.log(this.state.posts)
+      if (this.state.posts.length > 0) {
+            // for (var i = 0; i < 2; i++) {
+              
+            //   temp_array.push(this.state.posts[i])
+            // }
+            temp_array = this.state.posts.slice(0, 2)
 
-      this.setState({
-        scroll_posts: temp_array,
-      })
+            this.setState({
+              scroll_posts: temp_array,
+              loadPosts: true
+             
+            })
+         
+
+          } else {
+            this.setState({
+              scroll_posts: [],
+              loadPosts: false
+      
+            })
+          }
     
-    }
+    } 
     this.loadFunc()
   }
 
@@ -474,7 +497,7 @@ class ShowProfile extends Component {
             <div className="space">
             </div>
             <Card>
-            {this.state.showProfile ? 
+            {this.state.loadPosts ? 
               <div>
                 <InfiniteScroll
                   pageStart={0}
@@ -586,98 +609,7 @@ class ShowProfile extends Component {
                 </InfiniteScroll>
               </div>
               :
-              <div>
-       
-              {this.state.scroll_posts.map(post =>
-                <div className="container bootstrap snippet">
-                  <div className="col-sm-12">
-                    <div className="panel panel-white post panel-shadow">
-                      <div className="post-heading">
-                        <div className="pull-left image">
-                          <img src={default_profile_image} className="img-circle avatar" alt="user profile image" />
-                        </div>
-                        <div className="pull-left meta">
-                          <div className="title h5">
-                            <a href="#"><b>{post.name} </b></a>
-                             made a post.
-                          </div>
-                          <h6 className="text-muted time">{post.time}</h6>
-                        </div>
-                          {post.email === this.props.auth.user.email ?
-                            <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deletePost(post.post_id)} height="15" width="15"/>  
-                             : null }
-                      </div> 
-                      <div className="post-description"> 
-                        <div>{post.post}</div>
-                        {isUrl(post.post) ? 
-                          <div>
-                          {isReachable(post.post) ?
-                            <div>
-                              <MicrolinkCard url={post.post}  />
-                            </div>
-                            : null
-                          }
-                          </div>
-                          : null
-                        }
-                        <div className="stats">
-                        { post.like.some(element => element['email'] === this.props.auth.user.email) ?
-                          <div>
-                            <button href="#" className="btn btn-default stat-item" onClick = {() => this.unlikePost(post.post_id)}>
-                              <i className="fa fa-thumbs-up icon" id = "thumb_up_blue"/>
-                            </button>
-                            <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
-                              {post.like.length}
-                            </button>
-                          </div>
-                          : 
-                          <div>
-                            <button href="#" className="btn btn-default stat-item" onClick = {() => this.likePost(post.post_id)}>
-                              <i className="fa fa-thumbs-up icon"  />
-                            </button>
-                            <button href="#" className="btn btn-default stat-item" onClick={() => this.openModal(post.like)}>
-                              {post.like.length}
-                            </button>
-                          </div>
-                        }
-                        </div>
-                      </div>
-                        <div className="post-footer">
-                          <div className="input-group"> 
-                            <input className="form-control" name = "comment"  id="comment" ref={(ref) => this.comment= ref} placeholder="Add a comment" type="text" onChange = {this.onChange}/>
-                            <span className="input-group-addon">
-                              <button href="#" onClick = {() => this.handleComment(post.post_id)}><i className="fa fa-edit" /></button>  
-                            </span>
-                          </div>
-                          {post.comments.map(comment => 
-                            <ul className="comments-list">
-                              <li className="comment">
-                                <a className="pull-left" href="#">
-                                  <img src={`/images/${comment.email}.jpg`} className="img-circle avatar" alt="user profile image" />
-                                </a>
-                                <div className="comment-body">
-                                  <div className="comment-heading">
-                                    <h4 className="user">{comment.name}</h4>
-                                    <h5 className="time">{comment.time}</h5>
-                                    {comment.email === this.props.auth.user.email ?
-                                      <img src = {delete_icon} className = "profile_delete_icon" onClick = {() => this.deleteComment(comment.comment_id, post.post_id)} height="15" width="15"/>  
-                                      : null
-                                    }
-                                  </div>                                  
-                                  <p>{comment.comment}</p>
-                                </div>
-                              </li>
-                            </ul>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className = "space">
-                    </div>
-                  </div>      
-                )}
-        
-              </div>
+               null
               }
             </Card>
           </div>
