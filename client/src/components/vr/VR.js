@@ -44,6 +44,7 @@ class VR extends React.Component {
 
             gltf-model="#model2"
             scale="0.1 0.1 0.1"
+            position={{x: 0, y: -8, z: 0}}
         
         />
        <Entity primitive='a-sky' src={background_image}/>

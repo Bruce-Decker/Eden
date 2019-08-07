@@ -41,6 +41,11 @@ class ShowAllUserItems extends Component {
   handleDelete(id) {
     if (window.confirm('Are you sure you want to delete this item?')) {
       // TODO
+     
+    
+      axios.post('/items/deleteItemForUser/' + id)
+           .then(res => this.componentDidMount())
+           .catch(err => console.log(err))
     }
   }
 
