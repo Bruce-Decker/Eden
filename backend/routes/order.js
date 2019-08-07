@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../schema/Order');
 
+const keys = require('../key/keys');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(keys.sendgridApiKey);
+
 router.post('/addPostChargeInfo', function(req,res) {
   const paymentReceiptUrl = req.body.paymentReceiptUrl;
   const trackingId = req.body.trackingId;
@@ -23,6 +27,19 @@ router.post('/addPostChargeInfo', function(req,res) {
         else {
           console.log("Updated order " + orderId + " with tracking number and payment receipt");
           res.json({msg: "Order updated successfully", data: result});
+          /*const msg = {
+               to: result.email,
+               from: 'support@eden.com',
+               subject: 'Order # '+ result._id+' Placed Successfully',
+               text: 'Your Order was successfully placed.',
+               html: '<strong>Your Order was successfully placed</strong>',
+           };
+           try {
+               sgMail.send(msg);
+           }
+           catch (e) {
+               console.log(e);
+           }*/
         }
       }
     });
