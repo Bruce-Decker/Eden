@@ -330,7 +330,7 @@ class CheckoutClassic extends Component {
                   control={
                     <GreenSwitch
                       //checked={state.checkedA}
-                      onChange={this.handleAddress}
+                      onChange={this.handleAddress.bind(this)}
                       value="checkedA"
                     />
                   }
