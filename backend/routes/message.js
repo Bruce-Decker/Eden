@@ -420,11 +420,11 @@ router.get('/getInboxMessages/:receiver_email/:page', function(req, res) {
     var page = parseInt(req.params.page) || 0
     var limit = parseInt(req.query.limit) || 5
     var query = {$or: [{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
-    {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}]}
+    {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }}]}
 
     console.log(receiver_email)
     Message.find().or([{receiver_email: receiver_email, 'isDraft.email': { "$ne": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }},
-        {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }}])
+        {sender_email: receiver_email, "replies.0": {"$exists": true}, 'isDraft.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }, 'isTrashed.email': { "$nin": [receiver_email] }, 'isDeleted.email': { "$nin": [receiver_email] }}])
      .sort({'time': 'desc'})
      .skip(page * limit)
      .limit(limit)
@@ -523,9 +523,9 @@ router.get('/getDraftedMessages/:sender_email/:page', function(req, res) {
     var page = parseInt(req.params.page) || 0
    
     var limit = parseInt(req.query.limit) || 5
-    var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }}
+    var query = {sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }, 'isDeleted.email': { "$nin": [sender_email] }}
     
-    Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }})
+    Message.find({sender_email: sender_email, 'isDraft.email': {"$in": [sender_email]}, 'isTrashed.email': { "$nin": [sender_email] }, 'isDeleted.email': { "$nin": [sender_email] }})
      .sort({'time': 'desc'})
      .skip(page * limit)
      .limit(limit)

@@ -425,7 +425,7 @@ class ShowProfile extends Component {
               {this.state.post_like.map(like => 
                 <div>
                   <img className="profile_picutures_like" src={`/images/${like.email}.jpg`} height="80" width="120" />
-                    { }{like.name}
+                    { }<span style = {{color: "white"}}>{like.name} </span>
                     <div className="space">
                     </div>
                 </div>
@@ -515,7 +515,7 @@ class ShowProfile extends Component {
             pageId="2292649427730564"
             appId="466650420800999"
           />
-          {this.props.auth.user.email == this.props.match.params.email ?
+          {this.props.auth.user.email ?
           <Card>
             <div class="non-semantic-protector"> 
               <h1 class="ribbon">

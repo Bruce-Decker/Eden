@@ -98,20 +98,22 @@ class ReplyModal extends Component {
                     axios.post('/message/sendMessage', data) 
                         .then(res => {
                             console.log(res)
-                            if (this.props.isEdit) {
+                          
+                               var message_id_array = []
+                               message_id_array.push(this.props.message_id)
+
                                 var delete_data = {
-                                    message_id: this.props.message_id,
+                                    message_id: message_id_array,
                                     email: this.props.auth.user.email
                                 }
+                               
                                 axios.post('/message/deleteMessage', delete_data) 
                                    .then(res => {
                                        console.log(res)
                                        window.location.reload()
                                     })
                                    .catch(err => console.log(err))
-                            } else {
-                                window.location.reload()
-                            }
+                           
                            
                         })
                         .catch(err => console.log(err))

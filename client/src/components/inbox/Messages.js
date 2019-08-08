@@ -37,7 +37,7 @@ class Messages extends Component {
                 } else {
                     this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
                 }
-                //window.location.reload()
+                window.location.reload()
                 this.props.onMessage()
         }
 
@@ -53,7 +53,7 @@ class Messages extends Component {
                 } else {
                     this.props.history.push("/inbox/" + this.props.auth.user.email + "/" + page_number + "?emailType=" +  this.props.emailType + "&searchTerm=" + this.props.searchTerm)
                 }
-                //window.location.reload()
+                window.location.reload()
                 this.props.onMessage()
             }
        
@@ -204,7 +204,7 @@ class Messages extends Component {
                   <div className="btn-group">
                     <a data-toggle="dropdown" href="#" className="btn mini all" aria-expanded="false">
                       All
-                      <i className="fa fa-angle-down " />
+                   
                     </a>
                     <ul className="dropdown-menu">
                       <li><a href="#"> None</a></li>

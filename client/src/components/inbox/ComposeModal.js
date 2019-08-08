@@ -68,7 +68,7 @@ class ComposeModal extends Component {
 
       onSubmit = (e) => {
                 e.preventDefault()
-               
+                var message_id_array = []
                 var receiver_email = this.state.email
                 var subject = this.state.subject
                 var message = this.state.message
@@ -104,23 +104,26 @@ class ComposeModal extends Component {
                         if (!this.props.isReply) {
                             axios.post('/message/sendMessage', data) 
                                 .then(res => {
+                                
+                                  
+                                  
                                     console.log(res)
-                                    if (this.props.isEdit) {
+                                 
+                                  
+                                    message_id_array.push(this.props.message_id)
+
                                         var delete_data = {
-                                            message_id: this.props.message_id,
+                                            message_id: message_id_array,
                                             email: this.props.auth.user.email
                                         }
+                                        console.log(delete_data)
                                         axios.post('/message/deleteMessage', delete_data) 
                                         .then(res => {
-                                            console.log(res)
                                             this.props.clearState()
                                             window.location.reload()
                                             })
                                         .catch(err => console.log(err))
-                                    } else {
-                                        this.props.clearState()
-                                        window.location.reload()
-                                    }
+                                  
                                 
                                 })
                                 .catch(err => console.log(err))

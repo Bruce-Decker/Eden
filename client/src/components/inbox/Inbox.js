@@ -172,6 +172,8 @@ class Inbox extends Component {
 
 
     async componentDidMount() {
+      
+     
          var values = queryString.parse(this.props.location.search);
          
          var message_id
@@ -410,9 +412,7 @@ class Inbox extends Component {
                                                   <h5><a href="#">{this.props.auth.user.name}</a></h5>
                                                   <span><a href="#">{this.props.auth.user.email}</a></span>
                                                 </div>
-                                                <a className="mail-dropdown pull-right" href="javascript:;">
-                                                  <i className="fa fa-chevron-down" />
-                                                </a>
+                                               
                                               </div>
                                               <div className="inbox-body">
                                                 <div  data-toggle="modal" title="Compose" className="btn btn-compose" onClick = {() => this.openModal(false, false)}>
