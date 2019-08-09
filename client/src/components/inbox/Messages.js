@@ -21,7 +21,8 @@ class Messages extends Component {
         this.state = {
             selected_message_ids: [],
             tempSelected_message_ids: [],
-            selectAll: false
+            selectAll: false,
+            isChecked: true
         }
     }
 
@@ -75,11 +76,16 @@ class Messages extends Component {
         this.state.selected_message_ids = []
      }
         this.setState({
-            selectAll:  !this.state.selectAll
+            selectAll:  !this.state.selectAll,
+            isChecked: !this.state.isChecked
         })
      }
 
     trashMessages = () => {
+    
+      this.setState({
+        isChecked: !this.state.isChecked
+      })
        
         var message_id_array = []
         this.state.selected_message_ids.map(id => {
@@ -90,11 +96,13 @@ class Messages extends Component {
             message_id: message_id_array,
             email: this.props.auth.user.email
         }
+       
 
         axios.post('/message/trashMessage', data)
             .then(res => {
                 console.log(res.data)
                 //window.location.reload()
+               
                 this.props.onMessage()
             })
             .catch(err => console.log(err))
@@ -104,6 +112,10 @@ class Messages extends Component {
 
 
      deleteMessages = () => {
+
+      this.setState({
+        isChecked: !this.state.isChecked
+      })
        
         var message_id_array = []
         this.state.selected_message_ids.map(id => {
@@ -200,7 +212,7 @@ class Messages extends Component {
 
             <div className="mail-option">
                 <div className="chk-all">
-                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" onChange = {this.checkAllBox}/>
+                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" checked = {!this.state.isChecked} onChange = {this.checkAllBox}/>
                   <div className="btn-group">
                     <a data-toggle="dropdown" href="#" className="btn mini all" aria-expanded="false">
                       All
@@ -287,7 +299,7 @@ class Messages extends Component {
                                       <div className = "firstInboxContainer">
                                               <div className="inboxCheckBox" onClick = {(e) => this.preventTrigger(e)}>
                                                   
-                                                      <input key = {message.message_id} type="checkbox" className="mail-checkbox" onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selected_message_ids.includes(message.message_id)}/>
+                                                      <input key = {message.message_id} type="checkbox" className="mail-checkbox" ref={'checkbox'} onChange = {(e) => this.checkTrash(e, message.message_id)} checked={this.state.selected_message_ids.includes(message.message_id)}/>
                                               </div>
                                               {message.isStarred.some(e => e.email === this.props.auth.user.email) ?
                                             <div className="floatLeft inboxStar"  onClick = {(e) =>  this.unstarMessage(e, message.message_id)}>
