@@ -22,7 +22,7 @@ class Messages extends Component {
             selected_message_ids: [],
             tempSelected_message_ids: [],
             selectAll: false,
-            isChecked: true
+            isChecked: false
         }
     }
 
@@ -84,7 +84,7 @@ class Messages extends Component {
     trashMessages = () => {
     
       this.setState({
-        isChecked: !this.state.isChecked
+        isChecked: false
       })
        
         var message_id_array = []
@@ -212,7 +212,7 @@ class Messages extends Component {
 
             <div className="mail-option">
                 <div className="chk-all">
-                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" checked = {!this.state.isChecked} onChange = {this.checkAllBox}/>
+                  <input type="checkbox" className="mail-checkbox mail-group-checkbox" checked = {this.state.isChecked} onChange = {this.checkAllBox}/>
                   <div className="btn-group">
                     <a data-toggle="dropdown" href="#" className="btn mini all" aria-expanded="false">
                       All

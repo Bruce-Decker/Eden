@@ -377,6 +377,8 @@ router.post('/deleteMessage', function(req, res) {
 })
 
 
+
+
 router.get('/getSearchedMessages/:email/:page', function(req, res) {
     var page = parseInt(req.params.page) || 0
     var limit = parseInt(req.query.limit) || 5
@@ -384,11 +386,11 @@ router.get('/getSearchedMessages/:email/:page', function(req, res) {
     var searchTerm = new RegExp(req.query.search, "i")
     console.log(searchTerm)
     var email = req.params.email
-    var query = {$or: [{receiver_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
-    {sender_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}]}
+    var query = {$or: [{receiver_email: email, 'isDeleted.email': { "$nin": [email] }, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
+    {sender_email: email, 'isDeleted.email': { "$nin": [email] }, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}]}
    
-    Message.find().or([{receiver_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
-        {sender_email: email, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}])
+    Message.find().or([{receiver_email: email, 'isDeleted.email': { "$nin": [email] }, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}, 
+        {sender_email: email, 'isDeleted.email': { "$nin": [email] }, $or: [{subject: searchTerm}, {message: searchTerm}, {receiver_name: searchTerm}, {sender_name: searchTerm}]}])
         .sort({'time': 'desc'})
         .skip(page * limit)
         .limit(limit)
