@@ -61,8 +61,8 @@ class Messages extends Component {
      }
 
      refresh = () => {
-         //window.location.reload()
-         this.props.onMessage()
+         window.location.reload()
+         //this.props.onMessage()
      }
 
      checkAllBox = () => {
