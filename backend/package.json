@@ -41,7 +41,7 @@
     "unique-random": "^2.1.0",
     "unirest": "^0.6.0",
     "uuid": "^3.3.2",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
