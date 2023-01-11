@@ -24,7 +24,7 @@
     "delete": "^1.1.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "localStorage": "^1.0.3",
     "mongoose": "^5.2.7",
     "mongoose-reverse-populate": "^1.1.0",
